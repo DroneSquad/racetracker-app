@@ -7,5 +7,6 @@ a {
 }
 
 html {
+  background: var(--ds-background);
   font-family: 'Roboto', sans-serif;
 }

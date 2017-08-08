@@ -17,7 +17,7 @@
         }
     },
     "dependencies": {
-        "cordova-android": "^6.2.3",
+        "cordova-android": "^6.2.1",
         "cordova-browser": "~4.1.0",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-console": "^1.0.7",

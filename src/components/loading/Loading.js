@@ -25,10 +25,11 @@ export default class Loading extends React.PureComponent {
       ),
       isLoading: true,
     };
-    // todo have cordova device ready event call a action to allow the loading screen to advance
-    setTimeout(() => {
+    // have cordova device ready event call a action to allow the loading screen to advance
+    // if not in cordova we will fake it for 0.5 seconds
+    window.document.addEventListener("deviceready", () => {
       this.setState(state => ({isLoading: false}));
-    }, 1000);
+    }, false);
   }
 
 
