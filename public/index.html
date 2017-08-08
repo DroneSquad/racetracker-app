@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <title>Drone Squad</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- removed cordova temp for redux/router dev work -->
+    <!-- <script src="cordova.js"></script> -->
+
+    <!-- roboto font for material-ui -->
+    <script>
+        var WebFontConfig = {
+          google: { families: [ 'Roboto:400,300,500:latin' ] }
+        };
+        (function() {
+          var wf = document.createElement('script');
+          wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+          wf.type = 'text/javascript';
+          wf.async = 'true';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(wf, s);
+        })();
+      </script>
+  </body>
+</html>

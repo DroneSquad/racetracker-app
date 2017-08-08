@@ -1,0 +1,10 @@
+@import url("colors.css");
+
+a {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  outline: none;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+}

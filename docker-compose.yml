@@ -1,0 +1,19 @@
+---
+# Mobile App
+
+version: '2'
+
+services:
+# todo have the docker server image spin up for dev env for the mobile app
+#  api:
+#    container_name: DroneSquadServer
+#    image: image_name
+  mobile:
+    build: .
+    image: mauronic/ds-mobile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src/:/opt/mobile/src/
+      - ./public/:/opt/mobile/public/
+      #- ./node_modules/:/opt/mobile/node_modules/ todo needs testing, if new package is added must rebuild the image

@@ -1,0 +1,17 @@
+/*
+ This file contains all the constants for the colors
+ https://docs.google.com/spreadsheets/d/1o_ZKbgeuba2zRdBxbmIJH3BQdz8YZNiMY7oHlhaORjA/edit#gid=0
+ Updated: 8/7/2017
+*/
+
+:root {
+  --ds-background: #f3f3f3;
+  --ds-white: #fff;
+  --ds-black: #272c2e;
+  --ds-blue: #26687f;
+  --ds-blue-alt: #15576e;
+  --ds-orange: #ff6d00;
+  --ds-orange-alt: #ee5e11;
+  --ds-light-orange: #ffa000;
+  --ds-light-blue-alt: #0bf;
+}

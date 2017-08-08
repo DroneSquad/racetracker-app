@@ -1,0 +1,10 @@
+{
+  "icon": {
+    "filename": "icon.png",
+    "background": "000000ff"
+  },
+  "splash": {
+    "filename": "splash.png",
+    "background": "000000ff"
+  }
+}

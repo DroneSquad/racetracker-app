@@ -1,0 +1,19 @@
+.loading {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 30%;
+  margin: auto;
+}
+
+.loading .logo {
+  padding: 10px;
+  width: 60%;
+  height: 60%;
+  box-shadow: 0 0 10000px 1000px var(--ds-blue);
+  background-color: var(--ds-blue);
+}
