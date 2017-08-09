@@ -26,12 +26,3 @@ body {
   padding: 0;
   margin: 0;
 }
-
-#app {
-  position: absolute;
-  top: 0;
-  height: 100vh;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-}

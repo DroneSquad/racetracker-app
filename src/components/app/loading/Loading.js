@@ -1,12 +1,11 @@
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
-
-import configStore from '../../store';
-import App from '../app/App';
+import configStore from '../../../store';
+import App from '../App';
 
 import './loading.css'
-import loadingImg from '../../media/ds-full-logo-spin.svg';
+import loadingImg from '../../../media/ds-full-logo-spin.svg';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

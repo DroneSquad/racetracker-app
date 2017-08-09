@@ -18,7 +18,7 @@
 // import third party items
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Loading from './components/loading/Loading'
+import Loading from './components/app/loading/Loading'
 
 // css styling
 import 'mdi/css/materialdesignicons.css';

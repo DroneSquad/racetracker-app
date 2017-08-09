@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { authorize } from '../../reducers';
+import { authorize } from '../../../reducers';
 
 import './login.css';
-import loginImg from '../../media/ds-full-logo.svg';
-import loadingImg from '../../media/ds-full-logo-spin.svg';
+import loginImg from '../../../media/ds-full-logo.svg';
+import loadingImg from '../../../media/ds-full-logo-spin.svg';
 
 /** This handles the view of the login window */
 class Login extends PureComponent {
