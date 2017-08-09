@@ -1,0 +1,63 @@
+.login {
+  background: var(--ds-blue);
+  text-align: center;
+  margin: auto;
+  padding: 10% 0;
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.login .logo {
+  padding: 10px;
+  width: 75%;
+  max-width: 500px;
+  margin-bottom: 10px;
+}
+
+.login input {
+  margin: 10px;
+  font-size: larger;
+  width: 75%;
+  padding: 10px;
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.login input.error {
+  border: 1px solid red;
+}
+
+@media only screen and (max-width: 500px) {
+  .login input[type='email']:focus, .login input[type='password']:focus {
+    bottom: 38px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    margin: 10px 0;
+    height: 28px;
+    border: none;
+    outline: none;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    box-shadow: 0 0 10000px 10000px rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
+.login input[type='submit'] {
+  background: var(--ds-orange);
+  color: #fff;
+  border-radius: 2px;
+  min-width: 64px;
+  padding: 0 8px;
+  margin: 8px 8px 16px;
+  line-height: 36px;
+}
+
+.login input[type='submit']:hover {
+  background: var(--ds-orange-alt);
+}

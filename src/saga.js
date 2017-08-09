@@ -4,7 +4,7 @@ import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './reducers';
 
 const authMock = (login, password) =>
   new Promise((resolve, reject) => {
-    if (login === 'root' && password === 'root') {
+    if (login === 'root@example.com' && password === 'root') {
       resolve({ token: 'secret-token' });
     } else {
       reject({ status: 401 });

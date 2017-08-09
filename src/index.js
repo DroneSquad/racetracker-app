@@ -24,8 +24,8 @@ import Loading from './components/loading/Loading'
 import 'mdi/css/materialdesignicons.css';
 import './styles/dronesquad.css';
 // material-ui needs this for the onTouchTap plugin
-//import injectTapEventPlugin from 'react-tap-event-plugin' todo enable when we actually need this
-//injectTapEventPlugin() t
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 
 ReactDOM.render(<Loading />, document.getElementById('app'));

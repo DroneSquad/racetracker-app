@@ -4,46 +4,55 @@ import { Redirect } from 'react-router-dom';
 
 import { authorize } from '../../reducers';
 
+import './login.css';
+import loginImg from '../../media/ds-full-logo.svg';
+import loadingImg from '../../media/ds-full-logo-spin.svg';
+
+/** This handles the view of the login window */
 class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
-  onSubmit() {
-    const login = this.login.value;
-    const password = this.password.value;
+  /** Handle the login logic */
+  onSubmit(event) {
+    event.preventDefault();
+    this._loading = true;
+    const login = this._email.value;
+    const password = this._password.value;
     this.props.dispatch(authorize(login, password));
+    return false;
+  }
+
+  /** Remove the error class from the element */
+  onChange() {
+    this._email.classList.remove('error');
+    this._password.classList.remove('error');
   }
 
   render() {
-    const { error, token } = this.props;
+    let { token, error } = this.props;
 
     if (token) {
       return <Redirect to="/" />;
     }
 
+    if (error) {
+      this._loading = false;
+    }
+
     return (
-      <div>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        <div>
-          <input
-            ref={_ref => this.login = _ref}
-            type="text"
-            placeholder="login"
-          />
-        </div>
-        <div>
-          <input
-            ref={_ref => this.password = _ref}
-            type="password"
-            placeholder="password"
-          />
-        </div>
-        <div>
-          <button onClick={this.onSubmit}>Submit</button>
-        </div>
-      </div>
+      <form className="login" method="post" onSubmit={this.onSubmit}>
+        <img src={this._loading ? loadingImg : loginImg} className="logo" alt=""/>
+        <input type='hidden' value='prayer' />
+        <input onChange={this.onChange} className={error ? 'error' : ''} ref={ref => this._email = ref} type="email" placeholder="Email" required/>
+        <input onChange={this.onChange} className={error ? 'error' : ''} ref={ref => this._password = ref} type="password" placeholder="Password" required/>
+        <input type="submit" value={this._loading ? 'Signing in...' : 'Sign in'}/>
+        <br/>
+        <a className="link" rel="noopener noreferrer" target="_blank" href="https://dronesquad.com/account/register">Sign up for a Drone Squad account!</a>
+      </form>
     );
   }
 }
