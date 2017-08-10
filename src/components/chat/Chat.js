@@ -1,7 +1,5 @@
 import React from 'react';
-
 import { Link, Route, Switch } from 'react-router-dom';
-
 
 const Dialogs = () => (
   <div>
@@ -10,12 +8,11 @@ const Dialogs = () => (
   </div>
 );
 
-const Messages = () => (
-  <div>messages<Link to='/chat'>Back</Link></div>
+const Messages = ({ match: { params: { id } } }) => (
+  <div>messages {id} <Link to='/chat'>Back</Link></div>
 );
 
 export default class Chat extends React.Component {
-
 
   render() {
     return (

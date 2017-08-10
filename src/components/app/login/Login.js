@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import { authorize } from '../../../reducers';
 
-import './login.css';
 import loginImg from '../../../media/ds-full-logo.svg';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
+import './login.css';
 
 /** This handles the view of the login window */
-class Login extends PureComponent {
+class Login extends React.PureComponent {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
@@ -33,10 +33,11 @@ class Login extends PureComponent {
   }
 
   render() {
-    let { token, error } = this.props;
+    let { token, error, location } = this.props;
 
-    if (token) {
-      return <Redirect to="/" />;
+    if (token) { // Redirect to the place where we want to go to
+      let to = (location.search || '').split('redirect=')[1] || '/';
+      return <Redirect to={to} />;
     }
 
     if (error) {

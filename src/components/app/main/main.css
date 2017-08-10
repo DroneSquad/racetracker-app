@@ -1,0 +1,20 @@
+
+.main header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.main main {
+  --header-height: 64px;
+  --footer-height: 56px;
+  --padding: 8px;
+  padding: calc(var(--header-height) + var(--padding)) var(--padding) calc(var(--footer-height) + var(--padding)) var(--padding);
+}
+
+.main footer {
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}

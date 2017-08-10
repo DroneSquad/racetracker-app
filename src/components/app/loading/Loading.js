@@ -1,20 +1,38 @@
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
-import configStore from '../../../store';
-import App from '../App';
-
-import './loading.css'
-import loadingImg from '../../../media/ds-full-logo-spin.svg';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+import configStore from '../../../store';
+import App from '../App';
+
+import loadingImg from '../../../media/ds-full-logo-spin.svg';
+import './loading.css';
+
 
 /**
  * This will load the initial screen and then decided what to do from there
  * this can be user login or handle the action after a deeplink or push notification
  */
 export default class Loading extends React.PureComponent {
+
+  constructor(props) {
+    // Handle all the loading logic
+    super(props);
+    this.history = createHistory();
+    this.state = {
+      callback: this.defaultCallback,
+      isLoading: true,
+    };
+    // have cordova device ready event call a action to allow the loading screen to advance
+    // if not in cordova we will fake it for 0.5 seconds
+    window.document.addEventListener("deviceready", () => {
+      // todo check if token is valid, if not remove it
+      this.setState(state => ({isLoading: false}));
+    }, false);
+  }
 
   /** Update the mui theme settings to match drone squad color scheme */
   muiTheme = getMuiTheme({
@@ -24,27 +42,14 @@ export default class Loading extends React.PureComponent {
     },
   });
 
-  constructor(props) {
-    // Handle all the loading logic
-    super(props);
-    let history = createHistory();
-    this.state = {
-      callback: () => (
-        <Provider store={configStore(history)}>
-          <MuiThemeProvider muiTheme={this.muiTheme}>
-            <App history={history}/>
-          </MuiThemeProvider>
-        </Provider>
-      ),
-      isLoading: true,
-    };
-    // have cordova device ready event call a action to allow the loading screen to advance
-    // if not in cordova we will fake it for 0.5 seconds
-    window.document.addEventListener("deviceready", () => {
-      this.setState(state => ({isLoading: false}));
-    }, false);
-  }
-
+  /** The default callback that will open the app */
+  defaultCallback = () => (
+    <Provider store={configStore(this.history)}>
+      <MuiThemeProvider muiTheme={this.muiTheme}>
+        <App history={this.history}/>
+      </MuiThemeProvider>
+    </Provider>
+  );
 
   render() {
     // While the app is loading display the spinner

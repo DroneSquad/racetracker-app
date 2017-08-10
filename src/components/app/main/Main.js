@@ -8,21 +8,25 @@ import Paper from 'material-ui/Paper';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import FontIcon from 'material-ui/FontIcon';
 
-import Chat from '../chat/Chat';
-import Home from '../home/Home';
+import Chat from '../../chat/Chat';
+import Home from '../../home/Home';
+import FourOhFour from '../../404/FourOhFour';
+
+import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
 class Main extends React.Component {
   render() {
     let { token } = this.props;
 
-    if (!token) {
-      return <Redirect to="/login" />;
+    if (!token) { // All content in main needs a valid token
+      let to = `/login?redirect=${window.location.pathname}`;
+      return <Redirect to={to} />;
     }
 
     // todo have the selected route change the bottom navigation index
     return (
-      <content>
+      <content className="main">
         <header>
           <AppBar title="Drone Squad" iconElementLeft={<IconButton />}/>
         </header>
@@ -30,7 +34,9 @@ class Main extends React.Component {
         <main>
           <Switch>
             <Route path="/chat" component={Chat} />
-            <Route path="/" exact={true} component={Home} />
+            <Route path="/404" component={FourOhFour} />
+            <Route path="/" exact strict component={Home} />
+            <Route path="/" component={() => <Redirect to="/404" />} /> {/* Must be last */}
           </Switch>
         </main>
 
