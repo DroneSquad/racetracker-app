@@ -27,5 +27,5 @@ import './styles/dronesquad.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-
+window.history.replaceState(null, document.title, '/'); // fix for react router in cordova env
 ReactDOM.render(<Loading />, document.getElementById('app'));
