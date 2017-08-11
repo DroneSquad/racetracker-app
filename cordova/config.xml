@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.dronesquad.mobile" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <hook src="hooks/build.sh" type="before_prepare" />
     <name>Drone Squad</name>
     <description>
         Drone Squad Chat App
     </description>
-    <content src="/index.html#web" />
+    <content src="/index.html" />
     <preference name="BackgroundColor" value="#26687f" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="true" />
@@ -13,7 +12,7 @@
     <preference name="StatusBarBackgroundColor" value="#15576e" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <platform name="android">
-        <content src="/index.html#app" />
+        <hook src="hooks/build-android.sh" type="before_prepare" />
         <access origin="*" />
         <allow-navigation href="" />
         <allow-intent href="*" />
@@ -22,7 +21,7 @@
         <icon src="/icon.png" />
     </platform>
     <platform name="ios">
-        <content src="/index.html#app" />
+        <hook src="hooks/build-ios.sh" type="before_prepare" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>

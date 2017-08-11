@@ -3,7 +3,6 @@
   "displayName": "Drone Squad",
   "version": "3.0.0",
   "private": true,
-  "_homepage": "/android_asset/www/",
   "homepage": ".",
   "dependencies": {
     "autoprefixer": "7.1.1",
