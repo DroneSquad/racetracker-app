@@ -19,7 +19,7 @@
 
 .main main {
   --padding: 8px;
-  padding: calc(var(--header-height) + var(--padding)) var(--padding) calc(var(--footer-height) + var(--padding)) var(--padding);
+  padding: calc(var(--header-height) + var(--padding)) 0 calc(var(--footer-height) + var(--padding)) 0;
 }
 
 .main footer {
