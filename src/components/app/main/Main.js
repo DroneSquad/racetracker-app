@@ -10,6 +10,7 @@ import Chat from '../../chat/Chat';
 import Home from '../../home/Home';
 import FourOhFour from '../../404/FourOhFour';
 
+import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
@@ -26,7 +27,8 @@ class Main extends React.Component {
     return (
       <content className="main">
         <header>
-          <AppBar title="Drone Squad" iconElementLeft={<IconButton />}/>
+          <AppBar title={<img className="logo" src={logo}/>} iconElementLeft={<IconButton />}>
+          </AppBar>
         </header>
 
         <main>

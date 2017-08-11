@@ -1,3 +1,7 @@
+.main {
+  --header-height: 64px;
+  --footer-height: 56px;
+}
 
 .main header {
   position: fixed;
@@ -5,9 +9,15 @@
   width: 100%;
 }
 
+.main header .logo {
+  --padding: 10px;
+  padding: var(--padding) 0;
+  height: calc(var(--header-height) - 2 * var(--padding));
+  width: 100%;
+  margin: 0 auto;
+}
+
 .main main {
-  --header-height: 64px;
-  --footer-height: 56px;
   --padding: 8px;
   padding: calc(var(--header-height) + var(--padding)) var(--padding) calc(var(--footer-height) + var(--padding)) var(--padding);
 }
