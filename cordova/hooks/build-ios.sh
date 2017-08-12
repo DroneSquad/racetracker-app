@@ -2,4 +2,4 @@ echo "building ios application..."
 
 mediagen
 
-cd .. && yarn build
+cd .. && PUBLIC_URL=cdvfile://localhost/bundle/www yarn build

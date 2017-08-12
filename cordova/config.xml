@@ -2,7 +2,7 @@
 <widget id="com.dronesquad.mobile" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Drone Squad</name>
     <description>
-        Drone Squad Chat App
+        Drone Squad Mobile App
     </description>
     <content src="/index.html" />
     <preference name="BackgroundColor" value="#26687f" />
@@ -27,8 +27,8 @@
     </platform>
     <engine name="android" spec="^6.2.1" />
     <engine name="browser" spec="~4.1.0" />
-    <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="onesignal-cordova-plugin" spec="^2.1.2" />
