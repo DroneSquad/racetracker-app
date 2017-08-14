@@ -27,7 +27,7 @@ class Main extends React.Component {
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo}/>} iconElementLeft={<IconButton />}/>
+          <AppBar title={<img className="logo" src={logo} alt=""/>} iconElementLeft={<IconButton />}/>
         </header>
 
         <main>
