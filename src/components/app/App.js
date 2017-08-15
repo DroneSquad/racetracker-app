@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import Main from './main/Main';
 import Login from './login/Login';
+import Tracker from '../tracker/Tracker';
 
 /** This is the main app that the user will see, one will get here after loading is done */
 export default class App extends React.Component {
@@ -14,6 +15,7 @@ export default class App extends React.Component {
     return (
       <ConnectedRouter history={history}>
         <Switch>
+          <Route path="/tracker" component={Tracker} />
           <Route path="/login" component={Login} />
           <Route path="/" component={Main} />
         </Switch>

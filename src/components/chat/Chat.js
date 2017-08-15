@@ -45,8 +45,8 @@ export default class Chat extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/chat" exact={true} component={Dialogs} />
         <Route path="/chat/:id" component={Messages} />
+        <Route path="/chat" component={Dialogs} />
       </Switch>
     );
   }

@@ -22,6 +22,10 @@
   padding: calc(var(--header-height) + var(--padding)) 0 calc(var(--footer-height) + var(--padding)) 0;
 }
 
+.main main div {
+  overflow: hidden;
+}
+
 .main footer {
   text-align: center;
   position: fixed;
