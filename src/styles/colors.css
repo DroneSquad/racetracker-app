@@ -16,3 +16,75 @@
   --ds-light-blue: #0bf;
   --ds-light-blue-alt: #1ae;
 }
+
+.ds-background {
+  background-color: var(--ds-background) !important;
+}
+
+.ds-background-text {
+  color: var(--ds-background) !important;
+}
+
+.ds-white {
+  background-color: var(--ds-white) !important;
+}
+
+.ds-white-text {
+  color: var(--ds-white) !important;
+}
+
+.ds-black {
+  background-color: var(--ds-black) !important;
+}
+
+.ds-black-text {
+  color: var(--ds-black) !important;
+}
+
+.ds-blue {
+  background-color: var(--ds-blue) !important;
+}
+
+.ds-blue-text {
+  color: var(--ds-blue) !important;
+}
+
+.ds-blue-alt {
+  background-color: var(--ds-blue-alt) !important;
+}
+
+.ds-blue-alt-text {
+  color: var(--ds-blue-alt) !important;
+}
+
+.ds-orange {
+  background-color: var(--ds-orange) !important;
+}
+
+.ds-orange-text {
+  color: var(--ds-orange) !important;
+}
+
+.ds-orange-alt {
+  background-color: var(--ds-orange-alt) !important;
+}
+
+.ds-orange-alt-text {
+  color: var(--ds-orange-alt) !important;
+}
+
+.ds-light-blue {
+  background-color: var(--ds-light-blue) !important;
+}
+
+.ds-light-blue-text {
+  color: var(--ds-light-blue) !important;
+}
+
+.ds-light-blue-alt {
+  background-color: var(--ds-light-blue-alt) !important;
+}
+
+.ds-light-blue-alt-text {
+  color: var(--ds-light-blue-alt) !important;
+}

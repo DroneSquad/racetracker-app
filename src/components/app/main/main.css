@@ -4,6 +4,7 @@
 }
 
 .main header {
+  z-index: 1000;
   position: fixed;
   top: 0;
   width: 100%;
@@ -27,6 +28,7 @@
 }
 
 .main footer {
+  z-index: 1000;
   text-align: center;
   position: fixed;
   bottom: 0;

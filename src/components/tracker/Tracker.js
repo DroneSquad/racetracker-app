@@ -4,15 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import SettingsMenu from './settings/SettingsMenu';
 import Frequencies from './frequencies/Frequencies';
 import Frequency from './frequencies/Frequency';
-
-/** Test component to view the other views */
-class TrackerHome extends React.Component {
-  render() {
-    return (
-      <div>Home for Tracker</div>
-    );
-  }
-}
+import TrackerHome from './TrackerHome';
 
 /** Handles the main logic for the tracker things */
 export default class Tracker extends React.Component {

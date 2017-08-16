@@ -1,0 +1,42 @@
+.tracker-home {
+  --ds-background: var(--ds-white);
+  background-color: var(--ds-background);
+  height: 100vh;
+}
+
+.tracker-home img.scanning {
+  height: 40px;
+  width: 40px;
+}
+
+.tracker-home footer {
+  background-color: var(--ds-background);
+  box-shadow: 0 0 8px var(--ds-background);
+}
+
+.tracker-home footer button {
+  margin: 8px !important;
+}
+
+.device {
+  font-size: 16px;
+}
+
+.device ul.details {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #666;
+  display: flex;
+}
+
+.device ul.details li {
+  flex: 1;
+  text-align: center;
+  display: block;
+}
+
+.device ul.details span {
+   color: #333;
+}

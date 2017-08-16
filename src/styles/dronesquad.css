@@ -34,3 +34,39 @@ body {
 .no-padding {
   padding: 0;
 }
+
+.center-text {
+  text-align: center;
+}
+
+.right-text {
+  text-align: right;
+}
+
+.left-text {
+  text-align: left;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
+
+.clear {
+  clear: both;
+}
+
+.clear-right {
+  clear: right;
+}
+
+.clear-left {
+  clear: left;
+}
