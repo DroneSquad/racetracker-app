@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 import {
   AppBar,
-  IconButton,
   List,
   Divider,
   Subheader,
@@ -14,6 +13,8 @@ import {
 
 import loadingImg from '../../media/ds-logo-spin.svg';
 import TrackerDevice from './TrackerDevice';
+
+import { historyBackButton } from '../../utils';
 
 import './tracker-home.css';
 
@@ -120,7 +121,7 @@ export default class TrackerHome extends React.Component {
     return (
       <div className="main tracker-home">
         <header>
-          <AppBar title="RaceTracker" iconElementLeft={<IconButton />}/>
+          <AppBar title="RaceTracker" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <main>
           <List>
