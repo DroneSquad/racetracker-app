@@ -23,15 +23,10 @@ export default class TrackerHome extends React.Component {
   constructor(props) {
     super(props);
     this.rescan = this.rescan.bind(this);
+    this.connect = this.connect.bind(this);
+    this.openSettings = this.openSettings.bind(this);
     this.state = {
-      paired: [
-        {
-          name: 'RedPig',
-          frequency: 'F1',
-          single: .78,
-          battery: .29,
-        }
-      ]
+      paired: []
     };
   }
 
@@ -44,9 +39,9 @@ export default class TrackerHome extends React.Component {
     let deviceLogo = <FontIcon className="mdi mdi-watch"/>;
     let deviceComponent = <TrackerDevice name={device.name} />; // todo pass what you need
     if (paired) {
-      return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} rightIcon={<FontIcon className="mdi mdi-settings"/>}/>
+      return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} rightIcon={<FontIcon className="mdi mdi-settings"/>} onClick={() => this.openSettings(device)}/>
     }
-    return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo}/>
+    return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} onClick={() => this.connect(device)}/>
   }
 
   /** Maps the paired devices to the view components */
@@ -100,6 +95,23 @@ export default class TrackerHome extends React.Component {
         ],
       });
     }, Math.random() * 1000 + 1000);
+  }
+
+  /** Open the settings view with the selected device */
+  openSettings(device) {
+    console.log('opening settings');
+    console.log(device);
+    this.props.history.push('/tracker/settings');
+  }
+
+  /** Connect to the current device */
+  connect(device) {
+    console.log('connecting');
+    console.log(device);
+    this.setState(state => { // todo better handle things with actions
+      state.paired.push(device);
+      state.available.splice(state.available.indexOf(device), 1);
+    })
   }
 
   render() {

@@ -1,12 +1,13 @@
 import React from 'react';
 
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import FontIcon from 'material-ui/FontIcon';
 
 import SensitivitySetting from './SensitivitySetting';
 import TimeDelaySetting from './TimeDelaySetting';
+
+import { historyBackButton } from '../../../utils';
 
 /** Handles the main logic for the tracker things */
 export default class Tracker extends React.Component {
@@ -24,7 +25,7 @@ export default class Tracker extends React.Component {
     return (
       <div>
         <header>
-          <AppBar title="RaceTracker Settings" iconElementLeft={<IconButton />}/>
+          <AppBar title="RaceTracker Settings" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <Paper zDepth={1} rounded={false}>
           <h2 className="no-margin">{trackerName}</h2>

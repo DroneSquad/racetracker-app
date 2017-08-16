@@ -21,3 +21,13 @@ export function toPercent(value) {
   }
   return value + '%';
 }
+
+/** Run the browsers history back button, must be called in the context of the component */
+export function historyBackButton(backUpPath = '/') {
+  let { history } = this.props;
+  if (history.length > 1) {
+    this.props.history.goBack();
+  } else {
+    this.props.history.go(backUpPath);
+  }
+}
