@@ -20,7 +20,7 @@ export default class FrequencySetting extends Setting {
     let frequencies = <span className="bar-item" >{this.state.frequencies}</span>;
     return (
       <div className={this.isLoadingClass()}>
-        <ListItem disabled leftIcon={<FontIcon className="mdi mdi-signal"/>} primaryText="Frequencies" secondaryText={frequencies}/>
+        <ListItem disabled leftIcon={<FontIcon className="mdi mdi-radio-tower"/>} primaryText="Frequencies" secondaryText={frequencies}/>
       </div>
     );
   }

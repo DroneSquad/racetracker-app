@@ -22,6 +22,16 @@ export function toPercent(value) {
   return value + '%';
 }
 
+/** Fancy to get battery level*/
+export function batteryLevelIcon(value) {
+  if (value === 1) {
+    return 'mdi mdi-battery';
+  } else if (!value || value < .1) {
+    return 'mdi mdi-battery-10';
+  }
+  return `mdi mdi-battery-${Math.floor(value * 10) * 10}`;
+}
+
 /** Run the browsers history back button, must be called in the context of the component */
 export function historyBackButton(backUpPath = '/') {
   let { history } = this.props;

@@ -8,7 +8,7 @@ import {
 
 import Setting from './Setting';
 
-import { toPercent } from '../../../utils';
+import { toPercent, batteryLevelIcon } from '../../../utils';
 
 export default class DeviceSettings extends Setting {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class DeviceSettings extends Setting {
       this.setState({
         name: 'Pink Panther',
         firmware: '1.56',
-        batteryLevel: 0.5,
+        batteryLevel: 0.85,
         bluetoothLevel: 0.4,
       });
     }, Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
@@ -32,7 +32,7 @@ export default class DeviceSettings extends Setting {
         <h2 className="ds-blue-text bar-item">{this.state.name}</h2>
         <h6 className="no-margin bar-item">Firmware {this.state.firmware}</h6>
         <List>
-          <ListItem disabled primaryText="Battery Level" leftIcon={<FontIcon className="mdi mdi-battery"/>} rightIcon={batteryLevel}/>
+          <ListItem disabled primaryText="Battery Level" leftIcon={<FontIcon className={batteryLevelIcon(this.state.batteryLevel)}/>} rightIcon={batteryLevel}/>
           <ListItem disabled primaryText="Bluetooth Single Strength" leftIcon={<FontIcon className="mdi mdi-bluetooth"/>} rightIcon={bluetoothLevel}/>
         </List>
       </div>
