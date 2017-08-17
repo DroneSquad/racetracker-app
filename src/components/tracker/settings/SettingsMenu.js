@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   AppBar,
-  FontIcon,
   List,
   ListItem,
   Divider,
@@ -23,14 +22,9 @@ export default class Tracker extends React.Component {
 
   constructor(props) {
     super(props);
-    this.trackerName = 'Tracker Name';
-    this.battery = 50;
-    this.range = 100;
   }
 
   render() {
-    //let { trackerName, battery, range } = this;
-
     return (
       <div className="main settings-menu">
         <header>
