@@ -1,6 +1,7 @@
 .main {
   --header-height: 64px;
   --footer-height: 56px;
+  overflow: scroll;
 }
 
 .main header {
@@ -21,10 +22,6 @@
 .main main {
   --padding: 8px;
   padding: calc(var(--header-height) + var(--padding)) 0 calc(var(--footer-height) + var(--padding)) 0;
-}
-
-.main main div {
-  overflow: hidden;
 }
 
 .main footer {

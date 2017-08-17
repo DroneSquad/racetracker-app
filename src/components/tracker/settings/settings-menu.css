@@ -1,0 +1,29 @@
+.settings-menu {
+  --ds-background: var(--ds-white);
+  background-color: var(--ds-background);
+  height: 100vh;
+}
+
+.settings-menu h2 {
+  height: 1em;
+  line-height: normal;
+  margin: 0 0 2px 0;
+  font-weight: normal;
+}
+
+.settings-menu h6 {
+  width: max-content;
+  font-weight: normal;
+}
+
+.settings-menu .push-down-text {
+  margin-top: 8px;
+}
+
+.settings-menu .push-down-icon {
+  margin-top: 18px !important;
+}
+
+.settings-menu .sensitivity-slider > div {
+  margin: 0 !important;
+}

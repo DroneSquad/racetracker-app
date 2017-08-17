@@ -17,7 +17,7 @@ export function toPercent(value) {
     return '100%';
   }
   if (value < 1) {
-    return (value * 10) + '%'
+    return (value * 100) + '%'
   }
   return value + '%';
 }
