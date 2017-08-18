@@ -20,10 +20,6 @@ import './settings-menu.css';
 /** Handles the main logic for the tracker things */
 export default class Tracker extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="main settings-menu">
@@ -33,8 +29,6 @@ export default class Tracker extends React.Component {
         <main>
           <List>
             <ListItem disabled primaryText={<DeviceSetting />} />
-            <Divider />
-            <ListItem disabled primaryText={<FrequencySetting />}/>
             <Divider />
             <ListItem disabled primaryText={<FlyoverSetting />}/>
             <Divider />

@@ -4,7 +4,7 @@
   height: 100vh;
 }
 
-.settings-menu h2 {
+.settings-menu h3, .settings-menu h2 {
   height: 1em;
   line-height: normal;
   margin: 0 0 2px 0;
@@ -26,4 +26,9 @@
 
 .settings-menu .sensitivity-slider > div {
   margin: 0 !important;
+}
+
+.settings-menu .frequencies {
+  margin: 0 !important;
+  height: 48px !important;
 }

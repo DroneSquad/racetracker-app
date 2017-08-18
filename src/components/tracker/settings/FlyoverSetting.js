@@ -15,11 +15,11 @@ export default class FrequencySetting extends Setting {
   }
 
   render() {
-    let toggleSwitch = <Toggle disabled={this.state.loading} label="Start timer on flyover" />;
+    let text = <h3 className="no-margin">Detect VTx to start timing</h3>;
+    let toggleSwitch = <Toggle disabled={this.state.loading} label={text} />;
+    let secondary = 'Timing begins when the video transmitter flies over the RaceTracker';
     return (
-      <div className={this.isLoadingClass()}>
-        <ListItem disabled leftIcon={<FontIcon className="mdi mdi-earth push-down-icon"/>} primaryText={toggleSwitch}/>
-      </div>
+      <ListItem disabled primaryText={toggleSwitch} secondaryText={secondary}/>
     );
   }
 }

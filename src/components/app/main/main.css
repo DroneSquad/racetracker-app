@@ -1,7 +1,8 @@
 .main {
   --header-height: 64px;
   --footer-height: 56px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .main header {

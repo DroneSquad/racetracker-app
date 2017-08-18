@@ -12,14 +12,14 @@ export default class FrequencySetting extends Setting {
     super(props);
     setTimeout(() => {
       this.doneLoading();
-      this.setState({frequencies: 'IMD5: F1-5600, F1-5600, F1-5600, F1-5600, F1-5600'});
+      this.setState({frequencies: '8 frequencies are being tracked'});
     }, Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
   }
 
   render() {
     let frequencies = <span className="bar-item" >{this.state.frequencies}</span>;
     return (
-      <div className={this.isLoadingClass()}>
+      <div className={'frequencies ' + this.isLoadingClass()}>
         <ListItem disabled leftIcon={<FontIcon className="mdi mdi-radio-tower"/>} primaryText="Frequencies" secondaryText={frequencies}/>
       </div>
     );

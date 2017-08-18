@@ -4,9 +4,11 @@ import {
   List,
   ListItem,
   FontIcon,
+  Divider,
 } from 'material-ui';
 
 import Setting from './Setting';
+import FrequencySetting from './FrequencySetting';
 
 import { toPercent, batteryLevelIcon } from '../../../utils';
 
@@ -33,7 +35,10 @@ export default class DeviceSettings extends Setting {
         <h6 className="no-margin bar-item">Firmware {this.state.firmware}</h6>
         <List>
           <ListItem disabled primaryText="Battery Level" leftIcon={<FontIcon className={batteryLevelIcon(this.state.batteryLevel)}/>} rightIcon={batteryLevel}/>
+          <Divider />
           <ListItem disabled primaryText="Bluetooth Single Strength" leftIcon={<FontIcon className="mdi mdi-bluetooth"/>} rightIcon={bluetoothLevel}/>
+          <Divider />
+          <FrequencySetting />
         </List>
       </div>
     );

@@ -24,8 +24,8 @@ export default class TimeDelaySetting extends Setting {
 
   render() {
     return (
-      <div className={this.isLoadingClass()}>
-        <h2 className="no-margin ds-blue-text left push-down-text">Fastest Lap</h2>
+      <div className={this.isLoadingClass()} style={{padding: '0 16px'}}>
+        <h3 className="no-margin left push-down-text">Fastest Lap</h3>
         <SelectField disabled={this.state.loading} className="right" value={this.state.time || 0} onChange={this.onSelectField}>
           {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>}/>}
           <MenuItem value={1} primaryText="5 seconds" />

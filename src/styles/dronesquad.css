@@ -36,37 +36,37 @@ body {
 }
 
 .center-text {
-  text-align: center;
+  text-align: center !important;
 }
 
 .right-text {
-  text-align: right;
+  text-align: right !important;
 }
 
 .left-text {
-  text-align: left;
+  text-align: left !important;
 }
 
 .center {
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
 
 .right {
-  float: right;
+  float: right !important;
 }
 
 .left {
-  float: left;
+  float: left !important;
 }
 
 .clear {
-  clear: both;
+  clear: both !important;
 }
 
 .clear-right {
-  clear: right;
+  clear: right !important;
 }
 
 .clear-left {
-  clear: left;
+  clear: left !important;
 }
