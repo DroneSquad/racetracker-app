@@ -9,7 +9,6 @@ import {
 
 import Setting from './Setting';
 import FrequencySetting from './FrequencySetting';
-import TrackerDevice from '../TrackerDevice';
 
 import { toPercent, batteryLevelIcon } from '../../../utils';
 
@@ -39,7 +38,7 @@ export default class DeviceSettings extends Setting {
           <Divider />
           <ListItem disabled primaryText="Bluetooth Single Strength" leftIcon={<FontIcon className="mdi mdi-bluetooth"/>} rightIcon={bluetoothLevel}/>
           <Divider />
-          <FrequencySetting />
+          <FrequencySetting history={this.props.history}/>
         </List>
       </div>
     );

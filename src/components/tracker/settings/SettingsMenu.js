@@ -28,7 +28,7 @@ export default class Tracker extends React.Component {
         </header>
         <main>
           <List>
-            <ListItem disabled primaryText={<DeviceSetting />} />
+            <ListItem disabled primaryText={<DeviceSetting history={this.props.history}/>} />
             <Divider />
             <ListItem disabled primaryText={<FlyoverSetting />}/>
             <Divider />

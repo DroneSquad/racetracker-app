@@ -5,17 +5,18 @@ import {
   List,
   ListItem,
   Divider,
-  IconButton,
   DropDownMenu,
   MenuItem,
 } from 'material-ui';
+
+import { historyBackButton } from '../../../../utils';
 
 export default class Frequencies extends React.Component {
   render() {
     return (
       <div className="main">
         <header>
-          <AppBar title="Video Frequencies" iconElementLeft={<IconButton />}/>
+          <AppBar title="Video Frequencies" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <main>
           <DropDownMenu value={1} onChange={() => {}}>
