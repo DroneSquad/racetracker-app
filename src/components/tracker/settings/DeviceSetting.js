@@ -18,10 +18,10 @@ export default class DeviceSettings extends Setting {
     setTimeout(() => {
       this.doneLoading();
       this.setState({
-        name: 'Pink Panther',
+        name: this.props.bluetooth.name,
         firmware: '1.56',
-        batteryLevel: 0.85,
-        bluetoothLevel: 0.4,
+        batteryLevel: this.props.bluetooth.battery,
+        bluetoothLevel: this.props.bluetooth.single,
       });
     }, Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
   }

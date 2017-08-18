@@ -12,7 +12,7 @@ import SensitivitySetting from './SensitivitySetting';
 import TimeDelaySetting from './TimeDelaySetting';
 import FlyoverSetting from './FlyoverSetting';
 
-import { historyBackButton } from '../../../utils';
+import { historyBackButton, notNull } from '../../../utils';
 
 import './settings-menu.css';
 
@@ -20,7 +20,8 @@ import './settings-menu.css';
 export default class Tracker extends React.Component {
 
   render() {
-    console.log(this.props);
+    let bluetoothDevice = notNull(this.props.location.state, 'Must have the state for the current window');
+    console.log(this.props.location.state); // this contains the current state for the view
     return (
       <div className="main settings-menu">
         <header>
@@ -28,13 +29,13 @@ export default class Tracker extends React.Component {
         </header>
         <main>
           <List>
-            <ListItem disabled primaryText={<DeviceSetting history={this.props.history}/>} />
+            <ListItem disabled primaryText={<DeviceSetting bluetooth={bluetoothDevice} history={this.props.history}/>} />
             <Divider />
-            <ListItem disabled primaryText={<FlyoverSetting />}/>
+            <ListItem disabled primaryText={<FlyoverSetting bluetooth={bluetoothDevice}/>}/>
             <Divider />
-            <ListItem disabled primaryText={<SensitivitySetting />}/>
+            <ListItem disabled primaryText={<SensitivitySetting bluetooth={bluetoothDevice}/>}/>
             <Divider />
-            <ListItem disabled primaryText={<TimeDelaySetting />}/>
+            <ListItem disabled primaryText={<TimeDelaySetting bluetooth={bluetoothDevice}/>}/>
           </List>
         </main>
       </div>
