@@ -10,7 +10,6 @@ import {
 import DeviceSetting from './DeviceSetting';
 import SensitivitySetting from './SensitivitySetting';
 import TimeDelaySetting from './TimeDelaySetting';
-import FrequencySetting from './FrequencySetting';
 import FlyoverSetting from './FlyoverSetting';
 
 import { historyBackButton } from '../../../utils';
@@ -21,6 +20,7 @@ import './settings-menu.css';
 export default class Tracker extends React.Component {
 
   render() {
+    console.log(this.props);
     return (
       <div className="main settings-menu">
         <header>

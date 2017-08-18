@@ -47,11 +47,19 @@ export default class Nav extends React.Component {
       return <BottomNavigationItem key={id} label={nav.name} icon={<FontIcon className={nav.iconClasses} />} onTouchTap={() => this.onClick(nav)}/>
     });
     this.state = {index: currentPageIndex};
-    props.history.listen(this.onHistory);
+  }
+
+  componentWillMount() {
+    this.unlisten = this.props.history.listen(this.onHistory); // docs says to call the function returned to unlisten
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   /** Listen to the history and update the index of the nav bar state */
   onHistory(event) {
+    console.log('history');
     if (event.pathname === '/404') { // if on 404 page set selected to nothing
       this.setState(state => state.index = -1);
     } else {

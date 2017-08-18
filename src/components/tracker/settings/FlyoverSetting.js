@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   ListItem,
-  FontIcon,
   Toggle,
 } from 'material-ui';
 

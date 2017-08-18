@@ -102,7 +102,7 @@ export default class TrackerHome extends React.Component {
   openSettings(device) {
     console.log('opening settings');
     console.log(device);
-    this.props.history.push('/tracker/settings');
+    this.props.history.push('/tracker/settings', device);
   }
 
   /** Connect to the current device */

@@ -21,7 +21,10 @@ export default class Loading extends React.PureComponent {
   constructor(props) {
     // Handle all the loading logic
     super(props);
-    this.history = createHistory();
+    this.history = createHistory({ // Make the urls in a hashbang format for reasons we are not running on a real web server
+      hash: 'hashbang',
+      basename: '#!',
+    });
     this.state = {
       callback: this.defaultCallback,
       isLoading: true,

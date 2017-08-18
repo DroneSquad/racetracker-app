@@ -27,7 +27,6 @@ import './styles/dronesquad.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-if (window.cordova) { // fix for react router in cordova env
-  window.history.replaceState(null, document.title, '/');
-}
+// keep all urls under hashbang
+window.history.replaceState(null, document.title, '/' + (window.location.hash || '#!/'));
 ReactDOM.render(<Loading />, document.getElementById('app'));
