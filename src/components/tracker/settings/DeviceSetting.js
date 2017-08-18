@@ -9,6 +9,7 @@ import {
 
 import Setting from './Setting';
 import FrequencySetting from './FrequencySetting';
+import TrackerDevice from '../TrackerDevice';
 
 import { toPercent, batteryLevelIcon } from '../../../utils';
 

@@ -37,10 +37,10 @@ export default class TrackerHome extends React.Component {
 
   /** Create the item list from a device object, maps click events*/
   device(id = 0, device, paired) {
-    let deviceLogo = <FontIcon className="mdi mdi-watch"/>;
+    let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer"/>;
     let deviceComponent = <TrackerDevice name={device.name} />; // todo pass what you need
     if (paired) {
-      return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} rightIcon={<FontIcon className="mdi mdi-settings"/>} onClick={() => this.openSettings(device)}/>
+      return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} rightIcon={<FontIcon className="pull-icon-down mdi mdi-settings"/>} onClick={() => this.openSettings(device)}/>
     }
     return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} onClick={() => this.connect(device)}/>
   }

@@ -18,25 +18,31 @@
   margin: 8px !important;
 }
 
+.pull-icon-down {
+  margin-top: 34px !important;
+}
+
 .device {
-  font-size: 16px;
-}
-
-.device ul.details {
   font-size: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: #666;
-  display: flex;
+  color: #aaa;
 }
 
-.device ul.details li {
-  flex: 1;
-  text-align: center;
-  display: block;
+.device .mdi {
+  color: #888 !important;
+  padding-right: 6px;
+  vertical-align: bottom;
 }
 
-.device ul.details span {
-   color: #333;
+.device h3 {
+  color: var(--ds-black);
+  font-size: 16px;
+  margin: 8px 0;
+  font-weight: normal;
+}
+
+.device span.detail {
+  padding-top: 4px;
+  padding-right: 16px;
+  height: 16px;
+  line-height: 16px;
 }
