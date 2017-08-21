@@ -19,7 +19,7 @@ export function toPercent(value) {
   if (value < 1) {
     return Math.floor(value * 100) + '%'
   }
-  return value + '%';
+  return (value || 0) + '%';
 }
 
 /** Fancy to get battery level*/

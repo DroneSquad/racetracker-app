@@ -9,12 +9,20 @@ import {
   MenuItem,
 } from 'material-ui';
 
-import { historyBackButton } from '../../../../utils';
+import { historyBackButton, toPercent } from '../../../../utils';
+
+import './frequencies.css';
 
 export default class Frequencies extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
   render() {
     return (
-      <div className="main">
+      <div className="main video-frequencies">
         <header>
           <AppBar title="Video Frequencies" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
@@ -33,6 +41,10 @@ export default class Frequencies extends React.Component {
             <MenuItem value={4} primaryText="Weekends" />
             <MenuItem value={5} primaryText="Weekly" />
           </DropDownMenu>
+          <p>
+            Drone Squad quality rating: {toPercent(this.state.quality)} <br />
+            Reduce frequencies to improve timing accuracy.
+          </p>
           <List>
             <ListItem primaryText="All mail" rightIcon={<span>Text</span>} />
             <Divider />

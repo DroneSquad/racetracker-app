@@ -7,10 +7,12 @@ import {
 
 import { historyBackButton } from '../../../../utils';
 
+import './frequencies.css';
+
 export default class Frequency extends React.Component {
   render() {
     return (
-      <div className="main">
+      <div className="main video-frequencies">
         <header>
           <AppBar title="RaceTracker Settings"  iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>

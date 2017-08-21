@@ -20,7 +20,7 @@ import './settings-menu.css';
 export default class Tracker extends React.Component {
 
   render() {
-    let bluetoothDevice = notNull(this.props.location.state, 'Must have the state for the current window');
+    let bluetoothDevice = this.props.location.state || {};//notNull(this.props.location.state, 'Must have the state for the current window');
     console.log(this.props.location.state); // this contains the current state for the view
     return (
       <div className="main settings-menu">

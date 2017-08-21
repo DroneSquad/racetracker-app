@@ -31,8 +31,8 @@ export default class DeviceSettings extends Setting {
     let bluetoothLevel = <span className="bar-item" >{toPercent(this.state.bluetoothLevel)}</span>;
     return (
       <div className={this.isLoadingClass()}>
-        <h2 className="ds-blue-text bar-item">{this.state.name}</h2>
-        <h6 className="no-margin bar-item">Firmware {this.state.firmware}</h6>
+        <h2 className="ds-blue-text bar-item">{this.state.name || 'Undefined'}</h2>
+        <h6 className="no-margin bar-item">Firmware {this.state.firmware || '0.0'}</h6>
         <List>
           <ListItem disabled primaryText="Battery Level" leftIcon={<FontIcon className={batteryLevelIcon(this.state.batteryLevel)}/>} rightIcon={batteryLevel}/>
           <Divider />

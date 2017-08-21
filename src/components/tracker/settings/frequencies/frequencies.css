@@ -1,0 +1,5 @@
+.video-frequencies {
+  --ds-background: var(--ds-white);
+  background-color: var(--ds-background);
+  height: 100vh;
+}
