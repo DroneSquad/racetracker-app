@@ -14,33 +14,29 @@ export default class SensitivitySetting extends Setting {
 
   constructor(props) {
     super(props);
-    this.onSlider = this.onSlider.bind(this);
-    this.calibrate = this.calibrate.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
     setTimeout(() => this.doneLoading(), Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
   }
 
   /** When the slider changes */
-  onSlider(event, value) {
+  onSlider = (event, value) => {
     this.setState({slider: value});
-  }
+  };
 
   /** Calibrate the race tracker */
-  calibrate() {
+  calibrate = () => {
     this.setState({calibrating: true});
     setTimeout(() => {
       this.setState({calibrating: false, calibrateDialog: false, slider: 0.55});
     }, 1000); // todo trigger after we fetch the settings from the device
-  }
+  };
 
   /** Open the dialog */
-  handleOpen() {
+  handleOpen = () => {
     this.setState({calibrateDialog: true});
   };
 
   /** Close the dialog */
-  handleCancel() {
+  handleCancel= () => {
     this.setState({calibrateDialog: false});
   };
 

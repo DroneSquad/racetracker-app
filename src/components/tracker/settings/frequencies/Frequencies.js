@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import {
   AppBar,
@@ -15,10 +16,32 @@ import './frequencies.css';
 
 export default class Frequencies extends React.Component {
 
+  static MAX_FREQUENCY_AMOUNT = 8;
+
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {
+      amount: 0,
+      channel: 0,
+    }
   }
+
+  /** When the frequency amount changes */
+  onFrequencyAmount = (event, value) => {
+    console.log(value);
+    this.setState({amount: value});
+  };
+
+
+  /** When the frequency amount changes */
+  onFrequencyChannel = (event, value) => {
+    this.setState({channel: value});
+  };
+
+  /** When the user clicks on the frequency */
+  onFrequencyClick = () => {
+    this.props.history.push('/tracker/settings/frequencies/edit')
+  };
 
   render() {
     return (
@@ -27,39 +50,28 @@ export default class Frequencies extends React.Component {
           <AppBar title="Video Frequencies" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <main>
-          <DropDownMenu value={1} onChange={() => {}}>
-            <MenuItem value={1} primaryText="Never" />
-            <MenuItem value={2} primaryText="Every Night" />
-            <MenuItem value={3} primaryText="Weeknights" />
-            <MenuItem value={4} primaryText="Weekends" />
-            <MenuItem value={5} primaryText="Weekly" />
+          <DropDownMenu value={this.state.amount} onChange={this.onFrequencyAmount}>
+            {_.range(Frequencies.MAX_FREQUENCY_AMOUNT).map(i => <MenuItem value={i} primaryText={++i} />)}
           </DropDownMenu>
-          <DropDownMenu value={1} onChange={() => {}}>
-            <MenuItem value={1} primaryText="Never" />
-            <MenuItem value={2} primaryText="Every Night" />
-            <MenuItem value={3} primaryText="Weeknights" />
-            <MenuItem value={4} primaryText="Weekends" />
-            <MenuItem value={5} primaryText="Weekly" />
+          <DropDownMenu value={this.state.channel} onChange={this.onFrequencyChannel}>
+            {_.range(6).map(i => <MenuItem value={i} primaryText={String.fromCharCode(65 + i)} />)}
           </DropDownMenu>
           <p>
             Drone Squad quality rating: {toPercent(this.state.quality)} <br />
             Reduce frequencies to improve timing accuracy.
           </p>
           <List>
-            <ListItem primaryText="All mail" rightIcon={<span>Text</span>} />
-            <Divider />
-
-            <ListItem primaryText="Trash" rightIcon={<span>Text</span>} />
-            <Divider />
-
-            <ListItem primaryText="Spam" rightIcon={<span>Text</span>} />
-            <Divider />
-
-            <ListItem primaryText="Follow up" rightIcon={<span>Text</span>} />
-            <Divider />
-
+            {_.range(this.state.amount + 1).map(i => (
+              <div key={i++}>
+                <ListItem primaryText={'Frequency ' + (i)} rightIcon={<span>{String.fromCharCode(64 + i)}</span>} onTouchTap={this.onFrequencyClick} />
+                <Divider />
+              </div>
+            ))}
           </List>
         </main>
+        <footer>
+          <span>Pro video profiles by Alex "IBCrazy" Greve</span>
+        </footer>
       </div>
     );
   }

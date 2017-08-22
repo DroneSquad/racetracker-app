@@ -23,9 +23,6 @@ export default class TrackerHome extends React.Component {
 
   constructor(props) {
     super(props);
-    this.rescan = this.rescan.bind(this);
-    this.connect = this.connect.bind(this);
-    this.openSettings = this.openSettings.bind(this);
     this.state = {
       paired: []
     };
@@ -64,7 +61,7 @@ export default class TrackerHome extends React.Component {
   }
 
   /** Rescan the bluetooth devices */
-  rescan() {
+  rescan = () => {
     console.log('rescanning');
     this.setState({ available: null });
     // todo call action, replace the faked state
@@ -99,14 +96,14 @@ export default class TrackerHome extends React.Component {
   }
 
   /** Open the settings view with the selected device */
-  openSettings(device) {
+  openSettings = (device) => {
     console.log('opening settings');
     console.log(device);
     this.props.history.push('/tracker/settings', device);
   }
 
   /** Connect to the current device */
-  connect(device) {
+  connect = (device) => {
     console.log('connecting');
     console.log(device);
     this.setState(state => { // todo better handle things with actions

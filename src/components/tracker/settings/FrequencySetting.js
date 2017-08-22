@@ -10,7 +10,6 @@ import Setting from './Setting';
 export default class FrequencySetting extends Setting {
   constructor(props) {
     super(props);
-    this.openFrequencies = this.openFrequencies.bind(this);
     setTimeout(() => {
       this.doneLoading();
       this.setState({frequencies: '8 frequencies are being tracked'});
@@ -18,9 +17,9 @@ export default class FrequencySetting extends Setting {
   }
 
   /** Open the frequencies settings for the race tracker */
-  openFrequencies() {
+  openFrequencies = () => {
     this.props.history.push('/tracker/settings/frequencies');
-  }
+  };
 
   render() {
     let frequencies = <span className="bar-item" >{this.state.frequencies}</span>;

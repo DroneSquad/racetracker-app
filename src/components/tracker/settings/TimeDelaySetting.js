@@ -10,7 +10,6 @@ import Setting from './Setting';
 export default class TimeDelaySetting extends Setting {
   constructor(props) {
     super(props);
-    this.onSelectField = this.onSelectField.bind(this);
     setTimeout(() => {
       this.setState({time: 1}); // todo fetch from device
       this.doneLoading();
@@ -18,9 +17,9 @@ export default class TimeDelaySetting extends Setting {
   }
 
   /** When they select the menu item */
-  onSelectField(event, index, value) {
+  onSelectField = (event, index, value) => {
     this.setState({time: value})
-  }
+  };
 
   render() {
     return (
