@@ -14,3 +14,12 @@
   box-shadow: 0 0 8px 8px var(--ds-background);
   padding: 0 0 6px 0;
 }
+
+.video-frequencies .pad {
+  padding: 0 0 0 28px;
+}
+
+.video-frequencies h4 {
+  font-weight: normal;
+  font-size: 20px;
+}

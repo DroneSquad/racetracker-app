@@ -12,6 +12,7 @@ import {
 
 import { historyBackButton, toPercent } from '../../../../utils';
 
+import frequencies from './frequencies.json'; // the config to generate the profiles
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {
@@ -28,7 +29,6 @@ export default class Frequencies extends React.Component {
 
   /** When the frequency amount changes */
   onFrequencyAmount = (event, value) => {
-    console.log(value);
     this.setState({amount: value});
   };
 
@@ -51,10 +51,10 @@ export default class Frequencies extends React.Component {
         </header>
         <main>
           <DropDownMenu value={this.state.amount} onChange={this.onFrequencyAmount}>
-            {_.range(Frequencies.MAX_FREQUENCY_AMOUNT).map(i => <MenuItem value={i} primaryText={++i} />)}
+            {_.range(Frequencies.MAX_FREQUENCY_AMOUNT).map(i => <MenuItem key={i} value={i} primaryText={++i} />)}
           </DropDownMenu>
           <DropDownMenu value={this.state.channel} onChange={this.onFrequencyChannel}>
-            {_.range(6).map(i => <MenuItem value={i} primaryText={String.fromCharCode(65 + i)} />)}
+            {_.range(6).map(i => <MenuItem key={i} value={i} primaryText={String.fromCharCode(65 + i)} />)}
           </DropDownMenu>
           <p>
             Drone Squad quality rating: {toPercent(this.state.quality)} <br />
