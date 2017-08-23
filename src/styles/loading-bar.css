@@ -15,7 +15,8 @@
 }
 
 .loading-bar .bar-item:after {
-  content: '&nbsp;' !important;
+  content: '...' !important;
+  text-overflow: clip !important;
 }
 
 @keyframes loading {

@@ -12,7 +12,7 @@ import {
 
 import { historyBackButton, toPercent } from '../../../../utils';
 
-import frequencies from './frequencies.json'; // the config to generate the profiles
+//import frequencies from './frequencies.json'; // the config to generate the profiles
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {

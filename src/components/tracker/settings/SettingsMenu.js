@@ -12,7 +12,7 @@ import SensitivitySetting from './SensitivitySetting';
 import TimeDelaySetting from './TimeDelaySetting';
 import FlyoverSetting from './FlyoverSetting';
 
-import { historyBackButton, notNull } from '../../../utils';
+import { historyBackButton, /*notNull*/ } from '../../../utils';
 
 import './settings-menu.css';
 

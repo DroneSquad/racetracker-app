@@ -1,3 +1,38 @@
 {
-
+  "profiles": [
+    {
+      "name": "FatShark",
+      "frequencies": [
+        {
+          "imd": 1.0,
+          "bands": [5740]
+        },
+        {
+          "imd": 1.0,
+          "bands": [5740, 5880]
+        },
+        {
+          "imd": 1.0,
+          "bands": [5740, 5820, 5880]
+        }
+      ]
+    },
+    {
+      "name": "Raceband",
+      "frequencies": [
+        {
+          "imd": 1.0,
+          "bands": [5740]
+        },
+        {
+          "imd": 1.0,
+          "bands": [5740, 5880]
+        },
+        {
+          "imd": 1.0,
+          "bands": [5740, 5820, 5880]
+        }
+      ]
+    }
+  ]
 }
