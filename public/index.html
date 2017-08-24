@@ -8,7 +8,10 @@
     <title>Drone Squad</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- Floating element that will load before the loading screen, will be overwritten when react loads -->
+      <div style="top: 0; left: 0; position: absolute; display: block; height: 100vh; width: 100vw; overflow: hidden; background-color: #26687f"></div>
+    </div>
     <!-- This will load a fake cordova file if not in a cordova env -->
      <script src="%PUBLIC_URL%/cordova.js"></script>
   </body>
