@@ -5,11 +5,12 @@
         Drone Squad Mobile App
     </description>
     <content src="/index.html" />
-    <preference name="BackgroundColor" value="#26687f" />
+    <preference name="BackgroundColor" value="0xff26687f" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#15576e" />
+    <preference name="HeaderColor" value="#26687f" />
     <preference name="StatusBarStyle" value="lightcontent" />
     <platform name="android">
         <hook src="hooks/build-android.sh" type="before_prepare" />
@@ -29,6 +30,7 @@
     <engine name="browser" spec="~4.1.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="onesignal-cordova-plugin" spec="^2.1.2" />
