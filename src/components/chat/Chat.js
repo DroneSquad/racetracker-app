@@ -2,13 +2,12 @@ import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 
 /** The basic component for displaying the chat dialogs */
 const Dialogs = () => (
   <div>
     <header>
-      <AppBar title="Chat" iconElementLeft={<IconButton />}/>
+      <AppBar title="Chat"/>
     </header>
     dialogs
     <Link to='/chat/1'>1</Link>

@@ -12,15 +12,15 @@ const ROUTES = [
     name: 'Home',
     iconClasses: 'mdi mdi-home'
   },
+  // { // todo enable when its created
+  //   path: '/discover',
+  //   name: 'Discover',
+  //   iconClasses: 'mdi mdi-calendar'
+  // },
   {
-    path: '/discover',
-    name: 'Discover',
-    iconClasses: 'mdi mdi-calendar'
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    iconClasses: 'mdi mdi-account'
+    path: '/race',
+    name: 'Race',
+    iconClasses: 'mdi mdi-flag-checkered'
   },
   {
     path: '/chat',

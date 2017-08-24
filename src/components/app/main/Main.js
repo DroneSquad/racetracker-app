@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
 
 import Nav from './Nav';
 import Chat from '../../chat/Chat';
 import Home from '../../home/Home';
+import Race from '../../race/Race';
 import FourOhFour from '../../404/FourOhFour';
 
 import logo from '../../../media/ds-full-logo-horizontal.svg';
@@ -27,11 +27,12 @@ class Main extends React.Component {
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo} alt=""/>} iconElementLeft={<IconButton />}/>
+          <AppBar title={<img className="logo" src={logo} alt=""/>}/>
         </header>
 
         <main>
           <Switch>
+            <Route path="/race" component={Race} />
             <Route path="/chat" component={Chat} />
             <Route path="/404" component={FourOhFour} />
             <Route path="/" exact component={Home} />

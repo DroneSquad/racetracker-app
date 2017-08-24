@@ -41,9 +41,11 @@ export default class Loading extends React.PureComponent {
   muiTheme = getMuiTheme({
     palette: {
       primary1Color: 'var(--ds-blue)',
-      primary2Color: 'var(--ds-blue-alt)',
-      accent1Color: 'var(--ds-blue-alt)',
-      accent2Color: 'var(--ds-blue)',
+      primary2Color: 'var(--ds-light-blue)',
+      primary3Color: '#ccc',
+      accent1Color: 'var(--ds-light-blue-alt)',
+      accent2Color: 'var(--ds-blue-alt)',
+      accent3Color: '#aaa',
     },
   });
 

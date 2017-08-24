@@ -1,0 +1,6 @@
+.race main {
+  --padding: 0 !important;
+  margin-top: -8px;
+  z-index: 1001;
+  position: relative;
+}
