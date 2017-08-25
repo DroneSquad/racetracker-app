@@ -16,8 +16,10 @@
   --padding: 15px;
   padding: var(--padding) 0;
   height: calc(var(--header-height) - 2 * var(--padding));
-  width: 100%;
   margin: 0 auto;
+  width: 100vw;
+  left: 0 !important;
+  position: absolute;
 }
 
 .main main {

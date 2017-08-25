@@ -7,7 +7,7 @@ import AppBar from 'material-ui/AppBar';
 import Nav from './Nav';
 import Chat from '../../chat/Chat';
 import Home from '../../home/Home';
-import Race from '../../race/Race';
+import Fly from '../../fly/Fly';
 import FourOhFour from '../../404/FourOhFour';
 
 import logo from '../../../media/ds-full-logo-horizontal.svg';
@@ -32,7 +32,7 @@ class Main extends React.Component {
 
         <main>
           <Switch>
-            <Route path="/race" component={Race} />
+            <Route path="/fly" component={Fly} />
             <Route path="/chat" component={Chat} />
             <Route path="/404" component={FourOhFour} />
             <Route path="/" exact component={Home} />

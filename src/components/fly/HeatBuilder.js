@@ -10,6 +10,9 @@ import {
   Divider,
   Avatar,
   FontIcon,
+  IconMenu,
+  MenuItem,
+  IconButton,
 } from 'material-ui';
 
 import fetch from '../../fetch';
@@ -22,7 +25,7 @@ export class Pilot extends React.Component {
       loading: true,
       avatar: `https://api.dronesquad.com/avatar/${this.props.id}`,
       name: 'Unknown Name',
-      frequency: props.frequency || 'N/A - 0000'
+      frequency: props.frequency || 'N/A - 0000',
     };
   }
 
@@ -56,11 +59,24 @@ export default class HeatBuilder extends React.Component {
     this.state = {state: 'Up Next'};
   }
 
+  /** The drop down menu for the options menu */
+  menuDropdown = () => {
+    let styleIcons = {margin: '0 0 0 8px'};
+    let icon =<IconButton style={{margin: '-12px'}}><FontIcon className="no-padding ds-gray-alt-text mdi mdi-dots-vertical" /></IconButton>;
+    return (
+      <IconMenu iconButtonElement={icon}>
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-clock-start"/>} primaryText="Start"/>
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil"/>} primaryText="Edit" onTouchTap={() => this.props.history.push('/fly/heat/edit')}/>
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete"/>} primaryText="Delete"/>
+      </IconMenu>
+    );
+  };
+
   render() {
     let title = <span className="">{`Heat ${this.props.id} - ${this.state.state}`}</span>;
     return (
-      <Card onExpandChange={() => this.props.history.push('/race/heat/edit')}>
-        <CardTitle showExpandableButton title={title} closeIcon={<FontIcon className="mdi mdi-dots-vertical"/>}/>
+      <Card expanded={false}>
+        <CardTitle title={title} showExpandableButton closeIcon={this.menuDropdown()}/>
         <Divider/>
         <CardText className="no-padding">
           <List className="no-padding">

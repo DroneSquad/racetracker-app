@@ -1,0 +1,60 @@
+.fly {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+}
+
+.fly main {
+  --padding: 0 !important;
+  margin-top: -8px;
+  z-index: 1001;
+  position: relative;
+}
+
+.fly .heat-action {
+  overflow: hidden;
+  text-align: center;
+}
+
+.fly .heat-list {
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: calc(100vh - 235px);
+  z-index: -1 !important;
+}
+
+.heat-lineup {
+  --ds-background: var(--ds-white);
+  background-color: var(--ds-background);
+  height: 100vh;
+}
+
+.heat-selector {
+  display: flex;
+}
+
+.heat-selector .frequency {
+  margin: 8px 0 !important;
+}
+
+.heat-selector .frequency h4 {
+  font-size: 20px;
+  padding-bottom: 3px;
+  color: var(--ds-blue);
+}
+
+.heat-selector .frequency * {
+  text-align: center;
+  margin: 0 !important;
+  font-weight: normal;
+  font-size: 16px;
+  width: 15vw;
+  color: var(--ds-blue-alt);
+}
+
+.heat-selector .pilots {
+  width: 85vw !important;
+}
+

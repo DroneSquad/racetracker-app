@@ -9,8 +9,8 @@ import FontIcon from 'material-ui/FontIcon';
 const ROUTES = [
   {
     path: '/',
-    name: 'Home',
-    iconClasses: 'mdi mdi-home'
+    name: 'Community',
+    iconClasses: 'mdi mdi-account-multiple'
   },
   // { // todo enable when its created
   //   path: '/discover',
@@ -18,8 +18,8 @@ const ROUTES = [
   //   iconClasses: 'mdi mdi-calendar'
   // },
   {
-    path: '/race',
-    name: 'Race',
+    path: '/fly',
+    name: 'Fly',
     iconClasses: 'mdi mdi-flag-checkered'
   },
   {

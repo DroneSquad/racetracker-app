@@ -7,8 +7,9 @@ import {
 } from 'material-ui';
 
 import HeatBuilder from "./HeatBuilder";
+import HeatResults from "./HeatResults";
 
-/** The basic component for displaying the race heats */
+/** The basic component for displaying the fly heats */
 export default class RaceHeats extends React.Component {
 
   render() {
@@ -19,7 +20,7 @@ export default class RaceHeats extends React.Component {
         </Paper>
 
         <List className="heat-list">
-          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="1"/>}/>
+          <ListItem disabled primaryText={<HeatResults {...this.props} id="1"/>}/>
           <ListItem disabled primaryText={<HeatBuilder {...this.props} id="2"/>}/>
           <ListItem disabled primaryText={<HeatBuilder {...this.props} id="3"/>}/>
         </List>
