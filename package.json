@@ -58,7 +58,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "setup": "node scripts/setup.js"
+    "setup": "node scripts/setup.js",
+    "format": "./node_modules/.bin/prettier --write --single-quote --print-width=100 --parser=flow --tab-width=2 \"src/**/*.{js,jsx}\""
   },
   "jest": {
     "collectCoverageFrom": ["src/**/*.{js,jsx}"],
