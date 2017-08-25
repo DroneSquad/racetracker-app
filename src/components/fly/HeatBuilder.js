@@ -40,7 +40,7 @@ export class Pilot extends React.Component {
   }
 
   render() {
-    let name = <span className="bar-item">{this.state.name}</span>;
+    let name = <span className="ds-blue-text bar-item">{this.state.name}</span>;
     let frequency = <span className="bar-item">{this.state.frequency}</span>;
     let avatar = <Avatar className="bar-item" src={this.state.avatar}/>;
     return (
