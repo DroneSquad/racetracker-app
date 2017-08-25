@@ -11,10 +11,10 @@ export default class Tracker extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/tracker/settings/frequencies/edit" component={Frequency}/>
-        <Route path="/tracker/settings/frequencies" component={Frequencies}/>
-        <Route path="/tracker/settings" component={SettingsMenu}/>
-        <Route path="/tracker" component={TrackerHome}/>
+        <Route path="/tracker/settings/frequencies/edit" component={Frequency} />
+        <Route path="/tracker/settings/frequencies" component={Frequencies} />
+        <Route path="/tracker/settings" component={SettingsMenu} />
+        <Route path="/tracker" component={TrackerHome} />
       </Switch>
     );
   }

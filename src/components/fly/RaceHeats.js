@@ -1,17 +1,12 @@
 import React from 'react';
 
-import {
-  Paper,
-  List,
-  ListItem,
-} from 'material-ui';
+import { Paper, List, ListItem } from 'material-ui';
 
-import HeatBuilder from "./HeatBuilder";
-import HeatResults from "./HeatResults";
+import HeatBuilder from './HeatBuilder';
+import HeatResults from './HeatResults';
 
 /** The basic component for displaying the fly heats */
 export default class RaceHeats extends React.Component {
-
   render() {
     return (
       <div>
@@ -20,9 +15,9 @@ export default class RaceHeats extends React.Component {
         </Paper>
 
         <List className="heat-list">
-          <ListItem disabled primaryText={<HeatResults {...this.props} id="1"/>}/>
-          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="2"/>}/>
-          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="3"/>}/>
+          <ListItem disabled primaryText={<HeatResults {...this.props} id="1" />} />
+          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="2" />} />
+          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="3" />} />
         </List>
       </div>
     );

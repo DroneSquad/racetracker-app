@@ -9,7 +9,6 @@ import HeatLineUp from '../fly/HeatLineUp';
 
 /** This is the main app that the user will see, one will get here after loading is done */
 export default class App extends React.Component {
-
   /** This will render full screen pages that need different layouts */
   render() {
     let { history } = this.props;

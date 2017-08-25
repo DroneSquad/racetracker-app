@@ -35,7 +35,8 @@ class Login extends React.PureComponent {
   render() {
     let { token, error, location } = this.props;
 
-    if (token) { // Redirect to the place where we want to go to
+    if (token) {
+      // Redirect to the place where we want to go to
       let to = (location.search || '').split('redirect=')[1] || '/';
       return <Redirect to={to} />;
     }
@@ -46,13 +47,34 @@ class Login extends React.PureComponent {
 
     return (
       <form className="login" method="post" onSubmit={this.onSubmit}>
-        <img src={this._loading ? loadingImg : loginImg} className="logo" alt=""/>
-        <input type='hidden' value='prayer' />
-        <input onChange={this.onChange} className={error ? 'error' : ''} ref={ref => this._email = ref} type="email" placeholder="Email" required/>
-        <input onChange={this.onChange} className={error ? 'error' : ''} ref={ref => this._password = ref} type="password" placeholder="Password" required/>
-        <input type="submit" value={this._loading ? 'Signing in...' : 'Sign in'}/>
-        <br/>
-        <a className="link" rel="noopener noreferrer" target="_blank" href="https://dronesquad.com/account/register">Sign up for a Drone Squad account!</a>
+        <img src={this._loading ? loadingImg : loginImg} className="logo" alt="" />
+        <input type="hidden" value="prayer" />
+        <input
+          onChange={this.onChange}
+          className={error ? 'error' : ''}
+          ref={ref => (this._email = ref)}
+          type="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          onChange={this.onChange}
+          className={error ? 'error' : ''}
+          ref={ref => (this._password = ref)}
+          type="password"
+          placeholder="Password"
+          required
+        />
+        <input type="submit" value={this._loading ? 'Signing in...' : 'Sign in'} />
+        <br />
+        <a
+          className="link"
+          rel="noopener noreferrer"
+          target="_blank"
+          href="https://dronesquad.com/account/register"
+        >
+          Sign up for a Drone Squad account!
+        </a>
       </form>
     );
   }

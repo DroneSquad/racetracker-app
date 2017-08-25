@@ -11,30 +11,33 @@ import App from '../App';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
 import './loading.css';
 
-
 /**
  * This will load the initial screen and then decided what to do from there
  * this can be user login or handle the action after a deeplink or push notification
  */
 export default class Loading extends React.PureComponent {
-
   constructor(props) {
     // Handle all the loading logic
     super(props);
-    this.history = createHistory({ // Make the urls in a hashbang format for reasons we are not running on a real web server
+    this.history = createHistory({
+      // Make the urls in a hashbang format for reasons we are not running on a real web server
       hash: 'hashbang',
-      basename: '#!',
+      basename: '#!'
     });
     this.state = {
       callback: this.defaultCallback,
-      isLoading: true,
+      isLoading: true
     };
     // have cordova device ready event call a action to allow the loading screen to advance
     // if not in cordova we will fake it for 0.5 seconds
-    window.document.addEventListener("deviceready", () => {
-      // todo check if token is valid, if not remove it
-      this.setState(state => ({isLoading: false}));
-    }, false);
+    window.document.addEventListener(
+      'deviceready',
+      () => {
+        // todo check if token is valid, if not remove it
+        this.setState(state => ({ isLoading: false }));
+      },
+      false
+    );
   }
 
   /** Update the mui theme settings to match drone squad color scheme */
@@ -45,25 +48,24 @@ export default class Loading extends React.PureComponent {
       primary3Color: '#ccc',
       accent1Color: 'var(--ds-light-blue-alt)',
       accent2Color: 'var(--ds-blue-alt)',
-      accent3Color: '#aaa',
-    },
+      accent3Color: '#aaa'
+    }
   });
 
   /** The default callback that will open the app */
-  defaultCallback = () => (
+  defaultCallback = () =>
     <Provider store={configStore(this.history)}>
       <MuiThemeProvider muiTheme={this.muiTheme}>
-        <App history={this.history}/>
+        <App history={this.history} />
       </MuiThemeProvider>
-    </Provider>
-  );
+    </Provider>;
 
   render() {
     // While the app is loading display the spinner
     if (this.state.isLoading) {
       return (
         <div className="loading">
-          <img src={loadingImg} className="logo" alt=""/>
+          <img src={loadingImg} className="logo" alt="" />
         </div>
       );
     }
@@ -71,7 +73,6 @@ export default class Loading extends React.PureComponent {
     return this.state.callback();
   }
 }
-
 
 // Import root routes TODO: best way to handle this in v4
 //import createRoutes from './routes';

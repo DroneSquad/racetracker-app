@@ -8,11 +8,7 @@ import reducer from './reducers';
 const sagaMiddleware = createSagaMiddleware();
 
 export default function configStore(history) {
-
-  const middleware = applyMiddleware(
-    routerMiddleware(history),
-    sagaMiddleware
-  );
+  const middleware = applyMiddleware(routerMiddleware(history), sagaMiddleware);
 
   // TODO: input reducers dynamically and then combine
   // create the store

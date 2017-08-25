@@ -21,7 +21,7 @@ const authReducer = (state = initialState, { type, payload }) => {
       return { ...state, token: payload };
     }
     case AUTH_FAILURE: {
-      return { ...state, error: payload }
+      return { ...state, error: payload };
     }
     default:
       return state;

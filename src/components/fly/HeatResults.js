@@ -13,7 +13,7 @@ import {
   IconButton,
   FontIcon,
   IconMenu,
-  MenuItem,
+  MenuItem
 } from 'material-ui';
 
 import fetch from '../../fetch';
@@ -25,7 +25,7 @@ export class Pilot extends React.Component {
     this.state = {
       loading: true,
       name: 'Unknown',
-      avatar: `https://api.dronesquad.com/avatar/${this.props.id}`,
+      avatar: `https://api.dronesquad.com/avatar/${this.props.id}`
     };
   }
 
@@ -34,17 +34,27 @@ export class Pilot extends React.Component {
     fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
       this.setState({
         name: data.callsign || data.display || 'No Pilot Found',
-        loading: false,
+        loading: false
       });
     });
   }
 
   render() {
-    let name = <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px'}} className="ds-blue-text bar-item">{this.state.name}</span>;
-    let avatar = <Avatar size={20} className="bar-item" src={this.state.avatar}/>;
+    let name = (
+      <span
+        style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }}
+        className="ds-blue-text bar-item"
+      >
+        {this.state.name}
+      </span>
+    );
+    let avatar = <Avatar size={20} className="bar-item" src={this.state.avatar} />;
     return (
       <TableRow className={this.state.loading ? 'loading-bar' : ''}>
-        <TableRowColumn style={{width: '100px', textOverflow: 'clip'}}>{avatar}{name}</TableRowColumn>
+        <TableRowColumn style={{ width: '100px', textOverflow: 'clip' }}>
+          {avatar}
+          {name}
+        </TableRowColumn>
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn>0:01</TableRowColumn>
         <TableRowColumn>0</TableRowColumn>
@@ -55,20 +65,32 @@ export class Pilot extends React.Component {
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class HeatResults extends React.Component {
-
   constructor(props) {
     super(props);
   }
 
   /** The drop down menu for the options menu */
   menuDropdown = () => {
-    let styleIcons = {margin: '0 0 0 8px'};
-    let icon =<IconButton style={{margin: '-12px'}}><FontIcon className="no-padding ds-gray-alt-text mdi mdi-dots-vertical" /></IconButton>;
+    let styleIcons = { margin: '0 0 0 8px' };
+    let icon = (
+      <IconButton style={{ margin: '-12px' }}>
+        <FontIcon className="no-padding ds-gray-alt-text mdi mdi-dots-vertical" />
+      </IconButton>
+    );
     return (
       <IconMenu iconButtonElement={icon}>
-        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-restart"/>} primaryText="Re-run"/>
-        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil"/>} primaryText="Edit"/>
-        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete"/>} primaryText="Delete"/>
+        <MenuItem
+          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-restart" />}
+          primaryText="Re-run"
+        />
+        <MenuItem
+          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil" />}
+          primaryText="Edit"
+        />
+        <MenuItem
+          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete" />}
+          primaryText="Delete"
+        />
       </IconMenu>
     );
   };
@@ -77,11 +99,16 @@ export default class HeatResults extends React.Component {
     let title = <span>{`Heat ${this.props.id} Results`}</span>;
     return (
       <Card expanded={false}>
-        <CardTitle style={{paddingBottom: '0'}} title={title} showExpandableButton closeIcon={this.menuDropdown()}/>
+        <CardTitle
+          style={{ paddingBottom: '0' }}
+          title={title}
+          showExpandableButton
+          closeIcon={this.menuDropdown()}
+        />
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
-              <TableHeaderColumn style={{width: '100px'}}>Pilot</TableHeaderColumn>
+              <TableHeaderColumn style={{ width: '100px' }}>Pilot</TableHeaderColumn>
               <TableHeaderColumn>Laps</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
               <TableHeaderColumn>Points</TableHeaderColumn>
@@ -95,6 +122,6 @@ export default class HeatResults extends React.Component {
           </TableBody>
         </Table>
       </Card>
-    )
+    );
   }
 }
