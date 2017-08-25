@@ -2,35 +2,22 @@ import React from 'react';
 
 import {
   AppBar,
-  Tabs,
-  Tab,
 } from 'material-ui';
 
-import RaceHeats from './RaceHeats';
-
-import './race.css';
+import { historyBackButton } from '../../utils';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
-export default class Race extends React.Component {
+export default class HeatLineUp extends React.Component {
 
   render() {
+    let title = <span className="ds-blue-text">Heat 0 Lineup</span>;
     return (
-      <div className="race">
+      <div className="main">
         <header>
-          <AppBar title="Race"/>
+          <AppBar className="ds-white" title={title} iconClassNameLeft="ds-gray-alt-text mdi mdi-close" onLeftIconButtonTouchTap={historyBackButton.bind(this)} iconClassNameRight="ds-gray-alt-text mdi mdi-check" onRightIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <main>
-          <Tabs initialSelectedIndex={1}>
-            <Tab label="Racing" >
 
-            </Tab>
-            <Tab label="Heats" >
-              <RaceHeats/>
-            </Tab>
-            <Tab label="Leaders">
-
-            </Tab>
-          </Tabs>
         </main>
       </div>
     )

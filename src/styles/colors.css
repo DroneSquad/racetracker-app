@@ -8,6 +8,8 @@
   --ds-background: #f3f3f3;
   --ds-white: #fff;
   --ds-black: #272c2e;
+  --ds-gray: #aaa;
+  --ds-gray-alt: #666;
   --ds-blue: #26687f;
   --ds-blue-alt: #15576e;
   --ds-orange: #ff6d00;
@@ -31,6 +33,22 @@
 
 .ds-white-text {
   color: var(--ds-white) !important;
+}
+
+.ds-gray {
+  background-color: var(--ds-gray) !important;
+}
+
+.ds-gray-text {
+  color: var(--ds-gray) !important;
+}
+
+.ds-gray-alt {
+  background-color: var(--ds-gray-alt) !important;
+}
+
+.ds-gray-alt-text {
+  color: var(--ds-gray-alt) !important;
 }
 
 .ds-black {

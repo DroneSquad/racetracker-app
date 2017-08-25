@@ -37,7 +37,7 @@ export default class Race extends React.Component {
 
             </Tab>
             <Tab label="Heats" >
-              <RaceHeats/>
+              <RaceHeats {...this.props}/>
             </Tab>
             <Tab label="Leaders">
 

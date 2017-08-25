@@ -1,3 +1,9 @@
+.race {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+}
+
 .race main {
   --padding: 0 !important;
   margin-top: -8px;
@@ -8,4 +14,12 @@
 .race .heat-action {
   overflow: hidden;
   text-align: center;
+}
+
+.race .heat-list {
+  position: absolute;
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh - 235px);
+  z-index: -1 !important;
 }

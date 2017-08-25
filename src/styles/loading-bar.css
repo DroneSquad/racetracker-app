@@ -6,7 +6,7 @@
   object-position: -100vw -100vh !important;
   animation: loading 2s infinite !important;
   transition: all 1s !important;
-  border-radius: 5px !important;
+  border-radius: 5px;
 }
 
 .loading-bar .bar-item * {
