@@ -21,7 +21,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
-  height: calc(100vh - 235px);
+  height: calc(100vh - 220px);
   z-index: -1 !important;
 }
 

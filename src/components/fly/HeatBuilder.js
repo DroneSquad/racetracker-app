@@ -45,7 +45,7 @@ export class Pilot extends React.Component {
     let avatar = <Avatar className="bar-item" src={this.state.avatar}/>;
     return (
       <div className={this.state.loading ? 'loading-bar' : ''}>
-        <CardHeader className="no-padding" title={name} subtitle={frequency} avatar={avatar} />
+        <CardHeader className="no-padding" titleStyle={{margin: '2px 0'}} title={name} subtitle={frequency} avatar={avatar} />
       </div>
     );
   }
