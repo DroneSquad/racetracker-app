@@ -206,6 +206,10 @@ cordova-plugin-file@^4.3.3:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-4.3.3.tgz#012e97aa1afb91f84916e6341b548366d23de9b9"
 
+cordova-plugin-headercolor@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-headercolor/-/cordova-plugin-headercolor-1.0.0.tgz#020acd943787ee039d67f679e8d9ea6d38920316"
+
 cordova-plugin-statusbar@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.2.3.tgz#51c5e02ad433bebd0b0dc977a446eb91dfee1502"
