@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import SettingsMenu from './settings/SettingsMenu';
@@ -7,7 +7,7 @@ import Frequency from './settings/frequencies/Frequency';
 import TrackerHome from './TrackerHome';
 
 /** Handles the main logic for the tracker things */
-export default class Tracker extends React.Component {
+export default class Tracker extends Component {
   render() {
     return (
       <Switch>

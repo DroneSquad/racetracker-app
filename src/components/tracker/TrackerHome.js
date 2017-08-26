@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 
 import { AppBar, List, Divider, Subheader, FlatButton, ListItem, FontIcon } from 'material-ui';
@@ -11,22 +11,18 @@ import { historyBackButton } from '../../utils';
 import './tracker-home.css';
 
 /** Test component to view the other views */
-export default class TrackerHome extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      paired: []
-    };
-  }
-
+export default class TrackerHome extends Component {
   componentWillMount() {
-    this.rescan(); // Scan for new devices when the component mounts
+    this.rescan(); // auto scan for new trackers
   }
+  props: {
+    devices: Array<DiscoveryDevice>
+  };
 
   /** Create the item list from a device object, maps click events*/
   device(id = 0, device, paired) {
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
-    let deviceComponent = <TrackerDevice name={device.name} />; // todo pass what you need
+    let deviceComponent = <TrackerDevice name={device.name} rssi={device.rssi} />; // todo pass what you need
     if (paired) {
       return (
         <ListItem
@@ -76,23 +72,19 @@ export default class TrackerHome extends React.Component {
         available: [
           {
             name: 'IvoryMarten',
-            frequency: 'F8',
-            single: 0.82,
-            battery: 0.99
+            id: '28-AS-FG-23',
+            rssi: '-89'
           },
           {
             name: 'WhiteGoat',
-            frequency: 'F2',
-            single: 0.76,
-            battery: 0.97
+            id: '18-SS-FG-23',
+            rssi: '-56'
           },
           (() => {
             if (Math.random() > 0.5) {
               return {
                 name: 'BlueGull',
-                frequency: 'F4',
-                single: 0.78,
-                battery: 0.89
+                rssi: '-99'
               };
             }
           })()
