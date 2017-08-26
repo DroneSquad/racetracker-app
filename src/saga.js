@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './reducers';
+import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './reducers/auth';
 
 const authMock = (login, password) =>
   new Promise((resolve, reject) => {
