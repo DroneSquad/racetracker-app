@@ -41,3 +41,11 @@ export function historyBackButton(backUpPath = '/') {
     this.props.history.go(backUpPath);
   }
 }
+
+/** Convert RSSI(dBm) value into equivalent percentage value
+    TODO: shamelessly stolen/based on Microsoft's wifi signal quality formula
+    https://stackoverflow.com/questions/15797920/how-to-convert-wifi-signal-strength-from-quality-percent-to-rssi-dbm/15798024#15798024
+*/
+export function rssiToPercentage(value) {
+  return Math.min(Math.max(2 * (~~value + 100), 0), 100) + '%';
+}
