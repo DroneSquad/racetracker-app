@@ -5,6 +5,7 @@ import { FontIcon } from 'material-ui';
 import { rssiToPercentage } from '../../utils';
 
 const TrackerDevice = (props: { name: string, rssi: string }) => {
+  // TODO: bind the rssi value to main props, so update on change
   return (
     <div className="device">
       <h3>

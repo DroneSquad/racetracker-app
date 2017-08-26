@@ -7,7 +7,7 @@ declare var module: {
   }
 };
 
-export type TrackerDiscovery = {
+export type RaceTracker = {
   name: string,
   rssi: string,
   id: string,

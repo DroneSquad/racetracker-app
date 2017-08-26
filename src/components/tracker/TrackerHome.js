@@ -12,12 +12,16 @@ import './tracker-home.css';
 
 /** Test component to view the other views */
 export default class TrackerHome extends Component {
-  componentWillMount() {
-    this.rescan(); // auto scan for new trackers
-  }
   props: {
     devices: Array<DiscoveryDevice>
   };
+  componentWillMount() {
+    // on mount automatically poll for bluetooth devices
+    this.rescan(); // auto scan for new trackers
+  }
+  componentWillUnMount() {
+    // TODO: disconnect from any connected racetrackers
+  }
 
   /** Create the item list from a device object, maps click events*/
   device(id = 0, device, paired) {
@@ -62,9 +66,8 @@ export default class TrackerHome extends Component {
     return <ListItem disabled primaryText={<span>No available race trackers</span>} />;
   }
 
-  /** Rescan the bluetooth devices */
-  rescan = () => {
-    console.log('rescanning');
+  /** Discover all available bluetooth devices */
+  discover = () => {
     this.setState({ available: null });
     // todo call action, replace the faked state
     setTimeout(() => {
@@ -141,7 +144,7 @@ export default class TrackerHome extends Component {
           </List>
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={this.rescan} />
+          <FlatButton primary label="rescan" className="right" onClick={this.discover} />
         </footer>
       </div>
     );
