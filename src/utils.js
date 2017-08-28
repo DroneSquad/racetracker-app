@@ -43,7 +43,6 @@ export function historyBackButton(backUpPath = '/') {
 }
 
 /** Convert RSSI(dBm) value into equivalent percentage value
-    TODO: shamelessly stolen/based on Microsoft's wifi signal quality formula
     https://stackoverflow.com/questions/15797920/how-to-convert-wifi-signal-strength-from-quality-percent-to-rssi-dbm/15798024#15798024
 */
 export function rssiToPercentage(value) {

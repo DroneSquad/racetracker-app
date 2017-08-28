@@ -3,10 +3,12 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import { authReducer } from './auth';
+import trackers from './tracker';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  router: routerReducer
+  router: routerReducer,
+  trackers: trackers
 });
 
 export default rootReducer;
