@@ -1,25 +1,22 @@
+// @flow
+
 import React, { Component } from 'react';
-import _ from 'lodash';
-import TrackerList from './TrackerList';
-import { AppBar, List, Divider, Subheader, FlatButton, ListItem } from 'material-ui';
-import { historyBackButton } from '../../utils';
-import './tracker-home.css';
-import { discoverTracker } from '../../reducers/tracker';
 import { connect } from 'react-redux';
 
-/** Test component to view the other views */
+import { AppBar, Divider, FlatButton } from 'material-ui';
+import { historyBackButton } from '../../utils';
+import './tracker-home.css';
+
+import TrackerList from './TrackerList';
+import { discoverTracker } from '../../reducers/tracker';
+
 class TrackerHome extends Component {
   props: {
     trackers: Array<RaceTracker>,
     isScanning: boolean,
     handleClick: Function
   };
-  componentWillMount() {
-    // TODO: on mount automatically poll for bluetooth devices
-  }
-  componentWillUnMount() {
-    // TODO: disconnect from any connected racetrackers
-  }
+
   discover() {
     console.log('discover');
   }

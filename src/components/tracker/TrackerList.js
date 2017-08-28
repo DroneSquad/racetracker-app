@@ -28,7 +28,7 @@ const TrackerList = (props: {
         disabled
         primaryText={
           <span>
-            {props.emptyListText}
+            {props.emptyText}
           </span>
         }
       />

@@ -7,6 +7,7 @@ declare var module: {
   }
 };
 
+// basic bluetooth racetracker device on discovery
 export type RaceTracker = {
   name: string,
   rssi: string,
@@ -14,6 +15,7 @@ export type RaceTracker = {
   connected: boolean
 };
 
+// all action types with according payload
 declare type ActionType = 'CONNECT_TRACKER' | 'DISCOVER_TRACKER';
 
 declare type ActionT<A: ActionType, P> = {|
