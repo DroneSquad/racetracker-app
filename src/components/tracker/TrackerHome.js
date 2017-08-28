@@ -12,9 +12,9 @@ import { discoverTracker } from '../../reducers/tracker';
 
 class TrackerHome extends Component {
   props: {
-    trackers: Array<RaceTracker>,
     isScanning: boolean,
-    handleClick: Function
+    handleClick: Function,
+    trackers: Array<RaceTracker>
   };
 
   discover() {

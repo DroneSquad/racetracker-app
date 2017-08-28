@@ -1,5 +1,6 @@
 /** actions */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
+export const CONNECT_TRACKER = 'CONNECT_TRACKER';
 
 /** action creators */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -7,9 +8,14 @@ export const discoverTracker = (tracker: RaceTracker) => ({
   payload: tracker
 });
 
+export const connectTracker = (id: string) => ({
+  type: CONNECT_TRACKER,
+  payload: id
+});
+
 const trackers = (state = [], action: Action) => {
   switch (action.type) {
-    case 'DISCOVER_TRACKER':
+    case DISCOVER_TRACKER:
       return [
         ...state,
         {

@@ -9,7 +9,8 @@ import loadingImg from '../../media/ds-logo-spin.svg';
 const TrackerList = (props: {
   headerText: string,
   emptyText: string,
-  trackers: Array<RaceTracker>
+  trackers: Array<RaceTracker>,
+  isScanning: boolean
 }) => {
   let spinner = (
     <ListItem
