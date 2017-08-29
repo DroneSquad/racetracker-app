@@ -58,3 +58,23 @@
   width: 85vw !important;
 }
 
+.fly .pilot-name {
+  width: 100px !important;
+  text-overflow: clip !important;
+}
+
+@media (max-width: 350px) {
+  .fly .avatar {
+    display: none !important;
+  }
+
+  .fly .pilot-name {
+    width: 70px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .fly .small-screen {
+    padding: 8px 0 !important;
+  }
+}

@@ -41,12 +41,12 @@ export class Pilot extends React.Component {
 
   render() {
     let name = <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px'}} className="ds-blue-text bar-item">{this.state.name}</span>;
-    let avatar = <Avatar size={20} className="bar-item" src={this.state.avatar}/>;
+    let avatar = <Avatar size={20} className="avatar bar-item" src={this.state.avatar}/>;
     return (
       <TableRow className={this.state.loading ? 'loading-bar' : ''}>
-        <TableRowColumn style={{width: '100px', textOverflow: 'clip'}}>{avatar}{name}</TableRowColumn>
+        <TableRowColumn className="pilot-name">{avatar}{name}</TableRowColumn>
         <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn>0:01</TableRowColumn>
+        <TableRowColumn className="no-clip">0:01</TableRowColumn>
         <TableRowColumn>0</TableRowColumn>
       </TableRow>
     );
@@ -55,10 +55,6 @@ export class Pilot extends React.Component {
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class HeatResults extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   /** The drop down menu for the options menu */
   menuDropdown = () => {
@@ -81,7 +77,7 @@ export default class HeatResults extends React.Component {
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
-              <TableHeaderColumn style={{width: '100px'}}>Pilot</TableHeaderColumn>
+              <TableHeaderColumn className="pilot-name">Pilot</TableHeaderColumn>
               <TableHeaderColumn>Laps</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
               <TableHeaderColumn>Points</TableHeaderColumn>

@@ -20,9 +20,9 @@ export default class RaceHeats extends React.Component {
         </Paper>
 
         <List className="heat-list">
-          <ListItem disabled primaryText={<HeatResults {...this.props} id="1"/>}/>
-          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="2"/>}/>
-          <ListItem disabled primaryText={<HeatBuilder {...this.props} id="3"/>}/>
+          <ListItem className="small-screen" disabled primaryText={<HeatResults {...this.props} id="1"/>}/>
+          <ListItem className="small-screen" disabled primaryText={<HeatBuilder {...this.props} id="2"/>}/>
+          <ListItem className="small-screen" disabled primaryText={<HeatBuilder {...this.props} id="3"/>}/>
         </List>
       </div>
     );

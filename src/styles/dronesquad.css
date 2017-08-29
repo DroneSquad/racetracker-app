@@ -27,6 +27,10 @@ body {
   margin: 0;
 }
 
+.no-clip {
+  text-overflow: clip !important;
+}
+
 .no-margin {
   margin: 0 !important;
 }

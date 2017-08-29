@@ -22,6 +22,15 @@
   position: absolute;
 }
 
+@media (max-width: 350px) {
+  .main header .logo {
+    width: 100%;
+    left: auto;
+    position: relative;
+
+  }
+}
+
 .main main {
   --padding: 8px;
   padding: calc(var(--header-height) + var(--padding)) 0 calc(var(--footer-height) + var(--padding)) 0;
