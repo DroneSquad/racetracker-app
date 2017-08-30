@@ -63,7 +63,7 @@ export default class HeatResults extends React.Component {
     return (
       <IconMenu iconButtonElement={icon}>
         <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-restart"/>} primaryText="Re-run"/>
-        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil"/>} primaryText="Edit"/>
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil"/>} primaryText="Edit" onTouchTap={() => this.props.history.push('/fly/heat/results/edit')}/>
         <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete"/>} primaryText="Delete"/>
       </IconMenu>
     );
