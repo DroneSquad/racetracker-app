@@ -7,6 +7,7 @@ import './tracker-home.css';
 
 import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
 import { discoverTracker } from '../../reducers/tracker';
+import { clearAvailTrackers } from '../../reducers/tracker';
 
 class TrackerHome extends Component {
   props: {
@@ -15,6 +16,7 @@ class TrackerHome extends Component {
 
   discover() {
     console.log('discover racetrackers');
+    this.props.clearAvailDevices();
     // TODO: should timer setting be a user setting?
     window.ble.scan([], 10, this.props.deviceFound, function() {
       // TODO: determine best way to handle failure
@@ -56,10 +58,12 @@ class TrackerHome extends Component {
 const mapStateToProps = state => ({});
 const mapDispatchToProps = (dispatch: Function) => ({
   deviceFound(device) {
-    console.log(device);
     if (device.name.startsWith('TBSRT')) {
       dispatch(discoverTracker(device));
     }
+  },
+  clearAvailDevices() {
+    dispatch(clearAvailTrackers());
   }
 });
 

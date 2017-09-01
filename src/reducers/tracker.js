@@ -20,6 +20,11 @@ export const disconnectTracker = (id: string) => ({
   payload: id
 });
 
+export const clearAvailTrackers = () => ({
+  type: CLEAR_AVAIL_TRACKERS,
+  payload: null
+});
+
 //** reducers */
 const trackers = (state = [], action: Action) => {
   switch (action.type) {
@@ -41,6 +46,8 @@ const trackers = (state = [], action: Action) => {
       return state.map(
         tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker)
       );
+    case CLEAR_AVAIL_TRACKERS:
+      return state.filter(tracker => tracker.isConnected: true)
     default:
       return state;
   }
