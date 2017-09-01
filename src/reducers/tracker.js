@@ -43,17 +43,11 @@ const trackers = (state = [], action: Action) => {
     case CONNECT_TRACKER:
       return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true } : tracker));
     case DISCONNECT_TRACKER:
-<<<<<<< HEAD
       return state.map(
         tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker)
       );
     case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected: true)
-=======
-      return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker));
-    case CLEAR_AVAIL_TRACKERS:
-      return state.filter(tracker => (tracker.isConnected: true));
->>>>>>> dca811534d5ca895d3f976ff9d3e182c18b92bbb
     default:
       return state;
   }
