@@ -75,6 +75,19 @@ body {
   clear: left !important;
 }
 
+.white-bg {
+  --ds-background: var(--ds-white);
+  background-color: var(--ds-background);
+  height: 100vh;
+}
+
+.avatar {
+  background-position: center;
+  background-clip: content-box;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .spinner {
   animation: spinner 0.9s infinite linear !important;
 }

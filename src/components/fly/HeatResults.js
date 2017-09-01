@@ -9,13 +9,13 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn,
-  Avatar,
   IconButton,
   FontIcon,
   IconMenu,
   MenuItem
 } from 'material-ui';
 
+import PilotAvatar from '../app/PilotAvatar';
 import fetch from '../../fetch';
 
 /** Used to display the pilot info for the heat builder */
@@ -48,7 +48,7 @@ export class Pilot extends React.Component {
         {this.state.name}
       </span>
     );
-    let avatar = <Avatar size={20} className="avatar bar-item" src={this.state.avatar} />;
+    let avatar = <PilotAvatar size={20} src={this.state.avatar} />;
     return (
       <TableRow className={this.state.loading ? 'loading-bar' : ''}>
         <TableRowColumn className="pilot-name">
