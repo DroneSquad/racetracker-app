@@ -56,6 +56,7 @@ class TrackerHome extends Component {
 const mapStateToProps = state => ({});
 const mapDispatchToProps = (dispatch: Function) => ({
   deviceFound(device) {
+    console.log(device);
     if (device.name.startsWith('TBSRT')) {
       dispatch(discoverTracker(device));
     }

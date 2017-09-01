@@ -2,6 +2,7 @@
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
 export const DISCONNECT_TRACKER = 'DISCONNECT_TRACKER';
+export const CLEAR_AVAIL_TRACKERS = 'CLEAR_AVAIL_TRACKERS';
 
 /** action creators */
 export const discoverTracker = (tracker: RaceTracker) => ({

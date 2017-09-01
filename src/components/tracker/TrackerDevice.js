@@ -36,6 +36,7 @@ class TrackerDevice extends Component {
 
   openSettings(id) {
     console.log('openSettings');
+    // this.props.history.push('/tracker/settings', id);
   }
 
   render() {
