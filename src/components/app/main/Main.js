@@ -18,11 +18,11 @@ class Main extends React.Component {
   render() {
     let { token, history } = this.props;
 
-    if (!token) {
+    /** if (!token) {
       // All content in main needs a valid token
       let to = `/login?redirect=${window.location.pathname}`;
       return <Redirect to={to} />;
-    }
+    } */
 
     // todo have the selected route change the bottom navigation index
     return (

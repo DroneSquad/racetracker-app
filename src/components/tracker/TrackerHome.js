@@ -18,7 +18,7 @@ class TrackerHome extends Component {
     // TODO: should timer setting be a user setting?
     window.ble.scan([], 10, this.props.deviceFound, function() {
       // TODO: determine best way to handle failure
-      console.log('BLE device discovery failed!');
+      console.log('Bluetooth device discovery failed!');
     });
   }
 

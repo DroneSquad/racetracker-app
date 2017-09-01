@@ -1,6 +1,7 @@
 /** actions */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
+export const DISCONNECT_TRACKER = 'DISCONNECT_TRACKER';
 
 /** action creators */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -10,6 +11,11 @@ export const discoverTracker = (tracker: RaceTracker) => ({
 
 export const connectTracker = (id: string) => ({
   type: CONNECT_TRACKER,
+  payload: id
+});
+
+export const disconnectTracker = (id: string) => ({
+  type: DISCONNECT_TRACKER,
   payload: id
 });
 
@@ -23,14 +29,17 @@ const trackers = (state = [], action: Action) => {
           id: action.payload.id,
           rssi: action.payload.rssi,
           name: action.payload.name,
-          connected: false
+          isConnected: false
         }
       ];
     case CONNECT_TRACKER:
       return state.map(
-        tracker => (tracker.id === action.payload ? { ...tracker, connected: true } : tracker)
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true } : tracker)
       );
-
+    case DISCONNECT_TRACKER:
+      return state.map(
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker)
+      );
     default:
       return state;
   }

@@ -4,7 +4,7 @@ import { FontIcon } from 'material-ui';
 import { rssiToPercentage } from '../../utils';
 import { ListItem } from 'material-ui';
 
-import { connectTracker } from '../../reducers/tracker';
+import { connectTracker, disconnectTracker } from '../../reducers/tracker';
 
 export const DeviceProperties = (props: { name: string, rssi: string }) => {
   return (
@@ -24,24 +24,24 @@ class TrackerDevice extends Component {
   props: {
     name: string,
     rssi: string,
-    connected: boolean,
-    id: string
+    isConnected: boolean,
+    id: string,
+    connectSuccess: Function,
+    connectFailure: Function
   };
 
   connect(id) {
-    console.log('connect racetracker');
     window.ble.connect(id, this.props.connectSuccess, this.props.connectFailure);
   }
 
   openSettings(id) {
-    console.log('open racetracker settings');
-    console.log(id);
+    console.log('openSettings');
   }
 
   render() {
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
     let deviceComponent = <DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
-    if (this.props.connected) {
+    if (this.props.isConnected) {
       return (
         <ListItem
           key={this.props.id}
@@ -64,17 +64,18 @@ class TrackerDevice extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  connected: state.connected
+const mapStateToProps = (state, ownProps) => ({
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
 });
 
 const mapDispatchToProps = (dispatch: Function, ownProps) => ({
   connectSuccess() {
+    console.log('connection success: ' & ownProps.id);
     dispatch(connectTracker(ownProps.id));
   },
   connectFailure(device) {
-    console.log('connectFailure');
-    console.log(device);
+    console.log('connection failed disconnected: ' & device.id);
+    dispatch(disconnectTracker(device.id));
   }
 });
 

@@ -6,9 +6,9 @@ const filterStatus = (trackers, filter) => {
     case 'SHOW_ALL':
       return trackers;
     case 'SHOW_CONNECTED':
-      return trackers.filter(t => t.connected);
+      return trackers.filter(t => t.isConnected);
     case 'SHOW_AVAILABLE':
-      return trackers.filter(t => !t.connected);
+      return trackers.filter(t => !t.isConnected);
     default:
       return trackers;
   }

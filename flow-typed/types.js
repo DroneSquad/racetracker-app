@@ -12,7 +12,7 @@ export type RaceTracker = {
   name: string,
   rssi: string,
   id: string,
-  connected: boolean
+  isConnected: boolean
 };
 
 // all action types with according payload
