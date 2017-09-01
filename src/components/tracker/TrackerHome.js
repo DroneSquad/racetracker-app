@@ -7,21 +7,29 @@ import './tracker-home.css';
 
 import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
 import { discoverTracker } from '../../reducers/tracker';
-import { clearAvailTrackers } from '../../reducers/tracker';
+import { clearUnpairedTrackers } from '../../reducers/tracker';
+import { setBtIsScanning } from '../../reducers/bluetooth';
 
 class TrackerHome extends Component {
   props: {
-    deviceFound: Function
+    deviceFound: Function,
+    handleBtIsScanning: Function,
+    clearUnpaired: Function
   };
 
-  discover() {
-    console.log('discover racetrackers');
-    this.props.clearAvailDevices();
-    // TODO: should timer setting be a user setting?
-    window.ble.scan([], 10, this.props.deviceFound, function() {
-      // TODO: determine best way to handle failure
-      console.log('Bluetooth device discovery failed!');
+  stopDiscovery() {
+    window.ble.stopScan(this.props.handleBtIsScanning(false), function() {
+      console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
     });
+  }
+
+  startDiscovery() {
+    this.props.clearUnpaired();
+    this.props.handleBtIsScanning(true);
+    window.ble.startScan([], this.props.deviceFound, function() {
+      console.log('Bluetooth device discovery failed!'); // TODO: handle failure correctly
+    });
+    setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
   }
 
   render() {
@@ -48,7 +56,12 @@ class TrackerHome extends Component {
           />
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={() => this.discover()} />
+          <FlatButton
+            primary
+            label="rescan"
+            className="right"
+            onClick={() => this.startDiscovery()}
+          />
         </footer>
       </div>
     );
@@ -62,8 +75,11 @@ const mapDispatchToProps = (dispatch: Function) => ({
       dispatch(discoverTracker(device));
     }
   },
-  clearAvailDevices() {
-    dispatch(clearAvailTrackers());
+  clearUnpaired() {
+    dispatch(clearUnpairedTrackers());
+  },
+  handleBtIsScanning(value) {
+    dispatch(setBtIsScanning(value));
   }
 });
 

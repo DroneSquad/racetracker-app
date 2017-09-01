@@ -2,7 +2,7 @@
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
 export const DISCONNECT_TRACKER = 'DISCONNECT_TRACKER';
-export const CLEAR_AVAIL_TRACKERS = 'CLEAR_AVAIL_TRACKERS';
+export const CLEAR_UNPAIRED_TRACKERS = 'CLEAR_AVAIL_TRACKERS';
 
 /** action creators */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -20,8 +20,8 @@ export const disconnectTracker = (id: string) => ({
   payload: id
 });
 
-export const clearAvailTrackers = () => ({
-  type: CLEAR_AVAIL_TRACKERS,
+export const clearUnpairedTrackers = () => ({
+  type: CLEAR_UNPAIRED_TRACKERS,
   payload: null
 });
 
@@ -46,7 +46,7 @@ const trackers = (state = [], action: Action) => {
       return state.map(
         tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker)
       );
-    case CLEAR_AVAIL_TRACKERS:
+    case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected: true)
     default:
       return state;

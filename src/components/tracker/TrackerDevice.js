@@ -22,10 +22,10 @@ export const DeviceProperties = (props: { name: string, rssi: string }) => {
 
 class TrackerDevice extends Component {
   props: {
+    id: string,
     name: string,
     rssi: string,
     isConnected: boolean,
-    id: string,
     connectSuccess: Function,
     connectFailure: Function
   };
@@ -36,6 +36,7 @@ class TrackerDevice extends Component {
 
   openSettings(id) {
     console.log('openSettings');
+    // TODO: handle navigaion
     // this.props.history.push('/tracker/settings', id);
   }
 

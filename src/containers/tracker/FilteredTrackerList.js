@@ -15,7 +15,8 @@ const filterStatus = (trackers, filter) => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  trackers: filterStatus(state.trackers, ownProps.filter)
+  trackers: filterStatus(state.trackers, ownProps.filter),
+  isScanning: state.bluetooth.isScanning
 });
 
 const FilteredTrackerList = connect(mapStateToProps)(TrackerList);

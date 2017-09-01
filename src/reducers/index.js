@@ -4,11 +4,13 @@ import { routerReducer } from 'react-router-redux';
 
 import { authReducer } from './auth';
 import trackers from './tracker';
+import bluetooth from './bluetooth';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   router: routerReducer,
-  trackers: trackers
+  trackers: trackers,
+  bluetooth: bluetooth
 });
 
 export default rootReducer;

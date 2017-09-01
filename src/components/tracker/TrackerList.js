@@ -12,7 +12,6 @@ const TrackerList = (props: {
   trackers: Array<RaceTracker>,
   isScanning: boolean
 }) => {
-  // TODO: add spinner while scanning is running
   let spinner = (
     <ListItem
       className="center-text"
@@ -20,21 +19,22 @@ const TrackerList = (props: {
       primaryText={<img src={loadingImg} className="scanning" alt="Loading..." />}
     />
   );
-
   let utilSpace;
   if (props.trackers.length > 0) {
     utilSpace = props.trackers.map(tracker => <TrackerDevice key={tracker.id} {...tracker} />);
   } else {
-    utilSpace = (
-      <ListItem
-        disabled
-        primaryText={
-          <span>
-            {props.emptyText}
-          </span>
-        }
-      />
-    );
+    if (!props.isScanning) {
+      utilSpace = (
+        <ListItem
+          disabled
+          primaryText={
+            <span>
+              {props.emptyText}
+            </span>
+          }
+        />
+      );
+    }
   }
   return (
     <List>
@@ -42,6 +42,7 @@ const TrackerList = (props: {
         {props.headerText}
       </Subheader>
       {utilSpace}
+      {props.isScanning ? spinner : ''}
     </List>
   );
 };
