@@ -1,3 +1,5 @@
+// @flow
+
 /** actions */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
@@ -39,15 +41,11 @@ const trackers = (state = [], action: Action) => {
         }
       ];
     case CONNECT_TRACKER:
-      return state.map(
-        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true } : tracker)
-      );
+      return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true } : tracker));
     case DISCONNECT_TRACKER:
-      return state.map(
-        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker)
-      );
+      return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false } : tracker));
     case CLEAR_AVAIL_TRACKERS:
-      return state.filter(tracker => tracker.isConnected: true)
+      return state.filter(tracker => (tracker.isConnected: true));
     default:
       return state;
   }

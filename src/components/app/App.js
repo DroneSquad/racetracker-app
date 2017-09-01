@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import Main from './main/Main';
 import Login from './login/Login';
 import Tracker from '../tracker/Tracker';
+import NewGuest from '../people/NewGuest';
 import HeatLineUp from '../fly/HeatLineUp';
 import HeatResultEdit from '../fly/HeatResultEdit';
 
@@ -16,6 +17,7 @@ export default class App extends React.Component {
     return (
       <ConnectedRouter history={history}>
         <Switch>
+          <Route path="/people/guest/new" component={NewGuest} />
           <Route path="/fly/heat/results/edit" component={HeatResultEdit} />
           <Route path="/fly/heat/edit" component={HeatLineUp} />
           <Route path="/tracker" component={Tracker} />

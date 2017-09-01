@@ -74,3 +74,13 @@ body {
 .clear-left {
   clear: left !important;
 }
+
+.spinner {
+  animation: spinner 0.9s infinite linear !important;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
