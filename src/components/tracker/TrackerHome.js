@@ -10,14 +10,17 @@ import { discoverTracker } from '../../reducers/tracker';
 
 class TrackerHome extends Component {
   props: {
-    isScanning: boolean,
-    handleClick: Function,
-    trackers: Array<RaceTracker>
+    deviceFound: Function
   };
 
   discover() {
-    console.log('discover');
+    console.log('discover BLE devices');
+    // TODO: should timer setting be a user setting?
+    window.ble.scan([], 10, this.props.deviceFound, function() {
+      console.log('BLE device discovery failed');
+    });
   }
+
   render() {
     return (
       <div className="main tracker-home">
@@ -34,17 +37,23 @@ class TrackerHome extends Component {
           <TrackerList headerText="Available RaceTrackers" emptyText="No available race trackers" />
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={this.props.handleClick} />
+          <FlatButton primary label="rescan" className="right" onClick={this.discover.bind(this)} />
         </footer>
       </div>
     );
   }
 }
+
 const mapStateToProps = state => ({});
 const mapDispatchToProps = (dispatch: Function) => ({
-  handleClick(event) {
-    dispatch(discoverTracker({ name: 'TBS Orange', rssi: '-87', id: '9287359j' }));
+  deviceFound(device) {
+    if (device.name.startsWith('TBSRT')) {
+      dispatch(discoverTracker(device));
+    }
   }
+  //  handleClick(event) {
+  //    dispatch(discoverTracker({ name: 'TBS Orange', rssi: '-87', id: '9287359j' }));
+  //  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerHome);
