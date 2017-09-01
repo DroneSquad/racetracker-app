@@ -1,0 +1,10 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/react-event-listener/*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]

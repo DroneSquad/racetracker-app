@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './reducers';
+import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './reducers/auth';
 
 const authMock = (login, password) =>
   new Promise((resolve, reject) => {
@@ -19,9 +19,14 @@ function* authorize({ payload: { login, password } }) {
   } catch (error) {
     let message;
     switch (error.status) {
-      case 500: message = 'Internal Server Error'; break;
-      case 401: message = 'Invalid credentials'; break;
-      default: message = 'Something went wrong';
+      case 500:
+        message = 'Internal Server Error';
+        break;
+      case 401:
+        message = 'Invalid credentials';
+        break;
+      default:
+        message = 'Something went wrong';
     }
     yield put({ type: AUTH_FAILURE, payload: message });
     localStorage.removeItem('token');

@@ -18,16 +18,17 @@ class Main extends React.Component {
   render() {
     let { token, history } = this.props;
 
-    if (!token) { // All content in main needs a valid token
+    /** if (!token) {
+      // All content in main needs a valid token
       let to = `/login?redirect=${window.location.pathname}`;
       return <Redirect to={to} />;
-    }
+    } */
 
     // todo have the selected route change the bottom navigation index
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo} alt=""/>}/>
+          <AppBar title={<img className="logo" src={logo} alt="" />} />
         </header>
 
         <main>
@@ -41,17 +42,17 @@ class Main extends React.Component {
         </main>
 
         <footer>
-          <Nav history={history}/>
+          <Nav history={history} />
         </footer>
       </content>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return ({
+const mapStateToProps = state => {
+  return {
     token: state.auth.token
-  })
+  };
 };
 
 export default connect(mapStateToProps)(Main);

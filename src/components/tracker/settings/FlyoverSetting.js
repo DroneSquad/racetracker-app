@@ -1,9 +1,6 @@
 import React from 'react';
 
-import {
-  ListItem,
-  Toggle,
-} from 'material-ui';
+import { ListItem, Toggle } from 'material-ui';
 
 import Setting from './Setting';
 
@@ -17,10 +14,6 @@ export default class FrequencySetting extends Setting {
     let text = <h3 className="no-margin">Detect VTx to start timing</h3>;
     let toggleSwitch = <Toggle disabled={this.state.loading} label={text} />;
     let secondary = 'Timing begins when the video transmitter flies over the RaceTracker';
-    return (
-      <ListItem disabled primaryText={toggleSwitch} secondaryText={secondary}/>
-    );
+    return <ListItem disabled primaryText={toggleSwitch} secondaryText={secondary} />;
   }
 }
-
-

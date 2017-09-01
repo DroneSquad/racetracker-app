@@ -1,140 +1,66 @@
-import React from 'react';
-import _ from 'lodash';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import {
-  AppBar,
-  List,
-  Divider,
-  Subheader,
-  FlatButton,
-  ListItem,
-  FontIcon,
-} from 'material-ui';
-
-import loadingImg from '../../media/ds-logo-spin.svg';
-import TrackerDevice from './TrackerDevice';
-
+import { AppBar, Divider, FlatButton } from 'material-ui';
 import { historyBackButton } from '../../utils';
-
 import './tracker-home.css';
 
-/** Test component to view the other views */
-export default class TrackerHome extends React.Component {
+import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
+import { discoverTracker } from '../../reducers/tracker';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      paired: []
-    };
-  }
+class TrackerHome extends Component {
+  props: {
+    deviceFound: Function
+  };
 
-  componentWillMount() {
-    this.rescan(); // Scan for new devices when the component mounts
-  }
-
-  /** Create the item list from a device object, maps click events*/
-  device(id = 0, device, paired) {
-    let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer"/>;
-    let deviceComponent = <TrackerDevice name={device.name} />; // todo pass what you need
-    if (paired) {
-      return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} rightIcon={<FontIcon className="pull-icon-down mdi mdi-settings"/>} onClick={() => this.openSettings(device)}/>
-    }
-    return <ListItem key={id} primaryText={deviceComponent} leftIcon={deviceLogo} onClick={() => this.connect(device)}/>
-  }
-
-  /** Maps the paired devices to the view components */
-  pairedDevices() {
-    let { paired } = this.state;
-    if (_.size(paired) > 0) {
-      return _.map(paired, (device, id) => device && this.device(id, device, true));
-    }
-    return <ListItem disabled primaryText={<span>No paired race trackers</span>}/>;
-  }
-
-  /** Maps the available devices to the view components */
-  availableDevices() {
-    let { available } = this.state;
-    if (_.size(available) > 0) {
-      return _.map(available, (device, id) => device && this.device(id, device));
-    }
-    return <ListItem disabled primaryText={<span>No available race trackers</span>}/>;
-  }
-
-  /** Rescan the bluetooth devices */
-  rescan = () => {
-    console.log('rescanning');
-    this.setState({ available: null });
-    // todo call action, replace the faked state
-    setTimeout(() => {
-      this.setState({
-        available: [
-          {
-            name: 'IvoryMarten',
-            frequency: 'F8',
-            single: .82,
-            battery: .99,
-          },
-          {
-            name: 'WhiteGoat',
-            frequency: 'F2',
-            single: .76,
-            battery: .97,
-          },
-          (() => {
-            if (Math.random() > .5) {
-              return {
-                name: 'BlueGull',
-                frequency: 'F4',
-                single: .78,
-                battery: .89,
-              };
-            }
-          })()
-        ],
-      });
-    }, Math.random() * 1000 + 1000);
-  }
-
-  /** Open the settings view with the selected device */
-  openSettings = (device) => {
-    console.log('opening settings');
-    console.log(device);
-    this.props.history.push('/tracker/settings', device);
-  }
-
-  /** Connect to the current device */
-  connect = (device) => {
-    console.log('connecting');
-    console.log(device);
-    this.setState(state => { // todo better handle things with actions
-      state.paired.push(device);
-      state.available.splice(state.available.indexOf(device), 1);
-    })
+  discover() {
+    console.log('discover racetrackers');
+    // TODO: should timer setting be a user setting?
+    window.ble.scan([], 10, this.props.deviceFound, function() {
+      // TODO: determine best way to handle failure
+      console.log('Bluetooth device discovery failed!');
+    });
   }
 
   render() {
-    let { paired, available } = this.state;
-    let loadingComponent = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="scanning" alt="Loading..."/>}/>;
     return (
       <div className="main tracker-home">
         <header>
-          <AppBar title="RaceTracker" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
+          <AppBar
+            title="RaceTracker"
+            iconClassNameLeft="mdi mdi-arrow-left"
+            onLeftIconButtonTouchTap={historyBackButton.bind(this)}
+          />
         </header>
         <main>
-          <List>
-            <Subheader className="ds-blue-text">Paired devices</Subheader>
-            {(paired && this.pairedDevices()) || loadingComponent}
-          </List>
+          <FilteredTrackerList
+            filter="SHOW_CONNECTED"
+            headerText="Connected RaceTrackers"
+            emptyText="No connected race trackers"
+          />
           <Divider />
-          <List>
-            <Subheader className="ds-blue-text">Available devices</Subheader>
-            {(available && this.availableDevices()) || loadingComponent}
-          </List>
+          <FilteredTrackerList
+            filter="SHOW_AVAILABLE"
+            headerText="Available RaceTrackers"
+            emptyText="No available race trackers"
+          />
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={this.rescan}/>
+          <FlatButton primary label="rescan" className="right" onClick={() => this.discover()} />
         </footer>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => ({});
+const mapDispatchToProps = (dispatch: Function) => ({
+  deviceFound(device) {
+    console.log(device);
+    if (device.name.startsWith('TBSRT')) {
+      dispatch(discoverTracker(device));
+    }
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackerHome);

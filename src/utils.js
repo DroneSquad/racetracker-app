@@ -2,7 +2,6 @@
  * Random util functions that are used through out the app.
  */
 
-
 /** Make sure the value is not null */
 export function notNull(value, message) {
   if (!value) {
@@ -13,11 +12,12 @@ export function notNull(value, message) {
 
 /** Convert the value to a percent assuming its decimal */
 export function toPercent(value) {
-  if (value === 1) { // assume 1 is 100%
+  if (value === 1) {
+    // assume 1 is 100%
     return '100%';
   }
   if (value < 1) {
-    return Math.floor(value * 100) + '%'
+    return Math.floor(value * 100) + '%';
   }
   return (value || 0) + '%';
 }
@@ -26,7 +26,7 @@ export function toPercent(value) {
 export function batteryLevelIcon(value) {
   if (value === 1) {
     return 'mdi mdi-battery';
-  } else if (!value || value < .1) {
+  } else if (!value || value < 0.1) {
     return 'mdi mdi-battery-10';
   }
   return `mdi mdi-battery-${Math.floor(value * 10) * 10}`;
@@ -40,4 +40,11 @@ export function historyBackButton(backUpPath = '/') {
   } else {
     this.props.history.go(backUpPath);
   }
+}
+
+/** Convert RSSI(dBm) value into equivalent percentage value
+    https://stackoverflow.com/questions/15797920/how-to-convert-wifi-signal-strength-from-quality-percent-to-rssi-dbm/15798024#15798024
+*/
+export function rssiToPercentage(value) {
+  return Math.min(Math.max(2 * (~~value + 100), 0), 100) + '%';
 }
