@@ -23,7 +23,7 @@ declare module 'material-ui' {
  * needed.
  */
 declare module 'material-ui/AppBar/AppBar' {
-  declare module.exports: any;
+  declare module.exports: AppBar;
 }
 
 declare module 'material-ui/AppBar/index' {
@@ -355,7 +355,7 @@ declare module 'material-ui/List/List' {
 }
 
 declare module 'material-ui/List/ListItem' {
-  declare module.exports: any;
+  declare module.exports: ListItem;
 }
 
 declare module 'material-ui/List/makeSelectable' {
