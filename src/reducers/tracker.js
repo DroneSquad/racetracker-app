@@ -1,7 +1,6 @@
 /** actions */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
-export const SCAN_BLUETOOTH_DEVICES = 'SCAN_BLUETOOTH_DEVICES';
 
 /** action creators */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -27,6 +26,11 @@ const trackers = (state = [], action: Action) => {
           connected: false
         }
       ];
+    case CONNECT_TRACKER:
+      return state.map(
+        tracker => (tracker.id === action.payload ? { ...tracker, connected: true } : tracker)
+      );
+
     default:
       return state;
   }

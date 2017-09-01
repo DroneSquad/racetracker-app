@@ -5,7 +5,7 @@ import { AppBar, Divider, FlatButton } from 'material-ui';
 import { historyBackButton } from '../../utils';
 import './tracker-home.css';
 
-import TrackerList from './TrackerList';
+import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
 import { discoverTracker } from '../../reducers/tracker';
 
 class TrackerHome extends Component {
@@ -14,10 +14,11 @@ class TrackerHome extends Component {
   };
 
   discover() {
-    console.log('discover BLE devices');
+    console.log('discover racetrackers');
     // TODO: should timer setting be a user setting?
     window.ble.scan([], 10, this.props.deviceFound, function() {
-      console.log('BLE device discovery failed');
+      // TODO: determine best way to handle failure
+      console.log('BLE device discovery failed!');
     });
   }
 
@@ -32,12 +33,20 @@ class TrackerHome extends Component {
           />
         </header>
         <main>
-          <TrackerList headerText="Connected RaceTrackers" emptyText="No connected race trackers" />
+          <FilteredTrackerList
+            filter="SHOW_CONNECTED"
+            headerText="Connected RaceTrackers"
+            emptyText="No connected race trackers"
+          />
           <Divider />
-          <TrackerList headerText="Available RaceTrackers" emptyText="No available race trackers" />
+          <FilteredTrackerList
+            filter="SHOW_AVAILABLE"
+            headerText="Available RaceTrackers"
+            emptyText="No available race trackers"
+          />
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={this.discover.bind(this)} />
+          <FlatButton primary label="rescan" className="right" onClick={() => this.discover()} />
         </footer>
       </div>
     );
@@ -51,9 +60,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
       dispatch(discoverTracker(device));
     }
   }
-  //  handleClick(event) {
-  //    dispatch(discoverTracker({ name: 'TBS Orange', rssi: '-87', id: '9287359j' }));
-  //  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerHome);

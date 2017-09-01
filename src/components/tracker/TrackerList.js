@@ -1,17 +1,18 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
 import TrackerDevice from './TrackerDevice';
 import { List, Subheader, ListItem } from 'material-ui';
 import loadingImg from '../../media/ds-logo-spin.svg';
 
 const TrackerList = (props: {
+  filter: string,
   headerText: string,
   emptyText: string,
   trackers: Array<RaceTracker>,
   isScanning: boolean
 }) => {
+  // TODO: add spinner while scanning is running
   let spinner = (
     <ListItem
       className="center-text"
@@ -45,7 +46,4 @@ const TrackerList = (props: {
   );
 };
 
-const mapStateToProps = state => ({
-  trackers: state.trackers
-});
-export default connect(mapStateToProps)(TrackerList);
+export default TrackerList;
