@@ -11,12 +11,14 @@ import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
 import { discoverTracker } from '../../reducers/tracker';
 import { clearUnpairedTrackers } from '../../reducers/tracker';
 import { setBtIsScanning } from '../../reducers/bluetooth';
+import { setBtIsEnabled } from '../../reducers/bluetooth';
 
 class TrackerHome extends Component {
   props: {
     deviceFound: Function,
+    clearUnpaired: Function,
     handleBtIsScanning: Function,
-    clearUnpaired: Function
+    handleBtIsEnabled: Function
   };
 
   stopDiscovery() {
@@ -70,7 +72,9 @@ class TrackerHome extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  // add in enabled state watcher
+});
 const mapDispatchToProps = (dispatch: Function) => ({
   deviceFound(device) {
     if (device.name.startsWith('TBSRT')) {
@@ -82,6 +86,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   handleBtIsScanning(value) {
     dispatch(setBtIsScanning(value));
+  },
+  handleBtIsEnabled(value) {
+    dispatch(setBtIsEnabled(value));
   }
 });
 
