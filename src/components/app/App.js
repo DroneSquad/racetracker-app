@@ -6,6 +6,8 @@ import Main from './main/Main';
 import Login from './login/Login';
 import Tracker from '../tracker/Tracker';
 import NewGuest from '../people/NewGuest';
+import NewPilot from '../people/NewPilot';
+import People from '../people/People';
 import HeatLineUp from '../fly/HeatLineUp';
 import HeatResultEdit from '../fly/HeatResultEdit';
 
@@ -18,6 +20,8 @@ export default class App extends React.Component {
       <ConnectedRouter history={history}>
         <Switch>
           <Route path="/people/guest/new" component={NewGuest} />
+          <Route path="/people/new" component={NewPilot} />
+          <Route path="/people" component={People} />
           <Route path="/fly/heat/results/edit" component={HeatResultEdit} />
           <Route path="/fly/heat/edit" component={HeatLineUp} />
           <Route path="/tracker" component={Tracker} />

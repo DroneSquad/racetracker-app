@@ -2,6 +2,11 @@
  * Random util functions that are used through out the app.
  */
 
+import _ from 'lodash';
+
+/** Base 64 for a transparent 1x1 png */
+export const BLANK_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=';
+
 /** Make sure the value is not null */
 export function notNull(value, message) {
   if (!value) {
@@ -47,4 +52,9 @@ export function historyBackButton(backUpPath = '/') {
 */
 export function rssiToPercentage(value) {
   return Math.min(Math.max(2 * (~~value + 100), 0), 100) + '%';
+}
+
+/** Generate a list of random number from min to max */
+export function randomPilotIds() {
+  return _.range(3100, 3150);
 }

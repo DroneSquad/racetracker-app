@@ -8,13 +8,13 @@ import {
   List,
   CardHeader,
   Divider,
-  Avatar,
   FontIcon,
   IconMenu,
   MenuItem,
   IconButton
 } from 'material-ui';
 
+import PilotAvatar from '../app/PilotAvatar';
 import fetch from '../../fetch';
 
 /** Used to display the pilot info for the heat builder */
@@ -50,7 +50,7 @@ export class Pilot extends React.Component {
         {this.state.frequency}
       </span>
     );
-    let avatar = <Avatar className="bar-item" src={this.state.avatar} />;
+    let avatar = <PilotAvatar src={this.state.avatar} />;
     return (
       <div className={this.state.loading ? 'loading-bar' : ''}>
         <CardHeader

@@ -17,7 +17,7 @@ export default class NewGuest extends React.Component {
     super(props);
     this.state = {loading: true};
     setTimeout(() => { // todo replace with redux things
-      this.setState({loading: false, heatPoints: 4, saving: false});
+      this.setState({loading: false, saving: false});
     }, 250);
   }
 
@@ -26,11 +26,6 @@ export default class NewGuest extends React.Component {
     // todo save
     this.setState({saving: true});
     setTimeout(() => historyBackButton.bind(this)(), 1000);
-  };
-
-  /** Update heat points */
-  onHeatPoints = (event, value) => {
-    this.setState({heatPoints: value});
   };
 
   /** When the user types in the callsign */
@@ -57,7 +52,7 @@ export default class NewGuest extends React.Component {
     let title = <span className="ds-blue-text">New Guest</span>;
     let saveBtnClass = this.state.saving ? 'ds-gray-alt-text mdi mdi-loading spinner' : 'ds-gray-alt-text mdi mdi-check';
     return (
-      <div className="main heat-lineup">
+      <div className="main white-bg">
         <header>
           <AppBar className="ds-white" title={title} iconClassNameLeft="ds-gray-alt-text mdi mdi-close" onLeftIconButtonTouchTap={historyBackButton.bind(this)} iconClassNameRight={saveBtnClass} onRightIconButtonTouchTap={this.onSave}/>
         </header>
@@ -77,7 +72,7 @@ export default class NewGuest extends React.Component {
                 <TextField value={this.state.email} onChange={this.onEmail} hintText="Email" errorText={!this.state.email && 'Email is required'}/>
               </ListItem>
               <ListItem disabled>
-                <p>Race results will be emailed to the user when the heat is over.</p>
+                <p className="ds-gray-text">Race results will be emailed to the user when the heat is over.</p>
               </ListItem>
             </List>
           </form>
