@@ -33,7 +33,11 @@ class TrackerDevice extends Component {
 
   /** Connect to the tracker */
   connect = () => {
-    window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
+    if ('ble' in window) {
+      window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
+    } else {
+      this.props.connectSuccess();
+    }
   };
 
   /** Open the settings for the tracker */

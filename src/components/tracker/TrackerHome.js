@@ -27,19 +27,26 @@ class TrackerHome extends Component {
 
   /** Stop finding trackers */
   stopDiscovery = () => {
-    window.ble.stopScan(this.props.handleBtIsScanning(false), function() {
-      console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
-    });
+    if ('ble' in window) {
+      window.ble.stopScan(this.props.handleBtIsScanning(false), function() {
+        console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
+      });
+    }
   }
 
   /** Start finding trackers */
   startDiscovery = () => {
-    this.props.clearUnpaired();
-    this.props.handleBtIsScanning(true);
-    window.ble.startScan([], this.props.deviceFound, function() {
-      console.log('Bluetooth device discovery failed!'); // TODO: handle failure correctly
-    });
-    setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
+    if ('ble' in window) {
+      this.props.clearUnpaired();
+      this.props.handleBtIsScanning(true);
+      window.ble.startScan([], this.props.deviceFound, function() {
+        console.log('Bluetooth device discovery failed!'); // TODO: handle failure correctly
+      });
+      setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
+    } else {
+      this.props.deviceFound({id: 'id', name: `TBSRT Blue Gull`, rssi: 0.6});
+      this.stopDiscovery();
+    }
   };
 
   render() {

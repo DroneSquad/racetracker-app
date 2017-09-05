@@ -1,4 +1,5 @@
 // @flow
+import _ from 'lodash';
 
 /** actions */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
@@ -31,22 +32,18 @@ export const clearUnpairedTrackers = () => ({
 const trackers = (state = [], action: Action) => {
   switch (action.type) {
     case DISCOVER_TRACKER:
-      return [
-        ...state,
-        {
-          id: action.payload.id,
-          rssi: action.payload.rssi,
-          name: action.payload.name,
-          isConnected: false,
-          isConnecting: false,
-        }
-      ];
+      // use a union to remove copies of the same tracker id
+      return _.unionWith(state, [{
+        id: action.payload.id,
+        rssi: action.payload.rssi,
+        name: action.payload.name,
+      }], (left, right) => left.id === right.id);
     case CONNECT_TRACKER:
       return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false} : tracker));
     case DISCONNECT_TRACKER:
       return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker));
     case CLEAR_UNPAIRED_TRACKERS:
-      return state.filter(tracker => tracker.isConnected: true);
+      return state.filter(tracker => tracker.isConnected);
     default:
       return state;
   }

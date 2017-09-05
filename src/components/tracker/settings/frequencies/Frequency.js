@@ -1,8 +1,10 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { AppBar, List, ListItem, Divider, SelectField, MenuItem } from 'material-ui';
 
 import { historyBackButton } from '../../../../utils';
+import frequencies from './frequencies.json'; // the config to generate the profiles
 
 import './frequencies.css';
 
@@ -12,10 +14,12 @@ export default class Frequency extends React.Component {
     this.state = {
       loading: true,
       band: 0,
-      channel: 0
+      channel: 0,
+      bands: frequencies.profiles[0].bands,
+      profiles: _.map(frequencies.profiles, profile => profile.name),
     };
     setTimeout(() => {
-      this.setState({ loading: false, band: 1, channel: 1 });
+      this.setState({ loading: false, band: 0, channel: 4 });
     }, 1000);
   }
 
@@ -40,13 +44,11 @@ export default class Frequency extends React.Component {
         value={this.state.channel}
         onChange={this.onChannelSelect}
       >
-        {this.state.loading &&
-          <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
-        <MenuItem value={1} primaryText="5000" />
-        <MenuItem value={2} primaryText="5001" />
-        <MenuItem value={3} primaryText="5002" />
-        <MenuItem value={4} primaryText="5003" />
-        <MenuItem value={5} primaryText="5004" />
+        {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
+        {!this.state.loading && _.map(_.keys(this.state.bands), (value, index) => {
+          let text = `${_.upperCase(value)} - ${this.state.bands[value]}`;
+          return <MenuItem value={index} primaryText={text} />;
+        })}
       </SelectField>
     );
   };
@@ -60,13 +62,8 @@ export default class Frequency extends React.Component {
         value={this.state.band}
         onChange={this.onBandSelect}
       >
-        {this.state.loading &&
-          <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
-        <MenuItem value={1} primaryText="A" />
-        <MenuItem value={2} primaryText="B" />
-        <MenuItem value={3} primaryText="C" />
-        <MenuItem value={4} primaryText="D" />
-        <MenuItem value={5} primaryText="R" />
+        {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
+        {!this.state.loading && _.map(this.state.profiles, (value, index) => <MenuItem value={index} primaryText={value} />)}
       </SelectField>
     );
   };
