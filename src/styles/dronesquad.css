@@ -75,6 +75,10 @@ body {
   clear: left !important;
 }
 
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
 .white-bg {
   --ds-background: var(--ds-white);
   background-color: var(--ds-background);

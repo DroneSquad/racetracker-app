@@ -33,11 +33,11 @@ export default class Race extends React.Component {
         </header>
         <main>
           <Tabs initialSelectedIndex={1}>
-            <Tab label="Flying" />
+            <Tab label="Racing" />
             <Tab label="Heats">
               <RaceHeats history={this.props.history} />
             </Tab>
-            <Tab label="Leaders" />
+            <Tab label="Stats" />
           </Tabs>
         </main>
       </div>

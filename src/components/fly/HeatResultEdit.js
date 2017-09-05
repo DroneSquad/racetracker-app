@@ -23,9 +23,9 @@ class HeatResultRow extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {loading: true};
+    this.state = {id: ++HeatResultRow.id, loading: true};
     setTimeout(() => { // todo replace with redux things
-      this.setState({snackBar: null, loading: false, heatTime: new Date()});
+      this.setState({snackBar: null, loading: false, heatTime: '5:32.123'});
     }, 250);
   }
 
@@ -41,7 +41,7 @@ class HeatResultRow extends React.Component {
 
   /** When the time is split */
   onSplit = () => {
-    this.setState({snackBar: 'Your time has been spliced'});
+    this.setState({snackBar: `Lap ${this.state.id} split`});
   };
 
   onSnackBar = () => {
@@ -51,15 +51,16 @@ class HeatResultRow extends React.Component {
   render() {
     return (
       <TableRow className={this.state.loading ? 'loading-bar' : ''}>
-        <TableRowColumn>{++HeatResultRow.id}</TableRowColumn>
+        <TableRowColumn>{this.state.id}</TableRowColumn>
         <TableRowColumn className="no-clip">
-          <TimePicker format="24hr" value={this.state.heatTime} onChange={this.onHeatTime}/>
+          <TextField value={this.state.heatTime} onChange={this.onHeatTime}/>
+          {/*<TimePicker format="24hr" value={this.state.heatTime} onChange={this.onHeatTime}/>*/}
         </TableRowColumn>
         <TableRowColumn>
-          <IconButton iconClassName="mdi mdi-call-split" onTouchTap={this.onSplit} />
+          <IconButton iconClassName="mdi mdi-call-split ds-gray-alt-text rotate-90" onTouchTap={this.onSplit} />
         </TableRowColumn>
         <TableRowColumn>
-          <IconButton iconClassName="mdi mdi-delete" onTouchTap={this.onDelete}/>
+          <IconButton iconClassName="mdi mdi-delete ds-gray-alt-text" onTouchTap={this.onDelete}/>
         </TableRowColumn>
         <Snackbar open={!!this.state.snackBar} message={this.state.snackBar || ''} autoHideDuration={4000} action="undo" onRequestClose={this.onSnackBar}/>
       </TableRow>

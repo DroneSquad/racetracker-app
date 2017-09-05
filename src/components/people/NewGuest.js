@@ -30,7 +30,7 @@ export default class NewGuest extends React.Component {
 
   /** When the user types in the callsign */
   onCallsign = (event, value) => {
-    this.setState({callsign: value});
+    this.setState({enteredCallsign: true, callsign: value});
   };
 
   /** When the user types in the firstName */
@@ -45,7 +45,7 @@ export default class NewGuest extends React.Component {
 
   /** When the user types in the email */
   onEmail = (event, value) => {
-    this.setState({email: value});
+    this.setState({enteredEmail: true, email: value});
   };
 
   render() {
@@ -60,7 +60,7 @@ export default class NewGuest extends React.Component {
           <form>
             <List>
               <ListItem disabled leftIcon={<FontIcon className="mdi mdi-account"/>} innerDivStyle={{padding: '0 0 0 48px'}}>
-                <TextField value={this.state.callsign} onChange={this.onCallsign} hintText="Callsign" errorText={!this.state.callsign && 'Callsign is required'}/>
+                <TextField value={this.state.callsign} onChange={this.onCallsign} hintText="Callsign*" errorText={(!this.state.callsign && this.state.enteredCallsign) && 'Callsign is required'}/>
               </ListItem>
               <ListItem disabled innerDivStyle={{padding: '0 0 0 48px'}}>
                 <TextField value={this.state.firstName} onChange={this.onFirstName} hintText="First Name"/>
@@ -69,7 +69,7 @@ export default class NewGuest extends React.Component {
                 <TextField value={this.state.lastName} onChange={this.onLastName} hintText="Last Name"/>
               </ListItem>
               <ListItem disabled leftIcon={<FontIcon className="mdi mdi-email"/>} innerDivStyle={{padding: '0 0 0 48px'}}>
-                <TextField value={this.state.email} onChange={this.onEmail} hintText="Email" errorText={!this.state.email && 'Email is required'}/>
+                <TextField value={this.state.email} onChange={this.onEmail} hintText="Email*" errorText={(!this.state.email && this.state.enteredEmail) && 'Email is required'}/>
               </ListItem>
               <ListItem disabled>
                 <p className="ds-gray-text">Race results will be emailed to the user when the heat is over.</p>
