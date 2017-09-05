@@ -3,14 +3,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = (props: {}) => {
-  return (
-    <div>
-      Home Content
-      <hr />
-      <Link to="/tracker">TBS Race Tracker</Link>
-    </div>
-  );
-};
+export default class Home extends React.Component {
 
-export default Home;
+  props: {};
+
+  render() {
+    return (
+      <div>
+        Home Content
+        <hr />
+        <Link to="/tracker">TBS Race Tracker</Link>
+        <Link to="/people">People</Link>
+      </div>
+    );
+  }
+}
