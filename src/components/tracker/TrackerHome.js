@@ -21,20 +21,26 @@ class TrackerHome extends Component {
     handleBtIsEnabled: Function
   };
 
-  stopDiscovery() {
+  componentWillMount() {
+    this.startDiscovery();
+  }
+
+  /** Stop finding trackers */
+  stopDiscovery = () => {
     window.ble.stopScan(this.props.handleBtIsScanning(false), function() {
       console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
     });
   }
 
-  startDiscovery() {
+  /** Start finding trackers */
+  startDiscovery = () => {
     this.props.clearUnpaired();
     this.props.handleBtIsScanning(true);
     window.ble.startScan([], this.props.deviceFound, function() {
       console.log('Bluetooth device discovery failed!'); // TODO: handle failure correctly
     });
     setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
-  }
+  };
 
   render() {
     return (
@@ -48,6 +54,7 @@ class TrackerHome extends Component {
         </header>
         <main>
           <FilteredTrackerList
+            history={this.props.history}
             filter="SHOW_CONNECTED"
             headerText="Connected RaceTrackers"
             emptyText="No connected race trackers"
@@ -60,12 +67,7 @@ class TrackerHome extends Component {
           />
         </main>
         <footer>
-          <FlatButton
-            primary
-            label="rescan"
-            className="right"
-            onClick={() => this.startDiscovery()}
-          />
+          <FlatButton primary label="rescan" className="right" onClick={this.startDiscovery}/>
         </footer>
       </div>
     );

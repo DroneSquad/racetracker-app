@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontIcon } from 'material-ui';
 import { rssiToPercentage } from '../../utils';
-import { ListItem } from 'material-ui';
+import { ListItem, Snackbar } from 'material-ui';
 
 import { connectTracker, disconnectTracker } from '../../reducers/tracker';
 
@@ -25,49 +25,44 @@ class TrackerDevice extends Component {
     id: string,
     name: string,
     rssi: string,
+    isConnecting: boolean,
     isConnected: boolean,
     connectSuccess: Function,
     connectFailure: Function
   };
 
-  connect(id) {
-    window.ble.connect(id, this.props.connectSuccess, this.props.connectFailure);
-  }
+  /** Connect to the tracker */
+  connect = () => {
+    window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
+  };
 
-  openSettings(id) {
+  /** Open the settings for the tracker */
+  openSettings = () => {
     console.log('openSettings');
     // TODO: handle navigaion
-    // this.props.history.push('/tracker/settings', id);
-  }
+    this.props.history.push('/tracker/settings', this.props.id);
+  };
 
   render() {
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
     let deviceComponent = <DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
+    let extraProps = {key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo};
+    let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
     if (this.props.isConnected) {
-      return (
-        <ListItem
-          key={this.props.id}
-          primaryText={deviceComponent}
-          leftIcon={deviceLogo}
-          rightIcon={<FontIcon className="pull-icon-down mdi mdi-settings" />}
-          onClick={() => this.openSettings(this.props.id)}
-        />
-      );
-    } else {
-      return (
-        <ListItem
-          key={this.props.id}
-          primaryText={deviceComponent}
-          leftIcon={deviceLogo}
-          onClick={() => this.connect(this.props.id)}
-        />
-      );
+      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openSettings}/>;
     }
+    return (
+      <div>
+        <Snackbar open={this.props.isConnecting} message="Connecting..." />
+        <ListItem {...extraProps} onClick={this.connect}/>
+      </div>
+    );
   }
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
+  isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
 });
 
 const mapDispatchToProps = (dispatch: Function, ownProps) => ({

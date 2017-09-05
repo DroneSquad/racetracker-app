@@ -13,6 +13,7 @@ export default class Home extends React.Component {
         Home Content
         <hr />
         <Link to="/tracker">TBS Race Tracker</Link>
+        <hr />
         <Link to="/people">People</Link>
       </div>
     );

@@ -1,0 +1,5 @@
+.people .fetching {
+  --size: 40px;
+  height: var(--size);
+  width: var(--size);
+}

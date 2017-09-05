@@ -14,6 +14,7 @@ import {
 import PilotAvatar from '../app/PilotAvatar';
 import loadingImg from '../../media/ds-logo-spin.svg';
 import { historyBackButton, randomPilotIds } from '../../utils';
+import fetch from '../../fetch';
 
 class Pilot extends React.Component {
   constructor(props) {
@@ -62,9 +63,9 @@ export default class NewPilot extends React.Component {
   }
 
   render() {
-    let spinner = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="scanning" alt="Loading..." />}/>;
+    let spinner = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="fetching" alt="Loading..." />}/>;
     return (
-      <div className="main white-bg">
+      <div className="main people white-bg">
         <header>
           <AppBar title="Add Pilot" iconClassNameLeft="mdi mdi-arrow-left" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
@@ -73,6 +74,7 @@ export default class NewPilot extends React.Component {
             <ListItem leftIcon={<FontIcon className="mdi mdi-magnify"/>} primaryText={<TextField hintText="Enter name or callsign"/>}/>
             <Divider />
             <ListItem leftIcon={<FontIcon className="mdi mdi-account-multiple-plus"/>} primaryText="New guest" onTouchTap={() => this.props.history.push('/people/guest/new')}/>
+            <Divider />
           </List>
           <List>
             <Subheader>Pilots</Subheader>

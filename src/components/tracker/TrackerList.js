@@ -16,7 +16,7 @@ export default class TrackerList extends React.Component {
 
   render() {
     let spinner = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="scanning" alt="Loading..." />}/>;
-    let trackers = this.props.trackers.length > 0 ? this.props.trackers.map(tracker => <TrackerDevice key={tracker.id} {...tracker} />) : <ListItem disabled primaryText={this.props.emptyText}/>;
+    let trackers = this.props.trackers.length > 0 ? this.props.trackers.map(tracker => <TrackerDevice history={this.props.history} key={tracker.id} {...tracker} />) : <ListItem disabled primaryText={this.props.emptyText}/>;
     return (
       <List>
         <Subheader className="ds-blue-text">

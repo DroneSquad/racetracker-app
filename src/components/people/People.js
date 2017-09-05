@@ -11,8 +11,11 @@ import {
 } from 'material-ui';
 
 import PilotAvatar from '../app/PilotAvatar';
+import loadingImg from '../../media/ds-logo-spin.svg';
 import { historyBackButton, randomPilotIds } from '../../utils';
 import fetch from '../../fetch';
+
+import './people.css';
 
 class Person extends React.Component {
   constructor(props) {
@@ -72,14 +75,15 @@ export default class NewGuest extends React.Component {
   };
 
   render() {
+    let spinner = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="fetching" alt="Loading..." />}/>;
     return (
-      <div className="main heat-lineup">
+      <div className="main white-bg people">
         <header>
           <AppBar title="Pilots" iconClassNameLeft="mdi mdi-close" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
         </header>
         <main>
           <List>
-            {_.map(randomPilotIds(), value => <Person key={value} id={value} />)}
+            {this.state.loading ? spinner : _.map(randomPilotIds(), value => <Person key={value} id={value} />)}
           </List>
           <FloatingActionButton disabled={this.state.loading} style={{position: 'absolute', bottom: '16px', right: '16px'}} onTouchTap={this.onNewPilot}>
             <FontIcon className="mdi mdi-plus" />
