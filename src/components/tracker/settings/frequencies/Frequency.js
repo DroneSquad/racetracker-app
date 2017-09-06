@@ -15,7 +15,7 @@ export default class Frequency extends React.Component {
       loading: true,
       band: 0,
       channel: 0,
-      bands: frequencies.profiles[0].bands,
+      bands: frequencies.bands,
       profiles: _.map(frequencies.profiles, profile => profile.name),
     };
     setTimeout(() => {
