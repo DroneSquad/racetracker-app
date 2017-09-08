@@ -1,4 +1,5 @@
 import React from 'react';
+import uuid from 'uuid';
 
 import {
   Card,
@@ -16,12 +17,14 @@ import {
 } from 'material-ui';
 
 import PilotAvatar from '../app/PilotAvatar';
+import { lazyLoad } from '../../utils';
 import fetch from '../../fetch';
 
 /** Used to display the pilot info for the heat builder */
 export class Pilot extends React.Component {
   constructor(props) {
     super(props);
+    this.uuid = uuid.v4();
     this.state = {
       loading: true,
       name: 'Unknown',
@@ -29,14 +32,20 @@ export class Pilot extends React.Component {
     };
   }
 
-  componentWillMount() {
-    // todo replace with loopback, this is just to test loading
-    fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
-      this.setState({
-        name: data.callsign || data.display || 'No Pilot Found',
-        loading: false
+  componentDidMount() {
+    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
+      //todo replace with loopback, this is just to test loading
+      fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
+        this.setState({
+          name: data.callsign || data.display || 'No Pilot Found',
+          loading: false
+        });
       });
-    });
+    })
+  }
+
+  componentWillUnmount() {
+    this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
   }
 
   render() {
@@ -50,7 +59,7 @@ export class Pilot extends React.Component {
     );
     let avatar = <PilotAvatar size={20} src={this.state.avatar} />;
     return (
-      <TableRow className={this.state.loading ? 'loading-bar' : ''}>
+      <TableRow id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}>
         <TableRowColumn className="pilot-name">
           {avatar}
           {name}

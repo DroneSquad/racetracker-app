@@ -58,3 +58,52 @@ export function rssiToPercentage(value) {
 export function randomPilotIds() {
   return _.range(3100, 3150);
 }
+
+/** Will lazy load the element then call the callback on the element after its in view */
+export function lazyLoad(element, callback) {
+  if (!element || !callback) return; // dont need to do anything if they give us bad data
+  if (window.innerHeight >= element.getBoundingClientRect().top) {
+    callback();
+  } else {
+    callback.$element = element; // inject the element into the function
+    if ('lazyLoading' in window) {
+      window.lazyLoading.stack = [...window.lazyLoading.stack, callback];
+    } else { // lazy load the lazy load system
+      let lazyLoading = window.lazyLoading = {
+        stack: [callback],
+        ticking: false
+      };
+      // register the scroll event listener
+      window.addEventListener('scroll', () => {
+        if (lazyLoading.stack.length > 0 && !lazyLoading.ticking) {
+          // have the callbacks only be called on a request frame
+          window.requestAnimationFrame(() => {
+            for (let index in lazyLoading.stack) {
+              let action = lazyLoading.stack[index];
+              if (window.innerHeight >= action.$element.getBoundingClientRect().top) {
+                try {
+                  action();
+                } finally {
+                  lazyLoading.stack.splice(index, 1);
+                }
+              }
+            }
+            lazyLoading.ticking = false;
+          });
+          lazyLoading.ticking = true;
+        }
+      }, true);
+    }
+  }
+  // return a function that will remove the callback from the list
+  return () => {
+    if ('lazyLoading' in window) {
+      for (let index in window.lazyLoading.stack) {
+        let action = window.lazyLoading.stack[index];
+        if (callback === action) {
+          window.lazyLoading.stack.splice(index, 1);
+        }
+      }
+    }
+  };
+}

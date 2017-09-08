@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import uuid from 'uuid';
 
 import {
   AppBar,
@@ -13,12 +14,13 @@ import {
 
 import PilotAvatar from '../app/PilotAvatar';
 import loadingImg from '../../media/ds-logo-spin.svg';
-import { historyBackButton, randomPilotIds } from '../../utils';
+import { historyBackButton, randomPilotIds, lazyLoad } from '../../utils';
 import fetch from '../../fetch';
 
 class Pilot extends React.Component {
   constructor(props) {
     super(props);
+    this.uuid = uuid.v4();
     this.state = {
       loading: true,
       name: 'Unknown',
@@ -27,14 +29,20 @@ class Pilot extends React.Component {
     };
   }
 
-  componentWillMount() {
-    // todo replace with loopback, this is just to test loading
-    fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
-      this.setState({
-        name: data.callsign || data.display || 'No Pilot Found',
-        loading: false
+  componentDidMount() {
+    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
+      //todo replace with loopback, this is just to test loading
+      fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
+        this.setState({
+          name: data.callsign || data.display || 'No Pilot Found',
+          loading: false
+        });
       });
-    });
+    })
+  }
+
+  componentWillUnmount() {
+    this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
   }
 
   /** When the list item was clicked*/
@@ -46,7 +54,7 @@ class Pilot extends React.Component {
     let name = <div className="bar-item" style={{marginBottom: '1px'}}>{this.state.name}</div>;
     let avatar = <PilotAvatar src={this.state.avatar} />;
     return (
-      <ListItem onTouchTap={this.onClick} className={this.state.loading ? 'loading-bar' : ''} leftAvatar={avatar} primaryText={name}/>
+      <ListItem id={this.uuid} onTouchTap={this.onClick} className={this.state.loading ? 'loading-bar' : ''} leftAvatar={avatar} primaryText={name}/>
     );
   }
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
 import RaceHeats from './RaceHeats';
+import Racing from './Racing';
 
 import './fly.css';
 
@@ -33,7 +34,9 @@ export default class Race extends React.Component {
         </header>
         <main>
           <Tabs initialSelectedIndex={1}>
-            <Tab label="Racing" />
+            <Tab label="Racing">
+              <Racing history={this.props.history} />
+            </Tab>
             <Tab label="Heats">
               <RaceHeats history={this.props.history} />
             </Tab>

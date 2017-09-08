@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import uuid from 'uuid';
 
 import {
   AppBar,
@@ -12,7 +13,7 @@ import {
 
 import PilotAvatar from '../app/PilotAvatar';
 import loadingImg from '../../media/ds-logo-spin.svg';
-import { historyBackButton, randomPilotIds } from '../../utils';
+import { historyBackButton, randomPilotIds, lazyLoad } from '../../utils';
 import fetch from '../../fetch';
 
 import './people.css';
@@ -20,6 +21,7 @@ import './people.css';
 class Person extends React.Component {
   constructor(props) {
     super(props);
+    this.uuid = uuid.v4();
     this.state = {
       loading: true,
       name: 'Unknown',
@@ -28,14 +30,20 @@ class Person extends React.Component {
     };
   }
 
-  componentWillMount() {
-    // todo replace with loopback, this is just to test loading
-    fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
-      this.setState({
-        name: data.callsign || data.display || 'No Pilot Found',
-        loading: false
+  componentDidMount() {
+    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
+      // todo replace with loopback, this is just to test loading
+      fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
+        this.setState({
+          name: data.callsign || data.display || 'No Pilot Found',
+          loading: false
+        });
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
   }
 
   /** When the list item was clicked*/
@@ -54,7 +62,7 @@ class Person extends React.Component {
     let channel = <span className="bar-item">{this.state.channel}</span>;
     let icon = <IconButton style={{ padding: '0' }} onTouchTap={this.onClickIcon} children={<FontIcon className="mdi mdi-clipboard-outline"/>}/>;
     return (
-      <ListItem onTouchTap={this.onClick} className={this.state.loading ? 'loading-bar' : ''} leftAvatar={avatar} primaryText={name} secondaryText={channel} rightIcon={icon}/>
+      <ListItem id={this.uuid} onTouchTap={this.onClick} className={this.state.loading ? 'loading-bar' : ''} leftAvatar={avatar} primaryText={name} secondaryText={channel} rightIcon={icon}/>
     );
   }
 }

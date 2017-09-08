@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   AppBar,
-  TimePicker,
   Table,
   TableHeader,
   TableRow,
