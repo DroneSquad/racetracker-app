@@ -68,7 +68,7 @@ class Person extends React.Component {
 }
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
-export default class NewGuest extends React.Component {
+export default class People extends React.Component {
 
   constructor(props) {
     super(props);

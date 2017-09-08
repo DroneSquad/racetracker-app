@@ -4,7 +4,7 @@
   background-size: 100vw !important;
   color: rgba(255, 255, 255, 0) !important;
   object-position: -100vw -100vh !important;
-  animation: loading 2s infinite !important;
+  animation: loading 2s infinite linear !important;
   transition: all 1s !important;
   border-radius: 5px;
 }

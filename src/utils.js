@@ -56,7 +56,7 @@ export function rssiToPercentage(value) {
 
 /** Generate a list of random number from min to max */
 export function randomPilotIds() {
-  return _.range(3100, 3150);
+  return _.range(3100, 3350);
 }
 
 /** Will lazy load the element then call the callback on the element after its in view */
@@ -67,7 +67,7 @@ export function lazyLoad(element, callback) {
   } else {
     callback.$element = element; // inject the element into the function
     if ('lazyLoading' in window) {
-      window.lazyLoading.stack = [...window.lazyLoading.stack, callback];
+      window.lazyLoading.stack.push(callback);
     } else { // lazy load the lazy load system
       let lazyLoading = window.lazyLoading = {
         stack: [callback],
@@ -77,7 +77,7 @@ export function lazyLoad(element, callback) {
       window.addEventListener('scroll', () => {
         if (lazyLoading.stack.length > 0 && !lazyLoading.ticking) {
           // have the callbacks only be called on a request frame
-          window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(async () => {
             for (let index in lazyLoading.stack) {
               let action = lazyLoading.stack[index];
               if (window.innerHeight >= action.$element.getBoundingClientRect().top) {
