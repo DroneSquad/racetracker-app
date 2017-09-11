@@ -62,30 +62,46 @@ export function randomPilotIds() {
 /** Will lazy load the element then call the callback on the element after its in view */
 export function lazyLoad(element, callback) {
   if (!element || !callback) return; // dont need to do anything if they give us bad data
-  if (window.innerHeight >= element.getBoundingClientRect().top) {
+  let height = element.getBoundingClientRect().top;
+  if (window.innerHeight >= height) {
     callback();
   } else {
     callback.$element = element; // inject the element into the function
     if ('lazyLoading' in window) {
-      window.lazyLoading.stack.push(callback);
+      let sortedList = window.lazyLoading.sortedList;
+      // fancy sorting algorithm to speed this things up
+      if (sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height) {
+        sortedList.push(callback);
+      } else {
+        sortedList.splice((() => {
+          for (let i in sortedList) {
+            if (sortedList[i].$element.getBoundingClientRect().top >= height) {
+              return i;
+            }
+          }
+          return sortedList.length;
+        })(), 0, callback);
+      }
     } else { // lazy load the lazy load system
       let lazyLoading = window.lazyLoading = {
-        stack: [callback],
+        sortedList: [callback],
         ticking: false
       };
       // register the scroll event listener
       window.addEventListener('scroll', () => {
-        if (lazyLoading.stack.length > 0 && !lazyLoading.ticking) {
+        if (lazyLoading.sortedList.length > 0 && !lazyLoading.ticking) {
           // have the callbacks only be called on a request frame
           window.requestAnimationFrame(async () => {
-            for (let index in lazyLoading.stack) {
-              let action = lazyLoading.stack[index];
+            for (let index in lazyLoading.sortedList) {
+              let action = lazyLoading.sortedList[index];
               if (window.innerHeight >= action.$element.getBoundingClientRect().top) {
                 try {
                   action();
                 } finally {
-                  lazyLoading.stack.splice(index, 1);
+                  lazyLoading.sortedList.splice(index, 1);
                 }
+              } else {
+                break; // the stack is sorted once we are out of the screen no need to check for more
               }
             }
             lazyLoading.ticking = false;
