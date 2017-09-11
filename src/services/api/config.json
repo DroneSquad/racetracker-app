@@ -1,0 +1,4 @@
+{
+  "apiServer": "https://api.dronesquad.com",
+  "lbServer": "https://api.dronesquad.com/api"
+}
