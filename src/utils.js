@@ -70,7 +70,7 @@ export function lazyLoad(element, callback) {
     if ('lazyLoading' in window) {
       let sortedList = window.lazyLoading.sortedList;
       // fancy sorting algorithm to speed this things up
-      if (sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height) {
+      if (sortedList.length > 0 && sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height) {
         sortedList.push(callback);
       } else {
         sortedList.splice((() => {
@@ -118,10 +118,10 @@ export function lazyLoad(element, callback) {
   // return a function that will remove the callback from the list
   return () => {
     if ('lazyLoading' in window) {
-      for (let index in window.lazyLoading.stack) {
-        let action = window.lazyLoading.stack[index];
+      for (let index in window.lazyLoading.sortedList) {
+        let action = window.lazyLoading.sortedList[index];
         if (callback === action) {
-          window.lazyLoading.stack.splice(index, 1);
+          window.lazyLoading.sortedList.splice(index, 1);
         }
       }
     }
