@@ -94,7 +94,11 @@ export function lazyLoad(element, callback) {
           window.requestAnimationFrame(async () => {
             for (let index in lazyLoading.sortedList) {
               let action = lazyLoading.sortedList[index];
-              if (window.innerHeight >= action.$element.getBoundingClientRect().top) {
+              let height = action.$element.getBoundingClientRect().top;
+              if (height < 0) {
+                continue;
+              }
+              if (window.innerHeight >= height) {
                 try {
                   action();
                 } finally {
