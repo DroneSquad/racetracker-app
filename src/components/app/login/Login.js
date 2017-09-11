@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { authorize } from '../../../reducers/auth';
-
 import loginImg from '../../../media/ds-full-logo.svg';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
 import './login.css';
@@ -22,7 +20,7 @@ class Login extends React.PureComponent {
     this._loading = true;
     const login = this._email.value;
     const password = this._password.value;
-    this.props.dispatch(authorize(login, password));
+    // this.props.dispatch(authorize(login, password));
     return false;
   }
 

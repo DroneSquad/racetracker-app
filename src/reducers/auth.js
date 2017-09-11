@@ -5,15 +5,15 @@ export const AUTH_REQUEST = 'AUTH_REQUEST';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAILURE = 'AUTH_FAILURE';
 
-/** actions */
+/** actions
 export const authorize = (login, password) => ({
   type: AUTH_REQUEST,
   payload: { login: login, password: password }
-});
+}); */
 
 const DEFAULT_STATE = {
   // TODO: pull this token from proper storage
-  token: localStorage.getItem('token'),
+  token: null, // localStorage.getItem('token'),
   error: null
 };
 
@@ -23,9 +23,9 @@ const DEFAULT_STATE = {
 export const authReducer = (state = DEFAULT_STATE, { type, payload }) => {
   switch (type) {
     case AUTH_REQUEST: {
-      api.pilots.login({email: payload.login, password: payload.password}).then(__ => {
+      api.pilots.login({ email: payload.login, password: payload.password }).then(__ => {
         api.pilots.logout().then(json => {
-          console.log(json)
+          console.log(json);
         });
       });
       return state;
