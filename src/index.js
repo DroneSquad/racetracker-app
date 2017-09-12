@@ -19,24 +19,14 @@ injectTapEventPlugin();
 window.history.replaceState(null, document.title, '/' + (window.location.hash || '#!/'));
 
 // root dom element to attach application
-const appEl = document.getElementById('app');
+const root = document.getElementById('app');
 
 // initial render: displays loading screen while device/app is prepared
-ReactDOM.render(
-  <AppContainer>
-    <Loading isLoading={true} />
-  </AppContainer>,
-  appEl
-);
+ReactDOM.render(<AppContainer><Loading /></AppContainer>, root);
 
 // hot module swapping (development use only)
 if (module.hot) {
   module.hot.accept('./components/app/loading/Loading', () => {
-    ReactDOM.render(
-      <AppContainer>
-        <Loading isLoading={false} />
-      </AppContainer>,
-      appEl
-    );
+    ReactDOM.render(<AppContainer><Loading doneLoading/></AppContainer>, root);
   });
 }

@@ -26,7 +26,7 @@ export default class Loading extends React.PureComponent {
     });
     this.state = {
       callback: this.defaultCallback,
-      isLoading: props.isLoading
+      isLoading: !props.doneLoading
     };
   }
 
@@ -34,13 +34,14 @@ export default class Loading extends React.PureComponent {
   componentWillMount() {
     // have cordova device ready event call a action to allow the loading screen to advance
     // if not in cordova we will fake it for 0.5 seconds
-    window.document.addEventListener(
-      'deviceready',
-      () => {
-        this.setState({ isLoading: false });
-      },
-      false
-    );
+    this.deviceReady = () => {
+      this.setState({ isLoading: false });
+    };
+    window.document.addEventListener('deviceready', this.deviceReady, false);
+  }
+
+  componentWillUnmount() {
+    this.deviceReady && window.document.removeEventListener('deviceready', this.deviceReady)
   }
 
   /** Update the mui theme settings to match drone squad color scheme */
@@ -56,12 +57,13 @@ export default class Loading extends React.PureComponent {
   });
 
   /** The default callback that will open the app */
-  defaultCallback = () =>
+  defaultCallback = () => (
     <Provider store={configStore(this.history)}>
       <MuiThemeProvider muiTheme={this.muiTheme}>
         <App history={this.history} />
       </MuiThemeProvider>
-    </Provider>;
+    </Provider>
+  );
 
   render() {
     // While the app is loading display the spinner
