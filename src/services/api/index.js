@@ -26,6 +26,7 @@ export class Api {
   pilots = {
     /** Login the user, payload is {email, password} */
     login: auth => {
+      // auth: email, password
       return this.request(post, 'pilots/login', {...auth}).then(json => {
         this._token = {
           hash: json.id,
@@ -44,6 +45,17 @@ export class Api {
         }
         return json;
       });
+    },
+
+    /** Create a new account */
+    register: account => {
+      // account: email, firstName, lastName, callsign, password
+      return this.request(post, 'pilots', {...account});
+    },
+
+    /** Send a password reset link for the account */
+    forgot: email => {
+      return this.request(post, 'pilots/reset', {email: email});
     },
   }
 }
