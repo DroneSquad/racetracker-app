@@ -1,7 +1,7 @@
 // @flow
 
 import { connect } from 'react-redux';
-import { loginSuccess, loginFailure, loginRequest } from '../modules/login';
+import { loginRequest } from '../modules/login';
 
 import Login from '../components/Login';
 
@@ -11,8 +11,8 @@ import Login from '../components/Login';
     component - in this case, the Login:   */
 
 const mapStateToProps = (state, ownProps) => ({
-  token: state.auth.token
-  //  error: state.auth.error
+  token: state.auth.token,
+  error: state.auth.error
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

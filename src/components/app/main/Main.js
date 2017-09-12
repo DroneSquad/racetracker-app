@@ -17,15 +17,7 @@ import './main.css';
 class Main extends React.Component {
   render() {
     let { history } = this.props;
-    // let { token, history } = this.props;
-    /*  if (!token) {
-      // All content in main needs a valid token
-      let to = `/login?redirect=${window.location.pathname}`;
-      console.log(to);
-      return <Redirect to={to} />;
-    }
-    console.log('fail');*/
-    // todo have the selected route change the bottom navigation index
+    // TODO: have the selected route change the bottom navigation index
     return (
       <content className="main">
         <header>
