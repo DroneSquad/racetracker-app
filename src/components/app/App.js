@@ -1,8 +1,8 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
-import AuthRoute from '../../routes/AuthRoute';
 
+import AuthRoute from '../../routes/AuthRoute';
 import Main from './main/Main';
 import Login from './login/Login';
 import Tracker from '../tracker/Tracker';
@@ -20,13 +20,13 @@ export default class App extends React.Component {
     return (
       <ConnectedRouter history={history}>
         <Switch>
+          <Route path="/login" component={Login} />
           <AuthRoute path="/people/guest/new" component={NewGuest} />
           <AuthRoute path="/people/new" component={NewPilot} />
           <AuthRoute path="/people" component={People} />
           <AuthRoute path="/fly/heat/results/edit" component={HeatResultEdit} />
           <AuthRoute path="/fly/heat/edit" component={HeatLineUp} />
           <AuthRoute path="/tracker" component={Tracker} />
-          <Route path="/login" component={Login} />
           <AuthRoute path="/" component={Main} />
         </Switch>
       </ConnectedRouter>

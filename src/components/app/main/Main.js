@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
-import Route from '../../../routes/AuthRoute';
 
 import Nav from './Nav';
 import Chat from '../../chat/Chat';
@@ -17,8 +16,8 @@ import './main.css';
 /** This is the main screen of the app, this will display the routes for the buttons */
 class Main extends React.Component {
   render() {
-    let { token, history } = this.props;
-
+    let { history } = this.props;
+    // let { token, history } = this.props;
     /*  if (!token) {
       // All content in main needs a valid token
       let to = `/login?redirect=${window.location.pathname}`;

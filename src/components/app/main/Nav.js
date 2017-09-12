@@ -66,7 +66,6 @@ export default class Nav extends React.Component {
 
   /** Listen to the history and update the index of the nav bar state */
   onHistory(event) {
-    console.log('history');
     if (event.pathname === '/404') {
       // if on 404 page set selected to nothing
       this.setState(state => (state.index = -1));

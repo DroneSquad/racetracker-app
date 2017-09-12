@@ -31,6 +31,8 @@ class Login extends React.PureComponent {
   }
 
   render() {
+    // TODO: on successful login forward to the from state location (previously attempted access)
+    console.log(this.props);
     let { token, error, location } = this.props;
 
     if (token) {

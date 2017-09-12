@@ -12,7 +12,6 @@ export const authorize = (login, password) => ({
 }); */
 
 const DEFAULT_STATE = {
-  // TODO: pull this token from proper storage
   token: null, // localStorage.getItem('token'),
   error: null
 };

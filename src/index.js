@@ -1,8 +1,5 @@
 /*
- * app.js
- *
- * This is the entry file for the application, only setup and boilerplate
- *
+ * Application entry file, contains only setup and boilerplate
  */
 
 import React from 'react';
@@ -24,7 +21,7 @@ window.history.replaceState(null, document.title, '/' + (window.location.hash ||
 // root dom element to attach application
 const appEl = document.getElementById('app');
 
-// initial render: displays loading screen while device/app are prepared
+// initial render: displays loading screen while device/app is prepared
 ReactDOM.render(
   <AppContainer>
     <Loading isLoading={true} />
@@ -32,7 +29,7 @@ ReactDOM.render(
   appEl
 );
 
-// hot module swapping for development
+// hot module swapping (development use only)
 if (module.hot) {
   module.hot.accept('./components/app/loading/Loading', () => {
     ReactDOM.render(
