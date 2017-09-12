@@ -41,6 +41,7 @@
     "react-dev-utils": "^3.0.2",
     "react-dom": "^15.6.1",
     "react-error-overlay": "^1.0.9",
+    "react-hot-loader": "next",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",
     "react-router-redux": "nect",
@@ -54,7 +55,7 @@
     "url-loader": "0.5.9",
     "uuid": "^3.1.0",
     "webpack": "2.6.1",
-    "webpack-dev-server": "2.5.0",
+    "webpack-dev-server": "^2.7.1",
     "webpack-manifest-plugin": "1.1.0",
     "whatwg-fetch": "2.0.3"
   },
