@@ -32,7 +32,7 @@ class TrackerHome extends Component {
         console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
       });
     }
-  }
+  };
 
   /** Start finding trackers */
   startDiscovery = () => {
@@ -44,7 +44,7 @@ class TrackerHome extends Component {
       });
       setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
     } else {
-      this.props.deviceFound({id: 'id', name: `TBSRT Blue Gull`, rssi: 0.6});
+      this.props.deviceFound({ id: 'id', name: `TBSRT Blue Gull`, rssi: 0.6 });
       this.stopDiscovery();
     }
   };
@@ -74,7 +74,7 @@ class TrackerHome extends Component {
           />
         </main>
         <footer>
-          <FlatButton primary label="rescan" className="right" onClick={this.startDiscovery}/>
+          <FlatButton primary label="rescan" className="right" onClick={this.startDiscovery} />
         </footer>
       </div>
     );
