@@ -30,14 +30,13 @@ export default class Loading extends React.PureComponent {
     };
   }
 
-  /** Handles the logic to handle how the app should load */
+  /** Handles the logic for how the app should load */
   componentWillMount() {
     // have cordova device ready event call a action to allow the loading screen to advance
     // if not in cordova we will fake it for 0.5 seconds
     window.document.addEventListener(
       'deviceready',
       () => {
-        // todo check if token is valid, if not remove it
         this.setState({ isLoading: false });
       },
       false
@@ -73,26 +72,7 @@ export default class Loading extends React.PureComponent {
         </div>
       );
     }
-    // When the app is done loading display the proper component
+    // When the app is done loading, display the proper component
     return this.state.callback();
   }
 }
-
-// Import root routes TODO: best way to handle this in v4
-//import createRoutes from './routes';
-
-// Set up the router, wrapping all Routes in the App component
-//const rootRoute = {
-//  component: App,
-//  childRoutes: createRoutes(store),
-//};
-
-// UNUSED AS OF NOW TODO: add hot-swap
-// Hot reloadable translation json files
-// if (module.hot) {
-//  // modules.hot.accept does not accept dynamic dependencies,
-//  // have to be constants at compile-time
-//  module.hot.accept('./i18n', () => {
-//    render(translationMessages);
-//  });
-//}

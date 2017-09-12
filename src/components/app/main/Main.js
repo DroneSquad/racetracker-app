@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
+import Route from '../../../routes/AuthRoute';
 
 import Nav from './Nav';
 import Chat from '../../chat/Chat';
@@ -18,13 +19,13 @@ class Main extends React.Component {
   render() {
     let { token, history } = this.props;
 
-    if (!token) {
+    /*  if (!token) {
       // All content in main needs a valid token
       let to = `/login?redirect=${window.location.pathname}`;
       console.log(to);
       return <Redirect to={to} />;
     }
-    console.log('fail');
+    console.log('fail');*/
     // todo have the selected route change the bottom navigation index
     return (
       <content className="main">

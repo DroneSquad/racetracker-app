@@ -5,17 +5,6 @@
  *
  */
 
-// TODO: best location for this information
-// window.ds_settings = {
-//   api: 'https://staging.dronesquad.com/api/',
-//   raw_api: 'https://staging.dronesquad.com/',
-//   www: 'https://dronesquad.com/',
-// };
-
-// required for redux-saga es6 generator support
-//import 'babel-polyfill'; todo enable if we have problems
-
-// import third party items
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -29,7 +18,7 @@ import './styles/dronesquad.css';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-// keep all urls under hashbang
+// keep all urls under hashbang (cordova)
 window.history.replaceState(null, document.title, '/' + (window.location.hash || '#!/'));
 
 // root dom element to attach application

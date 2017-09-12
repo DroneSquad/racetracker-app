@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-// TODO: investigate if we actually should use this, or keep our redux pure
+// allows dispatch of actions from anywhere: store.dispatch(push('/foo'))
 import { routerReducer } from 'react-router-redux';
 
 import { authReducer } from './auth';
@@ -7,8 +7,8 @@ import trackers from './tracker';
 import bluetooth from './bluetooth';
 
 const rootReducer = combineReducers({
+  router: routerReducer, // react-router-redux v5.0
   auth: authReducer,
-  router: routerReducer,
   trackers: trackers,
   bluetooth: bluetooth
 });
