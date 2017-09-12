@@ -1,44 +1,39 @@
 // @flow
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import loginImg from '../../../media/ds-full-logo.svg';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
 import './account.css';
 
 /** This handles the view of the login window */
-export default class Login extends React.PureComponent {
+export default class Register extends React.PureComponent {
   props: {
     authLogin: Function,
     token: Object,
     error: Object
   };
 
+
   /** Handle the login logic */
   onSubmit = event => {
     event.preventDefault();
     this._loading = true;
-    const login = this._email.value;
-    const password = this._password.value;
-    const cert = { login: login, password: password };
-    this.props.authLogin(cert);
+    alert('soon tm');
     return false;
   };
 
   /** Remove the error class from the element */
   onChange = () => {
+    this._firstName.classList.remove('error');
+    this._lastName.classList.remove('error');
+    this._callsign.classList.remove('error');
     this._email.classList.remove('error');
     this._password.classList.remove('error');
   };
 
   render() {
-    let { token, error, location } = this.props;
-
-    if (token) {
-      // Redirect to the place where we want to go to
-      let to = (location.pathname || '').split('redirect=')[1] || '/';
-      return <Redirect to={to} />;
-    }
+    let { error } = this.props;
 
     if (error) {
       this._loading = false;
@@ -47,7 +42,30 @@ export default class Login extends React.PureComponent {
     return (
       <form className="account" method="post" onSubmit={this.onSubmit}>
         <img src={this._loading ? loadingImg : loginImg} className="logo" alt="" />
-        <input type="hidden" value="prayer" />
+        <input
+          onChange={this.onChange}
+          className={error ? 'error' : ''}
+          ref={ref => (this._firstName = ref)}
+          type="text"
+          placeholder="First Name"
+          required
+        />
+        <input
+          onChange={this.onChange}
+          className={error ? 'error' : ''}
+          ref={ref => (this._lastName = ref)}
+          type="text"
+          placeholder="Last Name"
+          required
+        />
+        <input
+          onChange={this.onChange}
+          className={error ? 'error' : ''}
+          ref={ref => (this._callsign = ref)}
+          type="text"
+          placeholder="Callsign"
+          required
+        />
         <input
           onChange={this.onChange}
           className={error ? 'error' : ''}
@@ -64,15 +82,9 @@ export default class Login extends React.PureComponent {
           placeholder="Password"
           required
         />
-        <br />
-        <Link className="forgot-password link ds-white-text left-text" to='/account/forgot'> Forgot your password?</Link>
-
-        <br />
-        <br />
-
-        <input type="submit" value={this._loading ? 'Signing in...' : 'Sign in'} />
-        <div className="center-text ds-white-text">No Drone Squad Account?</div>
-        <Link className="btn" to='/account/register'>Sign up</Link>
+        <input type="submit" value={this._loading ? 'Signing up...' : 'Sign up'} />
+        <div className="center-text ds-white-text">Have a Drone Squad Account?</div>
+        <Link className="btn" to='/account/login'>Sign in</Link>
       </form>
     );
   }

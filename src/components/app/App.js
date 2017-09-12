@@ -4,6 +4,8 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from '../../routes/AuthRoute';
 import Main from './main/Main';
+import Forgot from '../../routes/login/components/Forgot';
+import Register from '../../routes/login/components/Register';
 import Login from '../../routes/login/containers/LoginContainer';
 import Tracker from '../tracker/Tracker';
 import NewGuest from '../people/NewGuest';
@@ -20,7 +22,9 @@ export default class App extends React.Component {
     return (
       <ConnectedRouter history={history}>
         <Switch>
-          <Route path="/login" component={Login} />
+          <Route path="/account/forgot*" component={Forgot} />
+          <Route path="/account/register*" component={Register} />
+          <Route path="/account/login*" component={Login} />
           <AuthRoute path="/people/guest/new" component={NewGuest} />
           <AuthRoute path="/people/new" component={NewPilot} />
           <AuthRoute path="/people" component={People} />

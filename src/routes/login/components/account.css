@@ -1,4 +1,4 @@
-.login {
+.account {
   background: var(--ds-blue);
   text-align: center;
   margin: auto;
@@ -11,14 +11,16 @@
   bottom: 0;
 }
 
-.login .logo {
+.account .logo {
   padding: 10px;
   width: 75%;
   max-width: 500px;
   margin-bottom: 10px;
 }
 
-.login input {
+.account input, .account .btn {
+  display: inline-block;
+  text-decoration: none;
   margin: 10px;
   font-size: larger;
   width: 75%;
@@ -29,13 +31,14 @@
   -webkit-appearance: none;
 }
 
-.login input.error {
+.account input.error {
   border: 1px solid red;
 }
 
 @media only screen and (max-width: 500px) {
-  .login input[type='email']:focus,
-  .login input[type='password']:focus {
+  .account input[type='text']:focus,
+  .account input[type='email']:focus,
+  .account input[type='password']:focus {
     bottom: 38px;
     position: absolute;
     width: 100%;
@@ -50,8 +53,9 @@
   }
 }
 
-.login input[type='submit'] {
-  background: var(--ds-orange);
+.account input[type='submit'], .account .btn {
+  --bg-color: var(--ds-orange);
+  background: var(--bg-color);
   color: #fff;
   border-radius: 2px;
   min-width: 64px;
@@ -60,6 +64,18 @@
   line-height: 36px;
 }
 
-.login input[type='submit']:hover {
-  background: var(--ds-orange-alt);
+.account input[type='submit']:hover, .account .btn {
+  --bg-color-alt: var(--ds-orange-alt);
+  background: var(--bg-color-alt);
+}
+
+.account .btn {
+  --bg-color: var(--ds-light-blue);
+  --bg-color-alt: var(--ds-light-blue-alt);
+  padding: 0;
+}
+
+.account .forgot-password {
+  width: 75%;
+  display: inline-block;
 }
