@@ -22,26 +22,28 @@ export default class Loading extends React.PureComponent {
     this.history = createHistory({
       // Make the urls in a hashbang format for reasons we are not running on a real web server
       hash: 'hashbang',
-      basename: '#!'
+      basename: '#!',
     });
     this.state = {
       callback: this.defaultCallback,
-      isLoading: !props.doneLoading
+      isLoading: true,
     };
   }
+
+  /** Runs when the device is ready, addition checks should happen here */
+  onDeviceReady = () => {
+    this.setState({ isLoading: false });
+  };
 
   /** Handles the logic for how the app should load */
   componentWillMount() {
     // have cordova device ready event call a action to allow the loading screen to advance
     // if not in cordova we will fake it for 0.5 seconds
-    this.deviceReady = () => {
-      this.setState({ isLoading: false });
-    };
-    window.document.addEventListener('deviceready', this.deviceReady, false);
+    window.document.addEventListener('deviceready', this.onDeviceReady, false);
   }
 
   componentWillUnmount() {
-    this.deviceReady && window.document.removeEventListener('deviceready', this.deviceReady)
+    window.document.removeEventListener('deviceready', this.onDeviceReady)
   }
 
   /** Update the mui theme settings to match drone squad color scheme */

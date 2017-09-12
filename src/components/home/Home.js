@@ -10,7 +10,7 @@ export default class Home extends React.Component {
   render() {
     return (
       <div>
-        Home Content 55
+        Home Content
         <hr />
         <Link to="/tracker">TBS Race Tracker</Link>
         <hr />

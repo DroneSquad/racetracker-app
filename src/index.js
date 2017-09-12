@@ -27,6 +27,8 @@ ReactDOM.render(<AppContainer><Loading /></AppContainer>, root);
 // hot module swapping (development use only)
 if (module.hot) {
   module.hot.accept('./components/app/loading/Loading', () => {
-    ReactDOM.render(<AppContainer><Loading doneLoading/></AppContainer>, root);
+    ReactDOM.render(<AppContainer><Loading /></AppContainer>, root, () => {
+      window.document.dispatchEvent(new CustomEvent("deviceready")); // triggers the state change
+    });
   });
 }
