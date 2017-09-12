@@ -18,6 +18,7 @@ export default class Register extends React.PureComponent {
   /** Handle the login logic */
   onSubmit = event => {
     event.preventDefault();
+    this._submit.focus();
     this._loading = true;
     alert('soon tm');
     return false;
@@ -82,7 +83,7 @@ export default class Register extends React.PureComponent {
           placeholder="Password"
           required
         />
-        <input type="submit" value={this._loading ? 'Signing up...' : 'Sign up'} />
+        <input ref={ref => (this._submit = ref)} type="submit" value={this._loading ? 'Signing up...' : 'Sign up'} />
         <div className="center-text ds-white-text">Have a Drone Squad Account?</div>
         <Link className="btn" to='/account/login'>Sign in</Link>
       </form>

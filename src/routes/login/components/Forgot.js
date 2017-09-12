@@ -17,6 +17,7 @@ export default class Forgot extends React.PureComponent {
   /** Handle the login logic */
   onSubmit = event => {
     event.preventDefault();
+    this._submit.focus();
     this._loading = true;
     alert('soon tm');
     return false;
@@ -45,7 +46,7 @@ export default class Forgot extends React.PureComponent {
           placeholder="Email"
           required
         />
-        <input type="submit" value={this._loading ? 'Recovering...' : 'Recover'} />
+        <input ref={ref => (this._submit = ref)} type="submit" value={this._loading ? 'Recovering...' : 'Recover'} />
         <div className="center-text ds-white-text">Remember your password now?</div>
         <Link className="btn" to='/account/login'>Sign in</Link>
       </form>
