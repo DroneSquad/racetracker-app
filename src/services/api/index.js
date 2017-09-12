@@ -25,9 +25,9 @@ export class Api {
   /** Pilots endpoint */
   pilots = {
     /** Login the user, payload is {email, password} */
-    login: auth => {
+    login: (email, password) => {
       // auth: email, password
-      return this.request(post, 'pilots/login', {...auth}).then(json => {
+      return this.request(post, 'pilots/login', {email: email, password: password}).then(json => {
         this._token = {
           hash: json.id,
           ttl: json.ttl,
@@ -48,9 +48,14 @@ export class Api {
     },
 
     /** Create a new account */
-    register: account => {
-      // account: email, firstName, lastName, callsign, password
-      return this.request(post, 'pilots', {...account});
+    register: (firstName, lastName, callsign, email, password) => {
+      return this.request(post, 'pilots', {
+        firstName: firstName,
+        lastName: lastName,
+        callsign: callsign,
+        email: email,
+        password: password,
+      });
     },
 
     /** Send a password reset link for the account */

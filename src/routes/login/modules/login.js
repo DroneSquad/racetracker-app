@@ -19,7 +19,7 @@ export const loginRequest = credentials => {
   return function(dispatch) {
     return (
       api.pilots
-        .login({ email: credentials.login, password: credentials.password })
+        .login(credentials.login, credentials.password)
         .then(response => {
           let token = {
             hash: response.id,
