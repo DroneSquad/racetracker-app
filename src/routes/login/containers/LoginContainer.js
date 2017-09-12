@@ -10,10 +10,13 @@ import Login from '../components/Login';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the Login:   */
 
-const mapStateToProps = state => ({});
+const mapStateToProps = (state, ownProps) => ({
+  token: state.auth.token
+  //  error: state.auth.error
+});
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  authRequest(cert) {
+  authLogin(cert) {
     dispatch(loginRequest(cert));
   }
 });

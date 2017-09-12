@@ -15,6 +15,13 @@ export type RaceTracker = {
   isConnected: boolean
 };
 
+export type AuthToken = {
+  hash: string,
+  pilot: string,
+  ttl: string,
+  created: string
+};
+
 // all action types with according payload
 declare type ActionType = 'CONNECT_TRACKER' | 'DISCOVER_TRACKER';
 

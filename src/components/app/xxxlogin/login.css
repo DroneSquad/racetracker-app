@@ -1,4 +1,4 @@
-.login {
+/*.login {
   background: var(--ds-blue);
   text-align: center;
   margin: auto;
@@ -60,4 +60,4 @@
 
 .login input[type='submit']:hover {
   background: var(--ds-orange-alt);
-}
+}*/

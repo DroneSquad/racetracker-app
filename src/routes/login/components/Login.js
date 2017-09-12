@@ -9,7 +9,9 @@ import './login.css';
 /** This handles the view of the login window */
 export default class Login extends React.PureComponent {
   props: {
-    authRequest: Function
+    authLogin: Function,
+    token: Object,
+    error: Object
   };
 
   constructor(props) {
@@ -25,7 +27,7 @@ export default class Login extends React.PureComponent {
     const login = this._email.value;
     const password = this._password.value;
     const cert = { login: login, password: password };
-    this.props.authRequest(cert);
+    this.props.authLogin(cert);
     return false;
   }
 
@@ -36,16 +38,12 @@ export default class Login extends React.PureComponent {
   }
 
   render() {
-    // TODO: on successful login forward to the from state location (previously attempted access)
-    console.log(this.props);
     let { token, error, location } = this.props;
-
     if (token) {
       // Redirect to the place where we want to go to
       let to = (location.search || '').split('redirect=')[1] || '/';
       return <Redirect to={to} />;
     }
-
     if (error) {
       this._loading = false;
     }

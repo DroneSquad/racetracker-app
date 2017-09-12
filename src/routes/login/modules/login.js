@@ -1,7 +1,6 @@
 import api from '../../../services/api';
 
 /** types/constants */
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
@@ -18,16 +17,23 @@ export const loginFailure = error => ({
 
 export const loginRequest = credentials => {
   return function(dispatch) {
-    return api.pilots
-      .login({ email: credentials.login, password: credentials.password })
-      .then(response => {
-        console.log(response);
-        //sessionStorage.setItem('jwt', response.jwt);
-        dispatch(loginSuccess());
-      })
-      .catch(error => {
-        throw error;
-      });
+    return (
+      api.pilots
+        .login({ email: credentials.login, password: credentials.password })
+        .then(response => {
+          let token = {
+            hash: response.id,
+            ttl: response.ttl,
+            pilot: response.userId,
+            created: response.created
+          };
+          dispatch(loginSuccess(token));
+        })
+        // TODO: handle errors correctly
+        .catch(error => {
+          throw error;
+        })
+    );
   };
 };
 
@@ -38,13 +44,15 @@ const initialState = {
 };
 
 /** reducers */
-export const authReducer = (state = initialState, { type, payload }) => {
-  switch (type) {
+export const authReducer = (state = initialState, action: Action) => {
+  switch (action.type) {
     case LOGIN_SUCCESS: {
-      return { ...state, token: payload };
+      return Object.assign({}, state, {
+        token: action.payload
+      });
     }
     case LOGIN_FAILURE: {
-      return { ...state, error: payload };
+      return { ...state, error: action.payload };
     }
     default:
       return state;
