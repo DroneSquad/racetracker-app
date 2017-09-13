@@ -76,7 +76,7 @@ export default class Login extends React.PureComponent {
         <input ref={ref => (this._submit = ref)} type="submit" value={loading ? 'Signing in...' : 'Sign in'} />
         <div className="center-text ds-white-text">No Drone Squad Account?</div>
         <Link className="btn" to='/account/register'>Sign up</Link>
-        <Snackbar open={!!loginMessage} message={loginMessage}/>
+        <Snackbar open={!!loginMessage} message={loginMessage} autoHideDuration={5000}/>
       </form>
     );
   }

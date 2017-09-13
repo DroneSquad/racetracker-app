@@ -43,7 +43,7 @@ export const loginRequest = credentials => {
         })
         // TODO: handle errors correctly
         .catch(error => {
-          throw error;
+          dispatch(push('/account/login', {loginMessage: 'Invalid email or password'}));
         })
     );
   };
@@ -65,7 +65,7 @@ export const registerRequest = register => {
           register.password
         )
         .then(response => {
-          dispatch(push('/account/login'));
+          dispatch(push('/account/login', {loginMessage: 'Account has been created'}));
         })
         // TODO: handle errors correctly
         .catch(error => {
@@ -121,7 +121,7 @@ export const authReducer = (state = initialState, action: Action) => {
       return { ...state, error: action.payload, loading: false };
     }
     case FORGOT_SUCCESS: {
-      return { ...state, loginMessage: 'true', loading: false };
+      return { ...state, loading: false };
     }
     default:
       return { ...state, loading: false };
