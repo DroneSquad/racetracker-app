@@ -4,8 +4,8 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from '../../routes/AuthRoute';
 import Main from './main/Main';
-import Forgot from '../../routes/login/components/Forgot';
-import Register from '../../routes/login/components/Register';
+import Forgot from '../../routes/login/containers/ForgotContainer';
+import Register from '../../routes/login/containers/RegisterContainer';
 import Login from '../../routes/login/containers/LoginContainer';
 import Tracker from '../tracker/Tracker';
 import NewGuest from '../people/NewGuest';

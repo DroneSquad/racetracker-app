@@ -9,18 +9,28 @@ import './account.css';
 /** This handles the view of the login window */
 export default class Register extends React.PureComponent {
   props: {
-    authLogin: Function,
-    token: Object,
+    registerLogin: Function,
     error: Object
   };
-
 
   /** Handle the login logic */
   onSubmit = event => {
     event.preventDefault();
     this._submit.focus();
     this._loading = true;
-    alert('soon tm');
+    const firstname = this._firstName.value;
+    const lastname = this._lastName.value;
+    const callsign = this._callsign.value;
+    const email = this._email.value;
+    const password = this._password.value;
+    const reg = {
+      firstname: firstname,
+      lastname: lastname,
+      callsign: callsign,
+      email: email,
+      password: password
+    };
+    this.props.registerLogin(reg);
     return false;
   };
 
@@ -83,9 +93,15 @@ export default class Register extends React.PureComponent {
           placeholder="Password"
           required
         />
-        <input ref={ref => (this._submit = ref)} type="submit" value={this._loading ? 'Signing up...' : 'Sign up'} />
+        <input
+          ref={ref => (this._submit = ref)}
+          type="submit"
+          value={this._loading ? 'Signing up...' : 'Sign up'}
+        />
         <div className="center-text ds-white-text">Have a Drone Squad Account?</div>
-        <Link className="btn" to='/account/login'>Sign in</Link>
+        <Link className="btn" to="/account/login">
+          Sign in
+        </Link>
       </form>
     );
   }

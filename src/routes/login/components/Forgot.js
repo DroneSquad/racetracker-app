@@ -9,8 +9,7 @@ import './account.css';
 /** This handles the view of the login window */
 export default class Forgot extends React.PureComponent {
   props: {
-    authLogin: Function,
-    token: Object,
+    forgotLogin: Function,
     error: Object
   };
 
@@ -19,7 +18,8 @@ export default class Forgot extends React.PureComponent {
     event.preventDefault();
     this._submit.focus();
     this._loading = true;
-    alert('soon tm');
+    const email = this._email.value;
+    this.props.forgotLogin(email);
     return false;
   };
 
@@ -46,9 +46,15 @@ export default class Forgot extends React.PureComponent {
           placeholder="Email"
           required
         />
-        <input ref={ref => (this._submit = ref)} type="submit" value={this._loading ? 'Recovering...' : 'Recover'} />
+        <input
+          ref={ref => (this._submit = ref)}
+          type="submit"
+          value={this._loading ? 'Recovering...' : 'Recover'}
+        />
         <div className="center-text ds-white-text">Remember your password now?</div>
-        <Link className="btn" to='/account/login'>Sign in</Link>
+        <Link className="btn" to="/account/login">
+          Sign in
+        </Link>
       </form>
     );
   }
