@@ -3,18 +3,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default class Home extends React.Component {
+import api from '../../services/api';
 
-  props: {};
+export default class Home extends React.Component {
+  state = {pilot: {}}
+
+  componentWillMount() {
+    api.pilot().then(pilot => this.setState({pilot: pilot.$request.data}));
+  }
 
   render() {
-    return (
+  return (
       <div>
         Home Content
         <hr />
         <Link to="/tracker">TBS Race Tracker</Link>
         <hr />
         <Link to="/people">People</Link>
+        <hr />
+        <pre>
+          {JSON.stringify(this.state.pilot, '&nbsp;', 2)}
+        </pre>
       </div>
     );
   }
