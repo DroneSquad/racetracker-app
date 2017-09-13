@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { Snackbar } from 'material-ui';
+
 import loginImg from '../../../media/ds-full-logo.svg';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
 import './account.css';
@@ -10,7 +12,8 @@ import './account.css';
 export default class Forgot extends React.PureComponent {
   props: {
     forgotLogin: Function,
-    error: Object
+    error: Object,
+    message: string
   };
 
   /** Handle the login logic */
@@ -28,7 +31,7 @@ export default class Forgot extends React.PureComponent {
   };
 
   render() {
-    let { error, loading } = this.props;
+    let { error, loading, message } = this.props;
 
     return (
       <form className="account" method="post" onSubmit={this.onSubmit}>
@@ -50,6 +53,7 @@ export default class Forgot extends React.PureComponent {
         <Link className="btn" to="/account/login">
           Sign in
         </Link>
+        <Snackbar open={!!message} message={message} autoHideDuration={5000} />
       </form>
     );
   }

@@ -12,12 +12,12 @@ import Register from '../components/Register';
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,
-  error: state.auth.error
+  error: state.auth.error,
+  message: state.auth.message
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   registerLogin(reg) {
-    // TODO: add something to snackbar that indicates soccuess maybe?
     dispatch(registerRequest(reg));
   }
 });

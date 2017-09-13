@@ -1,6 +1,4 @@
 // @flow
-import _ from 'lodash';
-
 import { connect } from 'react-redux';
 import { loginRequest } from '../modules/login';
 
@@ -12,10 +10,10 @@ import Login from '../components/Login';
     component - in this case, the Login:   */
 
 const mapStateToProps = (state, ownProps) => ({
-  loginMessage: _.get(ownProps, 'location.state.loginMessage'), // this will handle null
   loading: state.auth.loading,
   token: state.auth.token,
-  error: state.auth.error
+  error: state.auth.error,
+  message: state.auth.message
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

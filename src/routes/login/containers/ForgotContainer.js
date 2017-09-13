@@ -12,12 +12,12 @@ import Forgot from '../components/Forgot';
 
 const mapStateToProps = state => ({
   loading: state.loading,
-  error: state.auth.error
+  error: state.auth.error,
+  message: state.auth.message
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   forgotLogin(email) {
-    // TODO: add something to snackbar that indicates soccuess maybe?
     dispatch(forgotRequest(email));
   }
 });

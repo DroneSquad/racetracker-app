@@ -13,12 +13,13 @@ export default class Login extends React.PureComponent {
   props: {
     authLogin: Function,
     token: Object,
-    error: Object
+    error: Object,
+    message: string
   };
 
   constructor(props) {
     super(props);
-    console.log(props)
+    console.log(props);
   }
 
   /** Handle the login logic */
@@ -39,7 +40,7 @@ export default class Login extends React.PureComponent {
   };
 
   render() {
-    let { token, error, location, loginMessage, loading } = this.props;
+    let { token, error, location, message, loading } = this.props;
 
     if (token) {
       // Redirect to the place where we want to go to
@@ -68,15 +69,23 @@ export default class Login extends React.PureComponent {
           required
         />
         <br />
-        <Link className="forgot-password link ds-white-text left-text" to='/account/forgot'> Forgot your password?</Link>
+        <Link className="forgot-password link ds-white-text left-text" to="/account/forgot">
+          {' '}Forgot your password?
+        </Link>
 
         <br />
         <br />
 
-        <input ref={ref => (this._submit = ref)} type="submit" value={loading ? 'Signing in...' : 'Sign in'} />
+        <input
+          ref={ref => (this._submit = ref)}
+          type="submit"
+          value={loading ? 'Signing in...' : 'Sign in'}
+        />
         <div className="center-text ds-white-text">No Drone Squad Account?</div>
-        <Link className="btn" to='/account/register'>Sign up</Link>
-        <Snackbar open={!!loginMessage} message={loginMessage} autoHideDuration={5000}/>
+        <Link className="btn" to="/account/register">
+          Sign up
+        </Link>
+        <Snackbar open={!!message} message={message} autoHideDuration={5000} />
       </form>
     );
   }
