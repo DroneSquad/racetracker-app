@@ -39,3 +39,14 @@ This will build the application and run the dev server in a container.
 You can access the website from your browser at `localhost:3000`.
 
 todo use docker to build the images for cordova and its dev enviroment
+
+## Fake Device Hot Swapping
+
+After starting your development environment, with the dev server running on your computer.
+You need to have the phone navigate to the dev server not the local files on the device.
+Your phone and computer both need to be on the same network.
+
+To do this, in chrome on your development machine go to `chrome://inspect` then inspect the WebView of the phone.
+In the inspect window change the address from `file:///#!/` to your computer internal ip address `http://192.168.1.2:3000`.
+If the loading spinner is not going away just refresh the page again, as chrome DataSaver may have cached the os version of the `cordova.js`.
+If the loading spinner is still there, go in the chrome inspect console and force the deviceready event `window.document.dispatchEvent(new CustomEvent("deviceready"))`.
