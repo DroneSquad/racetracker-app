@@ -73,19 +73,16 @@ export const forgotRequest = email => {
       type: FORGOT_REQUEST,
       payload: email
     });
-    return (
-      api.pilots
-        .forgot(email)
-        .then(response => {
-          dispatch(forgotSuccess('Email has been sent'));
-          dispatch(push('/account/login'));
-        })
-        // TODO: handle errors correctly
-        .catch(error => {
-          let resp = { error: error, message: 'Invalid email' };
-          dispatch(forgotFailure(resp));
-        })
-    );
+    return api.pilots
+      .forgot(email)
+      .then(response => {
+        dispatch(forgotSuccess('Email has been sent'));
+        dispatch(push('/account/login'));
+      })
+      .catch(error => {
+        let resp = { error: error, message: 'Invalid email' };
+        dispatch(forgotFailure(resp));
+      });
   };
 };
 
@@ -95,26 +92,23 @@ export const registerRequest = register => {
       type: REGISTER_REQUEST,
       payload: register
     });
-    return (
-      api.pilots
-        .register(
-          register.firstName,
-          register.lastName,
-          register.callsign,
-          register.email,
-          register.password
-        )
-        .then(response => {
-          dispatch(registerSuccess('Account has been created'));
-          dispatch(push('/account/login'));
-        })
-        // TODO: handle errors correctly
-        .catch(error => {
-          console.log(error);
-          let resp = { error: error, message: 'Signup Failed' };
-          dispatch(registerFailure(resp));
-        })
-    );
+    return api.pilots
+      .register(
+        register.firstName,
+        register.lastName,
+        register.callsign,
+        register.email,
+        register.password
+      )
+      .then(response => {
+        dispatch(registerSuccess('Account has been created'));
+        dispatch(push('/account/login'));
+      })
+      .catch(error => {
+        // TODO: more descriptive message?
+        let resp = { error: error, message: 'Signup Failed' };
+        dispatch(registerFailure(resp));
+      });
   };
 };
 

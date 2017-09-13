@@ -8,7 +8,7 @@ import loginImg from '../../../media/ds-full-logo.svg';
 import loadingImg from '../../../media/ds-full-logo-spin.svg';
 import './account.css';
 
-/** This handles the view of the login window */
+/** This handles the view of the register window */
 export default class Register extends React.PureComponent {
   props: {
     registerLogin: Function,
@@ -16,7 +16,7 @@ export default class Register extends React.PureComponent {
     message: string
   };
 
-  /** Handle the login logic */
+  /** Handle the register logic */
   onSubmit = event => {
     event.preventDefault();
     this._submit.focus();
