@@ -64,7 +64,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "setup": "node scripts/setup.js",
-    "format": "./node_modules/.bin/prettier --write --single-quote --print-width=100 --parser=flow --tab-width=2 \"src/**/*.{js,jsx}\""
+    "format": "./node_modules/.bin/prettier --write --single-quote --print-width=120 --parser=flow --tab-width=2 \"src/**/*.{js,jsx}\""
   },
   "jest": {
     "collectCoverageFrom": [
@@ -108,6 +108,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-plugin-transform-decorators": "^6.24.1",
     "enzyme": "^2.9.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-prettier": "^2.3.0",

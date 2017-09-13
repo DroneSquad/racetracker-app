@@ -17,7 +17,6 @@ export default class Forgot extends React.PureComponent {
   onSubmit = event => {
     event.preventDefault();
     this._submit.focus();
-    this._loading = true;
     const email = this._email.value;
     this.props.forgotLogin(email);
     return false;
@@ -29,15 +28,11 @@ export default class Forgot extends React.PureComponent {
   };
 
   render() {
-    let { error } = this.props;
-
-    if (error) {
-      this._loading = false;
-    }
+    let { error, loading } = this.props;
 
     return (
       <form className="account" method="post" onSubmit={this.onSubmit}>
-        <img src={this._loading ? loadingImg : loginImg} className="logo" alt="" />
+        <img src={loading ? loadingImg : loginImg} className="logo" alt="" />
         <input
           onChange={this.onChange}
           className={error ? 'error' : ''}
@@ -49,7 +44,7 @@ export default class Forgot extends React.PureComponent {
         <input
           ref={ref => (this._submit = ref)}
           type="submit"
-          value={this._loading ? 'Recovering...' : 'Recover'}
+          value={loading ? 'Recovering...' : 'Recover'}
         />
         <div className="center-text ds-white-text">Remember your password now?</div>
         <Link className="btn" to="/account/login">

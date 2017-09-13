@@ -11,6 +11,7 @@ import Register from '../components/Register';
     component - in this case, the Login:   */
 
 const mapStateToProps = state => ({
+  loading: state.auth.loading,
   error: state.auth.error
 });
 

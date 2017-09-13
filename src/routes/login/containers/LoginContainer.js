@@ -11,6 +11,8 @@ import Login from '../components/Login';
     component - in this case, the Login:   */
 
 const mapStateToProps = (state, ownProps) => ({
+  loginMessage: ownProps.location.state.loginMessage,
+  loading: state.auth.loading,
   token: state.auth.token,
   error: state.auth.error
 });

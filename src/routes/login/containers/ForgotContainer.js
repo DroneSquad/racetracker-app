@@ -11,6 +11,7 @@ import Forgot from '../components/Forgot';
     component - in this case, the Login:   */
 
 const mapStateToProps = state => ({
+  loading: state.loading,
   error: state.auth.error
 });
 
