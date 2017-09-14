@@ -69,12 +69,27 @@ export class Api {
     /** Send a password reset link for the account */
     forgot: email => {
       return this.request(this._axios.post, 'pilots/reset', { email: notNull(email, 'email') });
+    },
+
+    /** Get the current groups for the pilot sorted by the location lat lng*/
+    groups: (lat, lng) => {
+      return this.request(this._axios.get, `pilots/${notNull(this._token.pilot, 'pilot')}/myRaceGroups`, {
+        params: {
+          lat: notNull(lat, 'lat'),
+          lng: notNull(lng, 'lng')
+        }
+      });
     }
   };
 
   /** Get the pilot or the current logged in pilot */
   pilot = id => {
-    return this.request(this._axios.get, `pilots/${this._token.pilot || notNull(id, 'id')}`)
+    return this.request(this._axios.get, `pilots/${this._token.pilot || notNull(id, 'id')}`);
+  };
+
+  /** Get the group from the id */
+  group = id => {
+    return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}`);
   };
 }
 
