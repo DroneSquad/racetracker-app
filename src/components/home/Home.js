@@ -24,6 +24,8 @@ export default class Home extends React.Component {
         <hr />
         <Link to="/people">People</Link>
         <hr />
+        <Link to="/group/82">A Group</Link>
+        <hr />
         <pre>{JSON.stringify(this.state.pilot, '&nbsp;', 2)}</pre>
       </div>
     );

@@ -26,6 +26,19 @@ export class Api {
     return base(endpoint, options).then(request => ({ ...request.data, $request: request }));
   }
 
+  /** Return urls for things, genneraly used for redirects or picture */
+  urls = {
+    /** Get the avatar for the pilot id oo the current pilot */
+    avatar: id => {
+      return url.resolve(this._config.api, `avatar/${id || this._token.pilot || notNull(id, 'id')}`);
+    },
+
+    /** Get the banner for the group */
+    banner: id  => {
+      return url.resolve(this._config.api, `banner/${notNull(id, 'id')}`);
+    }
+  };
+
   /** Pilots endpoint */
   pilots = {
     /** Login the user, payload is {email, password} */
@@ -84,7 +97,7 @@ export class Api {
 
   /** Get the pilot or the current logged in pilot */
   pilot = id => {
-    return this.request(this._axios.get, `pilots/${this._token.pilot || notNull(id, 'id')}`);
+    return this.request(this._axios.get, `pilots/${id || this._token.pilot || notNull(id, 'id')}`);
   };
 
   /** Get the group from the id */

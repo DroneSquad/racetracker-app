@@ -10,6 +10,8 @@ import Home from '../../home/Home';
 import Fly from '../../fly/Fly';
 import FourOhFour from '../../404/FourOhFour';
 
+import Group from '../../../routes/group/components/Group';
+
 import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
@@ -26,6 +28,7 @@ class Main extends React.Component {
 
         <main>
           <Switch>
+            <Route path="/group/*" component={Group} />
             <Route path="/fly" component={Fly} />
             <Route path="/chat" component={Chat} />
             <Route path="/404" component={FourOhFour} />
