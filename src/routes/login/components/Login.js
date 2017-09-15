@@ -19,7 +19,6 @@ export default class Login extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    console.log(props);
   }
 
   /** Handle the login logic */
@@ -69,8 +68,8 @@ export default class Login extends React.PureComponent {
           required
         />
         <br />
-        <Link className="forgot-password link ds-white-text left-text" to="/account/forgot">
-          {' '}Forgot your password?
+        <Link className="forgot-password link left-text" to="/account/forgot">
+          Forgot your password?
         </Link>
 
         <br />

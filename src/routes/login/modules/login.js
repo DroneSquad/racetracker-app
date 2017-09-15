@@ -153,11 +153,11 @@ export const authReducer = (state = initialState, action: Action) => {
     }
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
+        api._updateToken(action.payload.auth.token); // update the api as well
         return { ...state, ...action.payload.auth };
       }
-      return { ...state, loading: false };
     }
     default:
-      return { ...state, loading: false };
+      return { ...state, error: null, message: '', loading: false };
   }
 };

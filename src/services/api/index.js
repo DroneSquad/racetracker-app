@@ -21,6 +21,17 @@ export class Api {
     return Api._instance;
   }
 
+  /** Update the token */
+  _updateToken(token) {
+    this._token = {
+      hash: token.id || token.hash,
+      ttl: token.ttl,
+      pilot: token.userId || token.pilot,
+      created: token.created
+    };
+    this._axios.defaults.headers.common['Authorization'] = this._token.hash;
+  }
+
   /** Create the request, todo add error handling and add middleware */
   request(base, endpoint, options) {
     return base(endpoint, options).then(request => ({ ...request.data, $request: request }));
@@ -47,12 +58,7 @@ export class Api {
         email: notNull(email, 'email'),
         password: notNull(password, 'password')
       }).then(json => {
-        this._token = {
-          hash: json.id,
-          ttl: json.ttl,
-          pilot: json.userId
-        };
-        this._axios.defaults.headers.common['Authorization'] = json.id;
+        this._updateToken(json);
         return json;
       });
     },
