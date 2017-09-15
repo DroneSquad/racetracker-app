@@ -9,7 +9,7 @@ export const BLANK_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB
 
 /** Make sure the value is not null */
 export function notNull(value, message) {
-  if (!value) {
+  if (typeof value == 'object' && !value) {
     throw new Error(message || 'The value was null');
   }
   return value;
