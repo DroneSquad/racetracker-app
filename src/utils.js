@@ -5,11 +5,12 @@
 import _ from 'lodash';
 
 /** Base 64 for a transparent 1x1 png */
-export const BLANK_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=';
+export const BLANK_PNG =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=';
 
 /** Make sure the value is not null */
 export function notNull(value, message) {
-  if (typeof value == 'object' && !value) {
+  if (typeof value === 'object' && !value) {
     throw new Error(message || 'The value was null');
   }
   return value;
@@ -70,49 +71,61 @@ export function lazyLoad(element, callback) {
     if ('lazyLoading' in window) {
       let sortedList = window.lazyLoading.sortedList;
       // fancy sorting algorithm to speed this things up
-      if (sortedList.length > 0 && sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height) {
+      if (
+        sortedList.length > 0 &&
+        sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height
+      ) {
         sortedList.push(callback);
       } else {
-        sortedList.splice((() => {
-          for (let i in sortedList) {
-            if (sortedList[i].$element.getBoundingClientRect().top >= height) {
-              return i;
+        sortedList.splice(
+          (() => {
+            for (let i in sortedList) {
+              if (sortedList[i].$element.getBoundingClientRect().top >= height) {
+                return i;
+              }
             }
-          }
-          return sortedList.length;
-        })(), 0, callback);
+            return sortedList.length;
+          })(),
+          0,
+          callback
+        );
       }
-    } else { // lazy load the lazy load system
-      let lazyLoading = window.lazyLoading = {
+    } else {
+      // lazy load the lazy load system
+      let lazyLoading = (window.lazyLoading = {
         sortedList: [callback],
         ticking: false
-      };
+      });
       // register the scroll event listener
-      window.addEventListener('scroll', () => {
-        if (lazyLoading.sortedList.length > 0 && !lazyLoading.ticking) {
-          // have the callbacks only be called on a request frame
-          window.requestAnimationFrame(async () => {
-            for (let index in lazyLoading.sortedList) {
-              let action = lazyLoading.sortedList[index];
-              let height = action.$element.getBoundingClientRect().top;
-              if (height < 0) {
-                continue;
-              }
-              if (window.innerHeight >= height) {
-                try {
-                  action();
-                } finally {
-                  lazyLoading.sortedList.splice(index, 1);
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (lazyLoading.sortedList.length > 0 && !lazyLoading.ticking) {
+            // have the callbacks only be called on a request frame
+            window.requestAnimationFrame(async () => {
+              for (let index in lazyLoading.sortedList) {
+                let action = lazyLoading.sortedList[index];
+                let height = action.$element.getBoundingClientRect().top;
+                if (height < 0) {
+                  continue;
                 }
-              } else {
-                break; // the stack is sorted once we are out of the screen no need to check for more
+                if (window.innerHeight >= height) {
+                  try {
+                    action();
+                  } finally {
+                    lazyLoading.sortedList.splice(index, 1);
+                  }
+                } else {
+                  break; // the stack is sorted once we are out of the screen no need to check for more
+                }
               }
-            }
-            lazyLoading.ticking = false;
-          });
-          lazyLoading.ticking = true;
-        }
-      }, true);
+              lazyLoading.ticking = false;
+            });
+            lazyLoading.ticking = true;
+          }
+        },
+        true
+      );
     }
   }
   // return a function that will remove the callback from the list
