@@ -22,11 +22,11 @@ export default class Loading extends React.PureComponent {
     this.history = createHistory({
       // Make the urls in a hashbang format for reasons we are not running on a real web server
       hash: 'hashbang',
-      basename: '#!',
+      basename: '#!'
     });
     this.state = {
       callback: this.defaultCallback,
-      isLoading: true,
+      isLoading: true
     };
   }
 
@@ -43,7 +43,7 @@ export default class Loading extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    window.document.removeEventListener('deviceready', this.onDeviceReady)
+    window.document.removeEventListener('deviceready', this.onDeviceReady);
   }
 
   /** Update the mui theme settings to match drone squad color scheme */
@@ -59,13 +59,12 @@ export default class Loading extends React.PureComponent {
   });
 
   /** The default callback that will open the app */
-  defaultCallback = () => (
-    <Provider store={configStore(this.history)}>
+  defaultCallback = () =>
+    <Provider store={configStore(this.history).store}>
       <MuiThemeProvider muiTheme={this.muiTheme}>
         <App history={this.history} />
       </MuiThemeProvider>
-    </Provider>
-  );
+    </Provider>;
 
   render() {
     // While the app is loading display the spinner
