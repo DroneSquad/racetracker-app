@@ -152,7 +152,10 @@ export const authReducer = (state = initialState, action: Action) => {
       return { ...state, error: null, message: action.payload, loading: false };
     }
     case 'persist/REHYDRATE': {
-      return { ...state, ...action.payload.auth };
+      if (action.payload !== undefined) {
+        return { ...state, ...action.payload.auth };
+      }
+      return { ...state, loading: false };
     }
     default:
       return { ...state, loading: false };
