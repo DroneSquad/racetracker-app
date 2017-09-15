@@ -151,6 +151,9 @@ export const authReducer = (state = initialState, action: Action) => {
     case FORGOT_SUCCESS: {
       return { ...state, error: null, message: action.payload, loading: false };
     }
+    case 'persist/REHYDRATE': {
+      return { ...state, ...action.payload.auth };
+    }
     default:
       return { ...state, loading: false };
   }
