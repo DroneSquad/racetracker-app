@@ -11,9 +11,7 @@ export default class Logout extends React.PureComponent {
   };
 
   onClick = event => {
-    console.log('logout');
-    console.log(this.props.token);
-    this.props.authLogout(this.props.token.token);
+    this.props.authLogout(this.props.token);
   };
 
   render() {

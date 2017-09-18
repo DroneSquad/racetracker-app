@@ -127,9 +127,10 @@ export const logoutRequest = token => {
       payload: token
     });
     return api.pilots
-      .logout(token)
+      .logout(token.token)
       .then(response => {
         console.log('logout response');
+        console.log(response);
         dispatch(logoutSuccess());
         dispatch(push('/account/login'));
       })
