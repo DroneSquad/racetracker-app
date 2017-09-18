@@ -1,7 +1,7 @@
 import api from '../../../services/api';
 
 export const GROUP_REQUEST = 'GROUP_REQUEST';
-export const GROUP_SUCCESS = 'GROUP_REQUEST';
+export const GROUP_SUCCESS = 'GROUP_SUCCESS';
 export const GROUP_ERROR = 'GROUP_ERROR';
 
 /** Get the request for the group */
@@ -25,16 +25,15 @@ export function requestGroup(id) {
 
 /** The default state for the group page */
 const defaultState = {
-  banner: null,
-  id: null,
-  name: null,
-  description: null,
 };
 
 /** The reducer for the state */
 export default function(state = defaultState, action) {
   switch (action.type) {
-
+    case GROUP_REQUEST:
+      return { ...state, loading: true };
+    case GROUP_SUCCESS:
+      return { ...state, ...action.payload, loading: false};
   }
   return { ...state };
 };

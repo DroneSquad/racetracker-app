@@ -17,10 +17,6 @@ export default class Login extends React.PureComponent {
     message: string
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   /** Handle the login logic */
   onSubmit = event => {
     event.preventDefault();

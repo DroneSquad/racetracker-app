@@ -1,0 +1,11 @@
+.group-details {
+  padding: 0 !important;
+}
+
+.group-details .group-item {
+  padding: 0 !important;
+}
+
+.group-details .group-item div div {
+  /*padding: 0 !important;*/
+}

@@ -187,6 +187,7 @@ export const authReducer = (state = initialState, action: Action) => {
         api._updateToken(action.payload.auth.token); // update the api as well
         return { ...state, ...action.payload.auth };
       }
+      break;
     }
     default:
       return { ...state, error: null, message: '', loading: false };

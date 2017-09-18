@@ -1,24 +1,39 @@
 import Group from '../components/Group';
 
-import { connect } from 'react-redux';
+import { connect as _connect } from 'react-redux';
 
 import { requestGroup } from '../modules/group';
+import { notNull } from '../../../utils';
 
-const mapStateToProps = (state, ownProps) => ({
-  redux: { // im tired of mapping states, just put it all under here
-    state: state
+/**
+ * This is to test decorators, this logic is a WIP and may / will change without notice
+ * @returns {function(*=)}
+ */
+function connect() {
+  return clazz => {
+    // depending how advance we can get this we may be able to grab them from variables within the class
+    let mapStateToProps = notNull(clazz.mapStateToProps, 'mapStateToProps');
+    // depending how advance we can get this we may be able to grab them from function within the class
+    let mapDispatchToProps = notNull(clazz.mapDispatchToProps, 'mapDispatchToProps');
+    return _connect(mapStateToProps, mapDispatchToProps)(clazz);
   }
-});
+}
 
-const mapDispatchToProps = dispatch => ({
-  requestGroup: id => dispatch(requestGroup(id))
-});
+/** Sample class that will use the decorators to connect the classes */
+@connect() export default class extends Group {
+
+  /** Currently needed for the connect decorator */
+  static mapStateToProps = states => ({
+    group: states.group
+  });
+
+  /** Currently needed for the connect decorator */
+  static mapDispatchToProps = dispatch => ({
+    requestGroup: id => dispatch(requestGroup(id))
+  });
 
 
-const GroupContainer = connect(mapStateToProps, mapDispatchToProps)(class extends Group {
   componentWillMount() {
     this.props.requestGroup(this.props.match.params.id)
   }
-});
-
-export default GroupContainer;
+}
