@@ -11,6 +11,9 @@ export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 export const FORGOT_REQUEST = 'FORGOT_REQUEST';
 export const FORGOT_SUCCESS = 'FORGOT_SUCCESS';
 export const FORGOT_FAILURE = 'FORGOT_FAILURE';
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 /** actions */
 export const loginSuccess = token => ({
@@ -41,6 +44,11 @@ export const registerSuccess = message => ({
 export const registerFailure = message => ({
   type: REGISTER_FAILURE,
   payload: message
+});
+
+export const logoutSuccess = () => ({
+  type: LOGOUT_SUCCESS,
+  payload: null
 });
 
 export const loginRequest = credentials => {
@@ -112,6 +120,27 @@ export const registerRequest = register => {
   };
 };
 
+export const logoutRequest = token => {
+  return function(dispatch) {
+    dispatch({
+      type: LOGOUT_REQUEST,
+      payload: token
+    });
+    return api.pilots
+      .logout(token)
+      .then(response => {
+        console.log('logout response');
+        dispatch(logoutSuccess());
+        dispatch(push('/account/login'));
+      })
+      .catch(error => {
+        console.log(error);
+        // let resp = { error: error, message: 'Invalid email or password' };
+        // dispatch(loginFailure(resp));
+      });
+  };
+};
+
 /** initial_state */
 const initialState = {
   message: '',
@@ -128,6 +157,7 @@ export const authReducer = (state = initialState, action: Action) => {
     case LOGIN_REQUEST: {
       return { ...state, error: null, message: '', loading: true };
     }
+    case LOGOUT_SUCCESS:
     case LOGIN_SUCCESS: {
       return {
         ...state,
