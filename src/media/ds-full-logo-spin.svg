@@ -1,16 +1,10 @@
 <svg viewBox="-35 -35 887 380" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <style type="text/css">
         .ds-spin {
-            animation: ds-spin 1s infinite;
+            animation: ds-spin 1s infinite linear;
             transform-origin: 125px 125px;
         }
         @keyframes ds-spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            80% {
-                transform: rotate(360deg);
-            }
             100% {
                 transform: rotate(360deg);
             }

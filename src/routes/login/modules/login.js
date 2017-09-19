@@ -51,8 +51,13 @@ export const logoutSuccess = () => ({
   payload: null
 });
 
+export const logoutFailure = () => ({
+  type: LOGOUT_FAILURE,
+  payload: null
+});
+
 export const loginRequest = credentials => {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: LOGIN_REQUEST,
       payload: credentials
@@ -69,14 +74,13 @@ export const loginRequest = credentials => {
         dispatch(loginSuccess(token));
       })
       .catch(error => {
-        let resp = { error: error, message: 'Invalid email or password' };
-        dispatch(loginFailure(resp));
+        dispatch(loginFailure({ error: error, message: 'Invalid email or password' }));
       });
   };
 };
 
 export const forgotRequest = email => {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: FORGOT_REQUEST,
       payload: email
@@ -88,14 +92,13 @@ export const forgotRequest = email => {
         dispatch(push('/account/login'));
       })
       .catch(error => {
-        let resp = { error: error, message: 'Invalid email' };
-        dispatch(forgotFailure(resp));
+        dispatch(forgotFailure({ error: error, message: 'Invalid email' }));
       });
   };
 };
 
 export const registerRequest = register => {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: REGISTER_REQUEST,
       payload: register
@@ -108,36 +111,31 @@ export const registerRequest = register => {
         register.email,
         register.password
       )
-      .then(response => {
+      .then(() => {
         dispatch(registerSuccess('Account has been created'));
         dispatch(push('/account/login'));
       })
       .catch(error => {
-        // TODO: more descriptive message?
-        let resp = { error: error, message: 'Signup Failed' };
-        dispatch(registerFailure(resp));
+        dispatch(registerFailure({ error: error, message: 'Signup Failed' }));
       });
   };
 };
 
 export const logoutRequest = token => {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: LOGOUT_REQUEST,
       payload: token
     });
     return api.pilots
       .logout(token.token)
-      .then(response => {
-        console.log('logout response');
-        console.log(response);
+      .then(() => {
         dispatch(logoutSuccess());
         dispatch(push('/account/login'));
       })
       .catch(error => {
-        console.log(error);
-        // let resp = { error: error, message: 'Invalid email or password' };
-        // dispatch(loginFailure(resp));
+        dispatch(logoutFailure({ error: error, message: 'Signout Failed' }));
+        dispatch(push('/account/login'));
       });
   };
 };
@@ -151,7 +149,7 @@ const initialState = {
 };
 
 /** reducers */
-export const authReducer = (state = initialState, action: Action) => {
+export default function(state = initialState, action: Action) {
   switch (action.type) {
     case REGISTER_REQUEST:
     case FORGOT_REQUEST:

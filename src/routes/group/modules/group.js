@@ -34,6 +34,7 @@ export default function(state = defaultState, action) {
       return { ...state, loading: true };
     case GROUP_SUCCESS:
       return { ...state, ...action.payload, loading: false};
+    default:
+      return { ...state };
   }
-  return { ...state };
 };
