@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import TrackerList from '../../components/tracker/TrackerList';
+import TrackerList from '../components/TrackerList';
 
 const filterStatus = (trackers, filter) => {
   switch (filter) {
@@ -15,8 +15,8 @@ const filterStatus = (trackers, filter) => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  trackers: filterStatus(state.trackers, ownProps.filter),
-  isScanning: state.bluetooth.isScanning
+  trackers: filterStatus(state.trackers, ownProps.filter)
+  // isScanning: state.bluetooth.isScanning
 });
 
 const FilteredTrackerList = connect(mapStateToProps)(TrackerList);

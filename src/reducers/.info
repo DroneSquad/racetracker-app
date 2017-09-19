@@ -1,9 +1,0 @@
-follows sort of modified "duck" pattern
----------------------------------------
-index.js: contains: combineReducers and complex selectors)
-
-all other files share name with their containers and contain:
-reducers, actionTypes (constants), actionsCreators, and selectors
-
-
-as of sep 19 2017 this folder should be removed once all the code has been moved

@@ -19,7 +19,7 @@ const initialState = {
   isEnabled: false
 };
 
-const bluetooth = (state = initialState, action: Action) => {
+const bluetoothReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case BT_IS_SCANNING:
       return Object.assign({}, state, {
@@ -34,4 +34,4 @@ const bluetooth = (state = initialState, action: Action) => {
   }
 };
 
-export default bluetooth;
+export default bluetoothReducer;

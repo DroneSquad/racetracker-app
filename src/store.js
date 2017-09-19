@@ -13,8 +13,8 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import authReducer from './routes/login/modules/login';
-import trackers from './reducers/tracker';
-import bluetooth from './reducers/bluetooth';
+import trackerReducer from './routes/tracker/modules/tracker';
+import bluetoothReducer from './routes/tracker/modules/bluetooth';
 
 const config = {
   key: 'root', // key is required
@@ -25,8 +25,8 @@ const config = {
 let reducers = {
   router: routerReducer, // react-router-redux v5.0
   auth: authReducer,
-  trackers: trackers,
-  bluetooth: bluetooth
+  trackers: trackerReducer,
+  bluetooth: bluetoothReducer
 };
 
 /** This function will get called after the loading screen happens before it renders the main content */
@@ -54,5 +54,5 @@ export function connect(reducer, key) {
     // depending how advance we can get this we may be able to grab them from function within the class
     let mapDispatchToProps = notNull(clazz.mapDispatchToProps, 'mapDispatchToProps');
     return _connect(mapStateToProps, mapDispatchToProps)(clazz);
-  }
+  };
 }

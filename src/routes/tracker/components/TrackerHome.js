@@ -1,40 +1,40 @@
 // @flow
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import { AppBar, Divider, FlatButton } from 'material-ui';
-import { historyBackButton } from '../../utils';
+import { historyBackButton } from '../../../utils';
 import './tracker-home.css';
 
-import FilteredTrackerList from '../../containers/tracker/FilteredTrackerList';
-import { discoverTracker } from '../../reducers/tracker';
-import { clearUnpairedTrackers } from '../../reducers/tracker';
-import { setBtIsScanning } from '../../reducers/bluetooth';
-import { setBtIsEnabled } from '../../reducers/bluetooth';
+import FilteredTrackerList from '../containers/FilteredTrackerList';
+// import { discoverTracker } from '../../reducers/tracker';
+// import { clearUnpairedTrackers } from '../../reducers/tracker';
+// import { setBtIsScanning } from '../../reducers/bluetooth';
+// import { setBtIsEnabled } from '../../reducers/bluetooth';
 
 class TrackerHome extends Component {
   props: {
-    deviceFound: Function,
-    clearUnpaired: Function,
-    handleBtIsScanning: Function,
-    handleBtIsEnabled: Function
+    trackers: Array
+    // deviceFound: Function,
+    // clearUnpaired: Function,
+    // handleBtIsScanning: Function,
+    // handleBtIsEnabled: Function
   };
 
   componentWillMount() {
-    this.startDiscovery();
+    // this.startDiscovery();
   }
 
-  /** Stop finding trackers */
+  /** Stop finding trackers
   stopDiscovery = () => {
     if ('ble' in window) {
       window.ble.stopScan(this.props.handleBtIsScanning(false), function() {
         console.log('Bluetooth stop discovery failed!'); // TODO: handle failure correctly
       });
     }
-  };
+  }; */
 
-  /** Start finding trackers */
+  /** Start finding trackers
   startDiscovery = () => {
     if ('ble' in window) {
       this.props.clearUnpaired();
@@ -47,7 +47,7 @@ class TrackerHome extends Component {
       this.props.deviceFound({ id: 'id', name: `TBSRT Blue Gull`, rssi: 0.6 });
       this.stopDiscovery();
     }
-  };
+  }; */
 
   render() {
     return (
@@ -68,6 +68,7 @@ class TrackerHome extends Component {
           />
           <Divider />
           <FilteredTrackerList
+            history={this.props.history}
             filter="SHOW_AVAILABLE"
             headerText="Available RaceTrackers"
             emptyText="No available race trackers"
@@ -81,24 +82,4 @@ class TrackerHome extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  // add in enabled state watcher
-});
-const mapDispatchToProps = (dispatch: Function) => ({
-  deviceFound(device) {
-    if (device.name.startsWith('TBSRT')) {
-      dispatch(discoverTracker(device));
-    }
-  },
-  clearUnpaired() {
-    dispatch(clearUnpairedTrackers());
-  },
-  handleBtIsScanning(value) {
-    dispatch(setBtIsScanning(value));
-  },
-  handleBtIsEnabled(value) {
-    dispatch(setBtIsEnabled(value));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TrackerHome);
+export default TrackerHome;
