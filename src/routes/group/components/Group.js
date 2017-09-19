@@ -18,6 +18,7 @@ import './group.css'
 
 export default class Group extends React.Component {
   render() {
+    console.log(this)
     let { id, name, description } = this.props.group;
     return (
       <List className="group-details">
