@@ -6,7 +6,7 @@ import './account.css';
 
 export default class Logout extends React.PureComponent {
   props: {
-    token: state.auth.token,
+    token: Object,
     authLogout: Function
   };
 

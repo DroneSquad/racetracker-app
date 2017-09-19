@@ -4,14 +4,14 @@ import { routerReducer } from 'react-router-redux';
 
 import { authReducer } from '../routes/login/modules/login';
 import groupReducer from '../routes/group/modules/group'; // the default export is the reducer no need to grab it directly
-import trackers from './tracker';
-import bluetooth from './bluetooth';
+import trackerReducer from '../routes/tracker/modules/tracker';
+// import bluetooth from './bluetooth';
 
 const rootReducer = combineReducers({
   router: routerReducer, // react-router-redux v5.0
   auth: authReducer,
-  trackers: trackers,
-  bluetooth: bluetooth,
+  trackers: trackerReducer,
+  // bluetooth: bluetooth,
   group: groupReducer
 });
 

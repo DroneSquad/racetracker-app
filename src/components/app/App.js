@@ -7,7 +7,7 @@ import Main from './main/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
 import Register from '../../routes/login/containers/RegisterContainer';
 import Login from '../../routes/login/containers/LoginContainer';
-import Tracker from '../tracker/Tracker';
+import Tracker from '../../routes/tracker';
 import NewGuest from '../people/NewGuest';
 import NewPilot from '../people/NewPilot';
 import People from '../people/People';
