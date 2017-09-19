@@ -31,8 +31,6 @@ let reducers = {
 
 /** This function will get called after the loading screen happens before it renders the main content */
 export default function configStore(history) {
-  console.log('configuring the store');
-  console.log(reducers);
   const reducer = persistReducer(config, combineReducers(reducers));
   const middleware = applyMiddleware(routerMiddleware(history), thunk);
   // create store
