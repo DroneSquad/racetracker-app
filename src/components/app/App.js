@@ -10,7 +10,7 @@ import Login from '../../routes/login/containers/LoginContainer';
 import Tracker from '../tracker/Tracker';
 import NewGuest from '../people/NewGuest';
 import NewPilot from '../people/NewPilot';
-import People from '../people/People';
+import People from '../../routes/people/containers/PeopleContainer';
 import HeatLineUp from '../fly/HeatLineUp';
 import HeatResultEdit from '../fly/HeatResultEdit';
 

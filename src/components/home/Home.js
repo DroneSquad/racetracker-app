@@ -10,7 +10,7 @@ export default class Home extends React.Component {
   state = { pilot: {} };
 
   componentWillMount() {
-    api.groups.members(82, { order: 'id DESC', limit: 5 }).then(pilot => {
+    api.groups.members(82, { limit: 1 }).then(pilot => {
       this.setState({ pilot: pilot.$request.data });
     });
   }

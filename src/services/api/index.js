@@ -128,6 +128,13 @@ export class Api {
   group = id => {
     return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}`);
   };
+
+  /** Public API endpoints that do not need an api key */
+  public = {
+    pilot: id => {
+      return axios.get(`${this._config.api}/pilot/${notNull(id, 'id')}`).then(response => response.data);
+    }
+  }
 }
 
 export default Api.get();
