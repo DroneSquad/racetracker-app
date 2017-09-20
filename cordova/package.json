@@ -37,6 +37,7 @@
         "browser-sync": "^2.18.13",
         "csp-parse": "0.0.2",
         "elementtree": "^0.1.7",
-        "plist": "^2.1.0"
+        "plist": "^2.1.0",
+        "react-hot-loader": "^1.3.1"
     }
 }

@@ -179,7 +179,7 @@ export default function(state = initialState, action: Action) {
         api._updateToken(action.payload.auth.token); // update the api as well
         return { ...state, ...action.payload.auth };
       }
-      break;
+      return { ...state };
     }
     default:
       return { ...state, error: null, message: '', loading: false };
