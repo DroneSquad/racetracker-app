@@ -32,14 +32,14 @@ export function requestGroup(id) {
 }
 
 /** Get the list of members that belong to the group */
-export function requestMembers(id) {
+export function requestMembers(id, filter) {
   return dispatch => {
     dispatch({
       type: GROUP_MEMBERS_REQUEST,
       payload: id
     });
     api.groups
-      .members(id)
+      .members(id, filter)
       .then(data =>
         dispatch({
           type: GROUP_MEMBERS_SUCCESS,

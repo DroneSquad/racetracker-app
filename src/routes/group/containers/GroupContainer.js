@@ -6,6 +6,9 @@ import { connect } from '../../../store';
 
 import { lazyLoad } from '../../../utils';
 
+// Math to caculate the number of avatars to show, this is magic numbers no way to really know
+const MEMBER_LIMIT = Math.floor(window.innerWidth / 25) - 5;
+
 /** Sample class that will use the decorators to connect the classes */
 @connect(reducer, 'group')
 export default class extends Group {
@@ -18,7 +21,7 @@ export default class extends Group {
   /** Currently needed for the connect decorator */
   static mapDispatchToProps = dispatch => ({
     requestGroup: id => dispatch(requestGroup(id)),
-    requestMembers: id => dispatch(requestMembers(id))
+    requestMembers: id => dispatch(requestMembers(id, { order: 'id DESC', limit: MEMBER_LIMIT }))
   });
 
   componentWillMount() {

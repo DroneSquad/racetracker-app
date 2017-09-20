@@ -110,8 +110,12 @@ export class Api {
   /** All actions that can be taken on a group */
   groups = {
     /** Get the list of all members that are part of the group */
-    members: id => {
-      return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}/members`);
+    members: (id, filter) => {
+      return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}/members`, {
+        params: {
+          filter: JSON.stringify(filter)
+        }
+      });
     },
 
     /** Get the count of members */
