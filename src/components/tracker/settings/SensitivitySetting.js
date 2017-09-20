@@ -36,16 +36,10 @@ export default class SensitivitySetting extends Setting {
   };
 
   render() {
-    let loadingComponent = (
-      <img src={loadingImg} style={{ height: '16px', width: '16px' }} alt="Loading..." />
-    );
+    let loadingComponent = <img src={loadingImg} style={{ height: '16px', width: '16px' }} alt="Loading..." />;
     let actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleCancel} />,
-      <FlatButton
-        label={this.state.calibrating ? loadingComponent : 'Calibrate'}
-        primary
-        onClick={this.calibrate}
-      />
+      <FlatButton label={this.state.calibrating ? loadingComponent : 'Calibrate'} primary onClick={this.calibrate} />
     ];
     return (
       <div className={this.isLoadingClass()} style={{ padding: '0 16px' }}>
@@ -72,12 +66,7 @@ export default class SensitivitySetting extends Setting {
             onChange={this.onSlider}
           />
           <div className="center-text">
-            <FlatButton
-              primary
-              disabled={this.state.loading}
-              label="Calibrate"
-              onTouchTap={this.handleOpen}
-            />
+            <FlatButton primary disabled={this.state.loading} label="Calibrate" onTouchTap={this.handleOpen} />
           </div>
           <p>Increase for missed laps, reduce to prevent double counting.</p>
         </div>

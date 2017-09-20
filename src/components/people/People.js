@@ -2,14 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import uuid from 'uuid';
 
-import {
-  AppBar,
-  List,
-  ListItem,
-  FontIcon,
-  IconButton,
-  FloatingActionButton,
-} from 'material-ui';
+import { AppBar, List, ListItem, FontIcon, IconButton, FloatingActionButton } from 'material-ui';
 
 import PilotAvatar from '../app/PilotAvatar';
 import loadingImg from '../../media/ds-logo-spin.svg';
@@ -47,34 +40,52 @@ class Person extends React.Component {
   }
 
   /** When the list item was clicked*/
-  onClick = () => {
-
-  };
+  onClick = () => {};
 
   /** When the icon was clicked */
-  onClickIcon = () => {
-
-  };
+  onClickIcon = () => {};
 
   render() {
-    let name = <div className="bar-item" style={{marginBottom: '1px'}}>{this.state.name}</div>;
+    let name = (
+      <div className="bar-item" style={{ marginBottom: '1px' }}>
+        {this.state.name}
+      </div>
+    );
     let avatar = <PilotAvatar src={this.state.avatar} />;
-    let channel = <span className="bar-item">{this.state.channel}</span>;
-    let icon = <IconButton style={{ padding: '0' }} onTouchTap={this.onClickIcon} children={<FontIcon className="mdi mdi-clipboard-outline"/>}/>;
+    let channel = (
+      <span className="bar-item">
+        {this.state.channel}
+      </span>
+    );
+    let icon = (
+      <IconButton
+        style={{ padding: '0' }}
+        onTouchTap={this.onClickIcon}
+        children={<FontIcon className="mdi mdi-clipboard-outline" />}
+      />
+    );
     return (
-      <ListItem id={this.uuid} onTouchTap={this.onClick} className={this.state.loading ? 'loading-bar' : ''} leftAvatar={avatar} primaryText={name} secondaryText={channel} rightIcon={icon}/>
+      <ListItem
+        id={this.uuid}
+        onTouchTap={this.onClick}
+        className={this.state.loading ? 'loading-bar' : ''}
+        leftAvatar={avatar}
+        primaryText={name}
+        secondaryText={channel}
+        rightIcon={icon}
+      />
     );
   }
 }
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class People extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = {loading: true};
-    setTimeout(() => { // todo replace with redux things
-      this.setState({loading: false});
+    this.state = { loading: true };
+    setTimeout(() => {
+      // todo replace with redux things
+      this.setState({ loading: false });
     }, 250);
   }
 
@@ -83,21 +94,35 @@ export default class People extends React.Component {
   };
 
   render() {
-    let spinner = <ListItem className="center-text" disabled primaryText={<img src={loadingImg} className="fetching" alt="Loading..." />}/>;
+    let spinner = (
+      <ListItem
+        className="center-text"
+        disabled
+        primaryText={<img src={loadingImg} className="fetching" alt="Loading..." />}
+      />
+    );
     return (
       <div className="main white-bg people">
         <header>
-          <AppBar title="Pilots" iconClassNameLeft="mdi mdi-close" onLeftIconButtonTouchTap={historyBackButton.bind(this)}/>
+          <AppBar
+            title="Pilots"
+            iconClassNameLeft="mdi mdi-close"
+            onLeftIconButtonTouchTap={historyBackButton.bind(this)}
+          />
         </header>
         <main>
           <List>
             {this.state.loading ? spinner : _.map(randomPilotIds(), value => <Person key={value} id={value} />)}
           </List>
-          <FloatingActionButton disabled={this.state.loading} style={{position: 'absolute', bottom: '16px', right: '16px'}} onTouchTap={this.onNewPilot}>
+          <FloatingActionButton
+            disabled={this.state.loading}
+            style={{ position: 'absolute', bottom: '16px', right: '16px' }}
+            onTouchTap={this.onNewPilot}
+          >
             <FontIcon className="mdi mdi-plus" />
           </FloatingActionButton>
         </main>
       </div>
-    )
+    );
   }
 }

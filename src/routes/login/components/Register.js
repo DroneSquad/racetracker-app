@@ -91,11 +91,7 @@ export default class Register extends React.PureComponent {
           placeholder="Password"
           required
         />
-        <input
-          ref={ref => (this._submit = ref)}
-          type="submit"
-          value={loading ? 'Signing up...' : 'Sign up'}
-        />
+        <input ref={ref => (this._submit = ref)} type="submit" value={loading ? 'Signing up...' : 'Sign up'} />
         <div className="center-text ds-white-text">Have a Drone Squad Account?</div>
         <Link className="btn" to="/account/login">
           Sign in

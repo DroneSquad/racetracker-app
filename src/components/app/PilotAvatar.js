@@ -14,7 +14,7 @@ export default class PilotAvatar extends Avatar {
       this.setState({ complete: event.target.complete });
     } else if (!this.failed) {
       event.persist();
-      this.lazyLoad = lazyLoad(event.target, () => event.target.src = this.props.src);
+      this.lazyLoad = lazyLoad(event.target, () => (event.target.src = this.props.src));
     }
   };
 
@@ -31,8 +31,15 @@ export default class PilotAvatar extends Avatar {
   render() {
     // todo add lazy loading, and fancy things like image caching
     return (
-      <span className={this.state.complete ? '' : 'loading-bar'} style={{...this.props.style}}>
-        <Avatar onError={this.onError} onLoad={this.onLoad} {...this.props} className="avatar bar-item" src={BLANK_PNG} style={{ objectFit: 'cover' }} />
+      <span className={this.state.complete ? '' : 'loading-bar'} style={{ ...this.props.style }}>
+        <Avatar
+          onError={this.onError}
+          onLoad={this.onLoad}
+          {...this.props}
+          className="avatar bar-item"
+          src={BLANK_PNG}
+          style={{ objectFit: 'cover' }}
+        />
       </span>
     );
   }

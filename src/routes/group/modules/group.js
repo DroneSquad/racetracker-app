@@ -11,21 +11,25 @@ export function requestGroup(id) {
       type: GROUP_REQUEST,
       payload: id
     });
-    api.group(id)
-      .then(data => dispatch({
-        type: GROUP_SUCCESS,
-        payload: data
-      }))
-      .catch(data => dispatch({
-        type: GROUP_ERROR,
-        payload: data
-      }));
-  }
+    api
+      .group(id)
+      .then(data =>
+        dispatch({
+          type: GROUP_SUCCESS,
+          payload: data
+        })
+      )
+      .catch(data =>
+        dispatch({
+          type: GROUP_ERROR,
+          payload: data
+        })
+      );
+  };
 }
 
 /** The default state for the group page */
-const defaultState = {
-};
+const defaultState = {};
 
 /** The reducer for the state */
 export default function(state = defaultState, action) {
@@ -33,8 +37,8 @@ export default function(state = defaultState, action) {
     case GROUP_REQUEST:
       return { ...state, loading: true };
     case GROUP_SUCCESS:
-      return { ...state, ...action.payload, loading: false};
+      return { ...state, ...action.payload, loading: false };
     default:
       return { ...state };
   }
-};
+}

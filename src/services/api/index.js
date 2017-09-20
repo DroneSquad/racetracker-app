@@ -42,10 +42,7 @@ export class Api {
   urls = {
     /** Get the avatar for the pilot id oo the current pilot */
     avatar: id => {
-      return url.resolve(
-        this._config.api,
-        `avatar/${id || this._token.pilot || notNull(id, 'id')}`
-      );
+      return url.resolve(this._config.api, `avatar/${id || this._token.pilot || notNull(id, 'id')}`);
     },
 
     /** Get the banner for the group */
@@ -69,10 +66,7 @@ export class Api {
 
     /** If the user login token is set, logout the user on the server side */
     logout: token => {
-      return this.request(
-        this._axios.post,
-        `pilots/logout?access_token=${token || this._token.hash}`
-      ).then(json => {
+      return this.request(this._axios.post, `pilots/logout?access_token=${token || this._token.hash}`).then(json => {
         if (!token) {
           this._token = null;
           delete this._axios.defaults.headers.common['Authorization'];
@@ -99,16 +93,12 @@ export class Api {
 
     /** Get the current groups for the pilot sorted by the location lat lng*/
     groups: (lat, lng) => {
-      return this.request(
-        this._axios.get,
-        `pilots/${notNull(this._token.pilot, 'pilot')}/myRaceGroups`,
-        {
-          params: {
-            lat: notNull(lat, 'lat'),
-            lng: notNull(lng, 'lng')
-          }
+      return this.request(this._axios.get, `pilots/${notNull(this._token.pilot, 'pilot')}/myRaceGroups`, {
+        params: {
+          lat: notNull(lat, 'lat'),
+          lng: notNull(lng, 'lng')
         }
-      );
+      });
     }
   };
 

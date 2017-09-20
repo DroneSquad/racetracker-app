@@ -54,5 +54,5 @@ export function connect(reducer, key) {
     // depending how advance we can get this we may be able to grab them from function within the class
     let mapDispatchToProps = notNull(clazz.mapDispatchToProps, 'mapDispatchToProps');
     return _connect(mapStateToProps, mapDispatchToProps)(clazz);
-  }
+  };
 }

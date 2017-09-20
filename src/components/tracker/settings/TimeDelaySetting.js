@@ -28,8 +28,7 @@ export default class TimeDelaySetting extends Setting {
           value={this.state.time || 0}
           onChange={this.onSelectField}
         >
-          {this.state.loading &&
-            <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
+          {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
           <MenuItem value={1} primaryText="5 seconds" />
           <MenuItem value={2} primaryText="10 seconds" />
           <MenuItem value={3} primaryText="15 seconds" />
@@ -37,8 +36,7 @@ export default class TimeDelaySetting extends Setting {
           <MenuItem value={5} primaryText="30 seconds" />
         </SelectField>
         <p className="clear">
-          If the timing gate is close to other sections of the track, this will prevent double
-          counting.
+          If the timing gate is close to other sections of the track, this will prevent double counting.
         </p>
       </div>
     );

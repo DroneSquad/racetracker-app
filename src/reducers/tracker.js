@@ -33,15 +33,25 @@ const trackers = (state = [], action: Action) => {
   switch (action.type) {
     case DISCOVER_TRACKER:
       // use a union to remove copies of the same tracker id
-      return _.unionWith(state, [{
-        id: action.payload.id,
-        rssi: action.payload.rssi,
-        name: action.payload.name,
-      }], (left, right) => left.id === right.id);
+      return _.unionWith(
+        state,
+        [
+          {
+            id: action.payload.id,
+            rssi: action.payload.rssi,
+            name: action.payload.name
+          }
+        ],
+        (left, right) => left.id === right.id
+      );
     case CONNECT_TRACKER:
-      return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false} : tracker));
+      return state.map(
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker)
+      );
     case DISCONNECT_TRACKER:
-      return state.map(tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker));
+      return state.map(
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker)
+      );
     case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected);
     default:

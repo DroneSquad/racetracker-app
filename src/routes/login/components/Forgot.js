@@ -44,11 +44,7 @@ export default class Forgot extends React.PureComponent {
           placeholder="Email"
           required
         />
-        <input
-          ref={ref => (this._submit = ref)}
-          type="submit"
-          value={loading ? 'Recovering...' : 'Recover'}
-        />
+        <input ref={ref => (this._submit = ref)} type="submit" value={loading ? 'Recovering...' : 'Recover'} />
         <div className="center-text ds-white-text">Remember your password now?</div>
         <Link className="btn" to="/account/login">
           Sign in

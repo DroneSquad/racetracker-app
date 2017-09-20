@@ -50,15 +50,15 @@ class TrackerDevice extends Component {
   render() {
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
     let deviceComponent = <DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
-    let extraProps = {key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo};
+    let extraProps = { key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
     if (this.props.isConnected) {
-      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openSettings}/>;
+      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openSettings} />;
     }
     return (
       <div>
         <Snackbar open={this.props.isConnecting} message="Connecting..." />
-        <ListItem {...extraProps} onClick={this.connect}/>
+        <ListItem {...extraProps} onClick={this.connect} />
       </div>
     );
   }
@@ -66,7 +66,7 @@ class TrackerDevice extends Component {
 
 const mapStateToProps = (state, ownProps) => ({
   isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
 });
 
 const mapDispatchToProps = (dispatch: Function, ownProps) => ({

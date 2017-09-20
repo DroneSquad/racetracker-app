@@ -38,7 +38,8 @@ export default class Frequencies extends React.Component {
 
   render() {
     let videoProfile = frequencies.profiles[this.state.channel];
-    let selectedAmount = videoProfile.frequencies.length <= this.state.amount ? videoProfile.frequencies.length - 1 : this.state.amount;
+    let selectedAmount =
+      videoProfile.frequencies.length <= this.state.amount ? videoProfile.frequencies.length - 1 : this.state.amount;
     let videoFrequencies = videoProfile.frequencies[selectedAmount];
     return (
       <div className="main video-frequencies">
@@ -51,9 +52,7 @@ export default class Frequencies extends React.Component {
         </header>
         <main>
           <DropDownMenu value={selectedAmount} onChange={this.onFrequencyAmount}>
-            {_.range(videoProfile.frequencies.length).map(i =>
-              <MenuItem key={i} value={i} primaryText={++i} />
-            )}
+            {_.range(videoProfile.frequencies.length).map(i => <MenuItem key={i} value={i} primaryText={++i} />)}
           </DropDownMenu>
           <DropDownMenu value={this.state.channel} onChange={this.onFrequencyChannel}>
             {_.map(this.state.profiles, (profile, index) =>
@@ -65,17 +64,23 @@ export default class Frequencies extends React.Component {
             Reduce frequencies to improve timing accuracy.
           </p>
           <List>
-            {videoFrequencies.bands.length > 0 && _.map(videoFrequencies.bands, (band, index) =>
-              <div key={++index}>
-                <ListItem
-                  primaryText={'Frequency ' + index}
-                  rightIcon={<span style={{width: '100%', textAlign: 'right'}}>{_.upperCase(band)} - {frequencies.bands[band]}</span>}
-                  onTouchTap={this.onFrequencyClick}
-                />
-                <Divider />
-              </div>
-            )}
-            {videoFrequencies.bands.length === 0 && <ListItem primaryText="There is no profile for this configuration"/>}
+            {videoFrequencies.bands.length > 0 &&
+              _.map(videoFrequencies.bands, (band, index) =>
+                <div key={++index}>
+                  <ListItem
+                    primaryText={'Frequency ' + index}
+                    rightIcon={
+                      <span style={{ width: '100%', textAlign: 'right' }}>
+                        {_.upperCase(band)} - {frequencies.bands[band]}
+                      </span>
+                    }
+                    onTouchTap={this.onFrequencyClick}
+                  />
+                  <Divider />
+                </div>
+              )}
+            {videoFrequencies.bands.length === 0 &&
+              <ListItem primaryText="There is no profile for this configuration" />}
           </List>
         </main>
         <footer>
