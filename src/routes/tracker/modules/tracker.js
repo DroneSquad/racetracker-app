@@ -53,6 +53,7 @@ const trackerReducer = (state = [], action: Action) => {
       );
     case CONNECT_TRACKER:
       return state.map(
+<<<<<<< HEAD:src/routes/tracker/modules/tracker.js
         tracker =>
           tracker.id === action.payload
             ? { ...tracker, isConnected: true, isConnecting: false }
@@ -64,6 +65,13 @@ const trackerReducer = (state = [], action: Action) => {
           tracker.id === action.payload
             ? { ...tracker, isConnected: false, isConnecting: false }
             : tracker
+=======
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker)
+      );
+    case DISCONNECT_TRACKER:
+      return state.map(
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker)
+>>>>>>> 750b6074b02f01415b00b03e3d97fb1d277ac76a:src/reducers/tracker.js
       );
     case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected);

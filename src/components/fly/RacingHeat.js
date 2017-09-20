@@ -41,7 +41,7 @@ export class Pilot extends React.Component {
           loading: false
         });
       });
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -50,10 +50,7 @@ export class Pilot extends React.Component {
 
   render() {
     let name = (
-      <span
-        style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }}
-        className="ds-blue-text bar-item"
-      >
+      <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {this.state.name}
       </span>
     );
@@ -85,19 +82,13 @@ export default class RacingHeat extends React.Component {
     );
     return (
       <IconMenu iconButtonElement={icon}>
-        <MenuItem
-          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-restart" />}
-          primaryText="Re-run"
-        />
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-restart" />} primaryText="Re-run" />
         <MenuItem
           leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil" />}
           primaryText="Edit"
           onTouchTap={() => this.props.history.push('/fly/heat/results/edit')}
         />
-        <MenuItem
-          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete" />}
-          primaryText="Delete"
-        />
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete" />} primaryText="Delete" />
       </IconMenu>
     );
   };
@@ -106,12 +97,7 @@ export default class RacingHeat extends React.Component {
     let title = <span>{`Heat ${this.props.id} Results`}</span>;
     return (
       <Card expanded={false}>
-        <CardTitle
-          style={{ paddingBottom: '0' }}
-          title={title}
-          showExpandableButton
-          closeIcon={this.menuDropdown()}
-        />
+        <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>

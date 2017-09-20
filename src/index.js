@@ -22,13 +22,24 @@ window.history.replaceState(null, document.title, '/' + (window.location.hash ||
 const root = document.getElementById('app');
 
 // initial render: displays loading screen while device/app is prepared
-ReactDOM.render(<AppContainer><Loading /></AppContainer>, root);
+ReactDOM.render(
+  <AppContainer>
+    <Loading />
+  </AppContainer>,
+  root
+);
 
 // hot module swapping (development use only)
 if (module.hot) {
   module.hot.accept('./components/app/loading/Loading', () => {
-    ReactDOM.render(<AppContainer><Loading /></AppContainer>, root, () => {
-      window.document.dispatchEvent(new CustomEvent("deviceready")); // triggers the state change
-    });
+    ReactDOM.render(
+      <AppContainer>
+        <Loading />
+      </AppContainer>,
+      root,
+      () => {
+        window.document.dispatchEvent(new CustomEvent('deviceready')); // triggers the state change
+      }
+    );
   });
 }

@@ -71,11 +71,7 @@ export default class Login extends React.PureComponent {
         <br />
         <br />
 
-        <input
-          ref={ref => (this._submit = ref)}
-          type="submit"
-          value={loading ? 'Signing in...' : 'Sign in'}
-        />
+        <input ref={ref => (this._submit = ref)} type="submit" value={loading ? 'Signing in...' : 'Sign in'} />
         <div className="center-text ds-white-text">No Drone Squad Account?</div>
         <Link className="btn" to="/account/register">
           Sign up

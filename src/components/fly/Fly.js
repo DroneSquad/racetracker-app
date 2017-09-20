@@ -18,10 +18,7 @@ export default class Race extends React.Component {
     );
     return (
       <IconMenu iconButtonElement={icon}>
-        <MenuItem
-          primaryText="RaceTracker Settings"
-          onTouchTap={() => this.props.history.push('/tracker')}
-        />
+        <MenuItem primaryText="RaceTracker Settings" onTouchTap={() => this.props.history.push('/tracker')} />
       </IconMenu>
     );
   };

@@ -29,9 +29,7 @@ export default class Tracker extends React.Component {
           <List>
             <ListItem
               disabled
-              primaryText={
-                <DeviceSetting bluetooth={bluetoothDevice} history={this.props.history} />
-              }
+              primaryText={<DeviceSetting bluetooth={bluetoothDevice} history={this.props.history} />}
             />
             <Divider />
             <ListItem disabled primaryText={<FlyoverSetting bluetooth={bluetoothDevice} />} />

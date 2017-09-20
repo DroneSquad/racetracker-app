@@ -42,9 +42,7 @@ class HeatSelector extends React.Component {
           <MenuItem value={-2} primaryText="Unassigned" />
           <MenuItem value={-1} primaryText="Add Pilot" />
           <Divider />
-          {_.map(this.state.pilots || [], (value, id) =>
-            <MenuItem key={id} value={id} primaryText={value} />
-          )}
+          {_.map(this.state.pilots || [], (value, id) => <MenuItem key={id} value={id} primaryText={value} />)}
         </SelectField>
       </div>
     );

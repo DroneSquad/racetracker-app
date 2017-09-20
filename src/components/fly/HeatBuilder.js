@@ -41,7 +41,7 @@ export class Pilot extends React.Component {
           loading: false
         });
       });
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -91,19 +91,13 @@ export default class HeatBuilder extends React.Component {
     );
     return (
       <IconMenu iconButtonElement={icon}>
-        <MenuItem
-          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-clock-start" />}
-          primaryText="Start"
-        />
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-clock-start" />} primaryText="Start" />
         <MenuItem
           leftIcon={<FontIcon style={styleIcons} className="mdi mdi-pencil" />}
           primaryText="Edit"
           onTouchTap={() => this.props.history.push('/fly/heat/edit')}
         />
-        <MenuItem
-          leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete" />}
-          primaryText="Delete"
-        />
+        <MenuItem leftIcon={<FontIcon style={styleIcons} className="mdi mdi-delete" />} primaryText="Delete" />
       </IconMenu>
     );
   };
@@ -116,22 +110,10 @@ export default class HeatBuilder extends React.Component {
         <Divider />
         <CardText className="no-padding">
           <List className="no-padding">
-            <ListItem
-              disabled
-              primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F4- 5640" />}
-            />
-            <ListItem
-              disabled
-              primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F2- 5730" />}
-            />
-            <ListItem
-              disabled
-              primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F6- 5890" />}
-            />
-            <ListItem
-              disabled
-              primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="R2- 5520" />}
-            />
+            <ListItem disabled primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F4- 5640" />} />
+            <ListItem disabled primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F2- 5730" />} />
+            <ListItem disabled primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="F6- 5890" />} />
+            <ListItem disabled primaryText={<Pilot id={Math.floor(Math.random() * 10000)} frequency="R2- 5520" />} />
           </List>
         </CardText>
       </Card>

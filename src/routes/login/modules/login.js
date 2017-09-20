@@ -104,13 +104,7 @@ export const registerRequest = register => {
       payload: register
     });
     return api.pilots
-      .register(
-        register.firstName,
-        register.lastName,
-        register.callsign,
-        register.email,
-        register.password
-      )
+      .register(register.firstName, register.lastName, register.callsign, register.email, register.password)
       .then(() => {
         dispatch(registerSuccess('Account has been created'));
         dispatch(push('/account/login'));
@@ -185,9 +179,9 @@ export default function(state = initialState, action: Action) {
         api._updateToken(action.payload.auth.token); // update the api as well
         return { ...state, ...action.payload.auth };
       }
-      break;
+      return { ...state };
     }
     default:
       return { ...state, error: null, message: '', loading: false };
   }
-};
+}

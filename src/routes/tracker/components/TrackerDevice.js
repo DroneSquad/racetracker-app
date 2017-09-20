@@ -67,7 +67,11 @@ class TrackerDevice extends Component {
 /*const mapStateToProps = (state, ownProps) => ({
   isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
   isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
+<<<<<<< HEAD:src/routes/tracker/components/TrackerDevice.js
 });*/
+=======
+});
+>>>>>>> 750b6074b02f01415b00b03e3d97fb1d277ac76a:src/components/tracker/TrackerDevice.js
 
 /*const mapDispatchToProps = (dispatch: Function, ownProps) => ({
   connectSuccess() {

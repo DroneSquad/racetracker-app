@@ -71,10 +71,7 @@ export function lazyLoad(element, callback) {
     if ('lazyLoading' in window) {
       let sortedList = window.lazyLoading.sortedList;
       // fancy sorting algorithm to speed this things up
-      if (
-        sortedList.length > 0 &&
-        sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height
-      ) {
+      if (sortedList.length > 0 && sortedList[sortedList.length - 1].$element.getBoundingClientRect().top <= height) {
         sortedList.push(callback);
       } else {
         sortedList.splice(
