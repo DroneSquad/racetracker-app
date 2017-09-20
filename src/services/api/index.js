@@ -107,6 +107,19 @@ export class Api {
     return this.request(this._axios.get, `pilots/${id || this._token.pilot || notNull(id, 'id')}`);
   };
 
+  /** All actions that can be taken on a group */
+  groups = {
+    /** Get the list of all members that are part of the group */
+    members: id => {
+      return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}/members`);
+    },
+
+    /** Get the count of members */
+    memberCount: id => {
+      return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}/members/count`);
+    }
+  };
+
   /** Get the group from the id */
   group = id => {
     return this.request(this._axios.get, `raceGroups/${notNull(id, 'id')}`);
