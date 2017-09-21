@@ -1,5 +1,4 @@
 // @flow
-
 import React from 'react';
 import TrackerDevice from './TrackerDevice';
 import { List, Subheader, ListItem } from 'material-ui';

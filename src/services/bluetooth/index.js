@@ -28,6 +28,7 @@ export class Ble {
     );
   }
 
+  /** give user dialog to enable bluetooth */
   enable(cb) {
     window.ble.enable(
       function() {
@@ -39,10 +40,10 @@ export class Ble {
     );
   }
 
+  /** get updated when the state of bluetooth changes on/off */
   startStateNotifications(cb) {
     window.ble.startStateNotifications(
       function(btState) {
-        console.log("startStateNotifications CALLED");
         if (btState === 'on') {
           cb({ value: true, message: '' })
         }
@@ -53,15 +54,35 @@ export class Ble {
     );
   }
 
-  stopStateNotifications() {
+  /** turn off bluetooth state notifications */
+  stopStateNotifications(cb) {
     window.ble.stopStateNotifications(
       function() {
-        console.log("stopStateNotifications Called");
+        cb("State Notifications Stopped");
       }
     );
   }
 
-}
+  /** start bluetooth device scan */
+  startDeviceScan(cb) {
+    window.ble.startScan([],
+      function(device) {
+        cb({ type: 'device', device: device });
+      }, function() {
+        cb({ type: 'error', error: 'Device scanning failed to start' });
+      });
+    setTimeout(() => this.stopDeviceScan(cb), 5000);
+  }
 
+  /** stop bluetooth device scan */
+  stopDeviceScan(cb) {
+    window.ble.stopScan(function() {
+      cb({ type: 'stop' });
+    }, function() {
+      cb({ type: 'error', error: 'Device scanning failed to stop' });
+    });
+  }
+
+}
 
 export default Ble.get();

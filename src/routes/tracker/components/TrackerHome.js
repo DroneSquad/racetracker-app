@@ -19,24 +19,37 @@ class TrackerHome extends Component {
     isBtEnabled: boolean,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
-    enableBt: Function
+    enableBt: Function,
+    startBtStateNotifications: Function,
+    stopBtStateNotifications: Function,
+    startBtDeviceScan: Function,
+    clearUnpairedRaceTrackers: Function
   };
 
   componentWillMount() {
-    this.startDiscovery();
+    if (!this.props.isBtAvailable){  // by default
+      this.props.checkIsBtAvailable(); // check and update accordingly
+    } else { // bluetooth is available (rehydration)
+      this.startDiscovery();  // run device discovery
+    }
+  }
+
+  componentWillUnmount() {
+    // stop state notifications if they have been activated
+    if (this.props.isBtAvailable){
+      this.props.stopBtStateNotifications();
+    }
   }
 
   /** Watch state.properties for changes on bluetooth enabled state */
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
-        console.log("componentDidUpdate.isBtAvailable");
-        this.startDiscovery();
+        this.props.startBtStateNotifications();
       }
     }
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
-        console.log("componentDidUpdate.isBtEnabled");
         this.startDiscovery();
       }
     }
@@ -44,29 +57,11 @@ class TrackerHome extends Component {
 
   /** Start tracker discovery if possible */
   startDiscovery = () => {
-    if (!this.props.isBtAvailable){  // currently no bluetooth is available
-      console.log("x");
-      this.props.checkIsBtAvailable(); // verify the above is correct
-    } else { // bluetooth is available
-      console.log("z");
-      if (!this.props.isBtEnabled){  // currently bluetooth is not enabled
-        this.props.checkIsBtEnabled();  // verify the above is correct
-      } else {  // bluetooth is enabled
-
-        // perform our scan here
-        console.log("bluetooth enabled, perform scan now");
-        /*if ('ble' in window) {
-          this.props.clearUnpaired();
-          this.props.handleBtIsScanning(true);
-          window.ble.startScan([], this.props.deviceFound, function() {
-            console.log('Bluetooth device discovery failed!'); // TODO: handle failure correctly
-          });
-          setTimeout(() => this.stopDiscovery(), 5000); // TODO: make timeout variable?
-        } else {
-          this.props.deviceFound({ id: 'id', name: `TBSRT Blue Gull`, rssi: 0.6 });
-          this.stopDiscovery();
-        }*/
-      }
+    if (!this.props.isBtEnabled){  // default
+      this.props.checkIsBtEnabled();  // verify the above is correct
+    } else {  // bluetooth is enabled, start bluetooth scan
+      this.props.clearUnpairedRaceTrackers();  // remove any unpaired devices from a prev scan
+      this.props.startBtDeviceScan(); // actively scan for bluetooth devices
     }
   };
 

@@ -1,6 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
-import { isAvailable, isEnabled, enable } from '../modules/bluetooth';
+import { isAvailable, isEnabled, enable, startStateNotifications, stopStateNotifications, startDeviceScan, stopDeviceScan, setIsScanning } from '../modules/bluetooth';
+import { clearUnpairedTrackers } from '../modules/racetracker';
 import TrackerHome from '../components/TrackerHome';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -11,7 +12,8 @@ import TrackerHome from '../components/TrackerHome';
 const mapStateToProps = (state, ownProps) => ({
   message: state.bluetooth.message,
   isBtAvailable: state.bluetooth.isAvailable,
-  isBtEnabled: state.bluetooth.isEnabled
+  isBtEnabled: state.bluetooth.isEnabled,
+  isBtScanning: state.bluetooth.isScanning
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -23,6 +25,21 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   enableBt() {
     dispatch(enable());
+  },
+  startBtStateNotifications() {
+    dispatch(startStateNotifications());
+  },
+  stopBtStateNotifications() {
+    dispatch(stopStateNotifications());
+  },
+  clearUnpairedRaceTrackers() {
+    dispatch(clearUnpairedTrackers());
+  },
+  startBtDeviceScan() {
+    dispatch(startDeviceScan());
+  },
+  setBtIsScanning(value) {
+    dispatch(setIsScanning(value))
   }
 });
 

@@ -1,24 +1,7 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
 import { FontIcon } from 'material-ui';
 import { rssiToPercentage } from '../../../utils';
 import { ListItem, Snackbar } from 'material-ui';
-
-// import { connectTracker, disconnectTracker } from '../../reducers/tracker';
-
-export const DeviceProperties = (props: { name: string, rssi: string }) => {
-  return (
-    <div className="device">
-      <h3>
-        {props.name}
-      </h3>
-      <span className="detail">
-        <FontIcon className="mdi mdi-radio-tower" />
-        {rssiToPercentage(props.rssi)}
-      </span>
-    </div>
-  );
-};
 
 class TrackerDevice extends Component {
   props: {
@@ -31,25 +14,38 @@ class TrackerDevice extends Component {
     connectFailure: Function
   };
 
+  DeviceProperties = (props: { name: string, rssi: string }) => {
+    return (
+      <div className="device">
+        <h3>
+          {props.name}
+        </h3>
+        <span className="detail">
+          <FontIcon className="mdi mdi-radio-tower" />
+          {rssiToPercentage(props.rssi)}
+        </span>
+      </div>
+    )
+  }
+
   /** Connect to the tracker */
   connect = () => {
-    if ('ble' in window) {
+    console.log("connect called")
+  /*  if ('ble' in window) {
       window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
     } else {
       this.props.connectSuccess();
-    }
+    }*/
   };
 
   /** Open the settings for the tracker */
   openSettings = () => {
-    console.log('openSettings');
-    // TODO: handle navigation
-    this.props.history.push('/tracker/settings', this.props.id);
+    // this.props.history.push('/tracker/settings', this.props.id);
   };
 
   render() {
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
-    let deviceComponent = <DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
+    let deviceComponent = <this.DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
     let extraProps = { key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
     if (this.props.isConnected) {
