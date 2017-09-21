@@ -10,7 +10,6 @@ const isAuthenticated = props => {
 
 const AuthRoute = ({ component, ...props }) => {
   if (isAuthenticated(props)) {
-    // TODO: check if they are trying to go to login, if so redirect to index
     return <Route {...props} component={component} />;
   } else {
     return (

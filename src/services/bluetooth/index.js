@@ -115,7 +115,6 @@ export class Ble {
     );
   }
 
-
 }
 
 export default Ble.get();

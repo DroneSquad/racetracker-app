@@ -11,6 +11,7 @@ export default class BluetoothCard extends Component {
     button: boolean,
     enableBt: Function
   };
+
   handleButtonClick = (event: Object) => {
     this.props.enableBt();
   };

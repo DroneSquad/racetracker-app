@@ -30,7 +30,7 @@ export default class Loading extends React.PureComponent {
     };
   }
 
-  /** Runs when the device is ready, addition checks should happen here */
+  /** Runs when the device is ready, additional checks should happen here */
   onDeviceReady = () => {
     this.setState({ isLoading: false });
   };

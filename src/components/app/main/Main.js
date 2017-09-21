@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
@@ -16,7 +15,7 @@ import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
-class Main extends React.Component {
+export default class Main extends React.Component {
   render() {
     let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index
@@ -42,11 +41,3 @@ class Main extends React.Component {
     );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    token: state.auth.token
-  };
-};
-
-export default connect(mapStateToProps)(Main);
