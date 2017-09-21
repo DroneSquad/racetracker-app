@@ -1,5 +1,6 @@
 import ble from '../../../services/bluetooth';
 import { discoverTracker } from './racetracker';
+
 /** types */
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
 export const BT_IS_ENABLED = 'BT_IS_ENABLED';

@@ -3,7 +3,7 @@ import { FontIcon } from 'material-ui';
 import { rssiToPercentage } from '../../../utils';
 import { ListItem, Snackbar } from 'material-ui';
 
-class TrackerDevice extends Component {
+export default class TrackerDevice extends Component {
   props: {
     id: string,
     name: string,
@@ -29,7 +29,7 @@ class TrackerDevice extends Component {
   }
 
   /** Connect to the tracker */
-  connect = () => {
+  connectTracker = () => {
     console.log("connect called")
   /*  if ('ble' in window) {
       window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
@@ -54,28 +54,8 @@ class TrackerDevice extends Component {
     return (
       <div>
         <Snackbar open={this.props.isConnecting} message="Connecting..." />
-        <ListItem {...extraProps} onClick={this.connect} />
+        <ListItem {...extraProps} onClick={this.connectTracker} />
       </div>
     );
   }
 }
-
-/*const mapStateToProps = (state, ownProps) => ({
-  isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
-});*/
-
-/*const mapDispatchToProps = (dispatch: Function, ownProps) => ({
-  connectSuccess() {
-    console.log('connection success: ' & ownProps.id);
-    dispatch(connectTracker(ownProps.id));
-  },
-  connectFailure(device) {
-    console.log('connection failed disconnected: ' & device.id);
-    dispatch(disconnectTracker(device.id));
-  }
-});*/
-
-// export default connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);
-
-export default TrackerDevice;
