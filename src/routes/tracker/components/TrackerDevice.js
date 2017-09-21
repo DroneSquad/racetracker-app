@@ -43,7 +43,7 @@ class TrackerDevice extends Component {
   /** Open the settings for the tracker */
   openSettings = () => {
     console.log('openSettings');
-    // TODO: handle navigaion
+    // TODO: handle navigation
     this.props.history.push('/tracker/settings', this.props.id);
   };
 

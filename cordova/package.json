@@ -17,7 +17,8 @@
             "cordova-plugin-headercolor": {},
             "cordova-plugin-ble-central": {
                 "BLUETOOTH_USAGE_DESCRIPTION": "Allows app to communicate with the TBS Racetracker"
-            }
+            },
+            "cordova-plugin-device": {}
         }
     },
     "dependencies": {
@@ -27,6 +28,7 @@
         "cordova-plugin-ble-central": "^1.1.4",
         "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-console": "^1.0.7",
+        "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-headercolor": "^1.0.0",
         "cordova-plugin-statusbar": "^2.2.3",

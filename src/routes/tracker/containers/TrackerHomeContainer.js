@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-
+import { isAvailable, isEnabled, enable } from '../modules/bluetooth';
 import TrackerHome from '../components/TrackerHome';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -8,32 +8,23 @@ import TrackerHome from '../components/TrackerHome';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the TrackerHome:   */
 
-const mapStateToProps = state => ({
-  trackers: state.trackers
+const mapStateToProps = (state, ownProps) => ({
+  message: state.bluetooth.message,
+  isBtAvailable: state.bluetooth.isAvailable,
+  isBtEnabled: state.bluetooth.isEnabled
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  /*discover(token) {
-    dispatch(logoutRequest(token));
-  }*/
-});
-
-/*const mapDispatchToProps = (dispatch: Function) => ({
-  deviceFound(device) {
-    if (device.name.startsWith('TBSRT')) {
-      dispatch(discoverTracker(device));
-    }
+  checkIsBtAvailable() {
+    dispatch(isAvailable());
   },
-  clearUnpaired() {
-    dispatch(clearUnpairedTrackers());
+  checkIsBtEnabled() {
+    dispatch(isEnabled());
   },
-  handleBtIsScanning(value) {
-    dispatch(setBtIsScanning(value));
-  },
-  handleBtIsEnabled(value) {
-    dispatch(setBtIsEnabled(value));
+  enableBt() {
+    dispatch(enable());
   }
-});*/
+});
 
 const TrackerHomeContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerHome);
 

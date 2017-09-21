@@ -25,7 +25,6 @@ class Main extends React.Component {
         <header>
           <AppBar title={<img className="logo" src={logo} alt="" />} />
         </header>
-
         <main>
           <Switch>
             <Route path="/group/:id" component={Group} />
@@ -36,7 +35,6 @@ class Main extends React.Component {
             <Route path="/" component={() => <Redirect to="/404" />} /> {/* Must be last */}
           </Switch>
         </main>
-
         <footer>
           <Nav history={history} />
         </footer>

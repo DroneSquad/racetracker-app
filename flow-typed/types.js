@@ -23,7 +23,7 @@ export type AuthToken = {
 };
 
 // all action types with according payload
-declare type ActionType = 'CONNECT_TRACKER' | 'DISCOVER_TRACKER';
+declare type ActionType = 'CONNECT_TRACKER' | 'DISCOVER_TRACKER' | 'BT_IS_AVAILABLE';
 
 declare type ActionT<A: ActionType, P> = {|
   type: A,
@@ -31,4 +31,5 @@ declare type ActionT<A: ActionType, P> = {|
 |};
 
 // action type: SET_SEARCH_TERM, payload: string
-export type Action = ActionT<'CONNECT_TRACKER', string> | ActionT<'DISCOVER_TRACKER', RaceTracker>;
+export type Action = ActionT<'CONNECT_TRACKER', string> | ActionT<'DISCOVER_TRACKER', RaceTracker> |
+ActionT<'BT_IS_AVAILABLE', boolean>;

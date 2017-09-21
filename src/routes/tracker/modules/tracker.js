@@ -31,12 +31,10 @@ export const clearUnpairedTrackers = () => ({
 /** initial_state */
 const initialState = {
   //trackers: [],
-  //  scanning: false
 };
 
 /** reducers */
 const trackerReducer = (state = [], action: Action) => {
-  console.log('trackerReducercalled');
   switch (action.type) {
     case DISCOVER_TRACKER:
       // use a union to remove copies of the same tracker id
