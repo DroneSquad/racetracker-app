@@ -83,6 +83,19 @@ export class Ble {
     });
   }
 
+  /** connect device to bluetooth device via device id */
+  connectDevice(device_id, cb) {
+    window.ble.connect(device_id,
+      function() {
+        cb({ device_id: device_id, connected: true, error: null });
+      }, function() {
+        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' connection failed' });
+    });
+  }
+
+
+
+
 }
 
 export default Ble.get();

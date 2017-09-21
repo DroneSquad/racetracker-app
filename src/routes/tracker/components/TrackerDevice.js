@@ -11,7 +11,8 @@ export default class TrackerDevice extends Component {
     isConnecting: boolean,
     isConnected: boolean,
     connectSuccess: Function,
-    connectFailure: Function
+    connectFailure: Function,
+    connectDevice: Function
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -30,12 +31,8 @@ export default class TrackerDevice extends Component {
 
   /** Connect to the tracker */
   connectTracker = () => {
-    console.log("connect called")
-  /*  if ('ble' in window) {
-      window.ble.connect(this.props.id, this.props.connectSuccess, this.props.connectFailure);
-    } else {
-      this.props.connectSuccess();
-    }*/
+    this.props.connectDevice(this.props.id)
+
   };
 
   /** Open the settings for the tracker */
