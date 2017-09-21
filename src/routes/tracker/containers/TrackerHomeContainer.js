@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import { isAvailable, isEnabled, enable, startStateNotifications, stopStateNotifications, startDeviceScan, stopDeviceScan, setIsScanning } from '../modules/bluetooth';
+import { isAvailable, isEnabled, enable, startStateNotifications, stopStateNotifications, startDeviceScan, stopDeviceScan } from '../modules/bluetooth';
 import { clearUnpairedTrackers } from '../modules/racetracker';
 import TrackerHome from '../components/TrackerHome';
 
@@ -40,9 +40,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   stopBtDeviceScan() {
     dispatch(stopDeviceScan());
-  },
-  setBtIsScanning(value) {
-    dispatch(setIsScanning(value))
   }
 });
 

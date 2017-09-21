@@ -1,5 +1,5 @@
 import ble from '../../../services/bluetooth';
-import { discoverTracker, connectTracker } from './racetracker';
+import { discoverTracker, connectTracker, connectingTracker, disconnectTracker } from './racetracker';
 
 /** types */
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
@@ -99,9 +99,15 @@ export const stopDeviceScan = () => {
 
 export const connectDevice = (device_id: string) => {
   return dispatch => {
-    ble.connectDevice((device_id, response) => {
-      dispatch(setIsEnabled({ value: response.value, message: response.message }));
-    });
+    dispatch(connectingTracker(device_id));
+    ble.connectDevice(
+      (response) => {
+      if (response.connected) {
+        dispatch(connectTracker(response.device_id));
+      } else {
+        dispatch(disconnectTracker(response.device_id));
+      }
+    }, device_id);
   };
 };
 

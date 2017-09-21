@@ -1,5 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
+import { connectDevice } from '../modules/bluetooth';
+
 import TrackerDevice from '../components/TrackerDevice';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -12,19 +14,10 @@ const mapStateToProps = (state, ownProps) => ({
   isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
 });
 
-const mapDispatchToProps = (dispatch: Function, ownProps) => ({
-  connectTracker() {
-    // console.log('connectTracker: ' & device_id);
-    console.log('connectTracker: ' & ownProps.id);
+const mapDispatchToProps = (dispatch: Function) => ({
+  connectBtDevice(device_id) {
+    dispatch(connectDevice(device_id))
   }
-   /*connectSuccess() {
-     console.log('connection success: ' & ownProps.id);
-    //  dispatch(connectTracker(ownProps.id));
-   },
-   connectFailure(device) {
-     console.log('connection failed disconnected: ' & device.id);
-     // dispatch(disconnectTracker(device.id));
-   }*/
 });
 
 const TrackerDeviceContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);

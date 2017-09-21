@@ -4,13 +4,19 @@ import _ from 'lodash';
 /** types */
 export const DISCOVER_TRACKER = 'DISCOVER_TRACKER';
 export const CONNECT_TRACKER = 'CONNECT_TRACKER';
+export const CONNECTING_TRACKER = 'CONNECTING_TRACKER';
 export const DISCONNECT_TRACKER = 'DISCONNECT_TRACKER';
-export const CLEAN_UNPAIRED_TRACKERS = 'CLEAN_UNPAIRED_TRACKERS';
+export const CLEAR_UNPAIRED_TRACKERS = 'CLEAR_UNPAIRED_TRACKERS';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
   type: DISCOVER_TRACKER,
   payload: tracker
+});
+
+export const connectingTracker = (id: string) => ({
+  type: CONNECTING_TRACKER,
+  payload: id
 });
 
 export const connectTracker = (id: string) => ({
@@ -24,7 +30,7 @@ export const disconnectTracker = (id: string) => ({
 });
 
 export const clearUnpairedTrackers = () => ({
-  type: CLEAN_UNPAIRED_TRACKERS,
+  type: CLEAR_UNPAIRED_TRACKERS,
   payload: null
 });
 
@@ -47,19 +53,19 @@ export default function(state = [], action: Action) {
     case CONNECT_TRACKER:
       return state.map(
         tracker =>
-          tracker.id === action.payload
-            ? { ...tracker, isConnected: true, isConnecting: false }
-            : tracker
+          tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker
       );
+    case CONNECTING_TRACKER:
+        return state.map(
+          tracker =>
+            tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: true } : tracker
+        );
     case DISCONNECT_TRACKER:
       return state.map(
         tracker =>
-          tracker.id === action.payload
-            ? { ...tracker, isConnected: false, isConnecting: false }
-            : tracker
-
+          tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker
       );
-    case CLEAN_UNPAIRED_TRACKERS:
+    case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected);
     default:
       return state;

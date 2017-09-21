@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
-import TrackerDeviceContainer from '../containers/TrackerDeviceContainer';
+
 import { List, Subheader, ListItem } from 'material-ui';
 import loadingImg from '../../../media/ds-logo-spin.svg';
+
+import TrackerDeviceContainer from '../containers/TrackerDeviceContainer';
 
 export default class TrackerList extends React.Component {
   props: {

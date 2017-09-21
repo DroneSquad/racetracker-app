@@ -1,7 +1,10 @@
+// flow
 import React, { Component } from 'react';
+
 import { FontIcon } from 'material-ui';
-import { rssiToPercentage } from '../../../utils';
 import { ListItem, Snackbar } from 'material-ui';
+
+import { rssiToPercentage } from '../../../utils';
 
 export default class TrackerDevice extends Component {
   props: {
@@ -9,7 +12,8 @@ export default class TrackerDevice extends Component {
     name: string,
     rssi: string,
     isConnecting: boolean,
-    isConnected: boolean
+    isConnected: boolean,
+    connectBtDevice: Function,
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -26,13 +30,12 @@ export default class TrackerDevice extends Component {
     )
   }
 
-  /** Connect to the tracker */
+  /** Connect to a tracker via id */
   connectTracker = () => {
-    console.log("connectTracker Called");
-    // this.props.connectDevice(this.props.id)
+    this.props.connectBtDevice(this.props.id)
   };
 
-  /** Open the settings for the tracker */
+  /** Open the tracker settings */
   openSettings = () => {
     // this.props.history.push('/tracker/settings', this.props.id);
   };

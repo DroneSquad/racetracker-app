@@ -84,7 +84,7 @@ export class Ble {
   }
 
   /** connect device to bluetooth device via device id */
-  connectDevice(device_id, cb) {
+  connectDevice(cb, device_id) {
     window.ble.connect(device_id,
       function() {
         cb({ device_id: device_id, connected: true, error: null });
@@ -92,7 +92,6 @@ export class Ble {
         cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' connection failed' });
     });
   }
-
 
 
 

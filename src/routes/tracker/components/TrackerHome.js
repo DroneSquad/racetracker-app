@@ -1,12 +1,11 @@
 // @flow
-
 import React, { Component } from 'react';
 
-import { Snackbar } from 'material-ui';
-
-import { AppBar, Divider, FlatButton } from 'material-ui';
-import { historyBackButton } from '../../../utils';
 import './tracker-home.css';
+import { Snackbar } from 'material-ui';
+import { AppBar, Divider, FlatButton } from 'material-ui';
+
+import { historyBackButton } from '../../../utils';
 
 import BluetoothCardContainer from '../containers/BluetoothCardContainer';
 import TrackerListContainer from   '../containers/TrackerListContainer';
@@ -146,8 +145,16 @@ class TrackerHome extends Component {
           />
         </header>
         <main>
-          {!isBtAvailable && <BluetoothCardContainer title="No Bluetooth Available" subtitle="This device does not support BluetoothLE" text="Cordova Bluetooth is not available" button='' />}
-          {isBtAvailable && !isBtEnabled && <BluetoothCardContainer title="Enable Bluetooth" subtitle="Bluetooth is required to use TBS RaceTrackers" text="Enable Bluetooth by clicking the button below" button='ENABLE' />}
+          {!isBtAvailable && <BluetoothCardContainer
+            title="No Bluetooth Available"
+            subtitle="This device does not support BluetoothLE"
+            text="Cordova Bluetooth is not available"
+            button='' />}
+          {isBtAvailable && !isBtEnabled && <BluetoothCardContainer
+            title="Enable Bluetooth"
+            subtitle="Bluetooth is required to use TBS RaceTrackers"
+            text="Enable Bluetooth by clicking the button below"
+            button='ENABLE' />}
           {isBtAvailable && isBtEnabled && <this.RtDiscoveryList />}
         </main>
         <footer>
