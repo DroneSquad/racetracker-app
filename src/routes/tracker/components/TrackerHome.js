@@ -17,12 +17,14 @@ class TrackerHome extends Component {
     error: null,
     isBtAvailable: boolean,
     isBtEnabled: boolean,
+    isBtScanning: boolean,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
     enableBt: Function,
     startBtStateNotifications: Function,
     stopBtStateNotifications: Function,
     startBtDeviceScan: Function,
+    stopBtDeviceScan: Function,
     clearUnpairedRaceTrackers: Function
   };
 
@@ -35,7 +37,7 @@ class TrackerHome extends Component {
   }
 
   componentWillUnmount() {
-    // stop state notifications if they have been activated
+    // stop state notifications if activated
     if (this.props.isBtAvailable){
       this.props.stopBtStateNotifications();
     }
@@ -68,6 +70,29 @@ class TrackerHome extends Component {
   handleSnackBarTap = (event: Object) => {
     this.props.enableBt();
   };
+
+  BtScanButton = () => {
+    let { isBtScanning, ...attrs } = this.props
+    attrs = {
+      className: "right"
+    }
+    if (isBtScanning) {
+      attrs = {
+        ...attrs,
+        onClick: this.props.stopBtDeviceScan,
+        label: 'stop'
+      }
+    } else {
+      attrs = {
+        ...attrs,
+        onClick: this.startDiscovery,
+        label: 'rescan'
+      }
+    }
+    return (
+      <FlatButton primary {...attrs} />
+    )
+  }
 
   BtSnackBar = () => {
     // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find platform
@@ -126,7 +151,7 @@ class TrackerHome extends Component {
           {isBtAvailable && isBtEnabled && <this.RtDiscoveryList />}
         </main>
         <footer>
-          {isBtAvailable && isBtEnabled && <FlatButton primary label="rescan" className="right" onClick={this.startDiscovery} />}
+          {isBtAvailable && isBtEnabled && <this.BtScanButton />}
         </footer>
         <this.BtSnackBar/>
       </div>

@@ -8,7 +8,7 @@ import TrackerList from '../components/TrackerList';
 
 const mapStateToProps = (state, ownProps) => ({
   trackers: filterStatus(state.trackers, ownProps.filter),
-  isScanning: state.bluetooth.isScanning
+  isBtScanning: state.bluetooth.isScanning
 });
 
 const filterStatus = (trackers, filter) => {

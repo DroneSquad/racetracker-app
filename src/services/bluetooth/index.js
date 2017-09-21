@@ -65,6 +65,7 @@ export class Ble {
 
   /** start bluetooth device scan */
   startDeviceScan(cb) {
+    console.log("start device scan");
     window.ble.startScan([],
       function(device) {
         cb({ type: 'device', device: device });
@@ -76,6 +77,7 @@ export class Ble {
 
   /** stop bluetooth device scan */
   stopDeviceScan(cb) {
+    console.log("stop device scan");
     window.ble.stopScan(function() {
       cb({ type: 'stop' });
     }, function() {

@@ -88,14 +88,13 @@ export const startDeviceScan = () => {
   };
 };
 
-// TODO: implement with manul option to stop scan (rescan button)
-/* export const stopDeviceScan = () => {
+export const stopDeviceScan = () => {
   return dispatch => {
     ble.stopDeviceScan(() => {
       dispatch(setIsScanning(false));
     });
   };
-}*/
+}
 
 /** initial state */
 const initialState = {

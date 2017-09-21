@@ -38,6 +38,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   startBtDeviceScan() {
     dispatch(startDeviceScan());
   },
+  stopBtDeviceScan() {
+    dispatch(stopDeviceScan());
+  },
   setBtIsScanning(value) {
     dispatch(setIsScanning(value))
   }

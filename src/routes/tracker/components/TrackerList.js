@@ -10,7 +10,7 @@ export default class TrackerList extends React.Component {
     headerText: string,
     emptyText: string,
     trackers: Array<RaceTracker>,
-    isScanning: boolean
+    isBtScanning: boolean
   };
 
   render() {
@@ -32,7 +32,7 @@ export default class TrackerList extends React.Component {
         <Subheader className="ds-blue-text">
           {this.props.headerText}
         </Subheader>
-        {this.props.isScanning ? spinner : trackers}
+        {this.props.isBtScanning ? spinner : trackers}
       </List>
     );
   }
