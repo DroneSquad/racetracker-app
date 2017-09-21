@@ -9,10 +9,7 @@ export default class TrackerDevice extends Component {
     name: string,
     rssi: string,
     isConnecting: boolean,
-    isConnected: boolean,
-    connectSuccess: Function,
-    connectFailure: Function,
-    connectDevice: Function
+    isConnected: boolean
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -31,8 +28,8 @@ export default class TrackerDevice extends Component {
 
   /** Connect to the tracker */
   connectTracker = () => {
-    this.props.connectDevice(this.props.id)
-
+    console.log("connectTracker Called");
+    // this.props.connectDevice(this.props.id)
   };
 
   /** Open the settings for the tracker */

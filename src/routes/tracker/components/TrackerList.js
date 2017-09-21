@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import TrackerDevice from './TrackerDevice';
+import TrackerDeviceContainer from '../containers/TrackerDeviceContainer';
 import { List, Subheader, ListItem } from 'material-ui';
 import loadingImg from '../../../media/ds-logo-spin.svg';
 
@@ -24,7 +24,7 @@ export default class TrackerList extends React.Component {
     let trackers =
       this.props.trackers.length > 0
         ? this.props.trackers.map(tracker =>
-            <TrackerDevice history={this.props.history} key={tracker.id} {...tracker} />
+            <TrackerDeviceContainer history={this.props.history} key={tracker.id} {...tracker} />
           )
         : <ListItem disabled primaryText={this.props.emptyText} />;
     return (

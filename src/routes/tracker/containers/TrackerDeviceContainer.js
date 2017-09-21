@@ -13,8 +13,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function, ownProps) => ({
-  connectTracker(device_id) {
-
+  connectTracker() {
+    // console.log('connectTracker: ' & device_id);
+    console.log('connectTracker: ' & ownProps.id);
   }
    /*connectSuccess() {
      console.log('connection success: ' & ownProps.id);
