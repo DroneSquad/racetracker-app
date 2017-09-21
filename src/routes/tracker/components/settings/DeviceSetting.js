@@ -5,7 +5,7 @@ import { List, ListItem, FontIcon, Divider } from 'material-ui';
 import Setting from './Setting';
 import FrequencySetting from './FrequencySetting';
 
-import { toPercent, batteryLevelIcon } from '../../../utils';
+import { toPercent, batteryLevelIcon } from '../../../../utils';
 
 export default class DeviceSettings extends Setting {
   constructor(props) {

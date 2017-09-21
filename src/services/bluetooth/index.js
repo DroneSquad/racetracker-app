@@ -58,7 +58,7 @@ export class Ble {
   stopStateNotifications(cb) {
     window.ble.stopStateNotifications(
       function() {
-        cb("State Notifications Stopped");
+        cb("Bluetooth state notifications stopped");
       }
     );
   }
@@ -69,7 +69,7 @@ export class Ble {
       function(device) {
         cb({ type: 'device', device: device });
       }, function() {
-        cb({ type: 'error', error: 'Device scanning failed to start' });
+        cb({ type: 'error', error: 'Device start scanning error' });
       });
     setTimeout(() => this.stopDeviceScan(cb), 5000);
   }
@@ -79,7 +79,7 @@ export class Ble {
     window.ble.stopScan(function() {
       cb({ type: 'stop' });
     }, function() {
-      cb({ type: 'error', error: 'Device scanning failed to stop' });
+      cb({ type: 'error', error: 'Device scanning stop error' });
     });
   }
 
@@ -89,10 +89,31 @@ export class Ble {
       function() {
         cb({ device_id: device_id, connected: true, error: null });
       }, function() {
-        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' connection failed' });
+        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' connection error' });
     });
   }
 
+  /** disconnect bluetooth device via device id */
+  disconnectDevice(cb, device_id) {
+    window.ble.disconnect(device_id,
+      function() {
+        cb({ device_id: device_id, connected: false, error: null });
+      }, function() {
+        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' disconnection error' });
+    });
+  }
+
+  /** check if a device is currently connected */
+  isConnected(cb, device_id) {
+    window.ble.isConnected(device_id,
+      function() {
+        cb({ device_id: device_id, connected: true });
+      },
+      function() {
+        cb({ device_id: device_id, connected: false });
+      }
+    );
+  }
 
 
 }

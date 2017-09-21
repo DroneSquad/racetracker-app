@@ -56,10 +56,10 @@ export default function(state = [], action: Action) {
           tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker
       );
     case CONNECTING_TRACKER:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: true } : tracker
-        );
+      return state.map(
+        tracker =>
+          tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: true } : tracker
+      );
     case DISCONNECT_TRACKER:
       return state.map(
         tracker =>

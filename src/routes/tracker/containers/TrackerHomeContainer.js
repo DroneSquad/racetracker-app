@@ -9,7 +9,7 @@ import TrackerHome from '../components/TrackerHome';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the TrackerHome:   */
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   message: state.bluetooth.message,
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,

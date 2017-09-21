@@ -14,6 +14,7 @@ export default class TrackerDevice extends Component {
     isConnecting: boolean,
     isConnected: boolean,
     connectBtDevice: Function,
+    openBtDeviceSettings: Function
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -30,14 +31,14 @@ export default class TrackerDevice extends Component {
     )
   }
 
-  /** Connect to a tracker via id */
+  /** Connect to the tracker */
   connectTracker = () => {
-    this.props.connectBtDevice(this.props.id)
+    this.props.connectBtDevice(this.props.id);
   };
 
   /** Open the tracker settings */
-  openSettings = () => {
-    // this.props.history.push('/tracker/settings', this.props.id);
+  openTrackerSettings = () => {
+    this.props.openBtDeviceSettings(this.props.id);
   };
 
   render() {
@@ -46,7 +47,7 @@ export default class TrackerDevice extends Component {
     let extraProps = { key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
     if (this.props.isConnected) {
-      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openSettings} />;
+      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openTrackerSettings} />;
     }
     return (
       <div>

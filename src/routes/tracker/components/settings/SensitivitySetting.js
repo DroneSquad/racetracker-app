@@ -3,8 +3,8 @@ import Setting from './Setting';
 
 import { Slider, FlatButton, Dialog } from 'material-ui';
 
-import loadingImg from '../../../media/ds-logo-spin.svg';
-import { toPercent } from '../../../utils';
+import loadingImg from '../../../../media/ds-logo-spin.svg';
+import { toPercent } from '../../../../utils';
 
 export default class SensitivitySetting extends Setting {
   constructor(props) {

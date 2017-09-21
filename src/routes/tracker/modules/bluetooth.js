@@ -111,6 +111,32 @@ export const connectDevice = (device_id: string) => {
   };
 };
 
+export const disconnectDevice = (device_id: string) => {
+  return dispatch => {
+    ble.disconnectDevice(
+      (response) => {
+        dispatch(disconnectTracker(response.device_id));
+        if (response.error) {
+          // TODO: add in some proper logging for errors
+          console.log(response.error);
+        }
+    }, device_id);
+  };
+};
+
+export const isConnected = (device_id: string) => {
+  return dispatch => {
+    ble.isConnected(
+      (response) => {
+      if (response.connected) {
+        dispatch(connectTracker(response.device_id));
+      } else {
+        dispatch(disconnectTracker(response.device_id));
+      }
+    }, device_id);
+  };
+};
+
 /** initial state */
 const initialState = {
   message:'',
@@ -118,7 +144,7 @@ const initialState = {
   isAvailable: false,
   isEnabled: false,
   isScanning: false,
-  isConnected: false
+  isConnected: false  // connection status, linked with total connected trackers array
 };
 
 /** reducers */
@@ -140,6 +166,11 @@ export default function(state = initialState, action: Action) {
       return {
         ...state,
         isScanning: action.payload
+      };
+    case BT_IS_CONNECTED:
+      return {
+        ...state,
+        isConnected: action.payload
       };
     default:
       return { ...state, message:'' };

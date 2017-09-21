@@ -1,5 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import { connectDevice } from '../modules/bluetooth';
 
 import TrackerDevice from '../components/TrackerDevice';
@@ -17,6 +19,9 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch: Function) => ({
   connectBtDevice(device_id) {
     dispatch(connectDevice(device_id))
+  },
+  openBtDeviceSettings(device_id) {
+    dispatch(push('/tracker/settings', device_id));
   }
 });
 
