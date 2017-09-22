@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ListItem, FontIcon, IconButton } from 'material-ui';
+import { ListItem, /*FontIcon, IconButton*/ } from 'material-ui';
 
 import PilotAvatar from '../../../components/app/PilotAvatar';
 
@@ -14,13 +14,13 @@ export default class extends React.Component {
       </div>
     );
     let avatar = <PilotAvatar src={this.state.avatar} />;
-    let icon = (
-      <IconButton
-        style={{ padding: '0' }}
-        onTouchTap={this.props.onClickIcon}
-        children={<FontIcon className="mdi mdi-clipboard-outline" />}
-      />
-    );
+    // let icon = (
+    //   <IconButton
+    //     style={{ padding: '0' }}
+    //     onTouchTap={this.props.onClickIcon}
+    //     children={<FontIcon className="mdi mdi-clipboard-outline" />}
+    //   />
+    // );
     return (
       <ListItem
         id={this.uuid}

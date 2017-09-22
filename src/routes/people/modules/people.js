@@ -34,7 +34,6 @@ const defaultState = {
 
 /** The reducer for the state */
 export default function(state = defaultState, action) {
-  console.log(action);
   switch (action.type) {
     case PEOPLE_REQUEST:
       return { ...state, pilots: null };

@@ -39,6 +39,4 @@ export default class extends Person {
   componentWillUnmount() {
     this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
   }
-
-
 }

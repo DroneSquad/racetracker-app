@@ -1,6 +1,6 @@
 import People from '../components/People';
 
-import reducer, { groupPilots } from '../modules/people';
+import reducer from '../modules/people';
 
 import { connect } from '../../../store';
 
