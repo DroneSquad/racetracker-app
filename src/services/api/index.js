@@ -35,7 +35,7 @@ export class Api {
 
   /** Create the request, todo add error handling and add middleware */
   request(base, endpoint, options) {
-    return base(endpoint, options).then(request => ({ ...request.data, $request: request }));
+    return base(endpoint, options).then(response => ({ ...response.data, $response: response }));
   }
 
   /** Return urls for things, genneraly used for redirects or picture */
@@ -134,7 +134,7 @@ export class Api {
     pilot: id => {
       return axios.get(`${this._config.api}/pilot/${notNull(id, 'id')}`).then(response => response.data);
     }
-  }
+  };
 }
 
 export default Api.get();

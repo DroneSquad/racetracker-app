@@ -26,7 +26,7 @@ export default class Group extends React.Component {
     let icon = <FontIcon className="mdi mdi-account ds-blue-text" />;
     let avatar = id => <PilotAvatar key={`${id}`} size={25} src={api.urls.avatar(id)} />;
     return (
-      <ListItem id={id} className="group-item" leftIcon={icon}>
+      <ListItem id={id} className="group-item" leftIcon={icon} onTouchTap={() => this.props.showMembers(this.id)}>
         {members && _.map(members, member => avatar(member.pilotId))}
         {!members && <LoadingSpinner />}
       </ListItem>

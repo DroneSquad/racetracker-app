@@ -1,6 +1,9 @@
 import Group from '../components/Group';
 
+import { push } from 'react-router-redux';
+
 import reducer, { requestGroup, requestMembers } from '../modules/group';
+import { groupPilots } from '../../people/modules/people';
 
 import { connect } from '../../../store';
 
@@ -21,7 +24,11 @@ export default class extends Group {
   /** Currently needed for the connect decorator */
   static mapDispatchToProps = dispatch => ({
     requestGroup: id => dispatch(requestGroup(id)),
-    requestMembers: id => dispatch(requestMembers(id, { order: 'id DESC', limit: MEMBER_LIMIT }))
+    requestMembers: id => dispatch(requestMembers(id, { order: 'id DESC', limit: MEMBER_LIMIT })),
+    showMembers: id => {
+      dispatch(groupPilots(id));
+      dispatch(push('/people'));
+    }
   });
 
   componentWillMount() {

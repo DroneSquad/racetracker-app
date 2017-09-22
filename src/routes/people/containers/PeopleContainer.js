@@ -1,6 +1,6 @@
 import People from '../components/People';
 
-import reducer from '../modules/people';
+import reducer, { groupPilots } from '../modules/people';
 
 import { connect } from '../../../store';
 
@@ -8,12 +8,17 @@ import { connect } from '../../../store';
 export default class extends People {
 
   static mapStateToProps = states => ({
-    people: states.people
+    pilots: states.people.pilots,
+    fab: false, // the fab for the view
   });
 
   /** Currently needed for the connect decorator */
   static mapDispatchToProps = dispatch => ({
+    fetchPilots: () => {},
+    onNewPilot: () => {}
   });
 
-
+  componentWillMount() {
+    this.props.fetchPilots();
+  }
 }
