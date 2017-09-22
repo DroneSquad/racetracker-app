@@ -4,11 +4,10 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 
 import Nav from './Nav';
-import Chat from '../../chat/Chat';
-import Home from '../../home/Home';
-import Fly from '../../fly/Fly';
-import FourOhFour from '../../404/FourOhFour';
-
+import Chat from '../../../routes/chat/components/Chat';
+import Home from '../../../routes/home/components/Home';
+import Fly from '../../../routes/fly/components/Fly';
+import FourOhFour from '../../404/components/FourOhFour';
 import Group from '../../../routes/group/containers/GroupContainer';
 
 import logo from '../../../media/ds-full-logo-horizontal.svg';

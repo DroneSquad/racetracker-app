@@ -16,9 +16,9 @@ import {
   MenuItem
 } from 'material-ui';
 
-import PilotAvatar from '../app/PilotAvatar';
-import { lazyLoad } from '../../utils';
-import fetch from '../../fetch';
+import PilotAvatar from '../../../global/app/PilotAvatar';
+import { lazyLoad } from '../../../utils';
+import fetch from '../../../fetch';
 
 /** Used to display the pilot info for the heat builder */
 export class Pilot extends React.Component {
@@ -63,15 +63,14 @@ export class Pilot extends React.Component {
         </TableRowColumn>
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn className="no-clip">0:01:00</TableRowColumn>
-        <TableRowColumn className="no-clip">0:01:00</TableRowColumn>
-        <TableRowColumn>F7</TableRowColumn>
+        <TableRowColumn>0</TableRowColumn>
       </TableRow>
     );
   }
 }
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
-export default class RacingHeat extends React.Component {
+export default class HeatResults extends React.Component {
   /** The drop down menu for the options menu */
   menuDropdown = () => {
     let styleIcons = { margin: '0 0 0 8px' };
@@ -104,8 +103,7 @@ export default class RacingHeat extends React.Component {
               <TableHeaderColumn className="pilot-name">Pilot</TableHeaderColumn>
               <TableHeaderColumn>Laps</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
-              <TableHeaderColumn>Total</TableHeaderColumn>
-              <TableHeaderColumn>Band</TableHeaderColumn>
+              <TableHeaderColumn>Points</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>

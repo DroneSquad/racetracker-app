@@ -3,7 +3,7 @@ import uuid from 'uuid';
 
 import { ListItem, FontIcon, IconButton } from 'material-ui';
 
-import PilotAvatar from '../../../components/app/PilotAvatar';
+import PilotAvatar from '../../../global/app/PilotAvatar';
 import { lazyLoad } from '../../../utils';
 
 import api from '../../../services/api';

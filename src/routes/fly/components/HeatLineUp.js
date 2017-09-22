@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { AppBar, MenuItem, SelectField, List, ListItem, Divider } from 'material-ui';
 
-import { historyBackButton } from '../../utils';
+import { historyBackButton } from '../../../utils';
 
 /** The Heat Selector for Pilots */
 class HeatSelector extends React.Component {

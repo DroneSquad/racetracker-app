@@ -3,16 +3,17 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from '../../routes/AuthRoute';
-import Main from './main/Main';
+
+import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
 import Register from '../../routes/login/containers/RegisterContainer';
 import Login from '../../routes/login/containers/LoginContainer';
 import Tracker from '../../routes/tracker';
-import NewGuest from '../people/NewGuest';
-import NewPilot from '../people/NewPilot';
+import NewGuest from '../../routes/people/components/NewGuest';
+import NewPilot from '../../routes/people/components/NewPilot';
 import People from '../../routes/people/containers/PeopleContainer';
-import HeatLineUp from '../fly/HeatLineUp';
-import HeatResultEdit from '../fly/HeatResultEdit';
+import HeatLineUp from '../../routes/fly/components/HeatLineUp';
+import HeatResultEdit from '../../routes/fly/components/HeatResultEdit';
 
 /** This is the main app that the user will see, one will get here after loading is done */
 export default class App extends React.Component {

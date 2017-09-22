@@ -15,9 +15,9 @@ import {
   IconButton
 } from 'material-ui';
 
-import PilotAvatar from '../app/PilotAvatar';
-import fetch from '../../fetch';
-import { lazyLoad } from '../../utils';
+import PilotAvatar from '../../../global/app/PilotAvatar';
+import fetch from '../../../fetch';
+import { lazyLoad } from '../../../utils';
 
 /** Used to display the pilot info for the heat builder */
 export class Pilot extends React.Component {

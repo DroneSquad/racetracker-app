@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-import Loading from './components/app/loading/Loading';
+import Loading from './global/app/components/Loading';
 
 // css styling
 import 'mdi/css/materialdesignicons.css';
@@ -31,7 +31,7 @@ ReactDOM.render(
 
 // hot module swapping (development use only)
 if (module.hot) {
-  module.hot.accept('./components/app/loading/Loading', () => {
+  module.hot.accept('./global/app/components/Loading', () => {
     ReactDOM.render(
       <AppContainer>
         <Loading />

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AppBar, TextField, List, ListItem, FontIcon } from 'material-ui';
 
-import { historyBackButton } from '../../utils';
+import { historyBackButton } from '../../../utils';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class NewGuest extends React.Component {

@@ -14,7 +14,7 @@ import {
   IconButton
 } from 'material-ui';
 
-import { historyBackButton } from '../../utils';
+import { historyBackButton } from '../../../utils';
 
 class HeatResultRow extends React.Component {
   static id = 0;
