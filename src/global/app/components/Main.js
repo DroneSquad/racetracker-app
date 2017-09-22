@@ -5,7 +5,7 @@ import AppBar from 'material-ui/AppBar';
 
 import Nav from './Nav';
 import Chat from '../../../routes/chat/components/Chat';
-import Home from '../../../routes/home/components/Home';
+import Home from '../../../routes/home';
 import Fly from '../../../routes/fly/components/Fly';
 import FourOhFour from '../../404/components/FourOhFour';
 import Group from '../../../routes/group/containers/GroupContainer';

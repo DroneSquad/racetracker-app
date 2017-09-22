@@ -3,8 +3,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import api from '../../../services/api';
-import LogoutContainer from '../../login/containers/LogoutContainer';
+import api from '../../services/api';
+import LogoutContainer from '../login/containers/LogoutContainer';
 
 export default class Home extends React.Component {
   state = { pilot: {} };
