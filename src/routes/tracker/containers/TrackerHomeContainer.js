@@ -1,6 +1,14 @@
 // @flow
 import { connect } from 'react-redux';
-import { isAvailable, isEnabled, enable, startStateNotifications, stopStateNotifications, startDeviceScan, stopDeviceScan } from '../modules/bluetooth';
+import {
+  isAvailable,
+  isEnabled,
+  enable,
+  startStateNotifications,
+  stopStateNotifications,
+  startDeviceScan,
+  stopDeviceScan
+} from '../modules/bluetooth';
 import { clearUnpairedTrackers } from '../modules/racetracker';
 import TrackerHome from '../components/TrackerHome';
 
@@ -9,7 +17,7 @@ import TrackerHome from '../components/TrackerHome';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the TrackerHome:   */
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   message: state.bluetooth.message,
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,

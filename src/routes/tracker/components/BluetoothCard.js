@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
+import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 
 export default class BluetoothCard extends Component {
@@ -22,10 +22,10 @@ export default class BluetoothCard extends Component {
       <Card>
         <CardTitle title={this.props.title} subtitle={this.props.subtitle} />
         <CardText>
-        {this.props.text}
+          {this.props.text}
         </CardText>
         <CardActions>
-          {!!this.props.button && <FlatButton label={this.props.button} onClick={this.handleButtonClick}/>}
+          {!!this.props.button && <FlatButton label={this.props.button} onClick={this.handleButtonClick} />}
         </CardActions>
       </Card>
     );
