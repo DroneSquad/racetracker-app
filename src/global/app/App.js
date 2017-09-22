@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
-import AuthRoute from '../../routes/AuthRoute';
+import AuthRoute from './AuthRoute';
 
 import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
