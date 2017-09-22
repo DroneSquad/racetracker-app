@@ -154,7 +154,7 @@ class TrackerHome extends Component {
             title="Enable Bluetooth"
             subtitle="Bluetooth is required to use TBS RaceTrackers"
             text="Enable Bluetooth by clicking the button below"
-            button='ENABLE' />}
+            button='enable' />}
           {isBtAvailable && isBtEnabled && <this.RtDiscoveryList />}
         </main>
         <footer>

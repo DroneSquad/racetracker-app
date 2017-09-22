@@ -89,7 +89,7 @@ export class Ble {
       function() {
         cb({ device_id: device_id, connected: true, error: null });
       }, function() {
-        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' connection error' });
+        cb({ device_id: device_id, connected: false, error: 'Device ' + device_id + ' connection error' });
     });
   }
 
@@ -99,7 +99,7 @@ export class Ble {
       function() {
         cb({ device_id: device_id, connected: false, error: null });
       }, function() {
-        cb({ device_id: device_id, connected: false, error: 'Device ' & device_id & ' disconnection error' });
+        cb({ device_id: device_id, connected: false, error: 'Device ' + device_id + ' disconnection error' });
     });
   }
 
