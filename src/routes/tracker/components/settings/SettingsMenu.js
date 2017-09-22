@@ -24,12 +24,8 @@ export default class SettingsMenu extends React.Component {
           />
         </header>
         <main>
-
-
-{device_id}
-MAIN AREA HERE
-
-
+          {device_id}
+          MAIN AREA HERE
         </main>
       </div>
     );

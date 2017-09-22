@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connectBtDevice(device_id) {
-    dispatch(connectDevice(device_id))
+    dispatch(connectDevice(device_id));
   },
   openBtDeviceSettings(device_id) {
     dispatch(push('/tracker/settings', device_id));

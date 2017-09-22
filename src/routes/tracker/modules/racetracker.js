@@ -52,22 +52,19 @@ export default function(state = [], action: Action) {
       );
     case CONNECT_TRACKER:
       return state.map(
-        tracker =>
-          tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: true, isConnecting: false } : tracker)
       );
     case CONNECTING_TRACKER:
       return state.map(
-        tracker =>
-          tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: true } : tracker
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: true } : tracker)
       );
     case DISCONNECT_TRACKER:
       return state.map(
-        tracker =>
-          tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker
+        tracker => (tracker.id === action.payload ? { ...tracker, isConnected: false, isConnecting: false } : tracker)
       );
     case CLEAR_UNPAIRED_TRACKERS:
       return state.filter(tracker => tracker.isConnected);
     default:
       return state;
   }
-};
+}

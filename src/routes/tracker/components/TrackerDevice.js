@@ -28,8 +28,8 @@ export default class TrackerDevice extends Component {
           {rssiToPercentage(props.rssi)}
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   /** Connect to the tracker */
   connectTracker = () => {

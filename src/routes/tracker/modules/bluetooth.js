@@ -31,7 +31,7 @@ export const setIsScanning = (value: boolean) => ({
 
 export const isAvailable = () => {
   return dispatch => {
-    ble.isAvailable((response) => {
+    ble.isAvailable(response => {
       dispatch(setIsAvailable({ value: response.value, message: response.message }));
     });
   };
@@ -39,7 +39,7 @@ export const isAvailable = () => {
 
 export const isEnabled = () => {
   return dispatch => {
-    ble.isEnabled((response) => {
+    ble.isEnabled(response => {
       dispatch(setIsEnabled({ value: response.value, message: response.message }));
     });
   };
@@ -47,7 +47,7 @@ export const isEnabled = () => {
 
 export const enable = () => {
   return dispatch => {
-    ble.enable((response) => {
+    ble.enable(response => {
       dispatch(setIsEnabled({ value: response.value, message: response.message }));
     });
   };
@@ -55,7 +55,7 @@ export const enable = () => {
 
 export const startStateNotifications = () => {
   return dispatch => {
-    ble.startStateNotifications((response) => {
+    ble.startStateNotifications(response => {
       dispatch(setIsEnabled({ value: response.value, message: response.message }));
     });
   };
@@ -63,7 +63,7 @@ export const startStateNotifications = () => {
 
 export const stopStateNotifications = () => {
   return dispatch => {
-    ble.stopStateNotifications((response) => {
+    ble.stopStateNotifications(response => {
       dispatch(noOp());
     });
   };
@@ -72,17 +72,17 @@ export const stopStateNotifications = () => {
 export const startDeviceScan = () => {
   return dispatch => {
     dispatch(setIsScanning(true));
-    ble.startDeviceScan((response) => {
+    ble.startDeviceScan(response => {
       if (response.type === 'device') {
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
             dispatch(discoverTracker(response.device));
           }
         }
-      };
+      }
       if (response.type === 'stop') {
         dispatch(setIsScanning(false));
-      };
+      }
       if (response.type === 'error') {
         // TODO: add in some proper logging for errors
         console.log(response.error);
@@ -97,13 +97,12 @@ export const stopDeviceScan = () => {
       dispatch(setIsScanning(false));
     });
   };
-}
+};
 
 export const connectDevice = (device_id: string) => {
   return dispatch => {
     dispatch(connectingTracker(device_id));
-    ble.connectDevice(
-      (response) => {
+    ble.connectDevice(response => {
       if (response.connected) {
         dispatch(connectTracker(response.device_id));
       } else {
@@ -115,21 +114,19 @@ export const connectDevice = (device_id: string) => {
 
 export const disconnectDevice = (device_id: string) => {
   return dispatch => {
-    ble.disconnectDevice(
-      (response) => {
-        dispatch(disconnectTracker(response.device_id));
-        if (response.error) {
-          // TODO: add in some proper logging for errors
-          console.log(response.error);
-        }
+    ble.disconnectDevice(response => {
+      dispatch(disconnectTracker(response.device_id));
+      if (response.error) {
+        // TODO: add in some proper logging for errors
+        console.log(response.error);
+      }
     }, device_id);
   };
 };
 
 export const isConnected = (device_id: string) => {
   return dispatch => {
-    ble.isConnected(
-      (response) => {
+    ble.isConnected(response => {
       if (response.connected) {
         dispatch(connectTracker(response.device_id));
       } else {
@@ -141,12 +138,12 @@ export const isConnected = (device_id: string) => {
 
 /** initial state */
 const initialState = {
-  message:'',
+  message: '',
   error: null,
   isAvailable: false,
   isEnabled: false,
   isScanning: false,
-  isConnected: false  // connection status, linked with total connected trackers array
+  isConnected: false // connection status, linked with total connected trackers array
 };
 
 /** reducers */
@@ -175,6 +172,6 @@ export default function(state = initialState, action: Action) {
         isConnected: action.payload
       };
     default:
-      return { ...state, message:'' };
+      return { ...state, message: '' };
   }
-};
+}

@@ -1,5 +1,3 @@
-
-
 /** The default state for the people page */
 const defaultState = {};
 

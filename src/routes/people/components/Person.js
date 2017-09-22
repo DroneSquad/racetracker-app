@@ -21,11 +21,14 @@ export default class extends React.Component {
 
   componentDidMount() {
     this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
-      api.public.pilot(this.props.id)
-        .then(pilot => this.setState({
-          name: pilot.callsign || pilot.display || 'No Pilot Name',
-          loading: false
-        }))
+      api.public
+        .pilot(this.props.id)
+        .then(pilot =>
+          this.setState({
+            name: pilot.callsign || pilot.display || 'No Pilot Name',
+            loading: false
+          })
+        )
         .catch(() => this.setState({ loading: false }));
     });
   }

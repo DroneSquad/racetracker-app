@@ -134,7 +134,7 @@ export class Api {
     pilot: id => {
       return axios.get(`${this._config.api}/pilot/${notNull(id, 'id')}`).then(response => response.data);
     }
-  }
+  };
 }
 
 export default Api.get();
