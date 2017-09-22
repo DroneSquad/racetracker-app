@@ -67,6 +67,7 @@ export class Ble {
   startDeviceScan(cb) {
     window.ble.startScan([],
       function(device) {
+        console.log(device);
         cb({ type: 'device', device: device });
       }, function() {
         cb({ type: 'error', error: 'Device start scanning error' });

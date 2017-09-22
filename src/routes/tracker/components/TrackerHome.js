@@ -24,7 +24,8 @@ class TrackerHome extends Component {
     stopBtStateNotifications: Function,
     startBtDeviceScan: Function,
     stopBtDeviceScan: Function,
-    clearUnpairedRaceTrackers: Function
+    clearUnpairedRaceTrackers: Function,
+    connectedTrackers: Array<RaceTracker>
   };
 
   componentWillMount() {
@@ -44,6 +45,11 @@ class TrackerHome extends Component {
 
   /** Watch state.properties for changes on bluetooth enabled state */
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.connectedTrackers.length !== this.props.connectedTrackers.length) {
+      console.log("-------------------")
+      console.log(prevProps.connectedTrackers);
+      console.log(this.props.connectedTrackers);
+    }
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         this.props.startBtStateNotifications();

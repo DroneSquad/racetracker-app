@@ -74,8 +74,10 @@ export const startDeviceScan = () => {
     dispatch(setIsScanning(true));
     ble.startDeviceScan((response) => {
       if (response.type === 'device') {
-        if (response.device.name.startsWith('TBSRT')) {
-          dispatch(discoverTracker(response.device));
+        if (response.device.name) {
+          if (response.device.name.startsWith('TBSRT')) {
+            dispatch(discoverTracker(response.device));
+          }
         }
       };
       if (response.type === 'stop') {
