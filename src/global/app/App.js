@@ -4,7 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
 
-import Main from './components/Main';
+import Main from './containers/MainContainer';
 import Forgot from '../../routes/login/containers/ForgotContainer';
 import Register from '../../routes/login/containers/RegisterContainer';
 import Login from '../../routes/login/containers/LoginContainer';

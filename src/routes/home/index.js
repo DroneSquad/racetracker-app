@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
-import LogoutContainer from '../login/containers/LogoutContainer';
+import Logout from '../login/containers/LogoutContainer';
 
 export default class Home extends React.Component {
   state = { pilot: {} };
@@ -26,7 +26,7 @@ export default class Home extends React.Component {
         <hr />
         <Link to="/group/82">A Group</Link>
         <hr />
-        <LogoutContainer />
+        <Logout />
         <pre>{JSON.stringify(this.state.pilot, '&nbsp;', 2)}</pre>
       </div>
     );

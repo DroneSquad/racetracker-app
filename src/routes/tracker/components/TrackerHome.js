@@ -7,8 +7,8 @@ import { Snackbar } from 'material-ui';
 
 import { historyBackButton } from '../../../utils';
 
-import BluetoothCardContainer from '../containers/BluetoothCardContainer';
-import TrackerListContainer from '../containers/TrackerListContainer';
+import BluetoothCard from '../containers/BluetoothCardContainer';
+import TrackerList from '../containers/TrackerListContainer';
 
 class TrackerHome extends Component {
   props: {
@@ -89,14 +89,14 @@ class TrackerHome extends Component {
   RtDiscoveryList = () => {
     return (
       <div>
-        <TrackerListContainer
+        <TrackerList
           history={this.props.history}
           filter="SHOW_CONNECTED"
           headerText="Connected RaceTrackers"
           emptyText="No connected race trackers"
         />
         <Divider />
-        <TrackerListContainer
+        <TrackerList
           history={this.props.history}
           filter="SHOW_AVAILABLE"
           headerText="Available RaceTrackers"
@@ -119,7 +119,7 @@ class TrackerHome extends Component {
         </header>
         <main>
           {!isBtAvailable &&
-            <BluetoothCardContainer
+            <BluetoothCard
               title="No Bluetooth LE Available"
               subtitle="This device does not support Bluetooth LE"
               text="The Cordova plugin for Bluetooth LE support is missing"
@@ -127,7 +127,7 @@ class TrackerHome extends Component {
             />}
           {isBtAvailable &&
             !isBtEnabled &&
-            <BluetoothCardContainer
+            <BluetoothCard
               title="Enable Bluetooth"
               subtitle="Bluetooth LE is required to use TBS RaceTrackers"
               text="Enable Bluetooth by clicking the button below"

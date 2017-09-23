@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
@@ -15,7 +15,11 @@ import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
-export default class Main extends React.Component {
+export default class Main extends Component {
+  props: {
+    isDeviceConnected: boolean
+  };
+
 
   /* RtDisconnectSnackBar = () => {
     // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find platform
@@ -35,6 +39,26 @@ export default class Main extends React.Component {
     return <Snackbar {...attrs} />;
   };*/
 
+
+  /*BtSnackBar = () => {
+     // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find platform
+     let { isBtEnabled, isBtAvailable, message, ...attrs } = this.props;
+     attrs = {
+       open: !!message,
+       message: message,
+       autoHideDuration: 5000
+     };
+     if (isBtAvailable && !isBtEnabled) {
+       attrs = {
+         ...attrs,
+         action: 'ENABLE',
+         onTouchTap: this.handleSnackBarTap
+       };
+     }
+     return <Snackbar {...attrs} />;
+   };
+   */
+
   render() {
     let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index
@@ -42,6 +66,7 @@ export default class Main extends React.Component {
       <content className="main">
         <header>
           <AppBar title={<img className="logo" src={logo} alt="" />} />
+
         </header>
         <main>
           <Switch>
@@ -52,8 +77,10 @@ export default class Main extends React.Component {
             <Route path="/" exact component={Home} />
             <Route path="/" component={() => <Redirect to="/404" />} /> {/* Must be last */}
           </Switch>
+
         </main>
         <footer>
+
           <Nav history={history} />
         </footer>
 
