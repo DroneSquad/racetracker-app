@@ -1,9 +1,9 @@
 /** The Ble (BluetoothLE) class handles bluetooth connection/communication on the device */
-
-const BT_SCAN_DURATION = 5000;  // time duration to run discovery scan
+import config from './config.json';
 
 export class Ble {
   constructor() {
+    this._config = { ...config };
     this._scanCB = null;
   }
 
@@ -84,8 +84,8 @@ export class Ble {
         cb({ error: err });
       }
     );
-    // for destruction if timeout is overridden by manual stop
-    this._scanCB = setTimeout(() => this.deviceScanComplete(cb), BT_SCAN_DURATION);
+    // for destruction if timeout is overridden by a manual stop
+    this._scanCB = setTimeout(() => this.deviceScanComplete(cb), this._config.scan_period);
   }
 
   /** stop/complete bluetooth device scan */
