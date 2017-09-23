@@ -1,15 +1,16 @@
 // @flow
 import { connect } from 'react-redux';
+
 import {
   isAvailable,
   isEnabled,
   enable,
   startStateNotifications,
-  stopStateNotifications,
   startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
-import { clearUnpairedTrackers } from '../modules/racetracker';
+import { clearAvailRtList } from '../modules/racetracker';
+
 import TrackerHome from '../components/TrackerHome';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -18,38 +19,21 @@ import TrackerHome from '../components/TrackerHome';
     component - in this case, the TrackerHome:   */
 
 const mapStateToProps = state => ({
-  message: state.bluetooth.message,
+  btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
-  connectedTrackers: state.trackers.filter(t => t.isConnected)
+  // connectedTrackers: state.trackers.filter(t => t.isConnected)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  checkIsBtAvailable() {
-    dispatch(isAvailable());
-  },
-  checkIsBtEnabled() {
-    dispatch(isEnabled());
-  },
-  enableBt() {
-    dispatch(enable());
-  },
-  startBtStateNotifications() {
-    dispatch(startStateNotifications());
-  },
-  stopBtStateNotifications() {
-    dispatch(stopStateNotifications());
-  },
-  clearUnpairedRaceTrackers() {
-    dispatch(clearUnpairedTrackers());
-  },
-  startBtDeviceScan() {
-    dispatch(startDeviceScan());
-  },
-  stopBtDeviceScan() {
-    dispatch(stopDeviceScan());
-  }
+  checkIsBtAvailable: () => dispatch(isAvailable()),
+  checkIsBtEnabled: () => dispatch(isEnabled()),
+  enableBt: () => dispatch(enable()),
+  startBtStateNotifications: () => dispatch(startStateNotifications()),
+  clearAvailRtList: () => dispatch(clearAvailRtList()),
+  startBtDeviceScan: () => dispatch(startDeviceScan()),
+  stopBtDeviceScan: () => dispatch(stopDeviceScan())
 });
 
 const TrackerHomeContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerHome);

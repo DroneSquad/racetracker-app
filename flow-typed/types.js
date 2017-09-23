@@ -13,7 +13,9 @@ export type RaceTracker = {
   rssi: string,
   id: string,
   isConnecting: boolean,
-  isConnected: boolean
+  isConnected: boolean,
+  recover: boolean,
+  reconnect: number
 };
 
 export type AuthToken = {

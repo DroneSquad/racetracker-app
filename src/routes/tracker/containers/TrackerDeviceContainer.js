@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { connectDevice } from '../modules/bluetooth';
+import { connectTracker } from '../modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 
@@ -17,12 +17,8 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  connectBtDevice(device_id) {
-    dispatch(connectDevice(device_id));
-  },
-  openBtDeviceSettings(device_id) {
-    dispatch(push('/tracker/settings', device_id));
-  }
+  connect: device_id => dispatch(connectTracker(device_id)),
+  openTrackerSettings: device_id => dispatch(push('/tracker/settings', device_id))
 });
 
 const TrackerDeviceContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);

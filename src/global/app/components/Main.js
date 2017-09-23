@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
+import { Snackbar } from 'material-ui';
 
 import Nav from './Nav';
 import Chat from '../../../routes/chat/components/Chat';
@@ -15,6 +16,25 @@ import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
 export default class Main extends React.Component {
+
+  /* RtDisconnectSnackBar = () => {
+    // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find platform
+    let { isBtEnabled, isBtAvailable, message, ...attrs } = this.props;
+    attrs = {
+      open: !!message,
+      message: message,
+      autoHideDuration: 5000
+    };
+    if (isBtAvailable && !isBtEnabled) {
+      attrs = {
+        ...attrs,
+        action: 'enable',
+        onTouchTap: this.handleSnackBarTap
+      };
+    }
+    return <Snackbar {...attrs} />;
+  };*/
+
   render() {
     let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index
@@ -36,6 +56,7 @@ export default class Main extends React.Component {
         <footer>
           <Nav history={history} />
         </footer>
+
       </content>
     );
   }

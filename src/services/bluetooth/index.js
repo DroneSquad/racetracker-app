@@ -1,5 +1,12 @@
-/** The Ble (BluetoothLE) class handles bluetooth connection/communication with the device */
+/** The Ble (BluetoothLE) class handles bluetooth connection/communication on the device */
+
+const BT_SCAN_DURATION = 5000;  // time duration to run discovery scan
+
 export class Ble {
+  constructor() {
+    this._scanCB = null;
+  }
+
   static get() {
     if (!Ble._instance) {
       Ble._instance = new Ble();
@@ -9,91 +16,110 @@ export class Ble {
 
   /** check if ble is available on this device */
   isAvailable(cb) {
-    // does window have a ref for the cordova ble plugin
+    // check for the presence of the cordova plugin on the window
     let bs = 'ble' in window ? true : false;
-    let bm = bs ? '' : 'This device does not support Bluetooth LE';
-    cb({ value: bs, message: bm });
+    cb(bs);
   }
 
   /** check if ble is enabled on this device */
   isEnabled(cb) {
     window.ble.isEnabled(
       function() {
-        cb({ value: true, message: '' });
+        cb(true);
       },
       function() {
-        cb({ value: false, message: 'Enable Bluetooth' });
+        cb(false);
       }
     );
   }
 
-  /** give user dialog to enable bluetooth */
+  /** present a user dialog to enable ble [ANDROID ONLY] */
   enable(cb) {
     window.ble.enable(
       function() {
-        cb({ value: true, message: '' });
+        cb({ value: true });
       },
       function() {
-        cb({ value: false, message: 'Enable Bluetooth' });
+        let err = new Error('Bluetooth was not enabled');
+        cb({ value: false, error: err });
       }
     );
   }
 
-  /** get updated when the state of bluetooth changes on/off */
+  /** get notifications when the state of bluetooth changes */
   startStateNotifications(cb) {
     window.ble.startStateNotifications(function(btState) {
+      // only watch for on/off state changes
       if (btState === 'on') {
-        cb({ value: true, message: '' });
+        cb({ value: true });
       }
       if (btState === 'off') {
-        cb({ value: false, message: 'Enable Bluetooth' });
+        cb({ value: false });
       }
+    }, function(btState) {
+      let err = Error('Bluetooth state change error: ' + btState);
+      cb({ error: err });
     });
   }
 
-  /** turn off bluetooth state notifications */
+  /** turn off bluetooth state change notifications */
   stopStateNotifications(cb) {
-    window.ble.stopStateNotifications(function() {
-      cb('Bluetooth state notifications stopped');
+    window.ble.stopStateNotifications(
+      null, // successfully stopped notifications
+      function() {
+        let err = Error('Error stopping device Bluetooth state notifications');
+        cb({ value: false, error: err });
     });
   }
 
-  /** start bluetooth device scan */
+  /** start bluetooth device discovery scan */
   startDeviceScan(cb) {
     window.ble.startScan(
-      [],
+      [], // array of services to scan for
       function(device) {
-        console.log(device);
-        cb({ type: 'device', device: device });
+        cb({ device: device }); // callback fired on each device discovery
       },
       function() {
-        cb({ type: 'error', error: 'Device start scanning error' });
+        let err = Error('Error during Bluetooth device discovery');
+        cb({ error: err });
       }
     );
-    setTimeout(() => this.stopDeviceScan(cb), 5000);
+    // for destruction if timeout is overridden by manual stop
+    this._scanCB = setTimeout(() => this.deviceScanComplete(cb), BT_SCAN_DURATION);
   }
 
-  /** stop bluetooth device scan */
-  stopDeviceScan(cb) {
+  /** stop/complete bluetooth device scan */
+  deviceScanComplete(cb) {
     window.ble.stopScan(
-      function() {
-        cb({ type: 'stop' });
-      },
-      function() {
-        cb({ type: 'error', error: 'Device scanning stop error' });
-      }
+     function () {
+       cb({}); // scan successfully stopped
+     },
+     function() {
+       let err = Error('Error stopping Bluetooth device discovery');
+       cb({ error: err });
+     }
     );
   }
 
-  /** connect device to bluetooth device via device id */
+  /** screw the timeout, i want that mickey mouse shit stopped right now! */
+  stopDeviceScan(cb) {
+    // kill the timeout w/ anon function, then recall complete
+    if (this._scanCB) {
+      clearTimeout(this._scanCB);
+      this._scanCB = null;
+    }
+    this.deviceScanComplete(cb);
+  }
+
+  /** connect to bluetooth device via device id */
   connectDevice(cb, device_id) {
     window.ble.connect(
       device_id,
-      function() {
-        cb({ device_id: device_id, connected: true, error: null });
+      function(device) {  // callback fired on successful device connection
+        cb({ device: device, connected: true });
       },
-      function() {
-        cb({ device_id: device_id, connected: false, error: 'Device ' + device_id + ' connection error' });
+      function(device) { // callback fired on device disconnection/error
+        cb({ device: device, connected: false });
       }
     );
   }
@@ -103,16 +129,17 @@ export class Ble {
     window.ble.disconnect(
       device_id,
       function() {
-        cb({ device_id: device_id, connected: false, error: null });
+        cb({ device_id: device_id, connected: false });
       },
       function() {
-        cb({ device_id: device_id, connected: false, error: 'Device ' + device_id + ' disconnection error' });
+        let err = Error('Error disconnecting Bluetooth device: ' + device_id);
+        cb({ error: err });
       }
     );
   }
 
-  /** check if a device is currently connected */
-  isConnected(cb, device_id) {
+  /** check if a device is currently connected w/ device id*/
+  isDeviceConnected(cb, device_id) {
     window.ble.isConnected(
       device_id,
       function() {
@@ -123,6 +150,7 @@ export class Ble {
       }
     );
   }
+
 }
 
 export default Ble.get();

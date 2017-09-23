@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 
 import './tracker-home.css';
-import { Snackbar } from 'material-ui';
 import { AppBar, Divider, FlatButton } from 'material-ui';
+import { Snackbar } from 'material-ui';
 
 import { historyBackButton } from '../../../utils';
 
@@ -12,46 +12,33 @@ import TrackerListContainer from '../containers/TrackerListContainer';
 
 class TrackerHome extends Component {
   props: {
-    message: string,
-    error: null,
+    btError: string,
     isBtAvailable: boolean,
     isBtEnabled: boolean,
     isBtScanning: boolean,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
-    enableBt: Function,
     startBtStateNotifications: Function,
-    stopBtStateNotifications: Function,
     startBtDeviceScan: Function,
     stopBtDeviceScan: Function,
-    clearUnpairedRaceTrackers: Function,
-    connectedTrackers: Array<RaceTracker>
+    clearAvailRtList: Function,
+    // connectedTrackers: Array<RaceTracker>
   };
 
   componentWillMount() {
     if (!this.props.isBtAvailable) {
-      // by default
-      this.props.checkIsBtAvailable(); // check and update accordingly
+      this.props.checkIsBtAvailable();
     } else {
-      // bluetooth is available (rehydration)
-      this.startDiscovery(); // run device discovery
+      this.startDiscovery();
     }
   }
 
-  componentWillUnmount() {
-    // stop state notifications if activated
-    if (this.props.isBtAvailable) {
-      this.props.stopBtStateNotifications();
-    }
-  }
-
-  /** Watch state.properties for changes on bluetooth enabled state */
+  /** Watch bluetooth state properties for changes */
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.connectedTrackers.length !== this.props.connectedTrackers.length) {
-      console.log('-------------------');
-      console.log(prevProps.connectedTrackers);
-      console.log(this.props.connectedTrackers);
-    }
+    // if (prevProps.connectedTrackers.length !== this.props.connectedTrackers.length) {
+      // console.log(prevProps.connectedTrackers)
+      // console.log(this.props.connectedTrackers)
+    // }
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         this.props.startBtStateNotifications();
@@ -64,22 +51,19 @@ class TrackerHome extends Component {
     }
   }
 
-  /** Start tracker discovery if possible */
+  /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtEnabled) {
-      // default
-      this.props.checkIsBtEnabled(); // verify the above is correct
+      this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
-      // bluetooth is enabled, start bluetooth scan
-      this.props.clearUnpairedRaceTrackers(); // remove any unpaired devices from a prev scan
-      this.props.startBtDeviceScan(); // actively scan for bluetooth devices
+      if (!this.props.isBtScanning) {  // prevent scanning if already running
+        this.props.clearAvailRtList(); // remove any unpaired devices from prev scan
+        this.props.startBtDeviceScan(); // begin bluetooth discovery scan
+      }
     }
   };
 
-  handleSnackBarTap = (event: Object) => {
-    this.props.enableBt();
-  };
-
+  /** change button purpose: start/stop scan based on scanning state */
   BtScanButton = () => {
     let { isBtScanning, ...attrs } = this.props;
     attrs = {
@@ -101,24 +85,7 @@ class TrackerHome extends Component {
     return <FlatButton primary {...attrs} />;
   };
 
-  BtSnackBar = () => {
-    // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find platform
-    let { isBtEnabled, isBtAvailable, message, ...attrs } = this.props;
-    attrs = {
-      open: !!message,
-      message: message,
-      autoHideDuration: 5000
-    };
-    if (isBtAvailable && !isBtEnabled) {
-      attrs = {
-        ...attrs,
-        action: 'ENABLE',
-        onTouchTap: this.handleSnackBarTap
-      };
-    }
-    return <Snackbar {...attrs} />;
-  };
-
+  /** displays all connected/available racetrackers */
   RtDiscoveryList = () => {
     return (
       <div>
@@ -140,7 +107,7 @@ class TrackerHome extends Component {
   };
 
   render() {
-    let { isBtEnabled, isBtAvailable } = this.props;
+    let { btError, isBtEnabled, isBtAvailable } = this.props;
     return (
       <div className="main tracker-home">
         <header>
@@ -153,16 +120,16 @@ class TrackerHome extends Component {
         <main>
           {!isBtAvailable &&
             <BluetoothCardContainer
-              title="No Bluetooth Available"
-              subtitle="This device does not support BluetoothLE"
-              text="Cordova Bluetooth is not available"
+              title="No Bluetooth LE Available"
+              subtitle="This device does not support Bluetooth LE"
+              text="The Cordova plugin for Bluetooth LE support is missing"
               button=""
             />}
           {isBtAvailable &&
             !isBtEnabled &&
             <BluetoothCardContainer
               title="Enable Bluetooth"
-              subtitle="Bluetooth is required to use TBS RaceTrackers"
+              subtitle="Bluetooth LE is required to use TBS RaceTrackers"
               text="Enable Bluetooth by clicking the button below"
               button="enable"
             />}
@@ -171,7 +138,7 @@ class TrackerHome extends Component {
         <footer>
           {isBtAvailable && isBtEnabled && <this.BtScanButton />}
         </footer>
-        <this.BtSnackBar />
+        <Snackbar open={!!btError} message={btError} autoHideDuration={5000} />
       </div>
     );
   }

@@ -9,9 +9,7 @@ import BluetoothCard from '../components/BluetoothCard';
     component - in this case, a BluetoothCard   */
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  enableBt() {
-    dispatch(enable());
-  }
+  enableBt: () => dispatch(enable())
 });
 
 const BluetoothCardContainer = connect(null, mapDispatchToProps)(BluetoothCard);
