@@ -16,20 +16,22 @@ class TrackerHome extends Component {
     isBtAvailable: boolean,
     isBtEnabled: boolean,
     isBtScanning: boolean,
+    trackers: Array<RaceTracker>,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
     startBtStateNotifications: Function,
     startBtDeviceScan: Function,
     stopBtDeviceScan: Function,
-    clearAvailRtList: Function,
-    // connectedTrackers: Array<RaceTracker>
+    refreshRtList: Function
   };
 
   componentWillMount() {
     if (!this.props.isBtAvailable) {
       this.props.checkIsBtAvailable();
     } else {
-      this.startDiscovery();
+      if (this.props.trackers.length === 0) {
+        this.startDiscovery();
+      }
     }
   }
 
@@ -39,6 +41,7 @@ class TrackerHome extends Component {
       // console.log(prevProps.connectedTrackers)
       // console.log(this.props.connectedTrackers)
     // }
+
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         this.props.startBtStateNotifications();
@@ -46,7 +49,9 @@ class TrackerHome extends Component {
     }
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
-        this.startDiscovery();
+        if (this.props.trackers.length === 0) {
+          this.startDiscovery();
+        }
       }
     }
   }
@@ -57,7 +62,7 @@ class TrackerHome extends Component {
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
       if (!this.props.isBtScanning) {  // prevent scanning if already running
-        this.props.clearAvailRtList(); // remove any unpaired devices from prev scan
+        this.props.refreshRtList(); // remove any unpaired devices from prev scan
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }
     }

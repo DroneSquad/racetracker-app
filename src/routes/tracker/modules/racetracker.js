@@ -5,18 +5,29 @@ import ble from '../../../services/bluetooth';
 
 import { setError } from './bluetooth';
 
+const ATTEMPT_RECOVERY = true;
+const RECOVERY_ATTEMPTS = 2;
+
 /** types */
 export const RT_DISCOVER = 'RT_DISCOVER';
 export const RT_CONNECT = 'RT_CONNECT';
 export const RT_CONNECTING = 'RT_CONNECTING';
 export const RT_DISCONNECT = 'RT_DISCONNECT';
-export const RT_CLEAN_LIST = 'RT_CLEAN_LIST';
+export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
   type: RT_DISCOVER,
-  payload: tracker
+  payload: tracker /*{
+    id: tracker.id,
+    rssi: tracker.rssi,
+    name: tracker.name,
+    isConnected: false,
+    isConnecting: false,
+    recover: ATTEMPT_RECOVERY,
+    reconnects: RECOVERY_ATTEMPTS
+  }*/
 });
 
 export const setConnecting = (id: string) => ({
@@ -29,18 +40,18 @@ export const setConnected = (tracker: RaceTracker) => ({
   payload: tracker
 });
 
-export const updateConnected = (response: Object) => ({
-  type: RT_UPDATE_CONNECT,
-  payload: response
-});
-
 export const setDisconnected = (id: string) => ({
   type: RT_DISCONNECT,
   payload: id
 });
 
-export const clearAvailRtList = () => ({
-  type: RT_CLEAN_LIST,
+export const updateConnected = (response: Object) => ({
+  type: RT_UPDATE_CONNECT,
+  payload: response
+});
+
+export const refreshRtList = () => ({
+  type: RT_REFRESH_LIST,
   payload: null
 });
 
@@ -51,6 +62,9 @@ export const connectTracker = (device_id: string) => {
       if (response.connected) {
         dispatch(setConnected(response.device));
       } else if (!response.connected) {
+        console.log("FAILED");
+        // tracker disconnected/failed to connect, attempt reconnect if desired
+
         dispatch(setDisconnected(response.device.id));
       }
     }, device_id);
@@ -87,16 +101,10 @@ export const isTrackerConnected = (device_id: string) => {
 export default function(state = [], action: Action) {
   switch (action.type) {
     case RT_DISCOVER:
-      // use a union to remove copies of the same tracker id
+      // use a union to remove dupes of same tracker ids
       return _.unionWith(
         state,
-        [
-          {
-            id: action.payload.id,
-            rssi: action.payload.rssi,
-            name: action.payload.name
-          }
-        ],
+        [action.payload],
         (left, right) => left.id === right.id
       );
     case RT_CONNECTING:
@@ -107,11 +115,11 @@ export default function(state = [], action: Action) {
       return state.map(
         tracker => (tracker.id === action.payload.id ? {
           ...tracker,
-          rssi: action.payload.rssi, // update rssi, because why not
+          rssi: action.payload.rssi, // update rssi, because... why not
           isConnected: true,
           isConnecting: false,
-          recover: true, // be default enable onDisconnect attempt recovery
-          reconnect: 0  // recovery attempt count reset
+          recover: ATTEMPT_RECOVERY, // reset to default
+          reconnects: RECOVERY_ATTEMPTS  // reset to default
         } : tracker)
       );
     case RT_DISCONNECT:
@@ -122,7 +130,7 @@ export default function(state = [], action: Action) {
       return state.map(
         tracker => (tracker.id === action.payload.device_id ? { ...tracker, isConnected: action.payload.connected } : tracker)
       );
-    case RT_CLEAN_LIST:
+    case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);
     default:
       return state;

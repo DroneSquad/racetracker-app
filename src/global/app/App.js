@@ -3,8 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
+import RtConnSnackbar from './components/RtConnSnackbar';
 
-import Main from './containers/MainContainer';
+import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
 import Register from '../../routes/login/containers/RegisterContainer';
 import Login from '../../routes/login/containers/LoginContainer';
@@ -21,20 +22,23 @@ export default class App extends React.Component {
   render() {
     let { history } = this.props;
     return (
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route path="/account/forgot*" component={Forgot} />
-          <Route path="/account/register*" component={Register} />
-          <Route path="/account/login*" component={Login} />
-          <AuthRoute path="/people/guest/new" component={NewGuest} />
-          <AuthRoute path="/people/new" component={NewPilot} />
-          <AuthRoute path="/people" component={People} />
-          <AuthRoute path="/fly/heat/results/edit" component={HeatResultEdit} />
-          <AuthRoute path="/fly/heat/edit" component={HeatLineUp} />
-          <AuthRoute path="/tracker" component={Tracker} />
-          <AuthRoute path="/" component={Main} />
-        </Switch>
-      </ConnectedRouter>
+      <div>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/account/forgot*" component={Forgot} />
+            <Route path="/account/register*" component={Register} />
+            <Route path="/account/login*" component={Login} />
+            <AuthRoute path="/people/guest/new" component={NewGuest} />
+            <AuthRoute path="/people/new" component={NewPilot} />
+            <AuthRoute path="/people" component={People} />
+            <AuthRoute path="/fly/heat/results/edit" component={HeatResultEdit} />
+            <AuthRoute path="/fly/heat/edit" component={HeatLineUp} />
+            <AuthRoute path="/tracker" component={Tracker} />
+            <AuthRoute path="/" component={Main} />
+          </Switch>
+        </ConnectedRouter>
+        <RtConnSnackbar />
+      </div>
     );
   }
 }

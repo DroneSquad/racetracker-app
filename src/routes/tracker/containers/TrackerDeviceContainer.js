@@ -13,7 +13,11 @@ import TrackerDevice from '../components/TrackerDevice';
 
 const mapStateToProps = (state, ownProps) => ({
   isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
+  name: state.trackers.filter(t => t.id === ownProps.id)[0].name,
+  rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
+  recover: state.trackers.filter(t => t.id === ownProps.id)[0].recover,
+  reconnects: state.trackers.filter(t => t.id === ownProps.id)[0].reconnects,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

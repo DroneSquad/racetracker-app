@@ -91,7 +91,7 @@ export const startDeviceScan = () => {
           }
         }
       } else {
-        // called on device scan complete by timeout
+        // called on device scan completed by timeout
         dispatch(setIsScanning(false));
       }
     });
@@ -104,7 +104,7 @@ export const stopDeviceScan = () => {
       if (response.error) {
         dispatch(setError(response.error));
       } else {
-        // fired on device scan stop (no timeout)
+        // fired on device scan stop manually (no timeout)
         dispatch(setIsScanning(false));
       }
     });

@@ -14,9 +14,9 @@ export default class TrackerDevice extends Component {
     isConnecting: boolean,
     isConnected: boolean,
     recover: boolean,
-    reconnect: number,
-    connectTracker: Function,
-    disconnectTracker: Function,
+    reconnects: number,
+    connect: Function,
+    disconnect: Function,
     // openTrackerSettings: Function
   };
 

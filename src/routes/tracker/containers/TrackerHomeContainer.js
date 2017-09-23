@@ -9,7 +9,7 @@ import {
   startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
-import { clearAvailRtList } from '../modules/racetracker';
+import { refreshRtList } from '../modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 
@@ -18,12 +18,17 @@ import TrackerHome from '../components/TrackerHome';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the TrackerHome:   */
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => (
+{
   btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
-  // connectedTrackers: state.trackers.filter(t => t.isConnected)
+  trackers: state.trackers,
+
+  connectedTrackers: state.trackers.filter(t => t.isConnected),
+  connectedCount: state.trackers.filter(t => t.isConnected).length,
+  deviceIsConnected: state.trackers.filter(t => t.isConnected).length > 0 ? true : false,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -31,7 +36,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   checkIsBtEnabled: () => dispatch(isEnabled()),
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
-  clearAvailRtList: () => dispatch(clearAvailRtList()),
+  refreshRtList: () => dispatch(refreshRtList()),
   startBtDeviceScan: () => dispatch(startDeviceScan()),
   stopBtDeviceScan: () => dispatch(stopDeviceScan())
 });
