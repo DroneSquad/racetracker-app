@@ -37,11 +37,6 @@ class TrackerHome extends Component {
 
   /** Watch bluetooth state properties for changes */
   componentDidUpdate(prevProps, prevState) {
-    // if (prevProps.connectedTrackers.length !== this.props.connectedTrackers.length) {
-      // console.log(prevProps.connectedTrackers)
-      // console.log(this.props.connectedTrackers)
-    // }
-
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         this.props.startBtStateNotifications();

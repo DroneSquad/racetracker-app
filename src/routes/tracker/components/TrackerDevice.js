@@ -12,9 +12,8 @@ export default class TrackerDevice extends Component {
     name: string,
     rssi: string,
     isConnecting: boolean,
+    isReconnecting: boolean,
     isConnected: boolean,
-    recover: boolean,
-    reconnects: number,
     connect: Function,
     disconnect: Function,
     // openTrackerSettings: Function
@@ -39,22 +38,24 @@ export default class TrackerDevice extends Component {
     this.props.connect(this.props.id);
   };
 
-  /** Open the tracker settings */
+  /** TODO: swap Open the tracker settings */
   disconnectTracker = () => {
     this.props.disconnect(this.props.id);
   };
 
   render() {
+    let { id, name, rssi, isConnected, isConnecting, isReconnecting } = this.props;
+
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
-    let deviceComponent = <this.DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
-    let extraProps = { key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo };
+    let deviceComponent = <this.DeviceProperties name={name} rssi={rssi} />;
+    let extraProps = { key: id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
-    if (this.props.isConnected) {
+    if (isConnected) {
       return <ListItem {...extraProps} rightIcon={icon} onClick={this.disconnectTracker} />;
     }
     return (
       <div>
-        <Snackbar open={this.props.isConnecting} message="Connecting..." />
+        <Snackbar open={isConnecting} message={isReconnecting ? 'Reconnecting...' : 'Connecting...'} />
         <ListItem {...extraProps} onClick={this.connectTracker} />
       </div>
     );

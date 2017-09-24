@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
-import RtConnSnackbar from './components/RtConnSnackbar';
+import RecoverySnackbar from './containers/RecoverySnackbarContainer';
 
 import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
@@ -37,7 +37,7 @@ export default class App extends React.Component {
             <AuthRoute path="/" component={Main} />
           </Switch>
         </ConnectedRouter>
-        <RtConnSnackbar />
+        <RecoverySnackbar />
       </div>
     );
   }

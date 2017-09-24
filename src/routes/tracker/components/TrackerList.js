@@ -11,8 +11,8 @@ export default class TrackerList extends React.Component {
     filter: string,
     headerText: string,
     emptyText: string,
-    trackers: Array<RaceTracker>,
-    isBtScanning: boolean
+    isBtScanning: boolean,
+    trackers: Array<RaceTracker>
   };
 
   render() {

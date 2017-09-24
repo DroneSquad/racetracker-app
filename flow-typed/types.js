@@ -14,8 +14,9 @@ export type RaceTracker = {
   id: string,
   isConnecting: boolean,
   isConnected: boolean,
+  isReconnecting: boolean,
   recover: boolean,
-  reconnect: number
+  reconnects: number
 };
 
 export type AuthToken = {
