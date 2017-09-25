@@ -1,0 +1,8 @@
+{
+  "service": "fff0",
+  "write": "fff1",
+  "read": "fff2",
+  "commands": {
+    "getBatteryLevel": "B",
+  }
+}

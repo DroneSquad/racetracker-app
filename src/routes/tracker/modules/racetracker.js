@@ -2,6 +2,7 @@
 import _ from 'lodash';
 
 import ble from '../../../services/bluetooth';
+import tbs from '../../../services/racetracker';
 
 import { setError } from './bluetooth';
 
@@ -13,6 +14,7 @@ const CONNECTED_MSG = ' connection success';
 const RECONNECTED_MSG = ' connection recovered';
 
 /** types */
+export const RT_ERROR = 'RT_ERROR';
 export const RT_DISCOVER = 'RT_DISCOVER';
 export const RT_CONNECT = 'RT_CONNECT';
 export const RT_DISCONNECT = 'RT_DISCONNECT';
@@ -21,7 +23,7 @@ export const RT_SHOW_CONNECTING = 'RT_SHOW_CONNECTING';
 export const RT_SHOW_CONNECTED = 'RT_SHOW_CONNECTED';
 export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
-export const RT_ERROR = 'RT_ERROR';
+export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -75,6 +77,11 @@ export const refreshRtList = () => ({
   payload: null
 });
 
+export const setBatteryLevel = (response: Object) => ({
+  type: RT_BATTERY_LEVEL,
+  payload: response
+})
+
 export const connectTracker = (device_id: string) => {
   return dispatch => {
     dispatch(showConnecting(device_id));
@@ -108,6 +115,18 @@ export const isTrackerConnected = (device_id: string) => {
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
+    }, device_id);
+  };
+};
+
+export const getBatteryLevel = (device_id: string) => {
+  return dispatch => {
+    tbs.getBatteryLevel(response => {
+      /*if (response.error) {
+        dispatch(setError(response.error));
+      } else {
+         dispatch(setBatteryLevel(response.batteryLevel));
+      }*/
     }, device_id);
   };
 };
@@ -196,6 +215,15 @@ export default function(state = [], action: Action) {
                 isConnected: action.payload.connected
               }
             : tracker
+      );
+    case RT_BATTERY_LEVEL:
+      return state.map(
+        tracker => tracker.id === action.payload.device_id
+          ? {
+            ...tracker,
+            batteryLevel: action.payload.batteryLevel,
+          }
+        : tracker
       );
     case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);

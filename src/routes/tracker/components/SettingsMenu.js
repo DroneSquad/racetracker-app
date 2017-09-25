@@ -8,10 +8,28 @@ import { AppBar, List, ListItem, Divider } from 'material-ui';
 // import TimeDelaySetting from './TimeDelaySetting';
 // import FlyoverSetting from './FlyoverSetting';
 
-import { historyBackButton } from '../../../../utils';
+import { historyBackButton } from '../../../utils';
 
 /** Handles the main logic for the Tracker Settings Menu */
 export default class SettingsMenu extends React.Component {
+
+/*  componentDidMount() {
+    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
+      api.public
+        .pilot(this.props.id)
+        .then(pilot =>
+          this.setState({
+            name: pilot.callsign || pilot.display || 'No Pilot Name',
+            loading: false
+          })
+        )
+        .catch(() => this.setState({ loading: false }));
+    });
+  }*/
+
+
+
+
   render() {
     let device_id = this.props.location.state;
     return (
