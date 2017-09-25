@@ -26,9 +26,11 @@ export default class extends React.Component {
   /** Display the pilots depending on the type of input */
   displayPilots(pilots) {
     if (_.size(pilots) === 0) {
-      return <ListItem>No pilots to load</ListItem>;
+      return <ListItem disabled>No pilots to load</ListItem>;
     }
+    let sort = pilot => _.lowerCase(pilot.member.callsign || pilot.member.firstName + pilot.member.lastName);
     if (Array.isArray(pilots)) {
+      pilots = _.sortBy(pilots, sort);
       return (
         <List>
           {_.map(_.uniqBy(pilots, 'id'), pilot => <Person key={pilot.id} id={pilot.pilotId} />)}
@@ -42,7 +44,7 @@ export default class extends React.Component {
             <Subheader>
               {_.startCase(key)}s
             </Subheader>
-            {_.map(_.uniqBy(value, 'id'), pilot => <Person key={pilot.id} id={pilot.pilotId} />)}
+            {_.map(_.sortBy(_.uniqBy(value, 'id'), sort), pilot => <Person key={pilot.id} id={pilot.pilotId} />)}
           </List>
         )}
       </div>
