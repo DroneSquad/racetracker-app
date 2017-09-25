@@ -129,7 +129,7 @@ export default function(state = [], action: Action) {
           isConnected: false,
           isReconnecting: false,
           connectedMsg: '',
-          connectingMsg: 'SHOW-CONNECTING', // (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
+          connectingMsg: (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
         } : tracker)
       );
     case RT_SHOW_CONNECTED:
@@ -137,7 +137,7 @@ export default function(state = [], action: Action) {
         tracker => (tracker.id === action.payload ? {
           ...tracker,
           connectingMsg: '',
-          connectedMsg: 'SHOW-CONNE', // (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
+          connectedMsg: (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
         } : tracker)
       );
     case RT_CONNECT:
@@ -146,6 +146,7 @@ export default function(state = [], action: Action) {
           ...tracker,
           rssi: action.payload.rssi, // update rssi, because... why the hell not..
           isConnected: true,
+          connectedMsg: '',
           isReconnecting: false,
           recover: ATTEMPT_RECOVERY, // reset to default
           reconnects: RECOVERY_ATTEMPTS,  // reset to default
