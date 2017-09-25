@@ -14,15 +14,14 @@ import TrackerDevice from '../components/TrackerDevice';
 const mapStateToProps = (state, ownProps) => (
 {
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
-  isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
-  isReconnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isReconnecting,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
+  connectedMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectedMsg,
+  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
   disconnect: device_id => dispatch(disconnectTracker(device_id)),
-  // TODO: move disconnect create openSettings
   // openTrackerSettings: device_id => dispatch(push('/tracker/settings', device_id))
 });
 

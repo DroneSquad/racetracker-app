@@ -39,6 +39,7 @@ class TrackerHome extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
+        // TODO: currently this is never stopped, find a good spot to halt notifications
         this.props.startBtStateNotifications();
       }
     }

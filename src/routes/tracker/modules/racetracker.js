@@ -6,14 +6,19 @@ import ble from '../../../services/bluetooth';
 import { setError } from './bluetooth';
 
 const ATTEMPT_RECOVERY = true;
-const RECOVERY_ATTEMPTS = 2;
+const RECOVERY_ATTEMPTS = 1;
+const CONNECTING_MSG = 'Connecting to ';
+const RECONNECTING_MSG = 'Reconnecting to ';
+const CONNECTED_MSG = ' connection success';
+const RECONNECTED_MSG = ' connection recovered';
 
 /** types */
 export const RT_DISCOVER = 'RT_DISCOVER';
 export const RT_CONNECT = 'RT_CONNECT';
-export const RT_CONNECTING = 'RT_CONNECTING';
-export const RT_RECONNECTING = 'RT_RECONNECTING';
 export const RT_DISCONNECT = 'RT_DISCONNECT';
+export const RT_RECONNECTING = 'RT_RECONNECTING';
+export const RT_SHOW_CONNECTING = 'RT_SHOW_CONNECTING';
+export const RT_SHOW_CONNECTED = 'RT_SHOW_CONNECTED';
 export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 export const RT_ERROR = 'RT_ERROR';
@@ -26,16 +31,22 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     rssi: tracker.rssi,
     name: tracker.name,
     isConnected: false,
-    isConnecting: false,
+    wasConnected: false,
     isReconnecting: false,
+    connectedMsg: '',
+    connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS,
-    error: '' // TODO: use an object?
   }
 });
 
-export const setConnecting = (id: string) => ({
-  type: RT_CONNECTING,
+export const showConnecting = (id: string) => ({
+  type: RT_SHOW_CONNECTING,
+  payload: id
+});
+
+export const showConnected = (id: string) => ({
+  type: RT_SHOW_CONNECTED,
   payload: id
 });
 
@@ -66,13 +77,14 @@ export const refreshRtList = () => ({
 
 export const connectTracker = (device_id: string) => {
   return dispatch => {
-    dispatch(setConnecting(device_id));
+    dispatch(showConnecting(device_id));
     ble.connectDevice(response => {
       if (response.connected) {
+        dispatch(showConnected(device_id));
         dispatch(setConnected(response.device));
+        // TODO: dispatch(showConnected(response.device.id));
       } else if (!response.connected) {
-        // the device has either failed to connect, or disconnected on error
-        // onChange of reconnecting prop fires proper action from RecoverySnackbar
+        // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
       }
     }, device_id);
@@ -84,7 +96,7 @@ export const disconnectTracker = (device_id: string) => {
     ble.disconnectDevice(response => {
       if (response.error) {
         dispatch(setError(response.error));
-        // error on disconnection!? wtf, revalidate/update connection state
+        // error on disconnection.. WTF!? revalidate/update connection state
         dispatch(isTrackerConnected(device_id));
       } else {
         dispatch(setDisconnected(response.device_id));
@@ -96,11 +108,7 @@ export const disconnectTracker = (device_id: string) => {
 export const isTrackerConnected = (device_id: string) => {
   return dispatch => {
     ble.isDeviceConnected(response => {
-      if (response.connected) {
-        dispatch(updateConnected(response));
-      } else {
-        dispatch(updateConnected(response));
-      }
+      dispatch(updateConnected(response));
     }, device_id);
   };
 };
@@ -109,18 +117,28 @@ export const isTrackerConnected = (device_id: string) => {
 export default function(state = [], action: Action) {
   switch (action.type) {
     case RT_DISCOVER:
-      // use a union to remove dupes of same tracker ids
+      // use a union to remove dupes of tracker ids
       return _.unionWith(
         state,
         [action.payload],
         (left, right) => left.id === right.id
       );
-    case RT_CONNECTING:
+    case RT_SHOW_CONNECTING:
       return state.map(
         tracker => (tracker.id === action.payload ? {
           ...tracker,
           isConnected: false,
-          isConnecting: true
+          isReconnecting: false,
+          connectedMsg: '',
+          connectingMsg: (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
+        } : tracker)
+      );
+    case RT_SHOW_CONNECTED:
+      return state.map(
+        tracker => (tracker.id === action.payload ? {
+          ...tracker,
+          connectingMsg: '',
+          connectedMsg: (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
         } : tracker)
       );
     case RT_CONNECT:
@@ -129,10 +147,11 @@ export default function(state = [], action: Action) {
           ...tracker,
           rssi: action.payload.rssi, // update rssi, because... why the hell not..
           isConnected: true,
-          isConnecting: false,
           isReconnecting: false,
+          connectingMsg: '',
+          connectedMsg: '',
           recover: ATTEMPT_RECOVERY, // reset to default
-          reconnects: RECOVERY_ATTEMPTS  // reset to default
+          reconnects: RECOVERY_ATTEMPTS,  // reset to default
         } : tracker)
       );
     case RT_DISCONNECT:
@@ -140,25 +159,31 @@ export default function(state = [], action: Action) {
         tracker => (tracker.id === action.payload ? {
           ...tracker,
           isConnected: false,
-          isConnecting: false,
           isReconnecting: false,
+          connectedMsg: '',
+          connectingMsg: '',
           recover: ATTEMPT_RECOVERY, // reset to default
-          reconnects: RECOVERY_ATTEMPTS  // reset to default
+          reconnects: RECOVERY_ATTEMPTS,  // reset to default
         } : tracker)
       );
     case RT_RECONNECTING:
       return state.map(
         tracker => (tracker.id === action.payload ? {
           ...tracker,
-          isConnected: false,
-          isConnecting: false,
+          wasConnected: (tracker.reconnects === RECOVERY_ATTEMPTS) ? tracker.isConnected : tracker.wasConnected,
           isReconnecting: true,
+          isConnected: false,
+          connectedMsg: '',
+          connectingMsg: '',
           reconnects: (tracker.recover) ? tracker.reconnects - 1 : tracker.reconnects,
         } : tracker)
       );
     case RT_UPDATE_CONNECT:
       return state.map(
-        tracker => (tracker.id === action.payload.device_id ? { ...tracker, isConnected: action.payload.connected } : tracker)
+        tracker => (tracker.id === action.payload.device_id ? {
+          ...tracker,
+          isConnected: action.payload.connected
+         } : tracker)
       );
     case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);

@@ -12,9 +12,11 @@ export type RaceTracker = {
   name: string,
   rssi: string,
   id: string,
-  isConnecting: boolean,
   isConnected: boolean,
+  wasConnected: boolean,
   isReconnecting: boolean,
+  connectedMsg: string,
+  connectingMsg: string,
   recover: boolean,
   reconnects: number
 };
