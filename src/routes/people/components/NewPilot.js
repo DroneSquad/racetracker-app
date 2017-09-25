@@ -4,10 +4,10 @@ import uuid from 'uuid';
 
 import { AppBar, TextField, List, ListItem, FontIcon, Subheader, Divider } from 'material-ui';
 
-import PilotAvatar from '../app/PilotAvatar';
-import loadingImg from '../../media/ds-logo-spin.svg';
-import { historyBackButton, randomPilotIds, lazyLoad } from '../../utils';
-import fetch from '../../fetch';
+import PilotAvatar from '../../../global/app/PilotAvatar';
+import loadingImg from '../../../media/ds-logo-spin.svg';
+import { historyBackButton, randomPilotIds, lazyLoad } from '../../../utils';
+import fetch from '../../../fetch';
 
 class Pilot extends React.Component {
   constructor(props) {

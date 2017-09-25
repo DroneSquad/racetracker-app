@@ -1,8 +1,8 @@
 // @flow
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+// import { push } from 'react-router-redux';
 
-import { connectDevice } from '../modules/bluetooth';
+import { connectTracker, disconnectTracker } from '../modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 
@@ -12,17 +12,16 @@ import TrackerDevice from '../components/TrackerDevice';
     component - in this case, the TrackerDevice:   */
 
 const mapStateToProps = (state, ownProps) => ({
-  isConnecting: state.trackers.filter(t => t.id === ownProps.id)[0].isConnecting,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
+  rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
+  connectedMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectedMsg,
+  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  connectBtDevice(device_id) {
-    dispatch(connectDevice(device_id));
-  },
-  openBtDeviceSettings(device_id) {
-    dispatch(push('/tracker/settings', device_id));
-  }
+  connect: device_id => dispatch(connectTracker(device_id)),
+  disconnect: device_id => dispatch(disconnectTracker(device_id))
+  // openTrackerSettings: device_id => dispatch(push('/tracker/settings', device_id))
 });
 
 const TrackerDeviceContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);

@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import AppBar from 'material-ui/AppBar';
 
 import Nav from './Nav';
-import Chat from '../../chat/Chat';
-import Home from '../../home/Home';
-import Fly from '../../fly/Fly';
-import FourOhFour from '../../404/FourOhFour';
-
+import Chat from '../../../routes/chat/components/Chat';
+import Home from '../../../routes/home';
+import Fly from '../../../routes/fly/components/Fly';
+import FourOhFour from '../../404/components/FourOhFour';
 import Group from '../../../routes/group/containers/GroupContainer';
-
 import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
-export default class Main extends React.Component {
+export default class Main extends Component {
+  props: {
+    isDeviceConnected: boolean
+  };
   render() {
     let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index

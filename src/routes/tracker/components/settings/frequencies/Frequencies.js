@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { AppBar, List, ListItem, Divider, DropDownMenu, MenuItem } from 'material-ui';
 
-import { historyBackButton, toPercent } from '../../../../utils';
+import { historyBackButton, toPercent } from '../../../../../utils';
 
 import frequencies from './frequencies.json'; // the config to generate the profiles
 import './frequencies.css';

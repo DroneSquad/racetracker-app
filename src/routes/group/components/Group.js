@@ -11,8 +11,8 @@ import {
   FloatingActionButton
 } from 'material-ui';
 
-import LoadingSpinner from '../../../components/app/LoadingSpinner';
-import PilotAvatar from '../../../components/app/PilotAvatar';
+import LoadingSpinner from '../../../global/app/LoadingSpinner';
+import PilotAvatar from '../../../global/app/PilotAvatar';
 
 import api from '../../../services/api';
 

@@ -1,27 +1,27 @@
 import ble from '../../../services/bluetooth';
-import { discoverTracker, connectTracker, connectingTracker, disconnectTracker } from './racetracker';
+
+import { discoverTracker } from './racetracker';
 
 /** types */
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
 export const BT_IS_ENABLED = 'BT_IS_ENABLED';
 export const BT_IS_AVAILABLE = 'BT_IS_AVAILABLE';
-export const BT_IS_CONNECTED = 'BT_IS_CONNECTED';
-export const BT_NO_OP = 'BT_NO_OP';
+export const BT_ERROR = 'BT_ERROR';
 
 /** actions */
-export const noOp = () => ({
-  type: BT_NO_OP,
-  payload: null
+export const setError = (error: Error) => ({
+  type: BT_ERROR,
+  payload: error.message
 });
 
-export const setIsAvailable = (response: Object) => ({
+export const setIsAvailable = (value: boolean) => ({
   type: BT_IS_AVAILABLE,
-  payload: response
+  payload: value
 });
 
-export const setIsEnabled = (response: Object) => ({
+export const setIsEnabled = (value: boolean) => ({
   type: BT_IS_ENABLED,
-  payload: response
+  payload: value
 });
 
 export const setIsScanning = (value: boolean) => ({
@@ -32,7 +32,7 @@ export const setIsScanning = (value: boolean) => ({
 export const isAvailable = () => {
   return dispatch => {
     ble.isAvailable(response => {
-      dispatch(setIsAvailable({ value: response.value, message: response.message }));
+      dispatch(setIsAvailable(response));
     });
   };
 };
@@ -40,7 +40,7 @@ export const isAvailable = () => {
 export const isEnabled = () => {
   return dispatch => {
     ble.isEnabled(response => {
-      dispatch(setIsEnabled({ value: response.value, message: response.message }));
+      dispatch(setIsEnabled(response));
     });
   };
 };
@@ -48,7 +48,10 @@ export const isEnabled = () => {
 export const enable = () => {
   return dispatch => {
     ble.enable(response => {
-      dispatch(setIsEnabled({ value: response.value, message: response.message }));
+      dispatch(setIsEnabled(response.value));
+      if (response.error) {
+        dispatch(setError(response.error));
+      }
     });
   };
 };
@@ -56,7 +59,11 @@ export const enable = () => {
 export const startStateNotifications = () => {
   return dispatch => {
     ble.startStateNotifications(response => {
-      dispatch(setIsEnabled({ value: response.value, message: response.message }));
+      if (response.error) {
+        dispatch(setError(response.error));
+      } else {
+        dispatch(setIsEnabled(response.value));
+      }
     });
   };
 };
@@ -64,7 +71,9 @@ export const startStateNotifications = () => {
 export const stopStateNotifications = () => {
   return dispatch => {
     ble.stopStateNotifications(response => {
-      dispatch(noOp());
+      if (response.error) {
+        dispatch(setError(response.error));
+      }
     });
   };
 };
@@ -73,19 +82,19 @@ export const startDeviceScan = () => {
   return dispatch => {
     dispatch(setIsScanning(true));
     ble.startDeviceScan(response => {
-      if (response.type === 'device') {
+      if (response.error) {
+        dispatch(setError(response.error));
+      } else if (response.device) {
         if (response.device.name) {
+          // some devices have no name
           if (response.device.name.startsWith('TBSRT')) {
+            // filter for TBS RaceTrackers
             dispatch(discoverTracker(response.device));
           }
         }
-      }
-      if (response.type === 'stop') {
+      } else {
+        // called on device scan completed by timeout
         dispatch(setIsScanning(false));
-      }
-      if (response.type === 'error') {
-        // TODO: add in some proper logging for errors
-        console.log(response.error);
       }
     });
   };
@@ -93,57 +102,23 @@ export const startDeviceScan = () => {
 
 export const stopDeviceScan = () => {
   return dispatch => {
-    ble.stopDeviceScan(() => {
-      dispatch(setIsScanning(false));
-    });
-  };
-};
-
-export const connectDevice = (device_id: string) => {
-  return dispatch => {
-    dispatch(connectingTracker(device_id));
-    ble.connectDevice(response => {
-      if (response.connected) {
-        dispatch(connectTracker(response.device_id));
-      } else {
-        dispatch(disconnectTracker(response.device_id));
-      }
-    }, device_id);
-  };
-};
-
-export const disconnectDevice = (device_id: string) => {
-  return dispatch => {
-    ble.disconnectDevice(response => {
-      dispatch(disconnectTracker(response.device_id));
+    ble.stopDeviceScan(response => {
       if (response.error) {
-        // TODO: add in some proper logging for errors
-        console.log(response.error);
-      }
-    }, device_id);
-  };
-};
-
-export const isConnected = (device_id: string) => {
-  return dispatch => {
-    ble.isConnected(response => {
-      if (response.connected) {
-        dispatch(connectTracker(response.device_id));
+        dispatch(setError(response.error));
       } else {
-        dispatch(disconnectTracker(response.device_id));
+        // fired on device scan stop manually (no timeout)
+        dispatch(setIsScanning(false));
       }
-    }, device_id);
+    });
   };
 };
 
 /** initial state */
 const initialState = {
-  message: '',
-  error: null,
+  error: '',
   isAvailable: false,
   isEnabled: false,
-  isScanning: false,
-  isConnected: false // connection status, linked with total connected trackers array
+  isScanning: false
 };
 
 /** reducers */
@@ -152,26 +127,27 @@ export default function(state = initialState, action: Action) {
     case BT_IS_AVAILABLE:
       return {
         ...state,
-        isAvailable: action.payload.value,
-        message: action.payload.message
+        isAvailable: action.payload,
+        error: ''
       };
     case BT_IS_ENABLED:
       return {
         ...state,
-        isEnabled: action.payload.value,
-        message: action.payload.message
+        isEnabled: action.payload,
+        error: ''
       };
     case BT_IS_SCANNING:
       return {
         ...state,
-        isScanning: action.payload
+        isScanning: action.payload,
+        error: ''
       };
-    case BT_IS_CONNECTED:
+    case BT_ERROR:
       return {
         ...state,
-        isConnected: action.payload
+        error: action.payload
       };
     default:
-      return { ...state, message: '' };
+      return { ...state, error: '' };
   }
 }

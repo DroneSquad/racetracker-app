@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 // import Frequencies from './componenets/settings/frequencies/Frequencies';
 // import Frequency from './componenets/settings/frequencies/Frequency';
-import TrackerHomeContainer from './containers/TrackerHomeContainer';
+import TrackerHome from './containers/TrackerHomeContainer';
 import SettingsMenu from './components/settings/SettingsMenu';
 
 /** Handles the main logic for the tracker things */
@@ -12,7 +12,7 @@ export default class Tracker extends Component {
     return (
       <Switch>
         <Route path="/tracker/settings" component={SettingsMenu} />
-        <Route path="/tracker" component={TrackerHomeContainer} />
+        <Route path="/tracker" component={TrackerHome} />
       </Switch>
     );
   }

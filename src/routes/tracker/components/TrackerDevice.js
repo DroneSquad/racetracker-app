@@ -11,10 +11,12 @@ export default class TrackerDevice extends Component {
     id: string,
     name: string,
     rssi: string,
-    isConnecting: boolean,
+    connectedMsg: string,
+    connectingMsg: string,
     isConnected: boolean,
-    connectBtDevice: Function,
-    openBtDeviceSettings: Function
+    connect: Function,
+    disconnect: Function
+    // opensettings
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -33,25 +35,31 @@ export default class TrackerDevice extends Component {
 
   /** Connect to the tracker */
   connectTracker = () => {
-    this.props.connectBtDevice(this.props.id);
+    this.props.connect(this.props.id);
   };
 
-  /** Open the tracker settings */
-  openTrackerSettings = () => {
-    this.props.openBtDeviceSettings(this.props.id);
+  /** TODO: swap Open the tracker settings */
+  disconnectTracker = () => {
+    this.props.disconnect(this.props.id);
   };
 
   render() {
+    let { id, name, rssi, isConnected, connectingMsg, connectedMsg } = this.props;
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
-    let deviceComponent = <this.DeviceProperties name={this.props.name} rssi={this.props.rssi} />;
-    let extraProps = { key: this.props.id, primaryText: deviceComponent, leftIcon: deviceLogo };
+    let deviceComponent = <this.DeviceProperties name={name} rssi={rssi} />;
+    let extraProps = { key: id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
-    if (this.props.isConnected) {
-      return <ListItem {...extraProps} rightIcon={icon} onClick={this.openTrackerSettings} />;
+    if (isConnected) {
+      return (
+        <div>
+          <Snackbar open={!!connectedMsg} message={connectedMsg} />
+          <ListItem {...extraProps} rightIcon={icon} onClick={this.disconnectTracker} />
+        </div>
+      );
     }
     return (
       <div>
-        <Snackbar open={this.props.isConnecting} message="Connecting..." />
+        <Snackbar open={!!connectingMsg} message={connectingMsg} />
         <ListItem {...extraProps} onClick={this.connectTracker} />
       </div>
     );

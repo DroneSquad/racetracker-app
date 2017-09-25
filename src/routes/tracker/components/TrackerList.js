@@ -4,15 +4,15 @@ import React from 'react';
 import { List, Subheader, ListItem } from 'material-ui';
 import loadingImg from '../../../media/ds-logo-spin.svg';
 
-import TrackerDeviceContainer from '../containers/TrackerDeviceContainer';
+import TrackerDevice from '../containers/TrackerDeviceContainer';
 
 export default class TrackerList extends React.Component {
   props: {
     filter: string,
     headerText: string,
     emptyText: string,
-    trackers: Array<RaceTracker>,
-    isBtScanning: boolean
+    isBtScanning: boolean,
+    trackers: Array<RaceTracker>
   };
 
   render() {
@@ -26,7 +26,7 @@ export default class TrackerList extends React.Component {
     let trackers =
       this.props.trackers.length > 0
         ? this.props.trackers.map(tracker =>
-            <TrackerDeviceContainer history={this.props.history} key={tracker.id} {...tracker} />
+            <TrackerDevice history={this.props.history} key={tracker.id} {...tracker} />
           )
         : <ListItem disabled primaryText={this.props.emptyText} />;
     return (

@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { List, ListItem } from 'material-ui';
 
 import api from '../../services/api';
-import LogoutContainer from '../../routes/login/containers/LogoutContainer';
+import Logout from '../login/containers/LogoutContainer';
 
 export default class Home extends React.Component {
   state = { pilot: {} };
@@ -29,7 +29,7 @@ export default class Home extends React.Component {
         <hr />
         <Link to="/group/82">A Group</Link>
         <hr />
-        <LogoutContainer />
+        <Logout />
         Showing Your Groups Sorted by Location (lat: 0, lng: 0). Do we want to ask user for location permissions here?
         <List>
           {this.state.groups &&
