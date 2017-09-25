@@ -48,14 +48,21 @@ export class Ble {
 
   /** get notifications when the state of bluetooth changes */
   startStateNotifications(cb) {
-    window.ble.startStateNotifications(function(btState) {
-      if (btState === 'on') {
-        cb({ value: true, message: '' });
+    window.ble.startStateNotifications(
+      function(btState) {
+        // only watch for on/off state changes
+        if (btState === 'on') {
+          cb({ value: true });
+        }
+        if (btState === 'off') {
+          cb({ value: false });
+        }
+      },
+      function(btState) {
+        let err = Error('Bluetooth state change error: ' + btState);
+        cb({ error: err });
       }
-      if (btState === 'off') {
-        cb({ value: false, message: 'Enable Bluetooth' });
-      }
-    });
+    );
   }
 
   /** turn off bluetooth state change notifications */

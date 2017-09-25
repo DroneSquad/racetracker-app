@@ -37,11 +37,6 @@ export default class extends Component {
 
   /** Watch bluetooth state properties for changes */
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.connectedTrackers.length !== this.props.connectedTrackers.length) {
-      console.log('-------------------');
-      console.log(prevProps.connectedTrackers);
-      console.log(this.props.connectedTrackers);
-    }
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         // TODO: currently this is never stopped, find a good spot to halt notifications

@@ -5,7 +5,7 @@ import { AppBar, List, ListItem, FontIcon, FloatingActionButton, Subheader } fro
 
 import Person from '../containers/PersonContainer';
 
-import LoadingSpinner from '../../../components/app/LoadingSpinner';
+import LoadingSpinner from '../../../global/app/LoadingSpinner';
 
 import { historyBackButton } from '../../../utils';
 

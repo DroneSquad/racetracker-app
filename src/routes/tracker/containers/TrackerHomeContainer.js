@@ -9,6 +9,7 @@ import {
   startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
+import { refreshRtList } from '../modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 

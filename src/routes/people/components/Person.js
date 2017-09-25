@@ -10,7 +10,7 @@ import api from '../../../services/api';
 import './people.css';
 
 export default class extends React.Component {
-  uuid = uuid.v4();
+  // uuid = uuid.v4();
 
   state = {
     loading: true,
