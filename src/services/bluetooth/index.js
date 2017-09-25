@@ -48,18 +48,21 @@ export class Ble {
 
   /** get notifications when the state of bluetooth changes */
   startStateNotifications(cb) {
-    window.ble.startStateNotifications(function(btState) {
-      // only watch for on/off state changes
-      if (btState === 'on') {
-        cb({ value: true });
+    window.ble.startStateNotifications(
+      function(btState) {
+        // only watch for on/off state changes
+        if (btState === 'on') {
+          cb({ value: true });
+        }
+        if (btState === 'off') {
+          cb({ value: false });
+        }
+      },
+      function(btState) {
+        let err = Error('Bluetooth state change error: ' + btState);
+        cb({ error: err });
       }
-      if (btState === 'off') {
-        cb({ value: false });
-      }
-    }, function(btState) {
-      let err = Error('Bluetooth state change error: ' + btState);
-      cb({ error: err });
-    });
+    );
   }
 
   /** turn off bluetooth state change notifications */
@@ -69,7 +72,8 @@ export class Ble {
       function() {
         let err = Error('Error stopping device Bluetooth state notifications');
         cb({ value: false, error: err });
-    });
+      }
+    );
   }
 
   /** start bluetooth device discovery scan */
@@ -91,13 +95,13 @@ export class Ble {
   /** stop/complete bluetooth device scan */
   deviceScanComplete(cb) {
     window.ble.stopScan(
-     function () {
-       cb({}); // scan successfully stopped
-     },
-     function() {
-       let err = Error('Error stopping Bluetooth device discovery');
-       cb({ error: err });
-     }
+      function() {
+        cb({}); // scan successfully stopped
+      },
+      function() {
+        let err = Error('Error stopping Bluetooth device discovery');
+        cb({ error: err });
+      }
     );
   }
 
@@ -115,10 +119,12 @@ export class Ble {
   connectDevice(cb, device_id) {
     window.ble.connect(
       device_id,
-      function(device) {  // callback fired on successful device connection
+      function(device) {
+        // callback fired on successful device connection
         cb({ device: device, connected: true });
       },
-      function(device) { // callback fired on device disconnection/error
+      function(device) {
+        // callback fired on device disconnection/error
         cb({ device: device, connected: false });
       }
     );
@@ -150,7 +156,6 @@ export class Ble {
       }
     );
   }
-
 }
 
 export default Ble.get();

@@ -85,8 +85,10 @@ export const startDeviceScan = () => {
       if (response.error) {
         dispatch(setError(response.error));
       } else if (response.device) {
-        if (response.device.name) { // some devices have no name
-          if (response.device.name.startsWith('TBSRT')) {  // filter for TBS RaceTrackers
+        if (response.device.name) {
+          // some devices have no name
+          if (response.device.name.startsWith('TBSRT')) {
+            // filter for TBS RaceTrackers
             dispatch(discoverTracker(response.device));
           }
         }
@@ -116,7 +118,7 @@ const initialState = {
   error: '',
   isAvailable: false,
   isEnabled: false,
-  isScanning: false,
+  isScanning: false
 };
 
 /** reducers */

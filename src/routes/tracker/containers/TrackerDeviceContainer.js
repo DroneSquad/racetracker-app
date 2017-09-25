@@ -11,17 +11,16 @@ import TrackerDevice from '../components/TrackerDevice';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the TrackerDevice:   */
 
-const mapStateToProps = (state, ownProps) => (
-{
+const mapStateToProps = (state, ownProps) => ({
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
   isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
   connectedMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectedMsg,
-  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg,
+  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
-  disconnect: device_id => dispatch(disconnectTracker(device_id)),
+  disconnect: device_id => dispatch(disconnectTracker(device_id))
   // openTrackerSettings: device_id => dispatch(push('/tracker/settings', device_id))
 });
 

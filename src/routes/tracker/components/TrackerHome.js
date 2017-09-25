@@ -57,7 +57,8 @@ class TrackerHome extends Component {
     if (!this.props.isBtEnabled) {
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
-      if (!this.props.isBtScanning) {  // prevent scanning if already running
+      if (!this.props.isBtScanning) {
+        // prevent scanning if already running
         this.props.refreshRtList(); // remove any unpaired devices from prev scan
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }

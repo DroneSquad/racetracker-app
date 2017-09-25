@@ -36,7 +36,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     connectedMsg: '',
     connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
-    reconnects: RECOVERY_ATTEMPTS,
+    reconnects: RECOVERY_ATTEMPTS
   }
 });
 
@@ -117,71 +117,85 @@ export default function(state = [], action: Action) {
   switch (action.type) {
     case RT_DISCOVER:
       // use a union to remove dupes of tracker ids
-      return _.unionWith(
-        state,
-        [action.payload],
-        (left, right) => left.id === right.id
-      );
+      return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
     case RT_SHOW_CONNECTING:
       return state.map(
-        tracker => (tracker.id === action.payload ? {
-          ...tracker,
-          isConnected: false,
-          isReconnecting: false,
-          connectedMsg: '',
-          connectingMsg: (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
-        } : tracker)
+        tracker =>
+          tracker.id === action.payload
+            ? {
+                ...tracker,
+                isConnected: false,
+                isReconnecting: false,
+                connectedMsg: '',
+                connectingMsg: tracker.wasConnected ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name
+              }
+            : tracker
       );
     case RT_SHOW_CONNECTED:
       return state.map(
-        tracker => (tracker.id === action.payload ? {
-          ...tracker,
-          connectingMsg: '',
-          connectedMsg: (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
-        } : tracker)
+        tracker =>
+          tracker.id === action.payload
+            ? {
+                ...tracker,
+                connectingMsg: '',
+                connectedMsg: tracker.wasConnected ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG
+              }
+            : tracker
       );
     case RT_CONNECT:
       return state.map(
-        tracker => (tracker.id === action.payload.id ? {
-          ...tracker,
-          rssi: action.payload.rssi, // update rssi, because... why the hell not..
-          isConnected: true,
-          connectedMsg: '',
-          isReconnecting: false,
-          recover: ATTEMPT_RECOVERY, // reset to default
-          reconnects: RECOVERY_ATTEMPTS,  // reset to default
-        } : tracker)
+        tracker =>
+          tracker.id === action.payload.id
+            ? {
+                ...tracker,
+                rssi: action.payload.rssi, // update rssi, because... why the hell not..
+                isConnected: true,
+                connectedMsg: '',
+                isReconnecting: false,
+                recover: ATTEMPT_RECOVERY, // reset to default
+                reconnects: RECOVERY_ATTEMPTS // reset to default
+              }
+            : tracker
       );
     case RT_DISCONNECT:
       return state.map(
-        tracker => (tracker.id === action.payload ? {
-          ...tracker,
-          isConnected: false,
-          isReconnecting: false,
-          connectedMsg: '',
-          connectingMsg: '',
-          recover: ATTEMPT_RECOVERY, // reset to default
-          reconnects: RECOVERY_ATTEMPTS,  // reset to default
-        } : tracker)
+        tracker =>
+          tracker.id === action.payload
+            ? {
+                ...tracker,
+                isConnected: false,
+                isReconnecting: false,
+                connectedMsg: '',
+                connectingMsg: '',
+                recover: ATTEMPT_RECOVERY, // reset to default
+                reconnects: RECOVERY_ATTEMPTS // reset to default
+              }
+            : tracker
       );
     case RT_RECONNECTING:
       return state.map(
-        tracker => (tracker.id === action.payload ? {
-          ...tracker,
-          wasConnected: (tracker.reconnects === RECOVERY_ATTEMPTS) ? tracker.isConnected : tracker.wasConnected,
-          isReconnecting: true,
-          isConnected: false,
-          connectedMsg: '',
-          connectingMsg: '',
-          reconnects: (tracker.recover) ? tracker.reconnects - 1 : tracker.reconnects,
-        } : tracker)
+        tracker =>
+          tracker.id === action.payload
+            ? {
+                ...tracker,
+                wasConnected: tracker.reconnects === RECOVERY_ATTEMPTS ? tracker.isConnected : tracker.wasConnected,
+                isReconnecting: true,
+                isConnected: false,
+                connectedMsg: '',
+                connectingMsg: '',
+                reconnects: tracker.recover ? tracker.reconnects - 1 : tracker.reconnects
+              }
+            : tracker
       );
     case RT_UPDATE_CONNECT:
       return state.map(
-        tracker => (tracker.id === action.payload.device_id ? {
-          ...tracker,
-          isConnected: action.payload.connected
-         } : tracker)
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                isConnected: action.payload.connected
+              }
+            : tracker
       );
     case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);

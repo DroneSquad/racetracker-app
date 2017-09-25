@@ -11,13 +11,13 @@ import RecoverySnackbar from '../components/RecoverySnackbar';
     component - in this case, the TrackerDevice:   */
 
 const mapStateToProps = state => ({
-  reconnectingTrackers: state.trackers.filter(t => t.isReconnecting),
+  reconnectingTrackers: state.trackers.filter(t => t.isReconnecting)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
   disconnect: device_id => dispatch(disconnectTracker(device_id)),
-  setDisconnected: device_id => dispatch(setDisconnected(device_id)),
+  setDisconnected: device_id => dispatch(setDisconnected(device_id))
 });
 
 const RecoverySnackbarContainer = connect(mapStateToProps, mapDispatchToProps)(RecoverySnackbar);

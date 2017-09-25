@@ -15,7 +15,7 @@ export default class TrackerDevice extends Component {
     connectingMsg: string,
     isConnected: boolean,
     connect: Function,
-    disconnect: Function,
+    disconnect: Function
     // opensettings
   };
 
@@ -60,7 +60,7 @@ export default class TrackerDevice extends Component {
     return (
       <div>
         <Snackbar open={!!connectingMsg} message={connectingMsg} />
-        <ListItem {...extraProps} onClick={this.connectTracker}/>
+        <ListItem {...extraProps} onClick={this.connectTracker} />
       </div>
     );
   }

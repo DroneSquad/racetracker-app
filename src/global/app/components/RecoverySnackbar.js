@@ -12,27 +12,28 @@ export default class RecoverySnackbar extends React.PureComponent {
     message: string,
     action: string,
     device_id: string,
-    tryAgain: boolean,
+    tryAgain: boolean
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       message: '',
       action: '',
       device_id: '',
-      tryAgain: true,
+      tryAgain: true
     };
   }
 
   /** Watch reconnectingTracker array for applicable changes */
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.reconnectingTrackers.length !== this.props.reconnectingTrackers.length) {;
+    if (prevProps.reconnectingTrackers.length !== this.props.reconnectingTrackers.length) {
       if (this.props.reconnectingTrackers.length > 0) {
         // determine which/if any tracker is new to the stack
         let d = _.difference(
           _.map(this.props.reconnectingTrackers, 'id').sort(),
-          _.map(prevProps.reconnectingTrackers, 'id').sort());
+          _.map(prevProps.reconnectingTrackers, 'id').sort()
+        );
         if (d.length > 0) {
           let tracker = _(this.props.reconnectingTrackers).filter(t => t.id === d[0]).value()[0];
           if (tracker) {
@@ -48,23 +49,54 @@ export default class RecoverySnackbar extends React.PureComponent {
       if (tracker.reconnects > 0) {
         // attempt to automatically reconnect
         if (tracker.wasConnected) {
-          this.setState({ message: tracker.name + ' connection lost', action: '', device_id: tracker.id, tryAgain: true });
+          this.setState({
+            message: tracker.name + ' connection lost',
+            action: '',
+            device_id: tracker.id,
+            tryAgain: true
+          });
         } else {
-          this.setState({ message: tracker.name + ' connection failed', action: '', device_id: tracker.id, tryAgain: true });
+          this.setState({
+            message: tracker.name + ' connection failed',
+            action: '',
+            device_id: tracker.id,
+            tryAgain: true
+          });
         }
       } else {
         // reconnection attempts failed, ask our user for advice
         if (tracker.wasConnected) {
-          this.setState({ message: tracker.name + ' connection lost', action: 'try again', device_id: tracker.id, tryAgain: false });
+          this.setState({
+            message: tracker.name + ' connection lost',
+            action: 'try again',
+            device_id: tracker.id,
+            tryAgain: false
+          });
         } else {
-          this.setState({ message: tracker.name + ' connection failed', action: 'try again', device_id: tracker.id, tryAgain: false });
+          this.setState({
+            message: tracker.name + ' connection failed',
+            action: 'try again',
+            device_id: tracker.id,
+            tryAgain: false
+          });
         }
       }
-    } else {  // recovery is not an option, give them nothing.. NOTHING I SAY
+    } else {
+      // recovery is not an option, give them nothing.. NOTHING I SAY
       if (tracker.wasConnected) {
-        this.setState({ message: tracker.name + ' connection lost', action: '', device_id: tracker.id, tryAgain: false });
+        this.setState({
+          message: tracker.name + ' connection lost',
+          action: '',
+          device_id: tracker.id,
+          tryAgain: false
+        });
       } else {
-        this.setState({ message: tracker.name + ' connection failed', action: '', device_id: tracker.id, tryAgain: false });
+        this.setState({
+          message: tracker.name + ' connection failed',
+          action: '',
+          device_id: tracker.id,
+          tryAgain: false
+        });
       }
     }
   }
@@ -89,17 +121,15 @@ export default class RecoverySnackbar extends React.PureComponent {
       open: !!message,
       message: message,
       autoHideDuration: 5000,
-      onRequestClose: this.handleRequestClose,
+      onRequestClose: this.handleRequestClose
     };
     if (action) {
       attrs = {
         ...attrs,
         action: action,
-        onActionTouchTap: this.handleTouchTap,
+        onActionTouchTap: this.handleTouchTap
       };
     }
-    return (
-      <Snackbar {...attrs} />
-    );
+    return <Snackbar {...attrs} />;
   }
 }
