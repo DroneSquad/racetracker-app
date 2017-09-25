@@ -45,6 +45,8 @@ export default class TrackerDevice extends Component {
 
   render() {
     let { id, name, rssi, isConnected, connectingMsg, connectedMsg } = this.props;
+    console.log("connectedMsg:" + connectedMsg);
+    console.log("connectingMsg:" + connectingMsg);
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
     let deviceComponent = <this.DeviceProperties name={name} rssi={rssi} />;
     let extraProps = { key: id, primaryText: deviceComponent, leftIcon: deviceLogo };

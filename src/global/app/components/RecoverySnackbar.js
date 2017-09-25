@@ -36,7 +36,6 @@ export default class RecoverySnackbar extends React.PureComponent {
         if (d.length > 0) {
           let tracker = _(this.props.reconnectingTrackers).filter(t => t.id === d[0]).value()[0];
           if (tracker) {
-            console.log("------------configSnackbar-----------");
             this.configSnackbar(tracker);
           }
         }
@@ -49,24 +48,16 @@ export default class RecoverySnackbar extends React.PureComponent {
       if (tracker.reconnects > 0) {
         // attempt to automatically reconnect
         if (tracker.wasConnected) {
-          console.log("1");
           this.setState({ message: tracker.name + ' connection lost', action: '', device_id: tracker.id, tryAgain: true });
-          console.log("1x");
         } else {
-          console.log("2");
           this.setState({ message: tracker.name + ' connection failed', action: '', device_id: tracker.id, tryAgain: true });
-          console.log("2x");
         }
       } else {
         // reconnection attempts failed, ask our user for advice
         if (tracker.wasConnected) {
-          console.log("3");
           this.setState({ message: tracker.name + ' connection lost', action: 'try again', device_id: tracker.id, tryAgain: false });
-          console.log("3x");
         } else {
-          console.log("4");
           this.setState({ message: tracker.name + ' connection failed', action: 'try again', device_id: tracker.id, tryAgain: false });
-          console.log("4x");
         }
       }
     } else {  // recovery is not an option, give them nothing.. NOTHING I SAY
@@ -79,24 +70,17 @@ export default class RecoverySnackbar extends React.PureComponent {
   }
 
   handleTouchTap = () => {
-    console.log("handleTouchTap-START");
     this.setState({ tryAgain: true });
-    console.log("handleTouchTap-END");
   };
 
   handleRequestClose = () => {
-    console.log("handleRequestClose-START");
     let { device_id, tryAgain } = this.state;
     if (tryAgain) {
-      console.log("XXX");
       this.props.connect(device_id);
     } else {
-      console.log("YYY");
       this.props.setDisconnected(device_id);
     }
-    console.log("RESET");
     this.setState({ message: '', action: '' });
-    console.log("handleRequestClose-END");
   };
 
   render() {
@@ -108,7 +92,6 @@ export default class RecoverySnackbar extends React.PureComponent {
       onRequestClose: this.handleRequestClose,
     };
     if (action) {
-      console.log("ACCTTIONN");
       attrs = {
         ...attrs,
         action: action,

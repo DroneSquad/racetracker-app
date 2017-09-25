@@ -6,7 +6,7 @@ import ble from '../../../services/bluetooth';
 import { setError } from './bluetooth';
 
 const ATTEMPT_RECOVERY = true;
-const RECOVERY_ATTEMPTS = 1;
+const RECOVERY_ATTEMPTS = 2;
 const CONNECTING_MSG = 'Connecting to ';
 const RECONNECTING_MSG = 'Reconnecting to ';
 const CONNECTED_MSG = ' connection success';
@@ -80,9 +80,8 @@ export const connectTracker = (device_id: string) => {
     dispatch(showConnecting(device_id));
     ble.connectDevice(response => {
       if (response.connected) {
-        dispatch(showConnected(device_id));
+        dispatch(showConnected(response.device.id));
         dispatch(setConnected(response.device));
-        // TODO: dispatch(showConnected(response.device.id));
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
@@ -130,7 +129,7 @@ export default function(state = [], action: Action) {
           isConnected: false,
           isReconnecting: false,
           connectedMsg: '',
-          connectingMsg: (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
+          connectingMsg: 'SHOW-CONNECTING', // (tracker.wasConnected) ? RECONNECTING_MSG + tracker.name : CONNECTING_MSG + tracker.name,
         } : tracker)
       );
     case RT_SHOW_CONNECTED:
@@ -138,7 +137,7 @@ export default function(state = [], action: Action) {
         tracker => (tracker.id === action.payload ? {
           ...tracker,
           connectingMsg: '',
-          connectedMsg: (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
+          connectedMsg: 'SHOW-CONNE', // (tracker.wasConnected) ? tracker.name + RECONNECTED_MSG : tracker.name + CONNECTED_MSG,
         } : tracker)
       );
     case RT_CONNECT:
@@ -148,8 +147,6 @@ export default function(state = [], action: Action) {
           rssi: action.payload.rssi, // update rssi, because... why the hell not..
           isConnected: true,
           isReconnecting: false,
-          connectingMsg: '',
-          connectedMsg: '',
           recover: ATTEMPT_RECOVERY, // reset to default
           reconnects: RECOVERY_ATTEMPTS,  // reset to default
         } : tracker)
