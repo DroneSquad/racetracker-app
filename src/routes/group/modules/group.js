@@ -31,6 +31,11 @@ export function requestGroup(id) {
   };
 }
 
+/** Get the member count of the group */
+export function requestMemberCount(id) {
+
+}
+
 /** Get the list of members that belong to the group */
 export function requestMembers(id, filter) {
   return dispatch => {
@@ -70,6 +75,6 @@ export default function(state = defaultState, action) {
     case GROUP_MEMBERS_SUCCESS:
       return { ...state, members: action.payload };
     default:
-      return { ...state };
+      return { ...state, loading: true };
   }
 }

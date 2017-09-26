@@ -38,7 +38,6 @@ export default class PilotAvatar extends Avatar {
           {...this.props}
           className="avatar bar-item"
           src={BLANK_PNG}
-          style={{ objectFit: 'cover' }}
         />
       </span>
     );

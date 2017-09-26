@@ -90,6 +90,7 @@ body {
   background-clip: content-box;
   background-repeat: no-repeat;
   background-size: cover;
+  object-fit: cover;
 }
 
 .spinner {

@@ -137,3 +137,34 @@ export function lazyLoad(element, callback) {
     }
   };
 }
+
+/** Format the address the best that we can */
+export function formatAddress(object) {
+  let place = (object || {}).place;
+  if (place && typeof place === 'object') {
+    // order by locality, admin_level_2, admin_level_1, country, etc
+    let political_components = _.orderBy(place.address_components, component => {
+      // make sure it's ordered with 'political' string at the end in case Google changes up the way the types are organized
+      component.types = _.orderBy(component.types, type => type === 'political');
+      switch (component.types[0]) {
+        case 'locality':
+          return 1;
+        case 'administrative_area_level_2':
+          return 2;
+        case 'administrative_area_level_1':
+          return 3;
+        case 'country':
+          return 4;
+        default:
+          return 5;
+      }
+    });
+    if (political_components[0]) return political_components[0].long_name;
+  }
+  return object.address;
+}
+
+/** Make word plur */
+export function pluritize(value, count) {
+  return count > 1 || count === 0 ? `${value}s` : value;
+}

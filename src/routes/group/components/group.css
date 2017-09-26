@@ -1,4 +1,5 @@
 .group-details {
+  --padding: 0;
   padding: 0 !important;
 }
 
@@ -8,4 +9,48 @@
 
 .group-details .group-item div div {
   /*padding: 0 !important;*/
+}
+
+.group-details .group-item.banner div div {
+  padding: 0 !important;
+  height: 175px;
+}
+
+.group-details .group-item.actions div div {
+  padding: 0 !important;
+}
+
+.group-details .banner img {
+  background-position: center;
+  background-clip: content-box;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: cover;
+}
+
+.group-details .info {
+  min-height: 115px;
+}
+
+.group-details .group-name {
+  --header-height: 20px;
+  font-size: var(--header-height);
+  line-height: var(--header-height);
+}
+
+.group-details .group-info {
+  --header-height: 16px;
+  font-size: var(--header-height);
+  line-height: var(--header-height);
+  margin: 8px 0;
+}
+
+.group-details .group-admins {
+  --header-height: 16px;
+  font-size: var(--header-height);
+  line-height: var(--header-height);
+}
+
+.group-details .recent-pilots .avatar {
+  margin: 0 4px;
 }

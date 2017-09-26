@@ -32,7 +32,7 @@
 }
 
 .main main {
-  --padding: 8px;
+  --padding: 0px; /** Must keep 0px not just 0 */
   padding: calc(var(--header-height) + var(--padding)) 0 calc(var(--footer-height) + var(--padding)) 0;
 }
 
