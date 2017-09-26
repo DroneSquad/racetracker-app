@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ListItem, /*FontIcon, IconButton*/ } from 'material-ui';
+import { ListItem /*FontIcon, IconButton*/ } from 'material-ui';
 
 import PilotAvatar from '../../../global/app/PilotAvatar';
 

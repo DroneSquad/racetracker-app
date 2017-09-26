@@ -2,12 +2,13 @@ import Group from '../components/Group';
 
 import { push } from 'react-router-redux';
 
-import reducer, { requestGroup, requestMembers } from '../modules/group';
+import reducer, { requestAllGroupData, requestMembers } from '../modules/group';
 import { groupPilots } from '../../people/modules/people';
 
 import { connect } from '../../../store';
 
 import { lazyLoad } from '../../../utils';
+
 
 // Math to caculate the number of avatars to show, this is magic numbers no way to really know
 const MEMBER_LIMIT = Math.floor(window.innerWidth / (25 + 4 * 2)) - 4;
@@ -38,7 +39,7 @@ export default class extends Group {
 
   /** Currently needed for the connect decorator */
   static mapDispatchToProps = dispatch => ({
-    requestGroup: id => dispatch(requestGroup(id)),
+    requestGroup: id => dispatch(requestAllGroupData(id)),
     requestMembers: id => dispatch(requestMembers(id, { order: 'id DESC', limit: MEMBER_LIMIT })),
     showMembers: id => {
       dispatch(groupPilots(id));

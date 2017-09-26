@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './settings-menu.css';
-import { AppBar, /*List, ListItem, Divider*/ } from 'material-ui';
+import { AppBar /*List, ListItem, Divider*/ } from 'material-ui';
 
 // import DeviceSetting from './DeviceSetting';
 // import SensitivitySetting from './SensitivitySetting';

@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Avatar } from 'material-ui';
+import { BLANK_PNG } from '../../../utils';
 
-import { BLANK_PNG, lazyLoad } from '../../utils';
+import api from '../../../services/api';
 
-/** Component wrapper for pilot avatars */
-export default class PilotAvatar extends Avatar {
+export default class extends React.Component {
   state = { complete: false };
 
   /** This will be called when the image done loading */
@@ -14,7 +13,7 @@ export default class PilotAvatar extends Avatar {
       this.setState({ complete: event.target.complete });
     } else if (!this.failed) {
       event.persist();
-      this.lazyLoad = lazyLoad(event.target, () => (event.target.src = this.props.src));
+      event.target.src = api.urls.banner(this.props.src);
     }
   };
 
@@ -24,21 +23,17 @@ export default class PilotAvatar extends Avatar {
     event.target.src = BLANK_PNG;
   };
 
-  componentWillUnmount() {
-    this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
-  }
-
   render() {
-    // todo add lazy loading, and fancy things like image caching
     return (
       <span className={this.state.complete ? '' : 'loading-bar'} style={{ ...this.props.style }}>
-        <Avatar
+        <img
           onError={this.onError}
           onLoad={this.onLoad}
           {...this.props}
-          style={{ ...this.props.style, position: 'initial' }}
-          className="avatar bar-item"
+          className="bar-item"
           src={BLANK_PNG}
+          alt=""
+          style={{ width: '100%' }}
         />
       </span>
     );
