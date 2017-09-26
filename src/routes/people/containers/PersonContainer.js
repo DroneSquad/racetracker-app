@@ -15,6 +15,10 @@ export default class extends Person {
 
   /** Currently needed for the connect decorator */
   static mapDispatchToProps = dispatch => ({
+    /** When the list item was clicked*/
+    onClick: () => {},
+    /** When the icon was clicked */
+    onClickIcon: () => {},
   });
 
   uuid = uuid.v4();
