@@ -3,15 +3,11 @@
 // READ_CHARACTERISTIC = 0000fff2-0000-1000-8000-00805f9b34fb (fff2) @ handle: 0x0027
 // WRITE_CHARACTERISTIC = 0000fff1-0000-1000-8000-00805f9b34fb (fff1) @ handle: 0x0024
 
-import ble from '../bluetooth';
 import config from './config.json';
 
 class TbsRt {
   constructor() {
     this._config = { ...config };
-
-
-
   }
 
   static get() {
@@ -33,40 +29,51 @@ class TbsRt {
     return String.fromCharCode.apply(null, new Uint8Array(buffer));
   }
 
-  writeCommand(cb, device_id, command) {
-  /*  window.ble.write(
-      device_id,
-      this._config.service,
-      this._config.write,
-
-      "ccc0", "ccc1", data.buffer, success, failure);
-
-  */
+  getCommand(key) {
+    return this.strToBytes(this._config.commands[key]);
   }
 
+  writeCommand(device_id, cmd) {
+    return new Promise((resolve, reject) => {
+      window.ble.write(
+        device_id,
+        this._config.service,
+        this._config.write,
+        this.getCommand(cmd),
+        function(data) {
+          resolve(data);
+        },
+        function(error) {
+          reject(error);
+        }
+      )}
+    )
+  }
 
-
-  /** connect to bluetooth device via device id */
-  getBatteryLevel(cb, device_id) {
-    console.log("getBatteryLevelCalled");
-    /*
-
-
-
+  readCommand(device_id) {
+    return new Promise((resolve, reject) => {
     window.ble.read(
       device_id,
       this._config.service,
-      this._config.write,
+      this._config.read,
       function(data) {
-
-        // callback fired on successful device connection
-        // cb({ device: device, batteryLevel: true });
+        resolve(data);
       },
       function(error) {
-        // callback fired on device disconnection/error
-        // cb({ device: device, error: false });
+        reject(error);
       }
-    );*/
+    )})
+  }
+
+  /** connect to bluetooth device via device id */
+  getBatteryLevel(cb, device_id) {
+    this.writeCommand(device_id, 'getBatteryLevel').then(
+      this.readCommand(device_id).then(
+        result => console.log(
+          this.bytesToStr(result)
+        )
+      )
+    ).catch(error => console.log(error));
   }
 
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import './settings-menu.css';
 import { AppBar, List, ListItem, Divider } from 'material-ui';
 
-// import DeviceSetting from './DeviceSetting';
+import DeviceSettings from '../containers/DeviceSettingsContainer';
 // import SensitivitySetting from './SensitivitySetting';
 // import TimeDelaySetting from './TimeDelaySetting';
 // import FlyoverSetting from './FlyoverSetting';
@@ -11,25 +11,7 @@ import { AppBar, List, ListItem, Divider } from 'material-ui';
 import { historyBackButton } from '../../../utils';
 
 /** Handles the main logic for the Tracker Settings Menu */
-export default class SettingsMenu extends React.Component {
-
-/*  componentDidMount() {
-    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
-      api.public
-        .pilot(this.props.id)
-        .then(pilot =>
-          this.setState({
-            name: pilot.callsign || pilot.display || 'No Pilot Name',
-            loading: false
-          })
-        )
-        .catch(() => this.setState({ loading: false }));
-    });
-  }*/
-
-
-
-
+export default class extends React.Component {
   render() {
     let device_id = this.props.location.state;
     return (
@@ -42,8 +24,13 @@ export default class SettingsMenu extends React.Component {
           />
         </header>
         <main>
-          {device_id}
-          MAIN AREA HERE
+          <List>
+            <ListItem
+              disabled
+              primaryText={<DeviceSettings device_id={device_id} history={this.props.history} />}
+            />
+            <Divider />
+          </List>
         </main>
       </div>
     );

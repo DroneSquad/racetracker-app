@@ -23,6 +23,7 @@ export const RT_SHOW_CONNECTING = 'RT_SHOW_CONNECTING';
 export const RT_SHOW_CONNECTED = 'RT_SHOW_CONNECTED';
 export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
+
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 
 /** actions */
@@ -38,7 +39,8 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     connectedMsg: '',
     connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
-    reconnects: RECOVERY_ATTEMPTS
+    reconnects: RECOVERY_ATTEMPTS,
+    batteryLevel: '',
   }
 });
 
@@ -122,11 +124,13 @@ export const isTrackerConnected = (device_id: string) => {
 export const getBatteryLevel = (device_id: string) => {
   return dispatch => {
     tbs.getBatteryLevel(response => {
-      /*if (response.error) {
-        dispatch(setError(response.error));
-      } else {
-         dispatch(setBatteryLevel(response.batteryLevel));
-      }*/
+      console.log("dispatch.getBatteryLevel");
+      console.log(response);
+      // if (response.error) {
+      //   dispatch(setError(response.error));
+      //} else {
+      //   dispatch(setBatteryLevel(response.batteryLevel));
+      //}
     }, device_id);
   };
 };

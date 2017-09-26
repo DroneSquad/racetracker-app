@@ -10,7 +10,7 @@ import { historyBackButton } from '../../../utils';
 import BluetoothCard from '../containers/BluetoothCardContainer';
 import TrackerList from '../containers/TrackerListContainer';
 
-class TrackerHome extends Component {
+export default class extends Component {
   props: {
     btError: string,
     isBtAvailable: boolean,
@@ -145,5 +145,3 @@ class TrackerHome extends Component {
     );
   }
 }
-
-export default TrackerHome;

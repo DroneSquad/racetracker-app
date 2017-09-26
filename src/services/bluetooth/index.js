@@ -33,6 +33,13 @@ export class Ble {
     );
   }
 
+  /* isEnabled = cb => {
+    window.ble.isEnabled(
+      () => cb(true),
+      () => cb(false)
+    )
+  }*/
+
   /** present a user dialog to enable ble [ANDROID ONLY] */
   enable(cb) {
     window.ble.enable(
