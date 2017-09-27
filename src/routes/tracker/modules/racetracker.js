@@ -24,6 +24,7 @@ export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
+export const RT_NAME = 'RT_NAME';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -151,7 +152,7 @@ export const getTrackerBatteryLevel = (device_id: string) => {
         dispatch(isTrackerConnected(device_id));
       } else {
         console.log(response);
-        // dispatch(setBatteryLevel(response));
+        dispatch(setBatteryLevel(response));
       }
     }, device_id);
   };
@@ -159,7 +160,7 @@ export const getTrackerBatteryLevel = (device_id: string) => {
 
 export const getTrackerName = (device_id: string) => {
   return dispatch => {
-    tbs.getId(response => {
+    tbs.getName(response => {
       if (response.error) {
         // TODO: log the error properly to device
         console.log(response.error)

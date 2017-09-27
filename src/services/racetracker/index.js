@@ -71,8 +71,8 @@ export class TbsRt {
         this._config.service,
         this._config.write,
         cmd,
-        (data) => resolve(data),
-        (error) => reject(error)
+        data => resolve(data),
+        error => reject(error)
       )}
     )
   }
@@ -84,8 +84,8 @@ export class TbsRt {
         device_id,
         this._config.service,
         this._config.read,
-        (data) => resolve(data),
-        (error) => reject(error)
+        data => resolve(data),
+        error => reject(error)
       )}
     )
   }
@@ -116,6 +116,18 @@ export class TbsRt {
         )
       )
     ).catch(error => cb({ error: error }));
+  }
+
+  /** Generic raw sending function for development/debug purposes */
+  sendRawCommand(raw_command, device_id) {
+    let cmd = this.strToBytes(raw_command);
+    this.writeCommand(cmd, device_id).then(
+      this.readCommand(device_id).then(
+        result => {
+          console.log(result)
+        }
+      )
+    ).catch(error => console.log(error));
   }
 
 }
