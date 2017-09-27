@@ -3,16 +3,17 @@ import React from 'react';
 import './settings-menu.css';
 import { AppBar, /*List, ListItem, Divider*/ } from 'material-ui';
 
-// import DeviceSetting from './DeviceSetting';
+import DeviceSettings from '../containers/DeviceSettingsContainer';
 // import SensitivitySetting from './SensitivitySetting';
 // import TimeDelaySetting from './TimeDelaySetting';
 // import FlyoverSetting from './FlyoverSetting';
 
-import { historyBackButton } from '../../../../utils';
+import { historyBackButton } from '../../../utils';
 
 /** Handles the main logic for the Tracker Settings Menu */
-export default class SettingsMenu extends React.Component {
+export default class extends React.Component {
   render() {
+    // id of the tracker for this menu, passed along as part of react-router-redux push command
     let device_id = this.props.location.state;
     return (
       <div className="main settings-menu">
@@ -24,8 +25,10 @@ export default class SettingsMenu extends React.Component {
           />
         </header>
         <main>
-          {device_id}
-          MAIN AREA HERE
+          <List>
+            <ListItem disabled primaryText={<DeviceSettings id={device_id} history={this.props.history} />} />
+            <Divider />
+          </List>
         </main>
       </div>
     );

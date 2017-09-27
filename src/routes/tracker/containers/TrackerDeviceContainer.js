@@ -1,8 +1,8 @@
 // @flow
 import { connect } from 'react-redux';
-// import { push } from 'react-router-redux';
+import { push } from 'react-router-redux';
 
-import { connectTracker, disconnectTracker } from '../modules/racetracker';
+import { connectTracker } from '../modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 
@@ -14,14 +14,14 @@ import TrackerDevice from '../components/TrackerDevice';
 const mapStateToProps = (state, ownProps) => ({
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
   isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
+  /* TODO remove this shit, and make the message part of the global snackbar */
   connectedMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectedMsg,
-  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg
+  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
-  disconnect: device_id => dispatch(disconnectTracker(device_id))
-  // openTrackerSettings: device_id => dispatch(push('/tracker/settings', device_id))
+  settings: device_id => dispatch(push('/tracker/settings', device_id))
 });
 
 const TrackerDeviceContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);

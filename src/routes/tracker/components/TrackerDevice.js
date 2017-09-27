@@ -15,8 +15,7 @@ export default class TrackerDevice extends Component {
     connectingMsg: string,
     isConnected: boolean,
     connect: Function,
-    disconnect: Function
-    // opensettings
+    settings: Function,
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -38,9 +37,9 @@ export default class TrackerDevice extends Component {
     this.props.connect(this.props.id);
   };
 
-  /** TODO: swap Open the tracker settings */
-  disconnectTracker = () => {
-    this.props.disconnect(this.props.id);
+  /** Go to the Tracker Settings page */
+  trackerSettings = () => {
+    this.props.settings(this.props.id);
   };
 
   render() {
@@ -53,7 +52,7 @@ export default class TrackerDevice extends Component {
       return (
         <div>
           <Snackbar open={!!connectedMsg} message={connectedMsg} />
-          <ListItem {...extraProps} rightIcon={icon} onClick={this.disconnectTracker} />
+          <ListItem {...extraProps} rightIcon={icon} onClick={this.trackerSettings} />
         </div>
       );
     }
