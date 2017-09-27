@@ -18,8 +18,7 @@ export class Ble {
   /** check if ble is available on this device */
   isAvailable(cb) {
     // check for the presence of the cordova plugin on the window
-    let bs = 'ble' in window ? true : false;
-    cb(bs);
+    cb('ble' in window ? true : false);
   }
 
   /** check if ble is enabled on this device */
@@ -33,10 +32,8 @@ export class Ble {
   /** present a user dialog to enable ble [ANDROID ONLY] */
   enable(cb) {
     window.ble.enable(
-      function() {
-        cb({ value: true });
-      },
-      function() {
+      () => cb({ value: true }),
+      () => {
         let err = new Error('Bluetooth was not enabled');
         cb({ value: false, error: err });
       }
@@ -46,7 +43,7 @@ export class Ble {
   /** get notifications when the state of bluetooth changes */
   startStateNotifications(cb) {
     window.ble.startStateNotifications(
-      function(btState) {
+      btState => {
         // only watch for on/off state changes
         if (btState === 'on') {
           cb({ value: true });
@@ -55,7 +52,7 @@ export class Ble {
           cb({ value: false });
         }
       },
-      function(btState) {
+      btState => {
         let err = Error('Bluetooth state change error: ' + btState);
         cb({ error: err });
       }
@@ -66,7 +63,7 @@ export class Ble {
   stopStateNotifications(cb) {
     window.ble.stopStateNotifications(
       null, // successfully stopped notifications
-      function() {
+      () => {
         let err = Error('Error stopping device Bluetooth state notifications');
         cb({ value: false, error: err });
       }
@@ -77,10 +74,8 @@ export class Ble {
   startDeviceScan(cb) {
     window.ble.startScan(
       [], // array of services to scan for
-      function(device) {
-        cb({ device: device }); // callback fired on each device discovery
-      },
-      function() {
+      device => cb({ device: device }), // callback fired on each device discovery
+      () => {
         let err = Error('Error during Bluetooth device discovery');
         cb({ error: err });
       }
@@ -92,10 +87,8 @@ export class Ble {
   /** stop/complete bluetooth device scan */
   deviceScanComplete(cb) {
     window.ble.stopScan(
-      function() {
-        cb({}); // scan successfully stopped
-      },
-      function() {
+      () => cb({}), // scan successfully stopped
+      () => {
         let err = Error('Error stopping Bluetooth device discovery');
         cb({ error: err });
       }
@@ -104,7 +97,7 @@ export class Ble {
 
   /** screw the timeout, i want that mickey mouse shit stopped right now! */
   stopDeviceScan(cb) {
-    // kill the timeout w/ anon function, then recall complete
+    // kill the timeout w/ anon function, then call scanComplete
     if (this._scanCB) {
       clearTimeout(this._scanCB);
       this._scanCB = null;
@@ -116,14 +109,10 @@ export class Ble {
   connectDevice(cb, device_id) {
     window.ble.connect(
       device_id,
-      function(device) {
-        // callback fired on successful device connection
-        cb({ device: device, connected: true });
-      },
-      function(device) {
-        // callback fired on device disconnection/error
-        cb({ device: device, connected: false });
-      }
+      // callback fired on successful device connection
+      device => cb({ device: device, connected: true }),
+      // callback fired on device disconnection/error
+      device => cb({ device: device, connected: false })
     );
   }
 
@@ -131,10 +120,8 @@ export class Ble {
   disconnectDevice(cb, device_id) {
     window.ble.disconnect(
       device_id,
-      function() {
-        cb({ device_id: device_id, connected: false });
-      },
-      function() {
+      () => cb({ device_id: device_id, connected: false }),
+      () => {
         let err = Error('Error disconnecting Bluetooth device: ' + device_id);
         cb({ error: err });
       }
