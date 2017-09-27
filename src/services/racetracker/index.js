@@ -5,6 +5,7 @@
 
 import config from './config.json';
 
+// regex expressions used to cleanup tracker responses
 const RE_PERCENT = /(\d+.\d+)%/;
 
 export class TbsRt {

@@ -124,7 +124,7 @@ export class Ble {
     );
   }
 
-  /** check if a device is currently connected w/ device id*/
+  /** check if a device is currently connected w/ device id */
   isDeviceConnected(cb, device_id) {
     window.ble.isConnected(
       device_id,
@@ -133,6 +133,7 @@ export class Ble {
     );
   }
 
+  /** read the rssi value of a device with device id */
   readDeviceRssi(cb, device_id) {
     window.ble.readRSSI(device_id, rssi => cb({ device_id: device_id, rssi: rssi }), error => cb({ error: error }));
   }
