@@ -1,69 +1,42 @@
-import React from 'react';
+import React, { Component } from 'react';
+
 import { List, ListItem, FontIcon, Divider } from 'material-ui';
 
-import Setting from './Setting';
-// import FrequencySetting from './FrequencySetting';
-import { /*toPercent,*/ batteryLevelIcon } from '../../../utils';
+import FrequencySetting from './settings/FrequencySetting';
+import { rssiToPercentage, batteryLevelIcon } from '../../../utils';
 
-export default class DeviceSettings extends Setting {
+export default class DeviceSettings extends Component {
   props: {
     id: string,
     name: string,
-    batteryLevel: string,
+    battery: string,
+    rssi: string,
+    getBattery: Function,
+    getRssi: Function,
   };
 
   constructor(props) {
     super(props);
-    // go and fetch all the RaceTracker settings
-    this.props.getBatteryLevel(this.props.id);
-    this.props.getRssiLevel(this.props.id);
-    this.props.getName(this.props.id);
-    // determine if loading state is complete
-    this.isLoading();
-  }
-
-  isLoading() {
-    if (this.props.name && this.props.batteryLevel && this.props.rssiLevel) {
-      this.doneLoading();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.loading) {
-      if (nextProps.batteryLevel !== this.props.batteryLevel) {
-        if (this.props.batteryLevel) {
-          this.isLoading();
-        }
-      }
-      if (nextProps.rssiLevel !== this.props.rssiLevel) {
-        if (this.props.rssiLevel) {
-          this.isLoading();
-        }
-      }
-      if (nextProps.name !== this.props.name) {
-        if (this.props.name) {
-          this.isLoading();
-        }
-      }
-    }
+    // query racetracker for updates to displayed properties
+    this.props.getBattery(this.props.id);
+    this.props.getRssi(this.props.id);
   }
 
   render() {
-    console.log("render called");
-      let batteryLevel = (
+    let batteryLevel = (
       <span className="bar-item">
-        {(this.props.batteryLevel)}
+        {(this.props.battery)+"%"}
       </span>
     );
-    let bluetoothLevel = (
+    let rssiLevel = (
       <span className="bar-item">
-        {(this.props.bluetoothLevel)}
+        {rssiToPercentage(this.props.rssi)}
       </span>
     );
     return (
-      <div className={this.isLoadingClass()}>
+      <div>
         <h2 className="ds-blue-text bar-item">
-          {this.props.name || 'Undefined'}
+          {this.props.name}
         </h2>
         <h6 className="no-margin bar-item">
           Firmware 1.56
@@ -72,7 +45,7 @@ export default class DeviceSettings extends Setting {
           <ListItem
             disabled
             primaryText="Battery Level"
-            leftIcon={<FontIcon className={batteryLevelIcon(this.state.batteryLevel)} />}
+            leftIcon={<FontIcon className={batteryLevelIcon(this.props.battery)} />}
             rightIcon={batteryLevel}
           />
           <Divider />
@@ -80,39 +53,12 @@ export default class DeviceSettings extends Setting {
             disabled
             primaryText="Bluetooth RSSI"
             leftIcon={<FontIcon className="mdi mdi-bluetooth" />}
-            rightIcon={bluetoothLevel}
+            rightIcon={rssiLevel}
           />
           <Divider />
+          <FrequencySetting history={this.props.history} />
         </List>
       </div>
     );
   }
 }
-
-/*
-<div className={this.isLoadingClass()}>
-  <h2 className="ds-blue-text bar-item">
-    {this.state.name || 'Undefined'}
-  </h2>
-  <h6 className="no-margin bar-item">
-    Firmware {this.state.firmware || '0.0'}
-  </h6>
-  <List>
-    <ListItem
-      disabled
-      primaryText="Battery Level"
-      leftIcon={<FontIcon className={batteryLevelIcon(this.state.batteryLevel)} />}
-      rightIcon={batteryLevel}
-    />
-    <Divider />
-    <ListItem
-      disabled
-      primaryText="Bluetooth Single Strength"
-      leftIcon={<FontIcon className="mdi mdi-bluetooth" />}
-      rightIcon={bluetoothLevel}
-    />
-    <Divider />
-    <FrequencySetting history={this.props.history} />
-  </List>
-</div>
-*/

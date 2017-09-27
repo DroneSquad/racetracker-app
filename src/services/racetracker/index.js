@@ -5,6 +5,8 @@
 
 import config from './config.json';
 
+const RE_PERCENT = /(\d+.\d+)%/;
+
 export class TbsRt {
   constructor() {
     this._config = { ...config };
@@ -53,8 +55,9 @@ export class TbsRt {
     return new Promise((resolve, reject) => {
       let response = this.bytesToStr(result);
       switch (key) {
-        case 'moreComplexCommand':
-          // do any regex/results cleanup
+        case 'getBatteryLevel':
+          let chunks = response.match(RE_PERCENT);
+          response = chunks[1];
           break;
         default:
           break;

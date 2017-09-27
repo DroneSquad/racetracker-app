@@ -30,12 +30,10 @@ export function toPercent(value) {
 
 /** Fancy to get battery level*/
 export function batteryLevelIcon(value) {
-  if (value === 1) {
+  if (parseInt(value, 10) === 100) {
     return 'mdi mdi-battery';
-  } else if (!value || value < 0.1) {
-    return 'mdi mdi-battery-10';
   }
-  return `mdi mdi-battery-${Math.floor(value * 10) * 10}`;
+  return `mdi mdi-battery-${ (parseInt(value/10, 10)+1)*10}`;
 }
 
 /** Run the browsers history back button, must be called in the context of the component */

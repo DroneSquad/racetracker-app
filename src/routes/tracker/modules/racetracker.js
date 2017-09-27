@@ -104,6 +104,14 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
+export const isTrackerConnected = (device_id: string) => {
+  return dispatch => {
+    ble.isDeviceConnected(response => {
+      dispatch(updateConnected(response));
+    }, device_id);
+  };
+};
+
 export const disconnectTracker = (device_id: string) => {
   return dispatch => {
     ble.disconnectDevice(response => {
@@ -134,14 +142,6 @@ export const getTrackerRssi = (device_id: string) => {
   };
 };
 
-export const isTrackerConnected = (device_id: string) => {
-  return dispatch => {
-    ble.isDeviceConnected(response => {
-      dispatch(updateConnected(response));
-    }, device_id);
-  };
-};
-
 export const getTrackerBatteryLevel = (device_id: string) => {
   return dispatch => {
     tbs.getBatteryLevel(response => {
@@ -151,13 +151,13 @@ export const getTrackerBatteryLevel = (device_id: string) => {
         // lets verify the connection state of this tracker
         dispatch(isTrackerConnected(device_id));
       } else {
-        console.log(response);
         dispatch(setBatteryLevel(response));
       }
     }, device_id);
   };
 };
 
+// TODO: honestly not sure if we should ever use this
 export const getTrackerName = (device_id: string) => {
   return dispatch => {
     tbs.getName(response => {
@@ -165,7 +165,7 @@ export const getTrackerName = (device_id: string) => {
         // TODO: log the error properly to device
         console.log(response.error)
         // lets verify the connection state of this tracker
-        dispatch(isTrackerConnected(device_id));
+        // dispatch(isTrackerConnected(device_id));
       } else {
         console.log(response);
         // dispatch(setTrackerName(response));

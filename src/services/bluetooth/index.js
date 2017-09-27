@@ -1,7 +1,6 @@
 /** The Ble (BluetoothLE) class handles bluetooth connection/communication on the device */
 import config from './config.json';
 
-// TODO: more fat arrows please
 export class Ble {
   constructor() {
     this._config = { ...config };

@@ -4,9 +4,10 @@ import './settings-menu.css';
 import { AppBar, List, ListItem, Divider } from 'material-ui';
 
 import DeviceSettings from '../containers/DeviceSettingsContainer';
+import FlyoverSetting from './settings/FlyoverSetting';
 // import SensitivitySetting from './SensitivitySetting';
 // import TimeDelaySetting from './TimeDelaySetting';
-// import FlyoverSetting from './FlyoverSetting';
+
 
 import { historyBackButton } from '../../../utils';
 
@@ -28,6 +29,7 @@ export default class extends React.Component {
           <List>
             <ListItem disabled primaryText={<DeviceSettings id={device_id} history={this.props.history} />} />
             <Divider />
+            <ListItem disabled primaryText={<FlyoverSetting id={device_id} />} />
           </List>
         </main>
       </div>
@@ -37,12 +39,6 @@ export default class extends React.Component {
 
 /*
 <List>
-  <ListItem
-    disabled
-    primaryText={<DeviceSetting bluetooth={bluetoothDevice} history={this.props.history} />}
-  />
-  <Divider />
-  <ListItem disabled primaryText={<FlyoverSetting bluetooth={bluetoothDevice} />} />
   <Divider />
   <ListItem disabled primaryText={<SensitivitySetting bluetooth={bluetoothDevice} />} />
   <Divider />

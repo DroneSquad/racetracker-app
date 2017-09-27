@@ -6,6 +6,7 @@ import {
   isEnabled,
   enable,
   startStateNotifications,
+  // stopStateNotifications, TODO: implement this on application close
   startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
@@ -31,6 +32,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   checkIsBtEnabled: () => dispatch(isEnabled()),
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
+  // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
   refreshRtList: () => dispatch(refreshRtList()),
   startBtDeviceScan: () => dispatch(startDeviceScan()),
   stopBtDeviceScan: () => dispatch(stopDeviceScan())
