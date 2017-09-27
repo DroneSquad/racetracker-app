@@ -15,7 +15,7 @@ export default class TrackerDevice extends Component {
     connectingMsg: string,
     isConnected: boolean,
     connect: Function,
-    settings: Function,
+    settings: Function
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {

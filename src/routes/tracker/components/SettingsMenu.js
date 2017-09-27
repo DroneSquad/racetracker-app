@@ -8,7 +8,6 @@ import FlyoverSetting from './settings/FlyoverSetting';
 // import SensitivitySetting from './SensitivitySetting';
 // import TimeDelaySetting from './TimeDelaySetting';
 
-
 import { historyBackButton } from '../../../utils';
 
 /** Handles the main logic for the Tracker Settings Menu */

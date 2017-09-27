@@ -12,7 +12,7 @@ export default class DeviceSettings extends Component {
     battery: string,
     rssi: string,
     getBattery: Function,
-    getRssi: Function,
+    getRssi: Function
   };
 
   constructor(props) {
@@ -25,7 +25,7 @@ export default class DeviceSettings extends Component {
   render() {
     let batteryLevel = (
       <span className="bar-item">
-        {(this.props.battery)+"%"}
+        {this.props.battery + '%'}
       </span>
     );
     let rssiLevel = (
@@ -38,9 +38,7 @@ export default class DeviceSettings extends Component {
         <h2 className="ds-blue-text bar-item">
           {this.props.name}
         </h2>
-        <h6 className="no-margin bar-item">
-          Firmware 1.56
-        </h6>
+        <h6 className="no-margin bar-item">Firmware 1.56</h6>
         <List>
           <ListItem
             disabled

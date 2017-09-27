@@ -12,7 +12,7 @@ import { getTrackerBatteryLevel, getTrackerRssi } from '../modules/racetracker';
 const mapStateToProps = (state, ownProps) => ({
   battery: state.trackers.filter(t => t.id === ownProps.id)[0].battery,
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
-  name: state.trackers.filter(t => t.id === ownProps.id)[0].name,
+  name: state.trackers.filter(t => t.id === ownProps.id)[0].name
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

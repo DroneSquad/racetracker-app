@@ -27,11 +27,11 @@ export default class extends Component {
 
   componentWillMount() {
     if (!this.props.isBtAvailable) {
-      console.log("componentWillMount:isBtAvailable")
+      console.log('componentWillMount:isBtAvailable');
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
-        console.log("componentWillMount:startDiscovery")
+        console.log('componentWillMount:startDiscovery');
         this.startDiscovery();
       }
     }

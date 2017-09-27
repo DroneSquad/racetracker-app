@@ -47,11 +47,11 @@ export class TbsRt {
           break;
       }
       resolve(this.strToBytes(cmd));
-    })
+    });
   }
 
   /** Convert RaceTracker response from bytes to string and do any additional formatting */
-  prepareResponse(key, result){
+  prepareResponse(key, result) {
     return new Promise((resolve, reject) => {
       let response = this.bytesToStr(result);
       switch (key) {
@@ -63,7 +63,7 @@ export class TbsRt {
           break;
       }
       resolve(response);
-    })
+    });
   }
 
   /** Send a command to RaceTracker WRITE_CHARACTERISTIC */
@@ -76,8 +76,8 @@ export class TbsRt {
         cmd,
         data => resolve(data),
         error => reject(error)
-      )}
-    )
+      );
+    });
   }
 
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
@@ -89,50 +89,49 @@ export class TbsRt {
         this._config.read,
         data => resolve(data),
         error => reject(error)
-      )}
-    )
+      );
+    });
   }
 
   /** Get the battery level of a RaceTracker by device id */
   getBatteryLevel(cb, device_id) {
     let cmdStr = 'getBatteryLevel';
-    this.prepareCommand(cmdStr).then(
-      cmd => this.writeCommand(cmd, device_id).then(
-        this.readCommand(device_id).then(
-          result => this.prepareResponse(cmdStr, result).then(
-            response => cb({ device_id: device_id, battery: response })
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, battery: response }))
           )
         )
       )
-    ).catch(error => cb({ error: error }));
+      .catch(error => cb({ error: error }));
   }
 
   /** Get the name of the RaceTracker by device id */
   getName(cb, device_id) {
     let cmdStr = 'getName';
-    this.prepareCommand(cmdStr).then(
-      cmd => this.writeCommand(cmd, device_id).then(
-        this.readCommand(device_id).then(
-          result => this.prepareResponse(cmdStr, result).then(
-            response => cb({ device_id: device_id, name: response })
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, name: response }))
           )
         )
       )
-    ).catch(error => cb({ error: error }));
+      .catch(error => cb({ error: error }));
   }
 
   /** Generic raw sending function for development/debug purposes */
   sendRawCommand(raw_command, device_id) {
     let cmd = this.strToBytes(raw_command);
-    this.writeCommand(cmd, device_id).then(
-      this.readCommand(device_id).then(
-        result => {
-          console.log(result)
-        }
+    this.writeCommand(cmd, device_id)
+      .then(
+        this.readCommand(device_id).then(result => {
+          console.log(result);
+        })
       )
-    ).catch(error => console.log(error));
+      .catch(error => console.log(error));
   }
-
 }
 
 export default TbsRt.get();

@@ -40,7 +40,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS,
-    battery: '',
+    battery: ''
   }
 });
 
@@ -82,12 +82,12 @@ export const refreshRtList = () => ({
 export const setBatteryLevel = (response: Object) => ({
   type: RT_BATTERY_LEVEL,
   payload: response
-})
+});
 
 export const setRssiLevel = (response: Object) => ({
   type: RT_RSSI_LEVEL,
   payload: response
-})
+});
 
 export const connectTracker = (device_id: string) => {
   return dispatch => {
@@ -117,7 +117,7 @@ export const disconnectTracker = (device_id: string) => {
     ble.disconnectDevice(response => {
       if (response.error) {
         // TODO: log the error properly to device
-        console.log(response.error)
+        console.log(response.error);
         // error on disconnection.. WTF!? revalidate/update connection state
         dispatch(isTrackerConnected(device_id));
       } else {
@@ -132,7 +132,7 @@ export const getTrackerRssi = (device_id: string) => {
     ble.readDeviceRssi(response => {
       if (response.error) {
         // TODO: log the error properly to device
-        console.log(response.error)
+        console.log(response.error);
         // lets verify the connection state of this tracker
         dispatch(isTrackerConnected(device_id));
       } else {
@@ -147,7 +147,7 @@ export const getTrackerBatteryLevel = (device_id: string) => {
     tbs.getBatteryLevel(response => {
       if (response.error) {
         // TODO: log the error properly to device
-        console.log(response.error)
+        console.log(response.error);
         // lets verify the connection state of this tracker
         dispatch(isTrackerConnected(device_id));
       } else {
@@ -163,7 +163,7 @@ export const getTrackerName = (device_id: string) => {
     tbs.getName(response => {
       if (response.error) {
         // TODO: log the error properly to device
-        console.log(response.error)
+        console.log(response.error);
         // lets verify the connection state of this tracker
         // dispatch(isTrackerConnected(device_id));
       } else {
@@ -261,21 +261,23 @@ export default function(state = [], action: Action) {
       );
     case RT_BATTERY_LEVEL:
       return state.map(
-        tracker => tracker.id === action.payload.device_id
-          ? {
-            ...tracker,
-            battery: action.payload.battery,
-          }
-        : tracker
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                battery: action.payload.battery
+              }
+            : tracker
       );
     case RT_RSSI_LEVEL:
       return state.map(
-        tracker => tracker.id === action.payload.device_id
-          ? {
-            ...tracker,
-            rssi: action.payload.rssi,
-          }
-        : tracker
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                rssi: action.payload.rssi
+              }
+            : tracker
       );
     case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);

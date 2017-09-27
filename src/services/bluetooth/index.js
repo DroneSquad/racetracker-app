@@ -22,10 +22,7 @@ export class Ble {
 
   /** check if ble is enabled on this device */
   isEnabled(cb) {
-    window.ble.isEnabled(
-      () => cb(true),
-      () => cb(false)
-    )
+    window.ble.isEnabled(() => cb(true), () => cb(false));
   }
 
   /** present a user dialog to enable ble [ANDROID ONLY] */
@@ -137,13 +134,8 @@ export class Ble {
   }
 
   readDeviceRssi(cb, device_id) {
-    window.ble.readRSSI(
-      device_id,
-      (rssi) => cb({ device_id: device_id, rssi: rssi }),
-      (error) => cb({ error: error })
-    );
+    window.ble.readRSSI(device_id, rssi => cb({ device_id: device_id, rssi: rssi }), error => cb({ error: error }));
   }
-
 }
 
 export default Ble.get();

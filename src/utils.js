@@ -33,7 +33,7 @@ export function batteryLevelIcon(value) {
   if (parseInt(value, 10) === 100) {
     return 'mdi mdi-battery';
   }
-  return `mdi mdi-battery-${ (parseInt(value/10, 10)+1)*10}`;
+  return `mdi mdi-battery-${(parseInt(value / 10, 10) + 1) * 10}`;
 }
 
 /** Run the browsers history back button, must be called in the context of the component */
