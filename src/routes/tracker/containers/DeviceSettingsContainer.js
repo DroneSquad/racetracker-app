@@ -10,11 +10,11 @@ import { getBatteryLevel } from '../modules/racetracker';
     component - in this case, a BluetoothCard   */
 
 const mapStateToProps = (state, ownProps) => ({
-  // batteryLevel: state.trackers.filter(t => t.id === ownProps.id)[0].batteryLevel,
+  batteryLevel: state.trackers.filter(t => t.id === ownProps.id)[0].batteryLevel,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  getBatteryLevel: device_id => dispatch(getBatteryLevel(device_id))
+  getBatteryLevel: device_id => dispatch(getBatteryLevel(device_id)),
 });
 
 const DeviceSettingsContainer = connect(mapStateToProps, mapDispatchToProps)(DeviceSettings);

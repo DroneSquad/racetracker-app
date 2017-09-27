@@ -40,7 +40,6 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS,
-    batteryLevel: '',
   }
 });
 
@@ -124,13 +123,13 @@ export const isTrackerConnected = (device_id: string) => {
 export const getBatteryLevel = (device_id: string) => {
   return dispatch => {
     tbs.getBatteryLevel(response => {
-      console.log("dispatch.getBatteryLevel");
-      console.log(response);
-      // if (response.error) {
-      //   dispatch(setError(response.error));
-      //} else {
-      //   dispatch(setBatteryLevel(response.batteryLevel));
-      //}
+      if (response.error) {
+        // TODO: really not sure we should write racetracker errors to the UI
+        // dispatch(setError(response.error));
+        console.log(response.error);
+      } else {
+        dispatch(setBatteryLevel(response));
+      }
     }, device_id);
   };
 };
@@ -225,7 +224,7 @@ export default function(state = [], action: Action) {
         tracker => tracker.id === action.payload.device_id
           ? {
             ...tracker,
-            batteryLevel: action.payload.batteryLevel,
+            batteryLevel: action.payload.battery,
           }
         : tracker
       );

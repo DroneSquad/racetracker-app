@@ -3,6 +3,7 @@
   "write": "fff1",
   "read": "fff2",
   "commands": {
-    "getBatteryLevel": "B"
+    "getBatteryLevel": "B",
+    "getTrackerId": "I"
   }
 }
