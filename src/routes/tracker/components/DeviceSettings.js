@@ -6,11 +6,18 @@ import Setting from './Setting';
 // import { toPercent, batteryLevelIcon } from '../../../../utils';
 
 export default class DeviceSettings extends Setting {
+  props: {
+    id: string,
+    name: string,
+    batteryLevel: string,
+  };
 
   constructor(props) {
     super(props);
-    console.log("constructor called");
-    console.log(props);
+    // go and fetch all the RaceTracker settings
+    this.props.getBatteryLevel(this.props.id);
+    this.props.getRssiLevel(this.props.id);
+    this.props.getName(this.props.id);
     // go and fetch updated properties from the RaceTracker
     // this.props.getBatteryLevel(this.props.device_id);
 
@@ -27,64 +34,19 @@ export default class DeviceSettings extends Setting {
 
   componentDidMount() {
     console.log("componentDidMount");
-    // in here we need to check the state of the props and set done after complete
-    // this.props.getBatteryLevel(this.props.device_id);
- }
+  }
 
- componentWillMount() {
-   console.log("componentWillMount");
-  /* if (!this.props.isBtAvailable) {
-     this.props.checkIsBtAvailable();
-   } else {
-     if (this.props.trackers.length === 0) {
-       this.startDiscovery();
-     }
-   }*/
- }
- componentWillReceiveProps(nextProps) {
-   console.log("componentWillReceiveProps");
-   console.log(nextProps);
-  /*if (nextProps.forPerson !== this.props.forPerson) {
-    this.props.dispatch(
-      makeASandwichWithSecretSauce(nextProps.forPerson)
-    );
-  }*/
-}
+  componentWillMount() {
+    console.log("componentWillMount");
+  }
 
-
-/*  constructor(props) {
-    super(props);
-    setTimeout(() => {
-      this.doneLoading();
-      this.setState({
-        name: this.props.bluetooth.name,
-        firmware: '1.56',
-        batteryLevel: this.props.bluetooth.battery,
-        bluetoothLevel: this.props.bluetooth.single
-      });
-    }, Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
-  }*/
-
-  /*componentDidMount() {
-    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
-      api.public
-        .pilot(this.props.id)
-        .then(pilot =>
-          this.setState({
-            name: pilot.callsign || pilot.display || 'No Pilot Name',
-            loading: false
-          })
-        )
-        .catch(() => this.setState({ loading: false }));
-    });
-  }*/
-
+  componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps");
+  }
 
   render() {
     console.log("render called");
-    console.log(this.props);
-    console.log(this.state);
-    /* let batteryLevel = (
+      /* let batteryLevel = (
       <span className="bar-item">
         {toPercent(this.state.batteryLevel)}
       </span>

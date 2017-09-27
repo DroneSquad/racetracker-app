@@ -8,6 +8,7 @@ declare var module: {
 };
 
 // basic bluetooth racetracker device on discovery
+// see src/routes/tracker/modules/racetracker.js as a reference to updte this
 export type RaceTracker = {
   name: string,
   rssi: string,
@@ -18,7 +19,8 @@ export type RaceTracker = {
   connectedMsg: string,
   connectingMsg: string,
   recover: boolean,
-  reconnects: number
+  reconnects: number,
+  batteryLevel: string,
 };
 
 export type AuthToken = {

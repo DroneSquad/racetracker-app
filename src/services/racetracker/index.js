@@ -80,14 +80,14 @@ export class TbsRt {
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
   readCommand(device_id) {
     return new Promise((resolve, reject) => {
-    window.ble.read(
-      device_id,
-      this._config.service,
-      this._config.read,
-      (data) => resolve(data),
-      (error) => reject(error)
-    )}
-  )
+      window.ble.read(
+        device_id,
+        this._config.service,
+        this._config.read,
+        (data) => resolve(data),
+        (error) => reject(error)
+      )}
+    )
   }
 
   /** Get the battery level of a RaceTracker by device id */
@@ -104,13 +104,14 @@ export class TbsRt {
     ).catch(error => cb({ error: error }));
   }
 
-  getTrackerId(cb, device_id) {
-    let cmdStr = 'getTrackerId';
+  /** Get the name of the RaceTracker by device id */
+  getName(cb, device_id) {
+    let cmdStr = 'getName';
     this.prepareCommand(cmdStr).then(
       cmd => this.writeCommand(cmd, device_id).then(
         this.readCommand(device_id).then(
           result => this.prepareResponse(cmdStr, result).then(
-            response => cb({ device_id: device_id, tracker_id: response })
+            response => cb({ device_id: device_id, name: response })
           )
         )
       )

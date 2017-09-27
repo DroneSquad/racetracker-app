@@ -4,8 +4,6 @@ import _ from 'lodash';
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
 
-import { setError } from './bluetooth';
-
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 2;
 const CONNECTING_MSG = 'Connecting to ';
@@ -25,6 +23,7 @@ export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
+export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -40,6 +39,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     connectingMsg: '',
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS,
+    battery: '',
   }
 });
 
@@ -83,6 +83,11 @@ export const setBatteryLevel = (response: Object) => ({
   payload: response
 })
 
+export const setRssiLevel = (response: Object) => ({
+  type: RT_RSSI_LEVEL,
+  payload: response
+})
+
 export const connectTracker = (device_id: string) => {
   return dispatch => {
     dispatch(showConnecting(device_id));
@@ -102,11 +107,27 @@ export const disconnectTracker = (device_id: string) => {
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
-        dispatch(setError(response.error));
+        // TODO: log the error properly to device
+        console.log(response.error)
         // error on disconnection.. WTF!? revalidate/update connection state
         dispatch(isTrackerConnected(device_id));
       } else {
         dispatch(setDisconnected(response.device_id));
+      }
+    }, device_id);
+  };
+};
+
+export const getTrackerRssi = (device_id: string) => {
+  return dispatch => {
+    ble.readDeviceRssi(response => {
+      if (response.error) {
+        // TODO: log the error properly to device
+        console.log(response.error)
+        // lets verify the connection state of this tracker
+        dispatch(isTrackerConnected(device_id));
+      } else {
+        dispatch(setRssiLevel(response));
       }
     }, device_id);
   };
@@ -120,15 +141,33 @@ export const isTrackerConnected = (device_id: string) => {
   };
 };
 
-export const getBatteryLevel = (device_id: string) => {
+export const getTrackerBatteryLevel = (device_id: string) => {
   return dispatch => {
     tbs.getBatteryLevel(response => {
       if (response.error) {
-        // TODO: really not sure we should write racetracker errors to the UI
-        // dispatch(setError(response.error));
-        console.log(response.error);
+        // TODO: log the error properly to device
+        console.log(response.error)
+        // lets verify the connection state of this tracker
+        dispatch(isTrackerConnected(device_id));
       } else {
-        dispatch(setBatteryLevel(response));
+        console.log(response);
+        // dispatch(setBatteryLevel(response));
+      }
+    }, device_id);
+  };
+};
+
+export const getTrackerName = (device_id: string) => {
+  return dispatch => {
+    tbs.getId(response => {
+      if (response.error) {
+        // TODO: log the error properly to device
+        console.log(response.error)
+        // lets verify the connection state of this tracker
+        dispatch(isTrackerConnected(device_id));
+      } else {
+        console.log(response);
+        // dispatch(setTrackerName(response));
       }
     }, device_id);
   };
@@ -224,7 +263,16 @@ export default function(state = [], action: Action) {
         tracker => tracker.id === action.payload.device_id
           ? {
             ...tracker,
-            batteryLevel: action.payload.battery,
+            battery: action.payload.battery,
+          }
+        : tracker
+      );
+    case RT_RSSI_LEVEL:
+      return state.map(
+        tracker => tracker.id === action.payload.device_id
+          ? {
+            ...tracker,
+            rssi: action.payload.rssi,
           }
         : tracker
       );

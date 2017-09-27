@@ -3,7 +3,49 @@
   "write": "fff1",
   "read": "fff2",
   "commands": {
+    "resetModeZero": 0,
+    "getCurrentMode": "M",
+    "calibrateGate": "G",
+    "setMaxRounds": "O",
+    "setMinLapTime": "F",
+    "enableVRX": "Q",
+    "changeChannel": "C",
+    "getTotalRounds": "R",
+    "getLaptime": "T",
+    "setRacerChannel": "N",
+    "getFlashData": "Z",
     "getBatteryLevel": "B",
-    "getTrackerId": "I"
+    "writeGateAdc": ",",
+    "readGateAdc": ".",
+    "readRssiAdc": "/",
+    "getName": "I",
+    "setScalingFactor": "o",
+    "setDefaults": "Y",
+    "testLeds": "="
+  },
+  "modes": {
+    "shotgun": 1,
+    "flyby": 2,
+    "gateColor": 3
+  },
+  "slots": {
+    "racer1": 25,
+    "racer2": 26,
+    "racer3": 27,
+    "racer4": 28,
+    "racer5": 29,
+    "racer6": 30,
+    "racer7": 31,
+    "racer8": 32
+  },
+  "flash": {
+    "channelNumber": 0,
+    "gateCalibration": 1,
+    "maxRounds": 2,
+    "lockOutTime": 6,
+    "txPowerLevel": 7,
+    "rxGain": 8,
+    "gateDrivers": 10,
+    "normalizeDrones": 24
   }
 }

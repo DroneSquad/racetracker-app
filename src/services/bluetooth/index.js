@@ -1,6 +1,7 @@
 /** The Ble (BluetoothLE) class handles bluetooth connection/communication on the device */
 import config from './config.json';
 
+// TODO: more fat arrows please
 export class Ble {
   constructor() {
     this._config = { ...config };
@@ -24,21 +25,10 @@ export class Ble {
   /** check if ble is enabled on this device */
   isEnabled(cb) {
     window.ble.isEnabled(
-      function() {
-        cb(true);
-      },
-      function() {
-        cb(false);
-      }
-    );
-  }
-
-  /* isEnabled = cb => {
-    window.ble.isEnabled(
       () => cb(true),
       () => cb(false)
     )
-  }*/
+  }
 
   /** present a user dialog to enable ble [ANDROID ONLY] */
   enable(cb) {
@@ -155,14 +145,19 @@ export class Ble {
   isDeviceConnected(cb, device_id) {
     window.ble.isConnected(
       device_id,
-      function() {
-        cb({ device_id: device_id, connected: true });
-      },
-      function() {
-        cb({ device_id: device_id, connected: false });
-      }
+      () => cb({ device_id: device_id, connected: true }),
+      () => cb({ device_id: device_id, connected: false })
     );
   }
+
+  readDeviceRssi(cb, device_id) {
+    window.ble.readRSSI(
+      device_id,
+      (rssi) => cb({ device_id: device_id, rssi: rssi }),
+      (error) => cb({ error: error })
+    );
+  }
+
 }
 
 export default Ble.get();
