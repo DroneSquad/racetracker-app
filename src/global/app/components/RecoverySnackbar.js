@@ -169,7 +169,7 @@ export default class RecoverySnackbar extends React.PureComponent {
         this.props.setDisconnected(id);
       }
     }
-    this.setState({ message: '' });
+    this.setState({ message: '', clicked: false });
   };
 
   render() {
