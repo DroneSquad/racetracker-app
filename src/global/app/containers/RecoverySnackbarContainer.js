@@ -11,7 +11,9 @@ import RecoverySnackbar from '../components/RecoverySnackbar';
     component - in this case, the TrackerDevice:   */
 
 const mapStateToProps = state => ({
-  reconnectingTrackers: state.trackers.filter(t => t.isReconnecting)
+  reconnectingTrackers: state.trackers.filter(t => t.isReconnecting),
+  connectingTrackers: state.trackers.filter(t => t.isConnecting),
+  connectedTrackers: state.trackers.filter(t => t.isConnected)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
