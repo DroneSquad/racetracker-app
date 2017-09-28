@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import { FontIcon } from 'material-ui';
-import { ListItem, Snackbar } from 'material-ui';
+import { ListItem } from 'material-ui';
 
 import { rssiToPercentage } from '../../../utils';
 
@@ -11,8 +11,6 @@ export default class TrackerDevice extends Component {
     id: string,
     name: string,
     rssi: string,
-    connectedMsg: string,
-    connectingMsg: string,
     isConnected: boolean,
     connect: Function,
     settings: Function
@@ -33,6 +31,7 @@ export default class TrackerDevice extends Component {
   };
 
   /** Connect to the tracker */
+  // TODO: some sort of check, no need to connect if already connected
   connectTracker = () => {
     this.props.connect(this.props.id);
   };
@@ -43,7 +42,7 @@ export default class TrackerDevice extends Component {
   };
 
   render() {
-    let { id, name, rssi, isConnected, connectingMsg, connectedMsg } = this.props;
+    let { id, name, rssi, isConnected } = this.props;
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
     let deviceComponent = <this.DeviceProperties name={name} rssi={rssi} />;
     let extraProps = { key: id, primaryText: deviceComponent, leftIcon: deviceLogo };
@@ -51,16 +50,17 @@ export default class TrackerDevice extends Component {
     if (isConnected) {
       return (
         <div>
-          <Snackbar open={!!connectedMsg} message={connectedMsg} />
           <ListItem {...extraProps} rightIcon={icon} onClick={this.trackerSettings} />
         </div>
       );
     }
     return (
       <div>
-        <Snackbar open={!!connectingMsg} message={connectingMsg} />
         <ListItem {...extraProps} onClick={this.connectTracker} />
       </div>
     );
   }
 }
+
+// <Snackbar open={!!connectedMsg} message={connectedMsg} />
+// <Snackbar open={!!connectingMsg} message={connectingMsg} />
