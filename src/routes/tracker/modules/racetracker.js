@@ -34,7 +34,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     isConnecting: false,
     isReconnecting: false,
     recover: ATTEMPT_RECOVERY,
-    reconnects: RECOVERY_ATTEMPTS,
+    reconnects: RECOVERY_ATTEMPTS
   }
 });
 
@@ -179,7 +179,7 @@ export default function(state = [], action: Action) {
                 isReconnecting: false,
                 isConnected: true,
                 recover: ATTEMPT_RECOVERY, // reset to default
-                reconnects: RECOVERY_ATTEMPTS, // reset to default
+                reconnects: RECOVERY_ATTEMPTS // reset to default
               }
             : tracker
       );
@@ -206,23 +206,23 @@ export default function(state = [], action: Action) {
                 wasConnected: tracker.reconnects === RECOVERY_ATTEMPTS ? tracker.isConnected : tracker.wasConnected,
                 isConnecting: false,
                 isConnected: false,
-                isReconnecting: true,
+                isReconnecting: true
               }
             : tracker
       );
-      case RT_CONNECTING:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload
-              ? {
-                  ...tracker,
-                  reconnects: (tracker.isReconnecting && tracker.recover) ? tracker.reconnects - 1 : tracker.reconnects,
-                  isConnected: false,
-                  isReconnecting: false,
-                  isConnecting: true,
-                }
-              : tracker
-        );
+    case RT_CONNECTING:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload
+            ? {
+                ...tracker,
+                reconnects: tracker.isReconnecting && tracker.recover ? tracker.reconnects - 1 : tracker.reconnects,
+                isConnected: false,
+                isReconnecting: false,
+                isConnecting: true
+              }
+            : tracker
+      );
     case RT_UPDATE_CONNECT:
       return state.map(
         tracker =>

@@ -10,7 +10,7 @@ export default class RecoverySnackbar extends React.PureComponent {
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
     disconnect: Function, // disconnect a connected tracker
-    setDisconnected: Function, // update prop of already disconnected tracker
+    setDisconnected: Function // update prop of already disconnected tracker
   };
 
   constructor(props) {
@@ -18,11 +18,11 @@ export default class RecoverySnackbar extends React.PureComponent {
     this.state = {
       id: '',
       message: '',
-      action: '',  // button on snackbar
+      action: '', // button on snackbar
       timer: true,
       clicked: false,
       default_action: '',
-      clicked_action: '',
+      clicked_action: ''
     };
   }
 
@@ -112,9 +112,11 @@ export default class RecoverySnackbar extends React.PureComponent {
         if (tracker.reconnects > 0) {
           defAction = 'connect';
           // attempt to automatically reconnect
-          if (tracker.wasConnected) {  // if it was connected and then failed
+          if (tracker.wasConnected) {
+            // if it was connected and then failed
             message = tracker.name + ' connection lost';
-          } else {  // if has never actually connected
+          } else {
+            // if has never actually connected
             message = tracker.name + ' connection error';
           }
         } else {
@@ -173,7 +175,6 @@ export default class RecoverySnackbar extends React.PureComponent {
   };
 
   render() {
-    // console.log("render");
     let { message, action, timer } = this.state;
     let attrs = {
       open: !!message,
@@ -183,7 +184,7 @@ export default class RecoverySnackbar extends React.PureComponent {
     if (timer) {
       attrs = {
         ...attrs,
-        autoHideDuration: 5000,
+        autoHideDuration: 5000
       };
     }
     if (action) {
@@ -193,65 +194,6 @@ export default class RecoverySnackbar extends React.PureComponent {
         onActionTouchTap: this.handleTouchTap
       };
     }
-    return  <Snackbar {...attrs} />;
+    return <Snackbar {...attrs} />;
   }
 }
-
-
-
-
-
-/*if (tracker.recover) {
-  if (tracker.reconnects > 0) {
-    // attempt to automatically reconnect
-    if (tracker.wasConnected) {
-      this.setState({
-        message: tracker.name + ' connection lost',
-        action: '',
-        device_id: tracker.id,
-        tryAgain: true
-      });
-    } else {
-      this.setState({
-        message: tracker.name + ' connection failed',
-        action: '',
-        device_id: tracker.id,
-        tryAgain: true
-      });
-    }
-  } else {
-    // reconnection attempts failed, ask our user for advice
-    if (tracker.wasConnected) {
-      this.setState({
-        message: tracker.name + ' connection lost',
-        action: 'retry',
-        device_id: tracker.id,
-        tryAgain: false
-      });
-    } else {
-      this.setState({
-        message: tracker.name + ' connection failed',
-        action: 'retry',
-        device_id: tracker.id,
-        tryAgain: false
-      });
-    }
-  }
-} else {
-  // recovery is not an option, give them nothing.. NOTHING I SAY
-  if (tracker.wasConnected) {
-    this.setState({
-      message: tracker.name + ' connection lost',
-      action: '',
-      device_id: tracker.id,
-      tryAgain: false
-    });
-  } else {
-    this.setState({
-      message: tracker.name + ' connection failed',
-      action: '',
-      device_id: tracker.id,
-      tryAgain: false
-    });
-  }
-}*/
