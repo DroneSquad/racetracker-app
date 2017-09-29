@@ -17,12 +17,12 @@ export default class extends React.Component {
   };
 
   /** Display the meetups */
-  meetups(meetups) {
-    if (meetups) {
-      if (meetups.length > 0) {
-        return _.map(meetups, meetup => meetup.id);
+  rsvps(rsvps) {
+    if (rsvps) {
+      if (_.size(rsvps) > 0) {
+        return _.map(rsvps, (rsvp, key) => <ListItem key={key}>{rsvp.status}</ListItem>);
       }
-      return <ListItem>No Meetups</ListItem>;
+      return <ListItem>No RSVPS</ListItem>;
     }
     return <ListItem><LoadingSpinner size={30}/></ListItem>;
   }
@@ -45,19 +45,19 @@ export default class extends React.Component {
   /** Handle the change of the tabs */
   handleChange = (value) => {
     this.setState({ index: value });
-    value === 0 && this.props.fetchMeetups();
+    value === 0 && this.props.fetchRsvps();
     value === 1 && this.props.fetchGroups();
   };
 
   render() {
-    let { meetups, groups } = this.props;
+    let { rsvps, groups } = this.props;
     return (
       <div className="home">
         <main>
           <Tabs initialSelectedIndex={this.state.index} onChange={this.handleChange}>
             <Tab value={0} label="Calendar">
               <List className="group-meetup-list">
-                {this.state.index === 0 && this.meetups(meetups)}
+                {this.state.index === 0 && this.rsvps(rsvps)}
               </List>
             </Tab>
             <Tab value={1} label="Groups">
