@@ -29,7 +29,6 @@ export default class PilotAvatar extends Avatar {
   }
 
   render() {
-    // todo add lazy loading, and fancy things like image caching
     return (
       <span className={this.state.complete ? '' : 'loading-bar'} style={{ ...this.props.style }}>
         <Avatar
