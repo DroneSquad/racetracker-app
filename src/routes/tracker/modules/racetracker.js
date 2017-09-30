@@ -7,6 +7,7 @@ import tbs from '../../../services/racetracker';
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 1;
 const RACEMODE_DEFAULT = 'shotgun';
+const MIN_LAP_TIME = 10;
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -32,6 +33,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     battery: '',
     firmware: '',
     raceMode: RACEMODE_DEFAULT,
+    minLapTime: MIN_LAP_TIME,
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -87,6 +89,11 @@ export const setFirmwareVersion = (response: Object) => ({
 })
 
 export const setRaceMode = (result: Object) => ({
+  type: RT_RACEMODE,
+  payload: result
+});
+
+export const setMinLapTime = (result: Object) => ({
   type: RT_RACEMODE,
   payload: result
 });
