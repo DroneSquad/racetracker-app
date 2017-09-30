@@ -99,6 +99,16 @@ export class Api {
           lng: notNull(lng, 'lng')
         }
       });
+    },
+
+    /** Get the rsvps for the pilot */
+    rsvps: () => {
+      return this.request(this._axios.get, `pilots/${notNull(this._token.pilot, 'pilot')}/rsvps`, {
+        params: {
+          // lat: notNull(lat, 'lat'),
+          // lng: notNull(lng, 'lng')
+        }
+      });
     }
   };
 

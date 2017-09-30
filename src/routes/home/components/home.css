@@ -1,0 +1,21 @@
+.home {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+}
+
+.home main {
+  --padding: 0 !important;
+  margin-top: -8px;
+  z-index: 1001;
+  position: relative;
+}
+
+.home .group-meetup-list {
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: calc(100vh - 170px);
+  z-index: -1 !important;
+}
