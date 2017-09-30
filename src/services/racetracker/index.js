@@ -129,10 +129,14 @@ export class TbsRt {
     this.writeCommand(cmd, device_id)
       .then(
         this.readCommand(device_id).then(result => {
-          console.log(result);
+          console.log('sendRawCommandResponse');
+          console.log(this.bytesToStr(result));
         })
       )
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log('sendRawCommandError');
+        console.log(error);
+      });
   }
 }
 

@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import DeviceSettings from '../components/DeviceSettings';
 
-import { getTrackerBatteryLevel, getTrackerRssi, getTrackerFirmwareVersion } from '../modules/racetracker';
+import { getBatteryLevel, getRssiLevel, getFirmwareVersion } from '../modules/racetracker';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -17,9 +17,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  getBattery: device_id => dispatch(getTrackerBatteryLevel(device_id)),
-  getRssi: device_id => dispatch(getTrackerRssi(device_id)),
-  getFirmware: device_id => dispatch(getTrackerFirmwareVersion(device_id))
+  getBattery: device_id => dispatch(getBatteryLevel(device_id)),
+  getRssi: device_id => dispatch(getRssiLevel(device_id)),
+  getFirmware: device_id => dispatch(getFirmwareVersion(device_id))
 });
 
 const DeviceSettingsContainer = connect(mapStateToProps, mapDispatchToProps)(DeviceSettings);

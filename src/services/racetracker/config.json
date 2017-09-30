@@ -6,7 +6,7 @@
   "firmware": "2a26",
   "commands": {
     "resetModeZero": 0,
-    "getCurrentMode": "M",
+    "getMode": "M",
     "calibrateGate": "G",
     "setMaxRounds": "O",
     "setMinLapTime": "F",

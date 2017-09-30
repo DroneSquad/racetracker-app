@@ -61,6 +61,3 @@ export default class TrackerDevice extends Component {
     );
   }
 }
-
-// <Snackbar open={!!connectedMsg} message={connectedMsg} />
-// <Snackbar open={!!connectingMsg} message={connectingMsg} />

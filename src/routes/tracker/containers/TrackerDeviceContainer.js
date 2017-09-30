@@ -14,9 +14,6 @@ import TrackerDevice from '../components/TrackerDevice';
 const mapStateToProps = (state, ownProps) => ({
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
   isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
-  /* TODO remove this shit, and make the message part of the global snackbar */
-  connectedMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectedMsg,
-  connectingMsg: state.trackers.filter(t => t.id === ownProps.id)[0].connectingMsg
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

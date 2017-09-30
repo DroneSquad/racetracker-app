@@ -6,6 +6,7 @@ import tbs from '../../../services/racetracker';
 
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 1;
+const RACEMODE_DEFAULT = 'shotgun';
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -16,10 +17,10 @@ export const RT_RECONNECTING = 'RT_RECONNECTING';
 export const RT_CONNECTING = 'RT_CONNECTING';
 export const RT_REFRESH_LIST = 'RT_REFRESH_LIST';
 export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
-
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
+export const RT_RACEMODE = 'RT_RACEMODE';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -30,6 +31,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
+    raceMode: RACEMODE_DEFAULT,
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -84,6 +86,11 @@ export const setFirmwareVersion = (response: Object) => ({
   payload: response
 })
 
+export const setRaceMode = (result: Object) => ({
+  type: RT_RACEMODE,
+  payload: result
+});
+
 export const connectTracker = (device_id: string) => {
   return dispatch => {
     dispatch(setConnecting(device_id));
@@ -122,7 +129,7 @@ export const disconnectTracker = (device_id: string) => {
   };
 };
 
-export const getTrackerRssi = (device_id: string) => {
+export const getRssiLevel = (device_id: string) => {
   return dispatch => {
     ble.readDeviceRssi(response => {
       if (response.error) {
@@ -137,8 +144,7 @@ export const getTrackerRssi = (device_id: string) => {
   };
 };
 
-export const getTrackerFirmwareVersion = (device_id: string) => {
-  console.log("racetracker:module:getTrackerFirmwareVersion");
+export const getFirmwareVersion = (device_id: string) => {
   return dispatch => {
     tbs.getFirmwareVersion(response => {
       if (response.error) {
@@ -153,7 +159,7 @@ export const getTrackerFirmwareVersion = (device_id: string) => {
   };
 };
 
-export const getTrackerBatteryLevel = (device_id: string) => {
+export const getBatteryLevel = (device_id: string) => {
   return dispatch => {
     tbs.getBatteryLevel(response => {
       if (response.error) {
@@ -167,23 +173,6 @@ export const getTrackerBatteryLevel = (device_id: string) => {
     }, device_id);
   };
 };
-
-// TODO: honestly not sure if we should ever use this
-/*export const getTrackerName = (device_id: string) => {
-  return dispatch => {
-    tbs.getName(response => {
-      if (response.error) {
-        // TODO: log the error properly to device
-        console.log(response.error);
-        // lets verify the connection state of this tracker
-        // dispatch(isTrackerConnected(device_id));
-      } else {
-        console.log(response);
-        // dispatch(setTrackerName(response));
-      }
-    }, device_id);
-  };
-};*/
 
 /** reducers */
 export default function(state = [], action: Action) {
@@ -283,6 +272,16 @@ export default function(state = [], action: Action) {
               ? {
                   ...tracker,
                   firmware: action.payload.firmware
+                }
+              : tracker
+        );
+      case RT_RACEMODE:
+        return state.map(
+          tracker =>
+            tracker.id === action.payload.device_id
+              ? {
+                  ...tracker,
+                  raceMode: action.payload.raceMode
                 }
               : tracker
         );
