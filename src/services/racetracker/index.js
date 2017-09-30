@@ -1,7 +1,9 @@
 /** The TbsRt (TBS RaceTracker) class handles communication to a TBS RaceTracker device */
-// GATT_SERVICE = 0000fff0-0000-1000-8000-00805f9b34fb (fff0) @ handle: 0x0023
+// RACETRACKER_SERVICE = 0000fff0-0000-1000-8000-00805f9b34fb (fff0) @ handle: 0x0023
 // READ_CHARACTERISTIC = 0000fff2-0000-1000-8000-00805f9b34fb (fff2) @ handle: 0x0027
 // WRITE_CHARACTERISTIC = 0000fff1-0000-1000-8000-00805f9b34fb (fff1) @ handle: 0x0024
+// DEVICE_SERVICE = 0000180a-0000-1000-8000-00805f9b34fb (180a) @ handle: 0x0010
+// FIRMWARE_CHARACTERISTIC = 00002a26-0000-1000-8000-00805f9b34fb (2a26) @ handle 0x0018
 
 import config from './config.json';
 
@@ -58,7 +60,7 @@ export class TbsRt {
       switch (key) {
         case 'getBatteryLevel':
           let chunks = response.match(RE_PERCENT);
-          response = chunks[1];
+          response = Math.round(chunks[1]);
           break;
         default:
           break;
@@ -72,7 +74,7 @@ export class TbsRt {
     return new Promise((resolve, reject) => {
       window.ble.write(
         device_id,
-        this._config.service,
+        this._config.racetracker_service,
         this._config.write,
         cmd,
         data => resolve(data),
@@ -86,7 +88,7 @@ export class TbsRt {
     return new Promise((resolve, reject) => {
       window.ble.read(
         device_id,
-        this._config.service,
+        this._config.racetracker_service,
         this._config.read,
         data => resolve(data),
         error => reject(error)
@@ -108,18 +110,17 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the name of the RaceTracker by device id */
-  getName(cb, device_id) {
-    let cmdStr = 'getName';
-    this.prepareCommand(cmdStr)
-      .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, name: response }))
-          )
-        )
-      )
-      .catch(error => cb({ error: error }));
+  /** Get the firmware version on a RaceTracker by device id */
+  getFirmwareVersion(cb, device_id) {
+    window.ble.read(
+      device_id,
+      this._config.device_service,
+      this._config.firmware,
+      response => {
+        cb({ device_id: device_id, firmware: this.bytesToStr(response) })
+      },
+        error => cb({ error: error })
+    );
   }
 
   /** Generic raw sending function for development/debug purposes */

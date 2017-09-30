@@ -1,7 +1,9 @@
 {
-  "service": "fff0",
+  "racetracker_service": "fff0",
   "write": "fff1",
   "read": "fff2",
+  "device_service": "180a",
+  "firmware": "2a26",
   "commands": {
     "resetModeZero": 0,
     "getCurrentMode": "M",
