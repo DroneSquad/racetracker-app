@@ -25,6 +25,7 @@ export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
 export const RT_CHAN_COUNT = 'RT_CHAN_COUNT';
+export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -40,7 +41,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     gateADC: '',
     activeMode: '', // (idle, shotgun, flyby, gateColor)
     channelCount: '', // active racers/frequencies setup
-    racerChannels: {},
+    racerChannels: [],
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -49,6 +50,11 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     reconnects: RECOVERY_ATTEMPTS
   }
 });
+
+/* export const setRacerChannel = (channel: Object) => ({
+  type: RT_RACER_CHAN,
+  payload: channel
+});*/
 
 export const setConnected = (tracker: RaceTracker) => ({
   type: RT_CONNECT,
@@ -218,34 +224,21 @@ export const readBatteryLevel = (device_id: string) => {
 
 export const readRacerChannels = (request: object) => {
   return dispatch => {
-    for (let racer of request.racers) {
+    /*for (let racer of request.racers) {
+      console.log("for: " + racer);
       tbs.readRacerChannel(response => {
         if (response.error) {
-          console.log("MODULE-ERROR");
           console.log(response.error); // TODO: log the error properly to device
-          // dispatch(isTrackerConnected(device_id)); // verify/update connection state
+          dispatch(isTrackerConnected(response)); // verify/update connection state
         } else {
-          console.log("MODULE-RESPONSE");
+          console.log("SUCCESS");
           console.log(response);
-          // dispatch(setRacerChannels(response)); // update the redux value
+          dispatch(setRacerChannel(response)); // update the redux value
         }
       }, { device_id: request.device_id, racer: racer });
-    }
+    }*/
   };
 };
-
-/*tbs.readRacerChannels(response => {
-  if (response.error) {
-    console.log("MODULE-ERROR");
-    console.log(response.error); // TODO: log the error properly to device
-    // dispatch(isTrackerConnected(device_id)); // verify/update connection state
-  } else {
-    console.log("MODULE-RESPONSE");
-    console.log(response);
-    // dispatch(setRacerChannels(response)); // update the redux value
-  }
-}, request);*/
-
 
 /** get the current minimum lap time of a racetracker */
 export const readChannelCount = (device_id: string) => {
@@ -309,6 +302,16 @@ export default function(state = [], action: Action) {
     case RT_DISCOVER:
       // use a union to remove dupes of tracker ids
       return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
+    /*case RT_RACER_CHAN:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.id
+            ? {
+              ...tracker,
+              racerChannels: _.unionWith(tracker.racerChannels, [{ racer: action.payload.racer, channel: action.payload.channel }], (left, right) => left.racer === right.racer)
+            }
+          : tracker
+    );*/
     case RT_CONNECT:
       return state.map(
         tracker =>
@@ -404,6 +407,16 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+    case RT_CHAN_COUNT:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                channelCount: action.payload.channelCount
+              }
+            : tracker
+      );
     case RT_RACEMODE:
       return state.map(
         tracker =>
@@ -441,16 +454,6 @@ export default function(state = [], action: Action) {
             ? {
                 ...tracker,
                 activeMode: action.payload.activeMode
-              }
-            : tracker
-      );
-    case RT_CHAN_COUNT:
-      return state.map(
-        tracker =>
-          tracker.id === action.payload.device_id
-            ? {
-                ...tracker,
-                channelCount: action.payload.channelCount
               }
             : tracker
       );

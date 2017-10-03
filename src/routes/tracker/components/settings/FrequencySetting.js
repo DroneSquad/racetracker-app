@@ -8,8 +8,6 @@ export default class FrequencySetting extends Setting {
   props: {
     id: string,
     channelCount: string,
-    getChannelCount: Function,
-    getRacerChannels: Function,
     frequencies: Function
   };
 
@@ -27,10 +25,6 @@ export default class FrequencySetting extends Setting {
     if (this.props.channelCount !== nextProps.channelCount) {
       if (this.state.loading) {
         this.doneLoading();
-        // console.log("getRacerChannels-Called");
-        // let racers = Array(Number(nextProps.channelCount)).fill().map((_, idx) => 1 + idx)
-        // console.log(racers);
-        // this.props.getRacerChannels({ device_id: this.props.id, racers: racers });
       }
     }
   }

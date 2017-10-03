@@ -10,7 +10,7 @@ import config from './config.json';
 // regex expressions used to cleanup tracker responses
 const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
-const RE_ALPHANUM = /^[a-z0-9]+/i;
+const RE_ALPHANUM = /[a-z0-9]+/i;
 
 export class TbsRt {
   constructor() {
@@ -75,25 +75,16 @@ export class TbsRt {
         case 'setMinLapTime':
         case 'getGateAdc':
         case 'setGateAdc':
+        case 'getChannelCount':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         case 'getActiveMode':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           response = this._config.modes[response];
           break;
-        case 'getChannelCount':
-          response = response.match(RE_NUMBER)[0];
-          break;
         case 'getRacerChannel':
-            console.log("prepareResponse");
-            console.log(response);
-            response = response.split(':');
-            // console.log(response);
-            // response = response.match(RE_ALPHANUM);
-            // console.log(response);
-            // response = response[0];
-            console.log("clean: " + response);
-            break;
+          response = response.split(':')[1].match(RE_ALPHANUM);
+          break;
         default:
           break;
       }
@@ -205,8 +196,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, device_id).then(
           this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: device_id, channelCount: response })
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, channelCount: response })
             )
           )
         )

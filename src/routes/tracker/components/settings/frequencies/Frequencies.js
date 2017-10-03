@@ -9,10 +9,18 @@ import frequencies from './frequencies.json'; // the config to generate the prof
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {
+  props: {
+    id: string,
+    getRacerChannels: Function
+  };
+
   static MAX_FREQUENCY_AMOUNT = 8;
 
   constructor(props) {
     super(props);
+    // TODO: these are just testing the racerChannels
+    let racers = Array(Number(this.props.channelCount)).fill().map((_, idx) => 1 + idx)
+    this.props.getRacerChannels({ device_id: this.props.id, racers: racers });
     this.state = {
       bands: frequencies.bands,
       profiles: _.map(frequencies.profiles, profile => profile.name),
@@ -33,6 +41,8 @@ export default class Frequencies extends React.Component {
 
   /** When the user clicks on the frequency */
   onFrequencyClick = () => {
+    console.log("onFrequencyClick");
+    console.log(this.props.racerChannels);
     this.props.history.push('/tracker/settings/frequencies/edit');
   };
 
