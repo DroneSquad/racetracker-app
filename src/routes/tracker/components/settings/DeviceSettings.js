@@ -21,7 +21,7 @@ export default class DeviceSettings extends Setting {
 
   constructor(props) {
     super(props);
-    // query racetracker for updates to displayed properties
+    // query racetracker for displayed properties
     this.props.getBattery(this.props.id);
     this.props.getRssi(this.props.id);
     this.props.getFirmware(this.props.id);
@@ -43,7 +43,9 @@ export default class DeviceSettings extends Setting {
         <h2 className="ds-blue-text bar-item">
           {this.props.name}
         </h2>
-        <h6 className="no-margin bar-item">Firmware {this.props.firmware}</h6>
+        <h6 className="no-margin bar-item">
+          Firmware {this.props.firmware}
+        </h6>
         <List>
           <ListItem
             disabled

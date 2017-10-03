@@ -3,9 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 
 import Frequencies from './components/settings/frequencies/Frequencies';
 import Frequency from './components/settings/frequencies/Frequency';
-import SettingsMenu from './components/settings/SettingsMenu';
+import SettingsMenu from './containers/SettingsMenuContainer';
 import TrackerHome from './containers/TrackerHomeContainer';
-
 
 /** Handles the main logic for the tracker things */
 export default class Tracker extends Component {

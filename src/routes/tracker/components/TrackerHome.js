@@ -22,12 +22,11 @@ export default class extends Component {
     startBtStateNotifications: Function,
     startBtDeviceScan: Function,
     stopBtDeviceScan: Function,
-    refreshRtList: Function
+    refreshTrackerList: Function
   };
 
   componentWillMount() {
     if (!this.props.isBtAvailable) {
-      console.log('componentWillMount:isBtAvailable');
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
@@ -62,7 +61,7 @@ export default class extends Component {
     } else {
       if (!this.props.isBtScanning) {
         // prevent scanning if already running
-        this.props.refreshRtList(); // remove any unpaired devices from prev scan
+        this.props.refreshTrackerList(); // remove any unpaired devices from prev scan
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }
     }

@@ -5,49 +5,28 @@
   "device_service": "180a",
   "firmware": "2a26",
   "commands": {
-    "resetModeZero": 0,
-    "getMode": "M",
-    "calibrateGate": "G",
-    "setMaxRounds": "O",
-    "setMinLapTime": "F",
-    "enableVRX": "Q",
-    "changeChannel": "C",
-    "getTotalRounds": "R",
-    "getLaptime": "T",
-    "setRacerChannel": "N",
-    "getFlashData": "Z",
     "getBatteryLevel": "B",
-    "writeGateAdc": ",",
-    "readGateAdc": ".",
-    "readRssiAdc": "/",
-    "getName": "I",
-    "setScalingFactor": "o",
-    "setDefaults": "Y",
-    "testLeds": "="
+    "getCurrentMode": "M",
+    "getMinLapTime": "Z 6",
+    "setMinLapTime": "F",
+    "calibrateGate": "G",
+    "getGateAdc": ".",
+    "setGateAdc": ","
   },
   "modes": {
+    "idle": 0,
     "shotgun": 1,
     "flyby": 2,
     "gateColor": 3
   },
   "slots": {
-    "racer1": 25,
-    "racer2": 26,
-    "racer3": 27,
-    "racer4": 28,
-    "racer5": 29,
-    "racer6": 30,
-    "racer7": 31,
-    "racer8": 32
-  },
-  "flash": {
-    "channelNumber": 0,
-    "gateCalibration": 1,
-    "maxRounds": 2,
-    "lockOutTime": 6,
-    "txPowerLevel": 7,
-    "rxGain": 8,
-    "gateDrivers": 10,
-    "normalizeDrones": 24
+    "1": 25,
+    "2": 26,
+    "3": 27,
+    "4": 28,
+    "5": 29,
+    "6": 30,
+    "7": 31,
+    "8": 32
   }
 }

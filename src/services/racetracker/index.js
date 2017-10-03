@@ -9,6 +9,7 @@ import config from './config.json';
 
 // regex expressions used to cleanup tracker responses
 const RE_PERCENT = /(\d+.\d+)%/;
+const RE_NUMBER = /\d+/g;
 
 export class TbsRt {
   constructor() {
@@ -43,8 +44,11 @@ export class TbsRt {
     return new Promise((resolve, reject) => {
       let cmd = this._config.commands[key];
       switch (key) {
-        case 'moreComplexCommand':
-          // do more complex things with the opts object
+        case 'setMinLapTime':
+          cmd = cmd + ' ' + options.minLapTime;
+          break;
+        case 'setGateAdc':
+          cmd = cmd + ' ' + options.gateADC;
           break;
         default:
           break;
@@ -54,13 +58,20 @@ export class TbsRt {
   }
 
   /** Convert RaceTracker response from bytes to string and do any additional formatting */
+  /*  key: the command lookup value in config.json
+  /*  result: raw text response from RaceTracker */
   prepareResponse(key, result) {
     return new Promise((resolve, reject) => {
       let response = this.bytesToStr(result);
       switch (key) {
         case 'getBatteryLevel':
-          let chunks = response.match(RE_PERCENT);
-          response = Math.round(chunks[1]);
+          response = Math.round(response.match(RE_PERCENT)[1]);
+          break;
+        case 'getMinLapTime':
+        case 'setMinLapTime':
+        case 'getGateAdc':
+        case 'setGateAdc':
+          response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         default:
           break;
@@ -70,6 +81,8 @@ export class TbsRt {
   }
 
   /** Send a command to RaceTracker WRITE_CHARACTERISTIC */
+  /*  cmd: raw command to send to RaceTracker */
+  /*  device_id: id of the RaceTracker to send to */
   writeCommand(cmd, device_id) {
     return new Promise((resolve, reject) => {
       window.ble.write(
@@ -84,6 +97,7 @@ export class TbsRt {
   }
 
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
+  /*  device_id: id of the racetracker to read result from */
   readCommand(device_id) {
     return new Promise((resolve, reject) => {
       window.ble.read(
@@ -96,8 +110,21 @@ export class TbsRt {
     });
   }
 
+  /** Get the firmware version on a RaceTracker by device id */
+  readFirmwareVersion(cb, device_id) {
+    window.ble.read(
+      device_id,
+      this._config.device_service,
+      this._config.firmware,
+      response => {
+        cb({ device_id: device_id, firmware: this.bytesToStr(response) });
+      },
+      error => cb({ error: error })
+    );
+  }
+
   /** Get the battery level of a RaceTracker by device id */
-  getBatteryLevel(cb, device_id) {
+  readBatteryLevel(cb, device_id) {
     let cmdStr = 'getBatteryLevel';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -110,17 +137,101 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the firmware version on a RaceTracker by device id */
-  getFirmwareVersion(cb, device_id) {
-    window.ble.read(
-      device_id,
-      this._config.device_service,
-      this._config.firmware,
-      response => {
-        cb({ device_id: device_id, firmware: this.bytesToStr(response) })
-      },
-        error => cb({ error: error })
-    );
+  /** Get the minimum lap time of a RaceTracker by device id */
+  readMinLapTime(cb, device_id) {
+    let cmdStr = 'getMinLapTime';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, minLapTime: response }))
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Set the minimum lap time of a RaceTracker by device id */
+  writeMinLapTime(cb, request) {
+    let cmdStr = 'setMinLapTime';
+    this.prepareCommand(cmdStr, request)
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, minLapTime: response })
+            )
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Get the Gate calibration value of a RaceTracker by device id */
+  readGateAdc(cb, device_id) {
+    let cmdStr = 'getGateAdc';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, gateADC: response }))
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Set the Gate calibration value of a RaceTracker by device id */
+  writeGateAdc(cb, request) {
+    let cmdStr = 'setGateAdc';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, gateADC: response })
+            )
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Perform a gate calibration for a RaceTracker by device id */
+  calibrateGate(cb, device_id) {
+    let cmdStr = 'calibrateGate';
+    this.prepareCommand(cmdStr, device_id)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCalibrationAtInterval(device_id, 'Calibrated').then(result => {
+            this.readGateAdc(cb, device_id);
+          })
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Query the state of the calibration process at an interval until completed */
+  readCalibrationAtInterval(device_id, match) {
+    return new Promise((resolve, reject) => {
+      let intId = setInterval(() => {
+        window.ble.read(
+          device_id,
+          this._config.racetracker_service,
+          this._config.read,
+          data => {
+            data = this.bytesToStr(data);
+            if (data.substring(0, 10) === match) {
+              clearInterval(intId);
+              resolve(data);
+            }
+          },
+          error => {
+            reject(error);
+          }
+        );
+      }, 1000);
+    });
   }
 
   /** Generic raw sending function for development/debug purposes */
@@ -130,7 +241,10 @@ export class TbsRt {
       .then(
         this.readCommand(device_id).then(result => {
           console.log('sendRawCommandResponse');
-          console.log(this.bytesToStr(result));
+          let response = this.bytesToStr(result);
+          console.log(response);
+          // do any optional work now
+          // ex. response.match(RE_PERCENT);
         })
       )
       .catch(error => {

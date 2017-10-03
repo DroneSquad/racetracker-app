@@ -13,37 +13,51 @@ import './home.css';
 
 export default class extends React.Component {
   state = {
-    index: 0, // the initial index of the tab
+    index: 0 // the initial index of the tab
   };
 
   /** Display the meetups */
   rsvps(rsvps) {
     if (rsvps) {
       if (_.size(rsvps) > 0) {
-        return _.map(rsvps, (rsvp, key) => <ListItem key={key}>{rsvp.status}</ListItem>);
+        return _.map(rsvps, (rsvp, key) =>
+          <ListItem key={key}>
+            {rsvp.status}
+          </ListItem>
+        );
       }
       return <ListItem>No RSVPS</ListItem>;
     }
-    return <ListItem><LoadingSpinner size={30}/></ListItem>;
+    return (
+      <ListItem>
+        <LoadingSpinner size={30} />
+      </ListItem>
+    );
   }
 
   /** Display the groups */
   groups(groups) {
     if (groups) {
       if (_.size(groups) > 0) {
-        return _.map(_.sortBy(groups, 'name'), (group, key) => (
+        return _.map(_.sortBy(groups, 'name'), (group, key) =>
           <ListItem key={key} rightIcon={<PilotAvatar src={api.urls.banner(group.id)} />}>
-            <Link to={`/group/${group.id}`}>{group.name}</Link>
+            <Link to={`/group/${group.id}`}>
+              {group.name}
+            </Link>
           </ListItem>
-        ));
+        );
       }
       return <ListItem>No Groups</ListItem>;
     }
-    return <ListItem><LoadingSpinner size={30}/></ListItem>;
+    return (
+      <ListItem>
+        <LoadingSpinner size={30} />
+      </ListItem>
+    );
   }
 
   /** Handle the change of the tabs */
-  handleChange = (value) => {
+  handleChange = value => {
     this.setState({ index: value });
     value === 0 && this.props.fetchRsvps();
     value === 1 && this.props.fetchGroups();

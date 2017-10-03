@@ -6,8 +6,7 @@ import tbs from '../../../services/racetracker';
 
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 1;
-const RACEMODE_DEFAULT = 'shotgun';
-const MIN_LAP_TIME = 10;
+const RACEMODE_DEFAULT = 'shotgun'; // flyby
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -22,6 +21,8 @@ export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
 export const RT_RACEMODE = 'RT_RACEMODE';
+export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
+export const RT_GATE_ADC = 'RT_GATE_ADC';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -33,7 +34,8 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     battery: '',
     firmware: '',
     raceMode: RACEMODE_DEFAULT,
-    minLapTime: MIN_LAP_TIME,
+    minLapTime: '',
+    gateADC: '',
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -63,47 +65,53 @@ export const setReconnecting = (id: string) => ({
   payload: id
 });
 
-export const updateConnected = (response: Object) => ({
+export const updateConnected = (request: Object) => ({
   type: RT_UPDATE_CONNECT,
-  payload: response
+  payload: request
 });
 
-export const refreshRtList = () => ({
+export const refreshTrackerList = () => ({
   type: RT_REFRESH_LIST,
   payload: null
 });
 
-export const setBatteryLevel = (response: Object) => ({
+export const setBatteryLevel = (request: Object) => ({
   type: RT_BATTERY_LEVEL,
-  payload: response
+  payload: request
 });
 
-export const setRssiLevel = (response: Object) => ({
+export const setRssiLevel = (request: Object) => ({
   type: RT_RSSI_LEVEL,
-  payload: response
+  payload: request
 });
 
-export const setFirmwareVersion = (response: Object) => ({
+export const setFirmwareVersion = (request: Object) => ({
   type: RT_FIRMWARE_VERSION,
-  payload: response
-})
-
-export const setRaceMode = (result: Object) => ({
-  type: RT_RACEMODE,
-  payload: result
+  payload: request
 });
 
-export const setMinLapTime = (result: Object) => ({
+export const setRaceMode = (request: Object) => ({
   type: RT_RACEMODE,
-  payload: result
+  payload: request
 });
 
+export const setMinLapTime = (request: Object) => ({
+  type: RT_MIN_LAPTIME,
+  payload: request
+});
+
+export const setGateADC = (request: Object) => ({
+  type: RT_GATE_ADC,
+  payload: request
+});
+
+/** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
   return dispatch => {
     dispatch(setConnecting(device_id));
     ble.connectDevice(response => {
       if (response.connected) {
-        // successful device connection, long running will fire on error disconnect
+        // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
@@ -113,6 +121,7 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
+/** check the current connection state, dispatch update if needed -> used on error */
 export const isTrackerConnected = (device_id: string) => {
   return dispatch => {
     ble.isDeviceConnected(response => {
@@ -121,14 +130,13 @@ export const isTrackerConnected = (device_id: string) => {
   };
 };
 
+/** disconnect a racetracker from the device/app */
 export const disconnectTracker = (device_id: string) => {
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
-        // TODO: log the error properly to device
-        console.log(response.error);
-        // error on disconnection.. WTF!? revalidate/update connection state
-        dispatch(isTrackerConnected(device_id));
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setDisconnected(response.device_id));
       }
@@ -136,14 +144,13 @@ export const disconnectTracker = (device_id: string) => {
   };
 };
 
-export const getRssiLevel = (device_id: string) => {
+/** get the current rssi value of a racetracker to the device/app */
+export const readRssiLevel = (device_id: string) => {
   return dispatch => {
     ble.readDeviceRssi(response => {
       if (response.error) {
-        // TODO: log the error properly to device
-        console.log(response.error);
-        // lets verify the connection state of this tracker
-        // dispatch(isTrackerConnected(device_id));
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setRssiLevel(response));
       }
@@ -151,14 +158,13 @@ export const getRssiLevel = (device_id: string) => {
   };
 };
 
-export const getFirmwareVersion = (device_id: string) => {
+/* get the firmware version of a racetracker */
+export const readFirmwareVersion = (device_id: string) => {
   return dispatch => {
-    tbs.getFirmwareVersion(response => {
+    tbs.readFirmwareVersion(response => {
       if (response.error) {
-        // TODO: log the error properly to device
-        console.log(response.error);
-        // lets verify the connection state of this tracker
-        // dispatch(isTrackerConnected(device_id));
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setFirmwareVersion(response));
       }
@@ -166,16 +172,57 @@ export const getFirmwareVersion = (device_id: string) => {
   };
 };
 
-export const getBatteryLevel = (device_id: string) => {
+/** get the current battery level of a racetracker */
+export const readBatteryLevel = (device_id: string) => {
   return dispatch => {
-    tbs.getBatteryLevel(response => {
+    tbs.readBatteryLevel(response => {
       if (response.error) {
-        // TODO: log the error properly to device
-        console.log(response.error);
-        // lets verify the connection state of this tracker
-        // dispatch(isTrackerConnected(device_id));
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setBatteryLevel(response));
+      }
+    }, device_id);
+  };
+};
+
+/** get the current minimum lap time of a racetracker */
+export const readMinLapTime = (device_id: string) => {
+  return dispatch => {
+    tbs.readMinLapTime(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setMinLapTime(response)); // update the redux value
+      }
+    }, device_id);
+  };
+};
+
+/** write a new min lap time value to a racetracker */
+export const writeMinLapTime = (request: object) => {
+  return dispatch => {
+    tbs.writeMinLapTime(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+      } else {
+        dispatch(setMinLapTime(response)); // update the redux value
+      }
+    }, request);
+  };
+};
+
+/** write a new min lap time value to a racetracker */
+export const calibrateGate = (device_id: string) => {
+  return dispatch => {
+    tbs.calibrateGate(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setGateADC(response)); // update the redux value
       }
     }, device_id);
   };
@@ -272,26 +319,46 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-      case RT_FIRMWARE_VERSION:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload.device_id
-              ? {
-                  ...tracker,
-                  firmware: action.payload.firmware
-                }
-              : tracker
-        );
-      case RT_RACEMODE:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload.device_id
-              ? {
-                  ...tracker,
-                  raceMode: action.payload.raceMode
-                }
-              : tracker
-        );
+    case RT_FIRMWARE_VERSION:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                firmware: action.payload.firmware
+              }
+            : tracker
+      );
+    case RT_RACEMODE:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                raceMode: action.payload.raceMode
+              }
+            : tracker
+      );
+    case RT_MIN_LAPTIME:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                minLapTime: action.payload.minLapTime
+              }
+            : tracker
+      );
+    case RT_GATE_ADC:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                gateADC: action.payload.gateADC
+              }
+            : tracker
+      );
     case RT_REFRESH_LIST:
       return state.filter(tracker => tracker.isConnected);
     default:

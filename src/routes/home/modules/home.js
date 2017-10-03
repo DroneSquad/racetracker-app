@@ -22,12 +22,14 @@ export function requestGroups(lng = 0, lat = 0) {
         dispatch({
           type: HOME_GROUP_SUCCESS,
           payload: groups
-        })
+        });
       })
-      .catch(error => dispatch({
-        type: HOME_GROUP_ERROR,
-        payload: error
-      }));
+      .catch(error =>
+        dispatch({
+          type: HOME_GROUP_ERROR,
+          payload: error
+        })
+      );
   };
 }
 
@@ -45,18 +47,19 @@ export function requestRsvps(lng = 0, lat = 0) {
         dispatch({
           type: HOME_RSVPS_SUCCESS,
           payload: rsvps
-        })
+        });
       })
-      .catch(error => dispatch({
-        type: HOME_RSVPS_SUCCESS,
-        payload: error
-      }));
+      .catch(error =>
+        dispatch({
+          type: HOME_RSVPS_SUCCESS,
+          payload: error
+        })
+      );
   };
 }
 
 /** The default state for the home page */
-const defaultState = {
-};
+const defaultState = {};
 
 /** The reducer for the state */
 export default function(state = defaultState, action) {
