@@ -110,6 +110,32 @@ export class TbsRt {
     });
   }
 
+  /** Read result of a command sent to a RaceTracker on an interval */
+  /*  device_id: id of the racetracker to read result from */
+  /*  interval: interval to check result in ms */
+  /*  complete: function that determines if the command has completed */
+  readCommandAtInterval(device_id, interval, complete) {
+    return new Promise((resolve, reject) => {
+      let intId = setInterval(() => {
+        window.ble.read(
+          device_id,
+          this._config.racetracker_service,
+          this._config.read,
+          data => {
+            data = this.bytesToStr(data);
+            if (complete(data)) {
+              clearInterval(intId);
+              resolve();
+            }
+          },
+          error => {
+            reject(error);
+          }
+        );
+      }, interval);
+    });
+  }
+
   /** Get the firmware version on a RaceTracker by device id */
   readFirmwareVersion(cb, device_id) {
     window.ble.read(
@@ -203,35 +229,21 @@ export class TbsRt {
     this.prepareCommand(cmdStr, device_id)
       .then(cmd =>
         this.writeCommand(cmd, device_id).then(
-          this.readCalibrationAtInterval(device_id, 'Calibrated').then(result => {
-            this.readGateAdc(cb, device_id);
-          })
+          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(
+            this.readGateAdc(cb, device_id)
+          )
         )
       )
       .catch(error => cb({ error: error }));
   }
 
-  /** Query the state of the calibration process at an interval until completed */
-  readCalibrationAtInterval(device_id, match) {
-    return new Promise((resolve, reject) => {
-      let intId = setInterval(() => {
-        window.ble.read(
-          device_id,
-          this._config.racetracker_service,
-          this._config.read,
-          data => {
-            data = this.bytesToStr(data);
-            if (data.substring(0, 10) === match) {
-              clearInterval(intId);
-              resolve(data);
-            }
-          },
-          error => {
-            reject(error);
-          }
-        );
-      }, 1000);
-    });
+  /** validation function to determine when the calibration process has completed */
+  isCalibrationComplete(data: string) {
+    let matchStr = 'Calibrated';
+    if (data.substring(0, 10) === matchStr) {
+      return true;
+    }
+    return false;
   }
 
   /** Generic raw sending function for development/debug purposes */

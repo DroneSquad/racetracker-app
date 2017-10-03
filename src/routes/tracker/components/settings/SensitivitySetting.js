@@ -13,7 +13,7 @@ export default class SensitivitySetting extends Setting {
 
   componentWillReceiveProps(nextProps) {
     if (this.state.calibrating) {
-      if (this.props.gateADC !== nextProps.gateADC) {
+      if (nextProps.gateADC) {
         this.setState({ calibrating: false, calibrateDialog: false });
       }
     }
