@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { ListItem, Toggle } from 'material-ui';
 
-export default class FlyoverSetting extends Component {
+import Setting from './Setting';
+
+export default class FlyoverSetting extends Setting {
   props: {
     id: string,
     raceMode: string,

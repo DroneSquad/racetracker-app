@@ -3,30 +3,19 @@ import React from 'react';
 import './settings-menu.css';
 import { AppBar, List, ListItem, Divider } from 'material-ui';
 
-import DeviceSettings from '../containers/DeviceSettingsContainer';
-import FlyoverSetting from '../containers/FlyoverSettingContainer';
+import DeviceSettings from '../../containers/DeviceSettingsContainer';
+import FlyoverSetting from '../../containers/FlyoverSettingContainer';
 
-import SensitivitySetting from '../components/settings/SensitivitySetting';
-import TimeDelaySetting from '../components/settings/TimeDelaySetting';
+import SensitivitySetting from './SensitivitySetting';
+import TimeDelaySetting from './TimeDelaySetting';
 
-import { historyBackButton } from '../../../utils';
-
-import tbs from '../../../services/racetracker';
+import { historyBackButton } from '../../../../utils';
 
 /** Handles the main logic for the Tracker Settings Menu */
 export default class extends React.Component {
   render() {
-    // id of the tracker for this menu, passed along as part of react-router-redux push csommand
+    // active tracker id, passed along as part of react-router-redux push command
     let device_id = this.props.location.state;
-    /* tbs.sendRawCommand("F", device_id);
-    tbs.sendRawCommand("M", device_id);
-    tbs.sendRawCommand("O", device_id);
-    tbs.sendRawCommand("C", device_id);
-    tbs.sendRawCommand("R", device_id);
-    tbs.sendRawCommand("I", device_id);
-    tbs.sendRawCommand(".", device_id);
-    tbs.sendRawCommand("/", device_id);*/
-
     return (
       <div className="main settings-menu">
         <header>

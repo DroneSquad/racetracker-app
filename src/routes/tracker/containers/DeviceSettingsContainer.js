@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import DeviceSettings from '../components/DeviceSettings';
+import DeviceSettings from '../components/settings/DeviceSettings';
 
 import { getBatteryLevel, getRssiLevel, getFirmwareVersion } from '../modules/racetracker';
 

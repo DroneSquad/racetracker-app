@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { List, ListItem, FontIcon, Divider } from 'material-ui';
 
-import FrequencySetting from './settings/FrequencySetting';
-import { rssiToPercentage, batteryLevelIcon } from '../../../utils';
+import FrequencySetting from './FrequencySetting';
+import { rssiToPercentage, batteryLevelIcon } from '../../../../utils';
 
-export default class DeviceSettings extends Component {
+import Setting from './Setting';
+
+export default class DeviceSettings extends Setting {
   props: {
     id: string,
     name: string,

@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import FlyoverSetting from '../components/FlyoverSetting';
+import FlyoverSetting from '../components/settings/FlyoverSetting';
 
 import { setRaceMode } from '../modules/racetracker';
 
