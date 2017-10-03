@@ -24,7 +24,7 @@ export const RT_RACEMODE = 'RT_RACEMODE';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
-export const RT_FREQ_COUNT = 'RT_FREQ_COUNT';
+export const RT_CHAN_COUNT = 'RT_CHAN_COUNT';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -39,7 +39,8 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     minLapTime: '',
     gateADC: '',
     activeMode: '', // (idle, shotgun, flyby, gateColor)
-    frequencyCount: '', // active racers/frequencies setup
+    channelCount: '', // active racers/frequencies setup
+    racerChannels: {},
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -114,8 +115,8 @@ export const setGateADC = (request: Object) => ({
   payload: request
 });
 
-export const setFrequencyCount = (request: Object) => ({
-  type: RT_FREQ_COUNT,
+export const setChannelCount = (request: Object) => ({
+  type: RT_CHAN_COUNT,
   payload: request
 });
 
@@ -215,15 +216,46 @@ export const readBatteryLevel = (device_id: string) => {
   };
 };
 
-/** get the current minimum lap time of a racetracker */
-export const readFrequencyCount = (device_id: string) => {
+export const readRacerChannels = (request: object) => {
   return dispatch => {
-    tbs.readFrequencyCount(response => {
+    for (let racer of request.racers) {
+      tbs.readRacerChannel(response => {
+        if (response.error) {
+          console.log("MODULE-ERROR");
+          console.log(response.error); // TODO: log the error properly to device
+          // dispatch(isTrackerConnected(device_id)); // verify/update connection state
+        } else {
+          console.log("MODULE-RESPONSE");
+          console.log(response);
+          // dispatch(setRacerChannels(response)); // update the redux value
+        }
+      }, { device_id: request.device_id, racer: racer });
+    }
+  };
+};
+
+/*tbs.readRacerChannels(response => {
+  if (response.error) {
+    console.log("MODULE-ERROR");
+    console.log(response.error); // TODO: log the error properly to device
+    // dispatch(isTrackerConnected(device_id)); // verify/update connection state
+  } else {
+    console.log("MODULE-RESPONSE");
+    console.log(response);
+    // dispatch(setRacerChannels(response)); // update the redux value
+  }
+}, request);*/
+
+
+/** get the current minimum lap time of a racetracker */
+export const readChannelCount = (device_id: string) => {
+  return dispatch => {
+    tbs.readChannelCount(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
-        dispatch(setFrequencyCount(response)); // update the redux value
+        dispatch(setChannelCount(response)); // update the redux value
       }
     }, device_id);
   };
@@ -412,13 +444,13 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    case RT_FREQ_COUNT:
+    case RT_CHAN_COUNT:
       return state.map(
         tracker =>
           tracker.id === action.payload.device_id
             ? {
                 ...tracker,
-                frequencyCount: action.payload.frequencyCount
+                channelCount: action.payload.channelCount
               }
             : tracker
       );

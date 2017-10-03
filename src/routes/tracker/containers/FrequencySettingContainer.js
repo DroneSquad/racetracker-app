@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import FrequencySetting from '../components/settings/FrequencySetting';
 
-import { readFrequencyCount } from '../modules/racetracker';
+import { readChannelCount, readRacerChannels } from '../modules/racetracker';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -11,11 +11,12 @@ import { readFrequencyCount } from '../modules/racetracker';
     component - in this case, a FrequencySetting */
 
 const mapStateToProps = (state, ownProps) => ({
-  frequencyCount: state.trackers.filter(t => t.id === ownProps.id)[0].frequencyCount
+  channelCount: state.trackers.filter(t => t.id === ownProps.id)[0].channelCount
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  getFrequencyCount: device_id => dispatch(readFrequencyCount(device_id)),
+  getChannelCount: device_id => dispatch(readChannelCount(device_id)),
+  getRacerChannels: object => dispatch(readRacerChannels(object)),
   frequencies: device_id => dispatch(push('/tracker/settings/frequencies', device_id))
 });
 

@@ -10,6 +10,7 @@ import config from './config.json';
 // regex expressions used to cleanup tracker responses
 const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
+const RE_ALPHANUM = /^[a-z0-9]+/i;
 
 export class TbsRt {
   constructor() {
@@ -50,6 +51,9 @@ export class TbsRt {
         case 'setGateAdc':
           cmd = cmd + ' ' + options.gateADC;
           break;
+        case 'getRacerChannel':
+          cmd = cmd + ' ' + this._config.slots[options.racer];
+          break;
         default:
           break;
       }
@@ -77,9 +81,19 @@ export class TbsRt {
           response = response.split(':')[1].match(RE_NUMBER)[0];
           response = this._config.modes[response];
           break;
-        case 'getFrequencyCount':
+        case 'getChannelCount':
           response = response.match(RE_NUMBER)[0];
           break;
+        case 'getRacerChannel':
+            console.log("prepareResponse");
+            console.log(response);
+            response = response.split(':');
+            // console.log(response);
+            // response = response.match(RE_ALPHANUM);
+            // console.log(response);
+            // response = response[0];
+            console.log("clean: " + response);
+            break;
         default:
           break;
       }
@@ -184,15 +198,31 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the total number of frequencies/racers tracked by a RaceTracker */
-  readFrequencyCount(cb, device_id) {
-    let cmdStr = 'getFrequencyCount';
+  /** Get the total number of channels/racers tracked by a RaceTracker */
+  readChannelCount(cb, device_id) {
+    let cmdStr = 'getChannelCount';
     this.prepareCommand(cmdStr)
       .then(cmd =>
         this.writeCommand(cmd, device_id).then(
           this.readCommand(device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: device_id, frequencyCount: response })
+              cb({ device_id: device_id, channelCount: response })
+            )
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Get the total number of channels/racers tracked by a RaceTracker */
+  readRacerChannel(cb, request) {
+    let cmdStr = 'getRacerChannel';
+    this.prepareCommand(cmdStr, request)
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, racer: request.racer, channel: response })
             )
           )
         )

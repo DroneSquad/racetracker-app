@@ -7,15 +7,16 @@ import Setting from './Setting';
 export default class FrequencySetting extends Setting {
   props: {
     id: string,
-    frequencyCount: string,
-    getFrequencyCount: Function,
+    channelCount: string,
+    getChannelCount: Function,
+    getRacerChannels: Function,
     frequencies: Function
   };
 
   constructor(props) {
     super(props);
-    this.props.getFrequencyCount(this.props.id);
-    if (this.props.frequencyCount) {
+    this.props.getChannelCount(this.props.id);
+    if (this.props.channelCount) {
       this.state.loading = false;
     } else {
       this.state.loading = true;
@@ -23,9 +24,13 @@ export default class FrequencySetting extends Setting {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.frequencyCount !== nextProps.frequencyCount) {
+    if (this.props.channelCount !== nextProps.channelCount) {
       if (this.state.loading) {
         this.doneLoading();
+        // console.log("getRacerChannels-Called");
+        // let racers = Array(Number(nextProps.channelCount)).fill().map((_, idx) => 1 + idx)
+        // console.log(racers);
+        // this.props.getRacerChannels({ device_id: this.props.id, racers: racers });
       }
     }
   }
@@ -37,10 +42,10 @@ export default class FrequencySetting extends Setting {
 
   render() {
     let freqCountText = '';
-    if (this.props.frequencyCount === '1') {
+    if (this.props.channelCount === '1') {
       freqCountText = '1 frequency is being tracked';
     } else {
-      freqCountText = this.props.frequencyCount + ' frequencies are being tracked';
+      freqCountText = this.props.channelCount + ' frequencies are being tracked';
     }
     let frequencies = (
       <span className="bar-item">

@@ -12,7 +12,8 @@
     "calibrateGate": "G",
     "getGateAdc": ".",
     "setGateAdc": ",",
-    "getFrequencyCount": "N"
+    "getRacerChannel": "Z",
+    "getChannelCount": "N"
   },
   "modes": {
     "0": "idle",
