@@ -6,18 +6,19 @@
   "firmware": "2a26",
   "commands": {
     "getBatteryLevel": "B",
-    "getCurrentMode": "M",
+    "getActiveMode": "M",
     "getMinLapTime": "Z 6",
     "setMinLapTime": "F",
     "calibrateGate": "G",
     "getGateAdc": ".",
-    "setGateAdc": ","
+    "setGateAdc": ",",
+    "getFrequencyCount": "N"
   },
   "modes": {
-    "idle": 0,
-    "shotgun": 1,
-    "flyby": 2,
-    "gateColor": 3
+    "0": "idle",
+    "1": "shotgun",
+    "2": "flyby",
+    "3": "gateColor"
   },
   "slots": {
     "1": 25,

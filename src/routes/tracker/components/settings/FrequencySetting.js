@@ -5,23 +5,46 @@ import { ListItem, FontIcon } from 'material-ui';
 import Setting from './Setting';
 
 export default class FrequencySetting extends Setting {
+  props: {
+    id: string,
+    frequencyCount: string,
+    getFrequencyCount: Function,
+    frequencies: Function
+  };
+
   constructor(props) {
     super(props);
-    setTimeout(() => {
-      this.doneLoading();
-      this.setState({ frequencies: '8 frequencies are being tracked' });
-    }, Math.random() * 1000 + 500); // todo trigger after we fetch the settings from the device
+    this.props.getFrequencyCount(this.props.id);
+    if (this.props.frequencyCount) {
+      this.state.loading = false;
+    } else {
+      this.state.loading = true;
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.frequencyCount !== nextProps.frequencyCount) {
+      if (this.state.loading) {
+        this.doneLoading();
+      }
+    }
   }
 
   /** Open the frequencies settings for the race tracker */
   openFrequencies = () => {
-    this.props.history.push('/tracker/settings/frequencies');
+    this.props.frequencies(this.props.id);
   };
 
   render() {
+    let freqCountText = '';
+    if (this.props.frequencyCount === '1') {
+      freqCountText = '1 frequency is being tracked';
+    } else {
+      freqCountText = this.props.frequencyCount + ' frequencies are being tracked';
+    }
     let frequencies = (
       <span className="bar-item">
-        {this.state.frequencies}
+        {freqCountText}
       </span>
     );
     return (

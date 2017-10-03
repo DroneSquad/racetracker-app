@@ -73,6 +73,13 @@ export class TbsRt {
         case 'setGateAdc':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
+        case 'getActiveMode':
+          response = response.split(':')[1].match(RE_NUMBER)[0];
+          response = this._config.modes[response];
+          break;
+        case 'getFrequencyCount':
+          response = response.match(RE_NUMBER)[0];
+          break;
         default:
           break;
       }
@@ -150,6 +157,20 @@ export class TbsRt {
   }
 
   /** Get the battery level of a RaceTracker by device id */
+  readActiveMode(cb, device_id) {
+    let cmdStr = 'getActiveMode';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result => {
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, activeMode: response }));
+          })
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Get the battery level of a RaceTracker by device id */
   readBatteryLevel(cb, device_id) {
     let cmdStr = 'getBatteryLevel';
     this.prepareCommand(cmdStr)
@@ -157,6 +178,22 @@ export class TbsRt {
         this.writeCommand(cmd, device_id).then(
           this.readCommand(device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, battery: response }))
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /** Get the total number of frequencies/racers tracked by a RaceTracker */
+  readFrequencyCount(cb, device_id) {
+    let cmdStr = 'getFrequencyCount';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: device_id, frequencyCount: response })
+            )
           )
         )
       )
@@ -229,9 +266,7 @@ export class TbsRt {
     this.prepareCommand(cmdStr, device_id)
       .then(cmd =>
         this.writeCommand(cmd, device_id).then(
-          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(
-            this.readGateAdc(cb, device_id)
-          )
+          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(this.readGateAdc(cb, device_id))
         )
       )
       .catch(error => cb({ error: error }));

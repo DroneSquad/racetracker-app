@@ -2,7 +2,7 @@ import React from 'react';
 
 import { List, ListItem, FontIcon, Divider } from 'material-ui';
 
-import FrequencySetting from './FrequencySetting';
+import FrequencySetting from '../../containers/FrequencySettingContainer';
 import { rssiToPercentage, batteryLevelIcon } from '../../../../utils';
 
 import Setting from './Setting';
@@ -61,7 +61,7 @@ export default class DeviceSettings extends Setting {
             rightIcon={rssiLevel}
           />
           <Divider />
-          <FrequencySetting history={this.props.history} />
+          <FrequencySetting id={this.props.id} history={this.props.history} />
         </List>
       </div>
     );

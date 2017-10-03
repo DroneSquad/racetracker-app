@@ -21,8 +21,10 @@ export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
 export const RT_RACEMODE = 'RT_RACEMODE';
+export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
+export const RT_FREQ_COUNT = 'RT_FREQ_COUNT';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -36,6 +38,8 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     raceMode: RACEMODE_DEFAULT,
     minLapTime: '',
     gateADC: '',
+    activeMode: '', // (idle, shotgun, flyby, gateColor)
+    frequencyCount: '', // active racers/frequencies setup
     isConnected: false,
     wasConnected: false,
     isConnecting: false,
@@ -95,6 +99,11 @@ export const setRaceMode = (request: Object) => ({
   payload: request
 });
 
+export const setActiveMode = (request: Object) => ({
+  type: RT_ACTIVE_MODE,
+  payload: request
+});
+
 export const setMinLapTime = (request: Object) => ({
   type: RT_MIN_LAPTIME,
   payload: request
@@ -102,6 +111,11 @@ export const setMinLapTime = (request: Object) => ({
 
 export const setGateADC = (request: Object) => ({
   type: RT_GATE_ADC,
+  payload: request
+});
+
+export const setFrequencyCount = (request: Object) => ({
+  type: RT_FREQ_COUNT,
   payload: request
 });
 
@@ -113,6 +127,7 @@ export const connectTracker = (device_id: string) => {
       if (response.connected) {
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
+        dispatch(readActiveMode(response.device.id));
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
@@ -139,6 +154,20 @@ export const disconnectTracker = (device_id: string) => {
         dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setDisconnected(response.device_id));
+      }
+    }, device_id);
+  };
+};
+
+/** get the current mode of a racetracker by device id */
+export const readActiveMode = (device_id: string) => {
+  return dispatch => {
+    tbs.readActiveMode(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setActiveMode(response)); // update the redux value
       }
     }, device_id);
   };
@@ -181,6 +210,20 @@ export const readBatteryLevel = (device_id: string) => {
         dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setBatteryLevel(response));
+      }
+    }, device_id);
+  };
+};
+
+/** get the current minimum lap time of a racetracker */
+export const readFrequencyCount = (device_id: string) => {
+  return dispatch => {
+    tbs.readFrequencyCount(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setFrequencyCount(response)); // update the redux value
       }
     }, device_id);
   };
@@ -356,6 +399,26 @@ export default function(state = [], action: Action) {
             ? {
                 ...tracker,
                 gateADC: action.payload.gateADC
+              }
+            : tracker
+      );
+    case RT_ACTIVE_MODE:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                activeMode: action.payload.activeMode
+              }
+            : tracker
+      );
+    case RT_FREQ_COUNT:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                frequencyCount: action.payload.frequencyCount
               }
             : tracker
       );
