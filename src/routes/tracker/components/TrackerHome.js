@@ -31,6 +31,7 @@ export default class extends Component {
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
+        // TODO: validate if this is ever actually fired, on a rehydration, if not remove
         console.log('componentWillMount:startDiscovery');
         this.startDiscovery();
       }
