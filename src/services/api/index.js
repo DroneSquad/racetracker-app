@@ -35,7 +35,9 @@ export class Api {
 
   /** Create the request, todo add error handling and add middleware */
   request(base, endpoint, options) {
-    return base(endpoint, options).then(response => ({ ...response.data, $response: response }));
+    return base(endpoint, options).then(response => ({ ...response.data, $response: response })).catch(error => {
+      window.onerror(error);
+    });
   }
 
   /** Return urls for things, genneraly used for redirects or picture */

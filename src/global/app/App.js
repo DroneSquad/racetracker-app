@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
 import RecoverySnackbar from './containers/RecoverySnackbarContainer';
+import ErrorPopup from './containers/ErrorPopupContainer';
 
 import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
@@ -38,6 +39,7 @@ export default class App extends React.Component {
           </Switch>
         </ConnectedRouter>
         <RecoverySnackbar />
+        <ErrorPopup />
       </div>
     );
   }
