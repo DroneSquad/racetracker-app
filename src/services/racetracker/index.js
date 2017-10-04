@@ -203,9 +203,7 @@ export class TbsRt {
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response =>
                 {
-                  console.log("racer: " + racer + " :" + response);
                   if (response !== 'FF') {
-                    console.log("ADDED");
                     channels.push({ racer: racer, channel: response })
                   }
                 }
@@ -216,10 +214,8 @@ export class TbsRt {
       .catch(error => errors.push(error))
     }
     if (errors.length > 0) {
-      console.log("ERROR");
       cb({ errors: errors })
     } else {
-      console.log("CHANNELS");
       cb({ device_id: device_id, channels: channels })
     }
   }
