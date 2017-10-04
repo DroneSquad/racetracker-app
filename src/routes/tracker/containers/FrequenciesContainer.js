@@ -8,7 +8,7 @@ import Frequencies from '../components/settings/frequencies/Frequencies';
     component - in this case, a Frequencies */
 
 const mapStateToProps = (state, ownProps) => ({
-  id: ownProps.location.state, // passed in via react-router-redux push command
+  id: ownProps.location.state // passed in via react-router-redux push command
 });
 
 const FrequenciesContainer = connect(mapStateToProps)(Frequencies);

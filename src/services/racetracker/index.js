@@ -85,8 +85,8 @@ export class TbsRt {
           break;
         case 'getMinLapTime':
         case 'setMinLapTime':
-        case "getMaxRounds":
-        case "setMaxRounds":
+        case 'getMaxRounds':
+        case 'setMaxRounds':
         case 'getGateAdc':
         case 'setGateAdc':
         case 'getRssiAdc':
@@ -103,8 +103,6 @@ export class TbsRt {
         default:
           break;
       }
-      // TODO: remove this log before deployment
-      console.log(key + ": " + response);
       resolve(response);
     });
   }
@@ -213,7 +211,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, totalRounds: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, totalRounds: response })
+            )
           )
         )
       )
@@ -227,7 +227,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, round: request.round, lapTime: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, round: request.round, lapTime: response })
+            )
           )
         )
       )
@@ -255,7 +257,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, maxRounds: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, maxRounds: response })
+            )
           )
         )
       )
@@ -263,22 +267,22 @@ export class TbsRt {
   }
 
   /** Get the current RSSI value of the ADC */
-    readRssiAdc(cb, device_id) {
-      let cmdStr = 'getRssiAdc';
-      this.prepareCommand(cmdStr)
-        .then(cmd =>
-          this.writeCommand(cmd, device_id).then(
-            this.readCommand(device_id).then(result =>
-              this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, rssiADC: response }))
-            )
+  readRssiAdc(cb, device_id) {
+    let cmdStr = 'getRssiAdc';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommand(device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, rssiADC: response }))
           )
         )
-        .catch(error => cb({ error: error }));
-    }
+      )
+      .catch(error => cb({ error: error }));
+  }
 
-    writeRacerChannels(cb, request) {
-      // TODO:
-      /*let channels = [];
+  writeRacerChannels(cb, request) {
+    // TODO:
+    /*let channels = [];
       let errors = [];
       let cmdStr = 'getRacerChannel';
       let racers = [1, 2, 3, 4, 5, 6, 7, 8];  // all available racer slots
@@ -305,58 +309,54 @@ export class TbsRt {
       } else {
         cb({ device_id: device_id, channels: channels })
       }*/
-    }
+  }
 
   /** Read all available racer slots for channels (used on initial set and count) */
   readRacerChannels(cb, device_id) {
     let channels = [];
     let errors = [];
     let cmdStr = 'getRacerChannel';
-    let racers = [1, 2, 3, 4, 5, 6, 7, 8];  // all available racer slots
+    let racers = [1, 2, 3, 4, 5, 6, 7, 8]; // all available racer slots
     for (let racer of racers) {
-      let slot = this._config.slots[racer];  // get the handle of the racer slot
+      let slot = this._config.slots[racer]; // get the handle of the racer slot
       this.prepareCommand(cmdStr, { slot: slot })
         .then(cmd =>
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
-              this.prepareResponse(cmdStr, result).then(response =>
-                {
-                  if (response !== 'FF') {
-                    channels.push({ racer: racer, channel: response })
-                  }
+              this.prepareResponse(cmdStr, result).then(response => {
+                if (response !== 'FF') {
+                  channels.push({ racer: racer, channel: response });
                 }
-              )
+              })
             )
           )
         )
-      .catch(error => errors.push(error))
+        .catch(error => errors.push(error));
     }
     if (errors.length > 0) {
-      cb({ errors: errors })
+      cb({ errors: errors });
     } else {
-      cb({ device_id: device_id, channels: channels })
+      cb({ device_id: device_id, channels: channels });
     }
   }
 
   /** Get the channel info for an individual racer slot */
   readRacerChannel(cb, request) {
     let cmdStr = 'getRacerChannel';
-    let slot = this._config.slots[request.racer];  // get the handle of the racer slot
+    let slot = this._config.slots[request.racer]; // get the handle of the racer slot
     this.prepareCommand(cmdStr, { slot: slot })
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              {
-                if (response !== 'FF') {
-                  cb({ device_id: request.device_id, racer: request.racer, channel: response })
-                }
+            this.prepareResponse(cmdStr, result).then(response => {
+              if (response !== 'FF') {
+                cb({ device_id: request.device_id, racer: request.racer, channel: response });
               }
-            )
+            })
           )
         )
       )
-    .catch(error => cb({ error: error }));
+      .catch(error => cb({ error: error }));
   }
 
   /* Set the channel of a specified racer slot */
@@ -402,7 +402,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, minLapTime: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, minLapTime: response })
+            )
           )
         )
       )
@@ -430,7 +432,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, gateADC: response.gateADC }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, gateADC: response.gateADC })
+            )
           )
         )
       )

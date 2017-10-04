@@ -9,7 +9,6 @@ import frequencies from './frequencies.json'; // the config to generate the prof
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {
-
   static MAX_FREQUENCY_AMOUNT = 8;
 
   constructor(props) {

@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  calibrate: device_id => dispatch(calibrateGate(device_id)),
+  calibrate: device_id => dispatch(calibrateGate(device_id))
 });
 
 const SensitivitySettingContainer = connect(mapStateToProps, mapDispatchToProps)(SensitivitySetting);

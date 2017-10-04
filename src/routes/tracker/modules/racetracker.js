@@ -23,9 +23,9 @@ export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
 export const RT_RACEMODE = 'RT_RACEMODE';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
-export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS'
+export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
-export const RT_RSSI_ADC= 'RT_RSSI_ADC';
+export const RT_RSSI_ADC = 'RT_RSSI_ADC';
 
 // TODO: complete these last two operations
 export const RT_RACER_CHANS = 'RT_RACER_CHANS';
@@ -150,7 +150,7 @@ export const setTotalRounds = (request: Object) => ({
   payload: request
 });
 
-export const setLaptime= (request: Object) => ({
+export const setLaptime = (request: Object) => ({
   type: RT_LAPTIME,
   payload: request
 });
@@ -265,7 +265,7 @@ export const readRacerChannel = (request: object) => {
         // dispatch(setRacerChannel(response)); // update the redux value
       }
     }, request);
-  }
+  };
 };
 
 // TODO:
@@ -281,7 +281,7 @@ export const writeRacerChannel = (request: object) => {
         // dispatch(setRacerChannel(response)); // update the redux value
       }
     }, request);
-  }
+  };
 };
 
 // TODO:
@@ -297,7 +297,7 @@ export const writeRacerChannels = (request: object) => {
         // dispatch(setRacerChannels(response)); // update the redux value
       }
     }, request);
-  }
+  };
 };
 
 /** Get all the currently configured channels for available racers */
@@ -311,7 +311,7 @@ export const readRacerChannels = (device_id: string) => {
         dispatch(setRacerChannels(response)); // update the redux value
       }
     }, device_id);
-  }
+  };
 };
 
 /** Set the desired gate ADC value for fine tuning */
@@ -325,7 +325,7 @@ export const writeGateAdc = (request: object) => {
         dispatch(setGateAdc(response)); // update the redux value
       }
     }, request);
-  }
+  };
 };
 
 /** Get the currently calibrated gate ADC value for a tracker */
@@ -409,7 +409,7 @@ export const writeMaxRounds = (request: object) => {
         dispatch(setMaxRounds(response)); // update the redux value
       }
     }, request);
-  }
+  };
 };
 
 /** get the current minimum lap time of a racetracker */
@@ -577,7 +577,7 @@ export default function(state = [], action: Action) {
       );
     case RT_RACER_CHAN:
       // TODO: implement add/update with a single racer and channel
-      return ;
+      return;
     case RT_MIN_LAPTIME:
       return state.map(
         tracker =>
@@ -588,16 +588,16 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-      case RT_MAX_ROUNDS:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload.device_id
-              ? {
-                  ...tracker,
-                  maxRounds: action.payload.maxRounds
-                }
-              : tracker
-        );
+    case RT_MAX_ROUNDS:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                maxRounds: action.payload.maxRounds
+              }
+            : tracker
+      );
     case RT_GATE_ADC:
       return state.map(
         tracker =>
@@ -608,16 +608,16 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-      case RT_RSSI_ADC:
-        return state.map(
-          tracker =>
-            tracker.id === action.payload.device_id
-              ? {
-                  ...tracker,
-                  rssiADC: action.payload.rssiADC
-                }
-              : tracker
-        );
+    case RT_RSSI_ADC:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                rssiADC: action.payload.rssiADC
+              }
+            : tracker
+      );
     case RT_ACTIVE_MODE:
       return state.map(
         tracker =>
