@@ -5,7 +5,7 @@ import { AppBar, List, ListItem, Divider, DropDownMenu, MenuItem } from 'materia
 
 import { historyBackButton, toPercent } from '../../../../../utils';
 
-import frequencies from './frequencies.json'; // the config to generate the profiles
+import frequencies from '../../../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {

@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import Frequencies from '../components/settings/frequencies/Frequencies';
+import Frequencies from '../../../components/settings/frequencies/Frequencies';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for

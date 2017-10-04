@@ -3,11 +3,11 @@ import React from 'react';
 import './settings-menu.css';
 import { AppBar, List, ListItem, Divider } from 'material-ui';
 
-import DeviceSettings from '../../containers/DeviceSettingsContainer';
-import FlyoverSetting from '../../containers/FlyoverSettingContainer';
+import DeviceSettings from '../../containers/settings/DeviceSettingsContainer';
+import FlyoverSetting from '../../containers/settings/FlyoverSettingContainer';
 
-import SensitivitySetting from '../../containers/SensitivitySettingContainer';
-import TimeDelaySetting from '../../containers/TimeDelaySettingContainer';
+import SensitivitySetting from '../../containers/settings/SensitivitySettingContainer';
+import TimeDelaySetting from '../../containers/settings/TimeDelaySettingContainer';
 
 import { historyBackButton } from '../../../../utils';
 

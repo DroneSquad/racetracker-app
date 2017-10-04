@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Frequencies from './containers/FrequenciesContainer';
-import Frequency from './containers/FrequencyContainer';
-import SettingsMenu from './containers/SettingsMenuContainer';
+import Frequencies from './containers/settings/frequencies/FrequenciesContainer';
+import Frequency from './containers/settings/frequencies/FrequencyContainer';
+import SettingsMenu from './containers/settings/SettingsMenuContainer';
 import TrackerHome from './containers/TrackerHomeContainer';
 
 /** Handles the main logic for the tracker things */

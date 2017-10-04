@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { AppBar, List, ListItem, Divider, SelectField, MenuItem } from 'material-ui';
 
 import { historyBackButton } from '../../../../../utils';
-import frequencies from './frequencies.json'; // the config to generate the profiles
+import frequencies from '../../../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles
 
 import './frequencies.css';
 

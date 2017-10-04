@@ -2,8 +2,8 @@ import React from 'react';
 
 import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
-import RaceHeats from './RaceHeats';
-import Racing from './Racing';
+//import RaceHeats from './RaceHeats';
+//import Racing from './Racing';
 
 import './fly.css';
 
@@ -32,10 +32,12 @@ export default class Race extends React.Component {
         <main>
           <Tabs initialSelectedIndex={1}>
             <Tab label="Racing">
-              <Racing history={this.props.history} />
+              {/*<Racing history={this.props.history} />*/}
+              <div className="center-text">Racing Tab Temp Disabled for Testing</div>
             </Tab>
             <Tab label="Heats">
-              <RaceHeats history={this.props.history} />
+              {/*<RaceHeats history={this.props.history} />*/}
+              <div className="center-text">Heats Tab Temp Disabled for Testing</div>
             </Tab>
             <Tab label="Stats" />
           </Tabs>

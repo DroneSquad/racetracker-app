@@ -2,7 +2,7 @@ import React from 'react';
 
 import { List, ListItem, FontIcon, Divider } from 'material-ui';
 
-import FrequencySetting from '../../containers/FrequencySettingContainer';
+import FrequencySetting from '../../containers/settings/FrequencySettingContainer';
 import { rssiToPercentage, batteryLevelIcon } from '../../../../utils';
 
 import Setting from './Setting';
