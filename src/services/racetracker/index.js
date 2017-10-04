@@ -161,7 +161,7 @@ export class TbsRt {
     );
   }
 
-  /** Get the battery level of a RaceTracker by device id */
+  /** Get the active mode of a RaceTracker by device id */
   readActiveMode(cb, device_id) {
     let cmdStr = 'getActiveMode';
     this.prepareCommand(cmdStr)
@@ -189,7 +189,7 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Read all available racer slots for channels used on initial set and count */
+  /** Read all available racer slots for channels (used on initial set and count) */
   readRacerChannels(cb, device_id) {
     let channels = [];
     let errors = [];
@@ -197,7 +197,7 @@ export class TbsRt {
     let racers = [1, 2, 3, 4, 5, 6, 7, 8];  // all available racer slots
     for (let racer of racers) {
       let slot = this._config.slots[racer];  // get the handle of the racer slot
-      this.prepareCommand(cmdStr, { racer: racer, slot: slot })
+      this.prepareCommand(cmdStr, { slot: slot })
         .then(cmd =>
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
@@ -218,6 +218,26 @@ export class TbsRt {
     } else {
       cb({ device_id: device_id, channels: channels })
     }
+  }
+
+  readRacerChannel(cb, request) {
+    let cmdStr = 'getRacerChannel';
+    let slot = this._config.slots[request.racer];  // get the handle of the racer slot
+    this.prepareCommand(cmdStr, { slot: slot })
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response =>
+              {
+                if (response !== 'FF') {
+                  cb({ device_id: request.device_id, racer: request.racer, channel: response })
+                }
+              }
+            )
+          )
+        )
+      )
+    .catch(error => cb({ error: error }));
   }
 
   /** Get the minimum lap time of a RaceTracker by device id */

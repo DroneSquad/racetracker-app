@@ -25,6 +25,7 @@ export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
 export const RT_SET_RACER_CHANS = 'RT_SET_RACER_CHANS';
+export const RT_SET_RACER_CHAN = 'RT_SET_RACER_CHAN';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -116,6 +117,11 @@ export const setGateADC = (request: Object) => ({
 
 export const setRacerChannels = (request: Object) => ({
   type: RT_SET_RACER_CHANS,
+  payload: request
+});
+
+export const setRacerChannel = (request: Object) => ({
+  type: RT_SET_RACER_CHAN,
   payload: request
 });
 
@@ -216,6 +222,21 @@ export const readBatteryLevel = (device_id: string) => {
   };
 };
 
+export const readRacerChannel = (request: object) => {
+  return dispatch => {
+    tbs.readRacerChannel(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(response)); // verify/update connection state
+      } else {
+        console.log(response);
+        // TODO: complete this operation
+        // dispatch(setRacerChannel(response)); // update the redux value
+      }
+    }, request);
+  }
+};
+
 export const readRacerChannels = (device_id: string) => {
   return dispatch => {
     tbs.readRacerChannels(response => {
@@ -223,7 +244,6 @@ export const readRacerChannels = (device_id: string) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
-        console.log(response);
         dispatch(setRacerChannels(response)); // update the redux value
       }
     }, device_id);
