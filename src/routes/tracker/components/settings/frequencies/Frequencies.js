@@ -18,9 +18,6 @@ export default class Frequencies extends React.Component {
 
   constructor(props) {
     super(props);
-    // TODO: these are just testing the racerChannels
-    let racers = Array(Number(this.props.channelCount)).fill().map((_, idx) => 1 + idx)
-    this.props.getRacerChannels({ device_id: this.props.id, racers: racers });
     this.state = {
       bands: frequencies.bands,
       profiles: _.map(frequencies.profiles, profile => profile.name),
@@ -41,8 +38,6 @@ export default class Frequencies extends React.Component {
 
   /** When the user clicks on the frequency */
   onFrequencyClick = () => {
-    console.log("onFrequencyClick");
-    console.log(this.props.racerChannels);
     this.props.history.push('/tracker/settings/frequencies/edit');
   };
 

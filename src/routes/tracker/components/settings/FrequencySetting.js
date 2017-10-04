@@ -7,13 +7,12 @@ import Setting from './Setting';
 export default class FrequencySetting extends Setting {
   props: {
     id: string,
-    channelCount: string,
-    frequencies: Function
+    channelCount: number,
+    goToFrequencies: Function
   };
 
   constructor(props) {
     super(props);
-    this.props.getChannelCount(this.props.id);
     if (this.props.channelCount) {
       this.state.loading = false;
     } else {
@@ -31,12 +30,12 @@ export default class FrequencySetting extends Setting {
 
   /** Open the frequencies settings for the race tracker */
   openFrequencies = () => {
-    this.props.frequencies(this.props.id);
+    this.props.goToFrequencies(this.props.id);
   };
 
   render() {
     let freqCountText = '';
-    if (this.props.channelCount === '1') {
+    if (this.props.channelCount === 1) {
       freqCountText = '1 frequency is being tracked';
     } else {
       freqCountText = this.props.channelCount + ' frequencies are being tracked';

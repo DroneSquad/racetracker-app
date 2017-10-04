@@ -13,7 +13,7 @@ export default class TrackerDevice extends Component {
     rssi: string,
     isConnected: boolean,
     connect: Function,
-    settings: Function
+    goToSettings: Function
   };
 
   DeviceProperties = (props: { name: string, rssi: string }) => {
@@ -32,13 +32,14 @@ export default class TrackerDevice extends Component {
 
   /** Connect to the tracker */
   // TODO: some sort of check, no need to connect if already connected
+  // TODO: also need to handle on restarts when no scan exists (rehydration?)
   connectTracker = () => {
     this.props.connect(this.props.id);
   };
 
   /** Go to the Tracker Settings page */
   trackerSettings = () => {
-    this.props.settings(this.props.id);
+    this.props.goToSettings(this.props.id);
   };
 
   render() {

@@ -52,7 +52,7 @@ export class TbsRt {
           cmd = cmd + ' ' + options.gateADC;
           break;
         case 'getRacerChannel':
-          cmd = cmd + ' ' + this._config.slots[options.racer];
+          cmd = cmd + ' ' + options.slot;
           break;
         default:
           break;
@@ -75,7 +75,6 @@ export class TbsRt {
         case 'setMinLapTime':
         case 'getGateAdc':
         case 'setGateAdc':
-        case 'getChannelCount':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         case 'getActiveMode':
@@ -83,11 +82,12 @@ export class TbsRt {
           response = this._config.modes[response];
           break;
         case 'getRacerChannel':
-          response = response.split(':')[1].match(RE_ALPHANUM);
+          response = response.split(':')[1].match(RE_ALPHANUM)[0];
           break;
         default:
           break;
       }
+      console.log(key + ": " + response);
       resolve(response);
     });
   }
@@ -189,35 +189,39 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the total number of channels/racers tracked by a RaceTracker */
-  readChannelCount(cb, device_id) {
-    let cmdStr = 'getChannelCount';
-    this.prepareCommand(cmdStr)
-      .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, channelCount: response })
-            )
-          )
-        )
-      )
-      .catch(error => cb({ error: error }));
-  }
-
-  /** Get the total number of channels/racers tracked by a RaceTracker */
-  readRacerChannel(cb, request) {
+  /** Read all available racer slots for channels used on initial set and count */
+  readRacerChannels(cb, device_id) {
+    let channels = [];
+    let errors = [];
     let cmdStr = 'getRacerChannel';
-    this.prepareCommand(cmdStr, request)
-      .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, racer: request.racer, channel: response })
+    let racers = [1, 2, 3, 4, 5, 6, 7, 8];  // all available racer slots
+    for (let racer of racers) {
+      let slot = this._config.slots[racer];  // get the handle of the racer slot
+      this.prepareCommand(cmdStr, { racer: racer, slot: slot })
+        .then(cmd =>
+          this.writeCommand(cmd, device_id).then(
+            this.readCommand(device_id).then(result =>
+              this.prepareResponse(cmdStr, result).then(response =>
+                {
+                  console.log("racer: " + racer + " :" + response);
+                  if (response !== 'FF') {
+                    console.log("ADDED");
+                    channels.push({ racer: racer, channel: response })
+                  }
+                }
+              )
             )
           )
         )
-      )
-      .catch(error => cb({ error: error }));
+      .catch(error => errors.push(error))
+    }
+    if (errors.length > 0) {
+      console.log("ERROR");
+      cb({ errors: errors })
+    } else {
+      console.log("CHANNELS");
+      cb({ device_id: device_id, channels: channels })
+    }
   }
 
   /** Get the minimum lap time of a RaceTracker by device id */
@@ -241,9 +245,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, minLapTime: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, minLapTime: response }))
           )
         )
       )
@@ -271,9 +273,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, gateADC: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, gateADC: response }))
           )
         )
       )
