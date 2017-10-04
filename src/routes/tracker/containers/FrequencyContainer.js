@@ -8,13 +8,9 @@ import Frequency from '../components/settings/frequencies/Frequency';
     component - in this case, a Frequency */
 
 const mapStateToProps = (state, ownProps) => ({
-  // channelCount: state.trackers.filter(t => t.id === ownProps.id)[0].channelCount
+  channelCount: state.trackers.filter(t => t.id === ownProps.id)[0].racerChannels.length
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({
-  // getChannelCount: device_id => dispatch(readChannelCount(device_id)),
-});
-
-const FrequencyContainer = connect(mapStateToProps, mapDispatchToProps)(Frequency);
+const FrequencyContainer = connect(mapStateToProps)(Frequency);
 
 export default FrequencyContainer;

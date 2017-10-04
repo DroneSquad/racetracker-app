@@ -23,9 +23,17 @@ export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
 export const RT_RACEMODE = 'RT_RACEMODE';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
+export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS'
 export const RT_GATE_ADC = 'RT_GATE_ADC';
-export const RT_SET_RACER_CHANS = 'RT_SET_RACER_CHANS';
-export const RT_SET_RACER_CHAN = 'RT_SET_RACER_CHAN';
+export const RT_RSSI_ADC= 'RT_RSSI_ADC';
+
+// TODO: complete these last two operations
+export const RT_RACER_CHANS = 'RT_RACER_CHANS';
+export const RT_RACER_CHAN = 'RT_RACER_CHAN';
+
+// TODO: create reducer with race/heat structure and attach these two
+export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
+export const RT_LAPTIME = 'RT_LAPTIME';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -38,7 +46,9 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     firmware: '',
     raceMode: RACEMODE_DEFAULT,
     minLapTime: '',
+    maxRounds: '',
     gateADC: '',
+    rssiADC: '',
     activeMode: '', // (idle, shotgun, flyby, gateColor)
     racerChannels: [],
     isConnected: false,
@@ -110,18 +120,38 @@ export const setMinLapTime = (request: Object) => ({
   payload: request
 });
 
-export const setGateADC = (request: Object) => ({
+export const setMaxRounds = (request: Object) => ({
+  type: RT_MAX_ROUNDS,
+  payload: request
+});
+
+export const setGateAdc = (request: Object) => ({
   type: RT_GATE_ADC,
   payload: request
 });
 
+export const setRssiAdc = (request: Object) => ({
+  type: RT_RSSI_ADC,
+  payload: request
+});
+
 export const setRacerChannels = (request: Object) => ({
-  type: RT_SET_RACER_CHANS,
+  type: RT_RACER_CHANS,
   payload: request
 });
 
 export const setRacerChannel = (request: Object) => ({
-  type: RT_SET_RACER_CHAN,
+  type: RT_RACER_CHAN,
+  payload: request
+});
+
+export const setTotalRounds = (request: Object) => ({
+  type: RT_TOTAL_ROUNDS,
+  payload: request
+});
+
+export const setLaptime= (request: Object) => ({
+  type: RT_LAPTIME,
   payload: request
 });
 
@@ -222,6 +252,7 @@ export const readBatteryLevel = (device_id: string) => {
   };
 };
 
+// TODO
 export const readRacerChannel = (request: object) => {
   return dispatch => {
     tbs.readRacerChannel(response => {
@@ -229,14 +260,47 @@ export const readRacerChannel = (request: object) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
+        // TODO:
         console.log(response);
-        // TODO: complete this operation
         // dispatch(setRacerChannel(response)); // update the redux value
       }
     }, request);
   }
 };
 
+// TODO:
+export const writeRacerChannel = (request: object) => {
+  return dispatch => {
+    tbs.writeRacerChannel(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(response)); // verify/update connection state
+      } else {
+        // TODO:
+        console.log(response);
+        // dispatch(setRacerChannel(response)); // update the redux value
+      }
+    }, request);
+  }
+};
+
+// TODO:
+export const writeRacerChannels = (request: object) => {
+  return dispatch => {
+    tbs.writeRacerChannels(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(response)); // verify/update connection state
+      } else {
+        // TODO:
+        console.log(response);
+        // dispatch(setRacerChannels(response)); // update the redux value
+      }
+    }, request);
+  }
+};
+
+/** Get all the currently configured channels for available racers */
 export const readRacerChannels = (device_id: string) => {
   return dispatch => {
     tbs.readRacerChannels(response => {
@@ -247,6 +311,104 @@ export const readRacerChannels = (device_id: string) => {
         dispatch(setRacerChannels(response)); // update the redux value
       }
     }, device_id);
+  }
+};
+
+/** Set the desired gate ADC value for fine tuning */
+export const writeGateAdc = (request: object) => {
+  return dispatch => {
+    tbs.writeGateAdc(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(response)); // verify/update connection state
+      } else {
+        dispatch(setGateAdc(response)); // update the redux value
+      }
+    }, request);
+  }
+};
+
+/** Get the currently calibrated gate ADC value for a tracker */
+export const readGateAdc = (device_id: string) => {
+  return dispatch => {
+    tbs.readGateAdc(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setGateAdc(response)); // update the redux value
+      }
+    }, device_id);
+  };
+};
+
+/** Get the RSSI value of the VTX related to the gate ADC value */
+export const readRssiAdc = (device_id: string) => {
+  return dispatch => {
+    tbs.readRssiAdc(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setRssiAdc(response)); // update the redux value
+      }
+    }, device_id);
+  };
+};
+
+/** Get the total number of rounds by a a selected racer */
+export const readTotalRounds = (request: object) => {
+  return dispatch => {
+    tbs.readTotalRounds(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+      } else {
+        dispatch(setTotalRounds(response)); // update the redux value
+      }
+    }, request);
+  };
+};
+
+/** Get the laptime of a specific round of a chosen racer */
+export const readLapTime = (request: object) => {
+  return dispatch => {
+    tbs.readLapTime(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+      } else {
+        dispatch(setLaptime(response)); // update the redux value
+      }
+    }, request);
+  };
+};
+
+/** Get the maximum number of allowed rounds for a ractracker */
+export const readMaxRounds = (device_id: string) => {
+  return dispatch => {
+    tbs.readMaxRounds(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+      } else {
+        dispatch(setMaxRounds(response)); // update the redux value
+      }
+    }, device_id);
+  };
+};
+
+/** Set the value of the maximum number of allowed rounds for a racetracker */
+export const writeMaxRounds = (request: object) => {
+  return dispatch => {
+    tbs.writeMaxRounds(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        dispatch(isTrackerConnected(response.device)); // verify/update connection state
+      } else {
+        dispatch(setMaxRounds(response)); // update the redux value
+      }
+    }, request);
   }
 };
 
@@ -286,7 +448,7 @@ export const calibrateGate = (device_id: string) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
-        dispatch(setGateADC(response)); // update the redux value
+        dispatch(setGateAdc(response)); // update the redux value
       }
     }, device_id);
   };
@@ -403,7 +565,7 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    case RT_SET_RACER_CHANS:
+    case RT_RACER_CHANS:
       return state.map(
         tracker =>
           tracker.id === action.payload.device_id
@@ -413,6 +575,9 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+    case RT_RACER_CHAN:
+      // TODO: implement add/update with a single racer and channel
+      return ;
     case RT_MIN_LAPTIME:
       return state.map(
         tracker =>
@@ -423,6 +588,16 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+      case RT_MAX_ROUNDS:
+        return state.map(
+          tracker =>
+            tracker.id === action.payload.device_id
+              ? {
+                  ...tracker,
+                  maxRounds: action.payload.maxRounds
+                }
+              : tracker
+        );
     case RT_GATE_ADC:
       return state.map(
         tracker =>
@@ -433,6 +608,16 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+      case RT_RSSI_ADC:
+        return state.map(
+          tracker =>
+            tracker.id === action.payload.device_id
+              ? {
+                  ...tracker,
+                  rssiADC: action.payload.rssiADC
+                }
+              : tracker
+        );
     case RT_ACTIVE_MODE:
       return state.map(
         tracker =>

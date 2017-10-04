@@ -9,12 +9,12 @@ import { writeMinLapTime, readMinLapTime } from '../modules/racetracker';
     component - in this case, a TimeDelaySetting */
 
 const mapStateToProps = (state, ownProps) => ({
-  minLapTime: state.trackers.filter(t => t.id === ownProps.id)[0].minLapTime
+  minLapTime: state.trackers.filter(t => t.id === ownProps.id)[0].minLapTime,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   getMinLapTime: device_id => dispatch(readMinLapTime(device_id)),
-  setMinLapTime: object => dispatch(writeMinLapTime(object))
+  setMinLapTime: object => dispatch(writeMinLapTime(object)),
 });
 
 const TimeDelaySettingContainer = connect(mapStateToProps, mapDispatchToProps)(TimeDelaySetting);

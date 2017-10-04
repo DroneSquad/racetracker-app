@@ -12,7 +12,13 @@
     "calibrateGate": "G",
     "getGateAdc": ".",
     "setGateAdc": ",",
-    "getRacerChannel": "Z"
+    "getRssiAdc": "/",
+    "getRacerChannel": "Z",
+    "setRacerChannel": "N",
+    "getTotalRounds": "R",
+    "getLapTime": "T",
+    "setMaxRounds": "O",
+    "getMaxRounds": "Z 2"
   },
   "modes": {
     "0": "idle",
