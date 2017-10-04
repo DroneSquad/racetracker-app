@@ -252,7 +252,7 @@ export const readBatteryLevel = (device_id: string) => {
   };
 };
 
-// TODO
+/** read the channel of a selected racer from racetracker, updating redux if successful */
 export const readRacerChannel = (request: object) => {
   return dispatch => {
     tbs.readRacerChannel(response => {
@@ -260,15 +260,13 @@ export const readRacerChannel = (request: object) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
-        // TODO:
-        console.log(response);
-        // dispatch(setRacerChannel(response)); // update the redux value
+        dispatch(setRacerChannel(response)); // update the redux value
       }
     }, request);
   };
 };
 
-// TODO:
+/* write a channel to a racer position on a racetracker and update redux */
 export const writeRacerChannel = (request: object) => {
   return dispatch => {
     tbs.writeRacerChannel(response => {
@@ -276,15 +274,13 @@ export const writeRacerChannel = (request: object) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
-        // TODO:
-        console.log(response);
-        // dispatch(setRacerChannel(response)); // update the redux value
+        dispatch(setRacerChannel(response)); // update the redux value
       }
     }, request);
   };
 };
 
-// TODO:
+/** Write an array or objects to the racetracker and update redux if successful */
 export const writeRacerChannels = (request: object) => {
   return dispatch => {
     tbs.writeRacerChannels(response => {
@@ -292,15 +288,13 @@ export const writeRacerChannels = (request: object) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
-        // TODO:
-        console.log(response);
-        // dispatch(setRacerChannels(response)); // update the redux value
+        dispatch(setRacerChannels(response)); // update the redux value
       }
     }, request);
   };
 };
 
-/** Get all the currently configured channels for available racers */
+/** Get all the currently configured channels for available racers, save to redux */
 export const readRacerChannels = (device_id: string) => {
   return dispatch => {
     tbs.readRacerChannels(response => {
@@ -576,8 +570,9 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACER_CHAN:
-      // TODO: implement add/update with a single racer and channel
+      // TODO:
       return;
+
     case RT_MIN_LAPTIME:
       return state.map(
         tracker =>

@@ -18,7 +18,11 @@
     "getTotalRounds": "R",
     "getLapTime": "T",
     "setMaxRounds": "O",
-    "getMaxRounds": "Z 2"
+    "getMaxRounds": "Z 2",
+    "stopRace": "0",
+    "startRaceShotgun": "1",
+    "startRaceFlyby": "2",
+    "activateVrx": "Q"
   },
   "modes": {
     "0": "idle",

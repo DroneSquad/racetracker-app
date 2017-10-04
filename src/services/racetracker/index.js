@@ -280,38 +280,32 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
+  /** perform mass update with an array of channels, write to rt and then redux */
   writeRacerChannels(cb, request) {
-    // TODO:
-    /*let channels = [];
-      let errors = [];
-      let cmdStr = 'getRacerChannel';
-      let racers = [1, 2, 3, 4, 5, 6, 7, 8];  // all available racer slots
-      for (let racer of racers) {
-        let slot = this._config.slots[racer];  // get the handle of the racer slot
-        this.prepareCommand(cmdStr, { slot: slot })
+    let errors = [];
+    let channels = [];
+    let cmdStr = 'setRacerChannel';
+    for (let channel of request.channels) {
+      if (channel.channel && channel.channel !== 'FF') {
+        this.prepareCommand(cmdStr, channel)
           .then(cmd =>
-            this.writeCommand(cmd, device_id).then(
-              this.readCommand(device_id).then(result =>
-                this.prepareResponse(cmdStr, result).then(response =>
-                  {
-                    if (response !== 'FF') {
-                      channels.push({ racer: racer, channel: response })
-                    }
-                  }
-                )
-              )
+            this.writeCommand(cmd, request.device_id).then(
+              this.readCommand(request.device_id).then(result => {
+                channels.push(channel);
+              })
             )
           )
-        .catch(error => errors.push(error))
+          .catch(error => errors.push(error));
       }
-      if (errors.length > 0) {
-        cb({ errors: errors })
-      } else {
-        cb({ device_id: device_id, channels: channels })
-      }*/
+    }
+    if (errors.length > 0) {
+      cb({ errors: errors });
+    } else {
+      cb({ device_id: request.device_id, channels: channels });
+    }
   }
 
-  /** Read all available racer slots for channels (used on initial set and count) */
+  /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
     let channels = [];
     let errors = [];
@@ -325,6 +319,7 @@ export class TbsRt {
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
                 if (response !== 'FF') {
+                  // FF indicates unassigned
                   channels.push({ racer: racer, channel: response });
                 }
               })
@@ -359,26 +354,20 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /* Set the channel of a specified racer slot */
+  /* Set the channel of a specified racer slot, empty values or 'FF' indicate array removal */
   writeRacerChannel(cb, request) {
-    // TODO;
-    /*let cmdStr = 'setRacerChannel';
-    let slot = this._config.slots[request.racer];  // get the handle of the racer slot
-    this.prepareCommand(cmdStr, { slot: slot })
+    let cmdStr = 'setRacerChannel';
+    this.prepareCommand(cmdStr, { racer: request.racer, channel: request.channel })
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              {
-                if (response !== 'FF') {
-                  cb({ device_id: request.device_id, racer: request.racer, channel: response })
-                }
-              }
-            )
+            this.prepareResponse(cmdStr, result).then(response => {
+              cb({ device_id: request.device_id, racer: request.racer, channel: response });
+            })
           )
         )
       )
-    .catch(error => cb({ error: error }));*/
+      .catch(error => cb({ error: error }));
   }
 
   /** Get the minimum lap time of a RaceTracker by device id */
