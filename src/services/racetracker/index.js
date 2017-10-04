@@ -283,16 +283,13 @@ export class TbsRt {
   /** perform mass update with an array of channels, write to rt and then redux */
   writeRacerChannels(cb, request) {
     let errors = [];
-    let channels = [];
     let cmdStr = 'setRacerChannel';
     for (let channel of request.channels) {
       if (channel.channel && channel.channel !== 'FF') {
         this.prepareCommand(cmdStr, channel)
           .then(cmd =>
             this.writeCommand(cmd, request.device_id).then(
-              this.readCommand(request.device_id).then(result => {
-                channels.push(channel);
-              })
+              this.readCommand(request.device_id)
             )
           )
           .catch(error => errors.push(error));
@@ -301,7 +298,7 @@ export class TbsRt {
     if (errors.length > 0) {
       cb({ errors: errors });
     } else {
-      cb({ device_id: request.device_id, channels: channels });
+      cb(request);
     }
   }
 
@@ -318,8 +315,7 @@ export class TbsRt {
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
-                if (response !== 'FF') {
-                  // FF indicates unassigned
+                if (response !== 'FF') {  // FF indicates unassigned
                   channels.push({ racer: racer, channel: response });
                 }
               })
@@ -344,9 +340,7 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response => {
-              if (response !== 'FF') {
-                cb({ device_id: request.device_id, racer: request.racer, channel: response });
-              }
+              cb({ device_id: request.device_id, channel: { racer: request.racer, channel: response } });
             })
           )
         )
@@ -362,7 +356,7 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response => {
-              cb({ device_id: request.device_id, racer: request.racer, channel: response });
+              cb({ device_id: request.device_id, channel: { racer: request.racer, channel: response } });
             })
           )
         )

@@ -26,8 +26,6 @@ export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
 export const RT_RSSI_ADC = 'RT_RSSI_ADC';
-
-// TODO: complete these last two operations
 export const RT_RACER_CHANS = 'RT_RACER_CHANS';
 export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 
@@ -565,14 +563,21 @@ export default function(state = [], action: Action) {
           tracker.id === action.payload.device_id
             ? {
                 ...tracker,
-                racerChannels: action.payload.channels
+                racerChannels: action.payload.channels  // replace previous entirely
               }
             : tracker
       );
     case RT_RACER_CHAN:
-      // TODO:
-      return;
-
+      let chans = state.filter(t => t.id === action.payload.device_id)[0].racerChannels;
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                racerChannels: _.unionWith(chans, [action.payload.channel], (left, right) => left.racer === right.racer)
+              }
+            : tracker
+      );
     case RT_MIN_LAPTIME:
       return state.map(
         tracker =>
