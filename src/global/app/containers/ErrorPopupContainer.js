@@ -15,7 +15,7 @@ export default class extends ErrorPopup {
   }
 
   /** Unattach the error handler */
-  componentDidUnmount() {
+  componentWillUnmount() {
     window.onerror = null;
   }
 
