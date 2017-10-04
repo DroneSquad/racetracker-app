@@ -287,11 +287,7 @@ export class TbsRt {
     for (let channel of request.channels) {
       if (channel.channel && channel.channel !== 'FF') {
         this.prepareCommand(cmdStr, channel)
-          .then(cmd =>
-            this.writeCommand(cmd, request.device_id).then(
-              this.readCommand(request.device_id)
-            )
-          )
+          .then(cmd => this.writeCommand(cmd, request.device_id).then(this.readCommand(request.device_id)))
           .catch(error => errors.push(error));
       }
     }
@@ -315,7 +311,8 @@ export class TbsRt {
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
-                if (response !== 'FF') {  // FF indicates unassigned
+                if (response !== 'FF') {
+                  // FF indicates unassigned
                   channels.push({ racer: racer, channel: response });
                 }
               })

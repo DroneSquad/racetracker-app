@@ -563,7 +563,7 @@ export default function(state = [], action: Action) {
           tracker.id === action.payload.device_id
             ? {
                 ...tracker,
-                racerChannels: action.payload.channels  // replace previous entirely
+                racerChannels: action.payload.channels // replace previous entirely
               }
             : tracker
       );
