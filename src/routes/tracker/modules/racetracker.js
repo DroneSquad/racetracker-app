@@ -251,6 +251,7 @@ export const readBatteryLevel = (device_id: string) => {
 };
 
 /** read the channel of a selected racer from racetracker, updating redux if successful */
+/*  request: { device_id: tracker_id, racer: racer_position } */
 export const readRacerChannel = (request: object) => {
   return dispatch => {
     tbs.readRacerChannel(response => {
@@ -265,6 +266,7 @@ export const readRacerChannel = (request: object) => {
 };
 
 /* write a channel to a racer position on a racetracker and update redux */
+/* request: { device_id: tracker_id, racer: racer_position, channel: channel_value } */
 export const writeRacerChannel = (request: object) => {
   return dispatch => {
     tbs.writeRacerChannel(response => {
@@ -279,6 +281,7 @@ export const writeRacerChannel = (request: object) => {
 };
 
 /** Write an array or objects to the racetracker and update redux if successful */
+/*  request: { device_id: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
 export const writeRacerChannels = (request: object) => {
   return dispatch => {
     tbs.writeRacerChannels(response => {
@@ -293,6 +296,7 @@ export const writeRacerChannels = (request: object) => {
 };
 
 /** Get all the currently configured channels for available racers, save to redux */
+/*  device_id: tracker_id */
 export const readRacerChannels = (device_id: string) => {
   return dispatch => {
     tbs.readRacerChannels(response => {
