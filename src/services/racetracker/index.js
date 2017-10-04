@@ -155,9 +155,7 @@ export class TbsRt {
               resolve();
             }
           },
-          error => {
-            reject(error);
-          }
+          error => reject(error)
         );
       }, interval);
     });
@@ -169,9 +167,7 @@ export class TbsRt {
       device_id,
       this._config.device_service,
       this._config.firmware,
-      response => {
-        cb({ device_id: device_id, firmware: this.bytesToStr(response) });
-      },
+      response => cb({ device_id: device_id, firmware: this.bytesToStr(response) }),
       error => cb({ error: error })
     );
   }
@@ -211,9 +207,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, totalRounds: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, totalRounds: response }))
           )
         )
       )
@@ -227,9 +221,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, round: request.round, lapTime: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, round: request.round, lapTime: response }))
           )
         )
       )
@@ -257,9 +249,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, maxRounds: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, maxRounds: response }))
           )
         )
       )
@@ -311,8 +301,8 @@ export class TbsRt {
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
+                // FF indicates unassigned
                 if (response !== 'FF') {
-                  // FF indicates unassigned
                   channels.push({ racer: racer, channel: response });
                 }
               })
@@ -382,9 +372,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, minLapTime: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, minLapTime: response }))
           )
         )
       )
@@ -412,9 +400,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, gateADC: response.gateADC })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, gateADC: response.gateADC }))
           )
         )
       )
