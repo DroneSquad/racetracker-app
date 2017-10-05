@@ -15,6 +15,7 @@ import { routerReducer } from 'react-router-redux';
 import authReducer from './routes/login/modules/login';
 import trackerReducer from './routes/tracker/modules/racetracker';
 import bluetoothReducer from './routes/tracker/modules/bluetooth';
+import voiceReducer from './global/voice/modules/voice';
 
 const config = {
   key: 'root', // key is required
@@ -26,7 +27,8 @@ let reducers = {
   router: routerReducer, // react-router-redux v5.0
   auth: authReducer,
   trackers: trackerReducer,
-  bluetooth: bluetoothReducer
+  bluetooth: bluetoothReducer,
+  voice: voiceReducer
 };
 
 /** This function will get called after the loading screen happens before it renders the main content */

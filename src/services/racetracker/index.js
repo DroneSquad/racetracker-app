@@ -12,13 +12,13 @@ const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
 const RE_ALPHANUM = /[a-z0-9]+/i;
 // regex replace arrays to convert channel prefixes: [user -> racetracker] ex. R3 -> C3
-const R2C = ['R', /r+/i, 'C']
-const L2D = ['L', /l+/i, 'D']
+const R2C = ['R', /r+/i, 'C'];
+const L2D = ['L', /l+/i, 'D'];
 // regex replace arrays to convert channel prefixes: [racetracker -> user] ex. C3 -> R3
-const C2R = ['C', /c+/i, 'R']
-const D2L = ['D', /d+/i, 'L']
+const C2R = ['C', /c+/i, 'R'];
+const D2L = ['D', /d+/i, 'L'];
 // regex replace function that uses to above arrays to fix channel prefixes
-const RE_CHANNEL = (c, r) => c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c;
+const RE_CHANNEL = (c, r) => (c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c);
 
 export class TbsRt {
   constructor() {
@@ -220,7 +220,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, totalRounds: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, totalRounds: response })
+            )
           )
         )
       )
@@ -234,7 +236,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, round: request.round, lapTime: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, round: request.round, lapTime: response })
+            )
           )
         )
       )
@@ -262,7 +266,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, maxRounds: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, maxRounds: response })
+            )
           )
         )
       )
@@ -386,7 +392,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, minLapTime: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, minLapTime: response })
+            )
           )
         )
       )
@@ -414,7 +422,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, gateADC: response.gateADC }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, gateADC: response.gateADC })
+            )
           )
         )
       )
