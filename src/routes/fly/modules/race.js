@@ -12,31 +12,14 @@ export const CREATE_RACE = 'CREATE_RACE';
 // export const RERUN_HEAT = 'RERUN_HEAT';
 
 /** actions */
-export const createRace = (trackerId: string) => ({
+export const createRace = (tracker: RaceTracker) => ({
   type: CREATE_RACE,
-  payload: trackerId
+  payload: tracker
 });
-
-export const ADD_HEAT = (request: object) => ({
-  type: ADD_HEAT,
-  payload: request
-});
-
-
-
-export const createHeat = (request: object) => {
-  return dispatch => {
-
-
-    dispatch(createHeat(request));
-  };
-};
-
-
 
 /** initial state */
 const initialState = {
-  trackerId: '',
+  tracker: null,
   date: new Date().toISOString().split('T')[0],
   heats: [],
   isActive: false,
@@ -48,15 +31,15 @@ export default function(state = initialState, action: Action) {
     case CREATE_RACE:
       return {
         ...state,
-        trackerId: action.payload,
-        active: true,
+        tracker: action.payload,
+        isActive: true,
       };
-    case CREATE_HEAT:
+    /*case CREATE_HEAT:
       return {
         racerChannels: action.payload.racerChannels,
         trackerId: action.payload.trackerId,
-      };
-      case ADD_HEAT:
+      };*/
+    /*  case ADD_HEAT:
         let heats = state.filter(t => t.id === action.payload.device_id)[0].racerChannels;
         return state.map(
           tracker =>

@@ -11,15 +11,12 @@ export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
-    activeTrackerId: string,
-    racerChannels: Array<RaceChannels>,
-    createRace: Function
   };
 
   componentDidMount() {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length === 1) {
-        this.props.createRace(this.props.connectedTrackers[0].id);
+        this.props.createRace(this.props.connectedTrackers[0]);
       }
     }
   }
@@ -28,7 +25,7 @@ export default class Racing extends Component {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
-          this.props.createRace(this.props.connectedTrackers[0].id);
+          this.props.createRace(this.props.connectedTrackers[0]);
         }
       }
     }
@@ -39,16 +36,13 @@ export default class Racing extends Component {
     return (
       <div>
         <Stopwatch />
-        <List className="heat-list">
-          { pendingHeats.map(heat =>
-            <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
-        </List>
+
       </div>
     );
   };
 
   handleListClick = (event: object) => {
-    this.props.createRace(event.id);
+    this.props.createRace(event);
   }
 
   render() {
@@ -79,3 +73,11 @@ export default class Racing extends Component {
     );
   }
 }
+
+
+/*
+<List className="heat-list">
+  { pendingHeats.map(heat =>
+    <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
+</List>
+*/

@@ -8,6 +8,7 @@ import Racing from '../containers/RacingContainer';
 import './fly.css';
 
 // TODO: state does not appear to be managed across tabs ..? investigate and fix
+
 export default class Race extends Component {
   props: {
     goToTrackerHome: Function
