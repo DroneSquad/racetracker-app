@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
-import RaceHeats from './RaceHeats';
+// import RaceHeats from './RaceHeats';
 import Racing from './Racing';
 
 import './fly.css';
 
+// TODO: these do not seem to keep their state across tabs?
 /** This will display tabs for each section for tab, they keep their state across tabs */
-export default class Race extends React.Component {
+export default class Race extends Component {
+  props: {
+    selectedTab: string;
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab : 'race',
+    };
+  }
+
   /** The drop down menu for the options menu */
   menuDropdown = () => {
     let icon = (
@@ -23,6 +35,12 @@ export default class Race extends React.Component {
     );
   };
 
+  handleTabChange = (value) => {
+    this.setState({
+      selectedTab: value,
+    });
+  };
+
   render() {
     return (
       <div className="fly">
@@ -30,16 +48,15 @@ export default class Race extends React.Component {
           <AppBar title="Fly" iconElementRight={this.menuDropdown()} />
         </header>
         <main>
-          <Tabs initialSelectedIndex={1}>
-            <Tab label="Racing">
+          <Tabs value={this.state.selectedTab} onChange={this.handleTabChange}>
+            <Tab value="race" label="Racing">
               <Racing history={this.props.history} />
-              {/*<div className="center-text">Racing Tab Temp Disabled for Testing</div>*/}
             </Tab>
-            <Tab label="Heats">
+            <Tab value="heats" label="Heats">
               {/*<RaceHeats history={this.props.history} />*/}
-              <div className="center-text">Heats Tab Temp Disabled for Testing</div>
+              <div className="center-text">Heats Tab Temp Disabled</div>
             </Tab>
-            <Tab label="Stats" />
+            <Tab value="stats" label="Stats" />
           </Tabs>
         </main>
       </div>

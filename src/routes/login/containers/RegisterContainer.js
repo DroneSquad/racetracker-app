@@ -16,9 +16,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  registerLogin(reg) {
-    dispatch(registerRequest(reg));
-  }
+  registerLogin: reg => dispatch(registerRequest(reg))
 });
 
 const RegisterContainer = connect(mapStateToProps, mapDispatchToProps)(Register);

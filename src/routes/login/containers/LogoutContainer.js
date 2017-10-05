@@ -14,9 +14,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  authLogout(token) {
-    dispatch(logoutRequest(token));
-  }
+  authLogout: token => dispatch(logoutRequest(token))
 });
 
 const LogoutContainer = connect(mapStateToProps, mapDispatchToProps)(Logout);
