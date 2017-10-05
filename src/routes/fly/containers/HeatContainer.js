@@ -9,9 +9,11 @@ import Heat from '../components/Heat';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
+
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
+
 });
 
 const HeatContainer = connect(mapStateToProps, mapDispatchToProps)(Heat);

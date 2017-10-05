@@ -11,9 +11,11 @@ import { raceCreate } from '../modules/race';
 
 const mapStateToProps = (state, ownProps) => ({
   connectedTrackers : state.trackers.filter(t => t.isConnected),
-  isRaceActive: state.race.active,
-  activeTracker: state.race.trackerId,
+  isRaceActive: state.race.isActive,
+  activeTrackerId: state.race.trackerId,
   racerChannels: (state.race.trackerId) ? state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels : [],
+  pendingHeats: state.race.heats.filter(t => t.isPending),
+  completeHeats: state.race.heats.filter(t => t.isComplete)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

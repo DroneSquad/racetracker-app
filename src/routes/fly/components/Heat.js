@@ -18,6 +18,7 @@ import Pilot from './Pilot';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
+
   /** The drop down menu for the options menu */
   menuDropdown = () => {
     let styleIcons = { margin: '0 0 0 8px' };
@@ -48,7 +49,7 @@ export default class Heat extends Component {
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn className="pilot-name">Pilot</TableHeaderColumn>
-              <TableHeaderColumn>Laps</TableHeaderColumn>
+              <TableHeaderColumn>Lap</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
               <TableHeaderColumn>Total</TableHeaderColumn>
               <TableHeaderColumn>Band</TableHeaderColumn>

@@ -1,7 +1,6 @@
 // @flow
 import React, { Component} from 'react';
 
-import _ from 'lodash';
 import { List, ListItem } from 'material-ui';
 
 import Heat from '../containers/HeatContainer';
@@ -11,6 +10,10 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
+    isRaceActive: boolean,
+    activeTrackerId: string,
+    racerChannels: Array<RaceChannels>,
+    createRace: Function
   };
 
   componentDidMount() {
@@ -32,13 +35,13 @@ export default class Racing extends Component {
   }
 
   raceInterface = () => {
+    let { pendingHeats } = this.props;
     return (
       <div>
         <Stopwatch />
         <List className="heat-list">
-          {_.range(1, 5).map(i =>
-            <ListItem key={i} className="small-screen" disabled primaryText={<Heat {...this.props} id={i} />} />
-          )}
+          { pendingHeats.map(heat =>
+            <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
         </List>
       </div>
     );
