@@ -1,24 +1,77 @@
-import React from 'react';
+// @flow
+import React, { Component} from 'react';
+
 import _ from 'lodash';
+import { List, ListItem } from 'material-ui';
 
-import { Paper, List, ListItem, FlatButton } from 'material-ui';
+import Heat from '../containers/HeatContainer';
+import Stopwatch from '../containers/StopwatchContainer';
+import RacetrackerCard from '../containers/RacetrackerCardContainer';
 
-import RacingHeat from './RacingHeat';
+export default class Racing extends Component {
+  props: {
+    connectedTrackers: Array<RaceTracker>,
+  };
 
-/** The basic component for displaying the fly heats */
-export default class Racing extends React.Component {
-  render() {
+  componentDidMount() {
+    if (!this.props.isRaceActive) {
+      if (this.props.connectedTrackers.length === 1) {
+        this.props.createRace(this.props.connectedTrackers[0].id);
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isRaceActive) {
+      if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
+        if (nextProps.connectedTrackers.length === 1) {
+          this.props.createRace(this.props.connectedTrackers[0].id);
+        }
+      }
+    }
+  }
+
+  raceInterface = () => {
     return (
       <div>
-        <Paper className="heat-action" style={{ display: 'flex' }}>
-          <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>Race Clock: 1:00:00</p>
-          <FlatButton primary style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="Stop Race" />
-        </Paper>
+        <Stopwatch />
         <List className="heat-list">
-          {_.range(1, 10).map(i =>
-            <ListItem key={i} className="small-screen" disabled primaryText={<RacingHeat {...this.props} id={i} />} />
+          {_.range(1, 5).map(i =>
+            <ListItem key={i} className="small-screen" disabled primaryText={<Heat {...this.props} id={i} />} />
           )}
         </List>
+      </div>
+    );
+  };
+
+  handleListClick = (event: object) => {
+    this.props.createRace(event.id);
+  }
+
+  render() {
+    let { isRaceActive, connectedTrackers } = this.props;
+    return (
+      <div>
+        {isRaceActive && <this.raceInterface />}
+        {!isRaceActive && connectedTrackers.length > 1 ?
+          <RacetrackerCard
+            title="Multi-tracker racing is not yet supported"
+            subtitle="Select the Racetracker you want to use for racing"
+            button=""
+            text={
+            <List>
+              {connectedTrackers.map(tracker =>
+                <ListItem primaryText={tracker.name} id={tracker.id}
+                  onClick={this.handleListClick.bind(this, tracker)}/>)}
+            </List>
+          }/> : null }
+        {!isRaceActive && connectedTrackers.length === 0 ?
+          <RacetrackerCard
+            title="Racetracker connection required"
+            subtitle="Race mode requires the connection of a TBS Racetracker"
+            text="Click below to discover, connect, and configure Racetrackers"
+            button="Racetracker Management"
+          /> : null}
       </div>
     );
   }

@@ -41,7 +41,7 @@ export default class extends ErrorPopup {
 
   /** Report the error */
   onReport = () => {
-    console.log('Report suppot added later');
+    console.log('Report support to be added later');
     this.setState({ opened: false });
   };
 }

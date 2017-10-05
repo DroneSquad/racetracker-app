@@ -6,7 +6,7 @@ import AppBar from 'material-ui/AppBar';
 import Nav from './Nav';
 import Chat from '../../../routes/chat/components/Chat';
 import Home from '../../../routes/home/containers/HomeContainer';
-import Fly from '../../../routes/fly/components/Fly';
+import Fly from '../../../routes/fly/containers/FlyContainer';
 import FourOhFour from '../../404/components/FourOhFour';
 import Group from '../../../routes/group/containers/GroupContainer';
 import logo from '../../../media/ds-full-logo-horizontal.svg';

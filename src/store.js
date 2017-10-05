@@ -13,6 +13,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import authReducer from './routes/login/modules/login';
+import raceReducer from './routes/fly/modules/race';
 import trackerReducer from './routes/tracker/modules/racetracker';
 import bluetoothReducer from './routes/tracker/modules/bluetooth';
 
@@ -25,15 +26,17 @@ const config = {
 let reducers = {
   router: routerReducer, // react-router-redux v5.0
   auth: authReducer,
+  race: raceReducer,
   trackers: trackerReducer,
   bluetooth: bluetoothReducer
 };
 
 /** This function will get called after the loading screen happens before it renders the main content */
 export default function configStore(history) {
+  // middleware, reducers, and routing
   const reducer = persistReducer(config, combineReducers(reducers));
   const middleware = applyMiddleware(routerMiddleware(history), thunk);
-  // create store
+  // create store and persist for rehydration
   const store = createStore(reducer, composeWithDevTools(middleware));
   const persistor = persistStore(store);
   // and finally send it back

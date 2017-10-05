@@ -2,8 +2,7 @@
 import React, { Component } from 'react';
 
 import './tracker-home.css';
-import { AppBar, Divider, FlatButton } from 'material-ui';
-import { Snackbar } from 'material-ui';
+import { AppBar, Divider, FlatButton, Snackbar } from 'material-ui';
 
 import { historyBackButton } from '../../../utils';
 
@@ -68,7 +67,7 @@ export default class extends Component {
   };
 
   /** change button purpose: start/stop scan based on scanning state */
-  BtScanButton = () => {
+  btScanButton = () => {
     let { isBtScanning, ...attrs } = this.props;
     attrs = {
       className: 'right'
@@ -90,7 +89,7 @@ export default class extends Component {
   };
 
   /** displays all connected/available racetrackers */
-  RtDiscoveryList = () => {
+  rtDiscoveryList = () => {
     return (
       <div>
         <TrackerList
@@ -137,10 +136,10 @@ export default class extends Component {
               text="Enable Bluetooth by clicking the button below"
               button="enable"
             />}
-          {isBtAvailable && isBtEnabled && <this.RtDiscoveryList />}
+          {isBtAvailable && isBtEnabled && <this.rtDiscoveryList />}
         </main>
         <footer>
-          {isBtAvailable && isBtEnabled && <this.BtScanButton />}
+          {isBtAvailable && isBtEnabled && <this.btScanButton />}
         </footer>
         <Snackbar open={!!btError} message={btError} autoHideDuration={5000} />
       </div>
