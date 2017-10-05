@@ -17,7 +17,7 @@ const L2D = ['L', /l+/i, 'D']
 // regex replace arrays to convert channel prefixes: [racetracker -> user] ex. C3 -> R3
 const C2R = ['C', /c+/i, 'R']
 const D2L = ['D', /d+/i, 'L']
-// regex replace function that uses to above arrays to fix channel prefixes
+// regex replace function that uses to above arrays
 const RE_CHANNEL = (c, r) => c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c;
 
 export class TbsRt {
@@ -356,7 +356,6 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response => {
-              // TODO: responses are not always accurate
               cb({ device_id: request.device_id, channel: { racer: request.racer, channel: response } });
             })
           )
