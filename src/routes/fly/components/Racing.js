@@ -15,7 +15,7 @@ export default class Racing extends Component {
     isRaceActive: boolean,
     activeTrackerId: string,
     racerChannels: Object,
-    heats: Array<Object>
+    //heats: Array<Object>
   };
 
   componentDidMount() {
@@ -37,30 +37,29 @@ export default class Racing extends Component {
     if (this.props.isRaceActive !== nextProps.isRaceActive) {
       if (nextProps.isRaceActive) {
         if (this.props.heats.length === 0) {
-          // this.newHeat();
+          // this.props.createHeat(this.props.activeTrackerId);
         }
       }
     }
   }
 
-  newHeat = () => {
+/*  newHeat() {
     this.props.createHeat({
-      id: '1',
+      id: 1,
       trackerId: this.props.activeTrackerId,
       isPending: true,
       isComplete: false,
-      isReRun: false,
-      channels: this.props.racerChannels
+      isReRun: false
+      // channels: this.props.racerChannels
     })
   };
-
+*/
   raceInterface = () => {
     return (
       <div>
         <Stopwatch />
         <List className="heat-list">
-
-
+          <ListItem key="HeatKey" className="small-screen" disabled primaryText={<Heat {...this.props} id="heatKey" />} />
         </List>
       </div>
     );
@@ -101,7 +100,9 @@ export default class Racing extends Component {
 
 
 /*
-{ heats.map(heat =>
-  <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
+
+
+          { heats.map(heat =>
+            <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
 
 */

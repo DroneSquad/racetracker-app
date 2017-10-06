@@ -16,16 +16,19 @@ export const createHeat = (heat: Object) => ({
 });
 
 /** initial state of a race */
-const initialRaceState = {
-  trackerId: '',
+const initialRace = {
+  id: '',
   name: '',
   date: new Date().toISOString().split('T')[0],
+  location: '',
+  trackerId: '',
   heats: [],
+  rounds: [],
   isActive: false,
 };
 
 /** reducers */
-export default function(state = initialRaceState, action: Action) {
+export default function(state = initialRace, action: Action) {
   switch (action.type) {
     case CREATE_RACE:
       return {

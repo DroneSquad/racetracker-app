@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import uuid from 'uuid';
 
-import PilotAvatar from '../../../global/app/PilotAvatar';
+import { Avatar } from 'material-ui'; //'../../../global/app/PilotAvatar';
 // import { lazyLoad } from '../../../utils';
 // import fetch from '../../../fetch';
+
+import { BLANK_PNG } from '../../../utils';
 
 import { TableRow, TableRowColumn } from 'material-ui';
 
@@ -13,9 +15,9 @@ export default class Pilot extends Component {
     super(props);
     this.uuid = uuid.v4();
     this.state = {
-      loading: true,
+      loading: false,
       name: 'Unknown',
-      avatar: `https://api.dronesquad.com/avatar/${this.props.id}`
+      avatar: BLANK_PNG //`https://api.dronesquad.com/avatar/${this.props.id}`
     };
   }
 
@@ -41,7 +43,7 @@ export default class Pilot extends Component {
         {this.state.name}
       </span>
     );
-    let avatar = <PilotAvatar size={20} src={this.state.avatar} />;
+    let avatar = <Avatar size={20} src={this.state.avatar} />;
     return (
       <TableRow id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}>
         <TableRowColumn className="pilot-name">
