@@ -6,19 +6,19 @@ import { AppBar, List, ListItem } from 'material-ui';
 import Logout from '../login/containers/LogoutContainer';
 import { sendVoice } from '../../global/voice/modules/voice';
 
-/** This component is used to test things in the app */
-export default class Home extends React.Component {
-  state = { };
+import { connect } from '../../store';
 
-  onSendVoice = () => {
-    console.log('sending voice');
-    sendVoice('hello world');
-  };
+/** This component is used to test things in the app */
+@connect()
+export default class Home extends React.Component {
+  static mapDispatchToProps = dispatch => ({
+    onVoiceSend: () => dispatch(sendVoice('hello world')),
+  });
 
   render() {
     return (
       <div>
-        <AppBar title="Developer Menu" />
+        <AppBar iconElementLeft={<br />} title="Developer Menu" />
         <List>
           <ListItem>
             <Link to="/">Home</Link>
@@ -29,8 +29,8 @@ export default class Home extends React.Component {
           <ListItem>
             <Link to="/tracker">TBS RaceTracker</Link>
           </ListItem>
-          <ListItem>
-            <a onClick={this.onSendVoice}>Send Voice</a>
+          <ListItem onTouchTap={this.props.onVoiceSend}>
+            Send Voice
           </ListItem>
         </List>
       </div>

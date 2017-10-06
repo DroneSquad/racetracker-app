@@ -52,9 +52,9 @@ export function connect(reducer, key) {
   }
   return clazz => {
     // depending how advance we can get this we may be able to grab them from variables within the class
-    let mapStateToProps = notNull(clazz.mapStateToProps, 'mapStateToProps');
+    let mapStateToProps = clazz.mapStateToProps || (states => ({ $states: states }));
     // depending how advance we can get this we may be able to grab them from function within the class
-    let mapDispatchToProps = notNull(clazz.mapDispatchToProps, 'mapDispatchToProps');
+    let mapDispatchToProps = clazz.mapDispatchToProps || (dispatch => ({ $dispatch: dispatch }));
     return _connect(mapStateToProps, mapDispatchToProps)(clazz);
   };
 }
