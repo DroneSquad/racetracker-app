@@ -1,4 +1,6 @@
 // @flow
+import _ from 'lodash';
+
 import React, { Component} from 'react';
 
 import { List, ListItem } from 'material-ui';
@@ -11,12 +13,15 @@ export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
+    activeTrackerId: string,
+    racerChannels: Object,
+    heats: Array<Object>
   };
 
   componentDidMount() {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length === 1) {
-        this.props.createRace(this.props.connectedTrackers[0]);
+        this.props.createRace(this.props.connectedTrackers[0].id);
       }
     }
   }
@@ -25,24 +30,44 @@ export default class Racing extends Component {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
-          this.props.createRace(this.props.connectedTrackers[0]);
+          this.props.createRace(this.props.connectedTrackers[0].id);
+        }
+      }
+    }
+    if (this.props.isRaceActive !== nextProps.isRaceActive) {
+      if (nextProps.isRaceActive) {
+        if (this.props.heats.length === 0) {
+          // this.newHeat();
         }
       }
     }
   }
 
+  newHeat = () => {
+    this.props.createHeat({
+      id: '1',
+      trackerId: this.props.activeTrackerId,
+      isPending: true,
+      isComplete: false,
+      isReRun: false,
+      channels: this.props.racerChannels
+    })
+  };
+
   raceInterface = () => {
-    let { pendingHeats } = this.props;
     return (
       <div>
         <Stopwatch />
+        <List className="heat-list">
 
+
+        </List>
       </div>
     );
   };
 
-  handleListClick = (event: object) => {
-    this.props.createRace(event);
+  handleListClick = (event: RaceTracker) => {
+    this.props.createRace(event.id);
   }
 
   render() {
@@ -76,8 +101,7 @@ export default class Racing extends Component {
 
 
 /*
-<List className="heat-list">
-  { pendingHeats.map(heat =>
-    <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
-</List>
+{ heats.map(heat =>
+  <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
+
 */

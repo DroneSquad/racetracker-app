@@ -1,55 +1,40 @@
 /** types */
-export const CREATE_RACE = 'CREATE_RACE';
-// export const START_RACE = 'START_RACE';
-// export const STOP_RACE = 'STOP_RACE';
-// export const END_RACE = 'END_RACE';
+import _ from 'lodash';
 
-// export const CREATE_HEAT = 'CREATE_HEAT';
-// export const START_HEAT = 'START_HEAT';
-// export const END_HEAT = 'END_HEAT';
-// export const DELETE_HEAT = 'DELETE_HEAT';
-// export const EDIT_HEAT = 'EDIT_HEAT';
-// export const RERUN_HEAT = 'RERUN_HEAT';
+export const CREATE_RACE = 'CREATE_RACE';
+export const CREATE_HEAT = 'CREATE_HEAT';
 
 /** actions */
-export const createRace = (tracker: RaceTracker) => ({
+export const createRace = (trackerId: string) => ({
   type: CREATE_RACE,
-  payload: tracker
+  payload: trackerId
 });
 
-/** initial state */
-const initialState = {
-  tracker: null,
+export const createHeat = (heat: Object) => ({
+  type: CREATE_HEAT,
+  payload: heat
+});
+
+/** initial state of a race */
+const initialRaceState = {
+  trackerId: '',
+  name: '',
   date: new Date().toISOString().split('T')[0],
   heats: [],
   isActive: false,
 };
 
 /** reducers */
-export default function(state = initialState, action: Action) {
+export default function(state = initialRaceState, action: Action) {
   switch (action.type) {
     case CREATE_RACE:
       return {
         ...state,
-        tracker: action.payload,
+        trackerId: action.payload,
         isActive: true,
       };
-    /*case CREATE_HEAT:
-      return {
-        racerChannels: action.payload.racerChannels,
-        trackerId: action.payload.trackerId,
-      };*/
-    /*  case ADD_HEAT:
-        let heats = state.filter(t => t.id === action.payload.device_id)[0].racerChannels;
-        return state.map(
-          tracker =>
-            tracker.id === action.payload.device_id
-              ? {
-                  ...tracker,
-                  racerChannels: _.unionWith(chans, [action.payload.channel], (left, right) => left.racer === right.racer)
-                }
-              : tracker
-        )*/
+    case CREATE_HEAT:
+      return _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id);
     default:
       return state
   }

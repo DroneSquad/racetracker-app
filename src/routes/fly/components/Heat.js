@@ -14,7 +14,7 @@ import {
   MenuItem
 } from 'material-ui';
 
-import Pilot from './Pilot';
+import Pilot from '../containers/PilotContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {

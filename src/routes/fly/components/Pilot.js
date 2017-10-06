@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 
 import PilotAvatar from '../../../global/app/PilotAvatar';
-import { lazyLoad } from '../../../utils';
-import fetch from '../../../fetch';
-
-
+// import { lazyLoad } from '../../../utils';
+// import fetch from '../../../fetch';
 
 import { TableRow, TableRowColumn } from 'material-ui';
-
 
 /** Used to display the pilot info for the heat builder */
 export default class Pilot extends Component {
@@ -22,7 +19,7 @@ export default class Pilot extends Component {
     };
   }
 
-  componentDidMount() {
+  /*componentDidMount() {
     this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
       //todo replace with loopback, this is just to test loading
       fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
@@ -32,11 +29,11 @@ export default class Pilot extends Component {
         });
       });
     });
-  }
+  }*/
 
-  componentWillUnmount() {
+  /*componentWillUnmount() {
     this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
-  }
+  }*/
 
   render() {
     let name = (
