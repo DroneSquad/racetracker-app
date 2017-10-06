@@ -1,30 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { AppBar, List, ListItem } from 'material-ui';
+
 import Logout from '../login/containers/LogoutContainer';
 import { sendVoice } from '../../global/voice/modules/voice';
 
 /** This component is used to test things in the app */
 export default class Home extends React.Component {
-  state = { pilot: {} };
+  state = { };
 
   onSendVoice = () => {
+    console.log('sending voice');
     sendVoice('hello world');
   };
 
   render() {
     return (
       <div>
-        Home Content
-        <hr />
-        <Link to="/tracker">TBS Race Tracker</Link>
-        <hr />
-        <Link to="/people">People</Link>
-        <hr />
-        <Link to="/group/82">A Group</Link>
-        <hr />
-        <Logout />
-        <button onClick={this.onSendVoice}>Send Voice</button>
+        <AppBar title="Developer Menu" />
+        <List>
+          <ListItem>
+            <Link to="/">Home</Link>
+          </ListItem>
+          <ListItem>
+            <Logout />
+          </ListItem>
+          <ListItem>
+            <Link to="/tracker">TBS RaceTracker</Link>
+          </ListItem>
+          <ListItem>
+            <a onClick={this.onSendVoice}>Send Voice</a>
+          </ListItem>
+        </List>
       </div>
     );
   }

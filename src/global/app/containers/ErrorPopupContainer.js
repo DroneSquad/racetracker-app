@@ -27,11 +27,13 @@ export default class extends ErrorPopup {
     }
     // console.error(error);
     // console.log(JSON.stringify(error));
-    this.setState({
-      opened: true,
-      title: String(error.message),
-      message: JSON.stringify(error, 2, ' ')
-    });
+    if (window.developer === true) { // only developers can see this currently
+      this.setState({
+        opened: true,
+        title: String(error.message),
+        message: JSON.stringify(error, 2, ' ')
+      });
+    }
   };
 
   /** Dismiss the error */
