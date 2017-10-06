@@ -11,12 +11,15 @@ import { TableRow, TableRowColumn } from 'material-ui';
 
 /** Used to display the pilot info for the heat builder */
 export default class Pilot extends Component {
+  props: {
+    name: string
+  };
   constructor(props) {
     super(props);
     this.uuid = uuid.v4();
     this.state = {
       loading: false,
-      name: 'Unknown',
+      // name: 'Unknown',
       avatar: BLANK_PNG //`https://api.dronesquad.com/avatar/${this.props.id}`
     };
   }
@@ -40,7 +43,7 @@ export default class Pilot extends Component {
   render() {
     let name = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
-        {this.state.name}
+        {this.props.name}
       </span>
     );
     let avatar = <Avatar size={20} src={this.state.avatar} />;
@@ -50,10 +53,12 @@ export default class Pilot extends Component {
           {avatar}
           {name}
         </TableRowColumn>
+
         <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn className="no-clip">0:01:00</TableRowColumn>
-        <TableRowColumn className="no-clip">0:01:00</TableRowColumn>
+        <TableRowColumn className="no-clip">01:00</TableRowColumn>
+        <TableRowColumn className="no-clip">01:00</TableRowColumn>
         <TableRowColumn>F7</TableRowColumn>
+
       </TableRow>
     );
   }

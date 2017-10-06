@@ -1,5 +1,6 @@
 /** types */
 import _ from 'lodash';
+import uuid from 'uuid';
 
 export const CREATE_RACE = 'CREATE_RACE';
 export const CREATE_HEAT = 'CREATE_HEAT';
@@ -22,8 +23,7 @@ const initialRace = {
   date: new Date().toISOString().split('T')[0],
   location: '',
   trackerId: '',
-  heats: [],
-  rounds: [],
+  activeHeat: '',
   isActive: false,
 };
 

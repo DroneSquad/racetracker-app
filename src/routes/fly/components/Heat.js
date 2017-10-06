@@ -55,12 +55,16 @@ export default class Heat extends Component {
               <TableHeaderColumn>Band</TableHeaderColumn>
             </TableRow>
           </TableHeader>
+
+
           <TableBody displayRowCheckbox={false}>
-            <Pilot id={Math.floor(Math.random() * 10000)} />
+            <Pilot name="Racer1" id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
           </TableBody>
+
+
         </Table>
       </Card>
     );
