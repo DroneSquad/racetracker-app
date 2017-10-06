@@ -25,7 +25,7 @@ export default class Main extends Component {
     } else {
       if (!window.developer && window.developer !== 0) {
         window.developer = 0;
-      } else if (window.developer === 7){
+      } else if (window.developer === 7) {
         let developerConfirm = window.confirm('Are you a developer?');
         if (developerConfirm) {
           window.developer = true;
@@ -42,7 +42,7 @@ export default class Main extends Component {
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo} alt="" onClick={this.onDeveloperMode}/>} />
+          <AppBar title={<img className="logo" src={logo} alt="" onClick={this.onDeveloperMode} />} />
         </header>
         <main>
           <Switch>

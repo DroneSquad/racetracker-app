@@ -9,7 +9,8 @@ export function sendVoice(text, locale = 'en-US', rate = 1) {
       type: VOICE_SEND,
       payload: { text, locale, rate }
     });
-    if ('TTS' in window) { // weird quirk to make it work on a browser
+    if ('TTS' in window) {
+      // weird quirk to make it work on a browser
       window['TTS'].speak(
         { text, locale, rate },
         () => dispatch({ type: VOICE_SEND_SUCCESS }),
@@ -22,7 +23,6 @@ export function sendVoice(text, locale = 'en-US', rate = 1) {
 }
 
 export default function(state = {}, action) {
-  console.log(action);
   switch (action.type) {
     default:
       return { ...state };
