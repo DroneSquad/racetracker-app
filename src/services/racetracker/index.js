@@ -15,17 +15,10 @@ const RE_ALPHANUM = /[a-z0-9]+/i;
 const R2C = ['R', /r+/i, 'C'];
 const L2D = ['L', /l+/i, 'D'];
 // regex replace arrays to convert channel prefixes: [racetracker -> user] ex. C3 -> R3
-<<<<<<< HEAD
-const C2R = ['C', /c+/i, 'R']
-const D2L = ['D', /d+/i, 'L']
-// regex replace function that uses to above arrays
-const RE_CHANNEL = (c, r) => c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c;
-=======
 const C2R = ['C', /c+/i, 'R'];
 const D2L = ['D', /d+/i, 'L'];
 // regex replace function that uses to above arrays to fix channel prefixes
 const RE_CHANNEL = (c, r) => (c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c);
->>>>>>> 52f9fdff690a6c737d1dba03288b3703ec127bf3
 
 export class TbsRt {
   constructor() {
