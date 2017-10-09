@@ -41,8 +41,10 @@ export default class Heat extends Component {
   };
 
   render() {
-    let { racerChannels } = this.props;
+    let { racerChannels, id } = this.props;
     let title = <span>{`Heat ${this.props.number}`}</span>;
+    console.log("render-Heat")
+    console.log(racerChannels);
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
@@ -58,7 +60,7 @@ export default class Heat extends Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {racerChannels.map(slot =>
-              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} /> )}
+              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={id} /> )}
           </TableBody>
         </Table>
       </Card>

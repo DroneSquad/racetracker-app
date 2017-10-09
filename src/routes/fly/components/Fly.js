@@ -39,7 +39,7 @@ export default class Race extends Component {
             </Tab>
             <Tab label="Heats">
               {/*<RaceHeats history={this.props.history} />*/}
-              {/*<div className="center-text">Heats Tab Currently Disabled</div>*/}
+              {<div className="center-text">Heats Tab Currently Disabled</div>}
             </Tab>
             <Tab label="Stats" />
           </Tabs>

@@ -42,8 +42,6 @@ export default class Racing extends Component {
 
   raceInterface = () => {
     return (
-
-
         <Stopwatch />
     );
   };
