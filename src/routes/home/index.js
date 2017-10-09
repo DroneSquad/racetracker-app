@@ -1,46 +1,40 @@
-// @flow
-
 import React from 'react';
-import { Link } from 'react-router-dom';
-import _ from 'lodash';
+import { push } from 'react-router-redux';
 
-import { List, ListItem } from 'material-ui';
+import { AppBar, List, ListItem } from 'material-ui';
 
-import api from '../../services/api';
-import Logout from '../login/containers/LogoutContainer';
+import { sendVoice } from '../../global/voice/modules/voice';
+import { logoutRequest } from '../../routes/login/modules/login';
 
+import { connect } from '../../store';
+
+/** This component is used to test things in the app */
+@connect()
 export default class Home extends React.Component {
-  state = { pilot: {} };
+  static mapStateToProps = states => ({
+    token: states.auth.token
+  });
 
-  componentWillMount() {
-    api.pilots.groups(0, 0).then(pilot => {
-      this.setState({ groups: pilot.$response.data });
-    });
-  }
+  static mapDispatchToProps = dispatch => ({
+    onHome: () => dispatch(push('/')),
+    onLogout: token => dispatch(logoutRequest(token)),
+    onVoiceSend: () => dispatch(sendVoice('hello world')),
+    onTracker: () => dispatch(push('/tracker'))
+  });
 
   render() {
     return (
       <div>
-        Home Content
-        <hr />
-        <Link to="/tracker">TBS Race Tracker</Link>
-        <hr />
-        <Link to="/people">People</Link>
-        <hr />
-        <Link to="/group/82">A Group</Link>
-        <hr />
-        <Logout />
-        Showing Your Groups Sorted by Location (lat: 0, lng: 0). Do we want to ask user for location permissions here?
+        <AppBar
+          iconClassNameLeft="mdi mdi-home"
+          onLeftIconButtonTouchTap={this.props.onHome}
+          title="Developer Menu"
+          iconClassNameRight="mdi mdi-logout"
+          onRightIconButtonTouchTap={() => this.props.onLogout(this.props.token)}
+        />
         <List>
-          {this.state.groups &&
-            _.map(this.state.groups, (value, key) =>
-              <ListItem key={key}>
-                <Link to={`/group/${value.id}`}>
-                  {value.name}
-                </Link>
-              </ListItem>
-            )}
-          {!this.state.groups && <ListItem>Loading Groups...</ListItem>}
+          <ListItem onTouchTap={this.props.onTracker}>TBS RaceTracker</ListItem>
+          <ListItem onTouchTap={this.props.onVoiceSend}>Send Voice</ListItem>
         </List>
       </div>
     );

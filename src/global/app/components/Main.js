@@ -17,13 +17,32 @@ export default class Main extends Component {
   props: {
     isDeviceConnected: boolean
   };
+
+  /** On developer mode */
+  onDeveloperMode = () => {
+    if (window.developer === true) {
+      this.props.history.push('/test');
+    } else {
+      if (!window.developer && window.developer !== 0) {
+        window.developer = 0;
+      } else if (window.developer === 7) {
+        let developerConfirm = window.confirm('Are you a developer?');
+        if (developerConfirm) {
+          window.developer = true;
+        }
+      } else {
+        window.developer++;
+      }
+    }
+  };
+
   render() {
     let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo} alt="" />} />
+          <AppBar title={<img className="logo" src={logo} alt="" onClick={this.onDeveloperMode} />} />
         </header>
         <main>
           <Switch>
