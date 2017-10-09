@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 
 import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
-import RaceHeats from './RaceHeats';
+// import RaceHeats from './RaceHeats';
 import Racing from '../containers/RacingContainer';
 
 import './fly.css';
 
 // TODO: state does not appear to be managed across tabs ..? investigate and fix
-
 export default class Race extends Component {
   props: {
     goToTrackerHome: Function
@@ -39,7 +38,7 @@ export default class Race extends Component {
               <Racing history={this.props.history} />
             </Tab>
             <Tab label="Heats">
-              <RaceHeats history={this.props.history} />
+              {/*<RaceHeats history={this.props.history} />*/}
               {/*<div className="center-text">Heats Tab Currently Disabled</div>*/}
             </Tab>
             <Tab label="Stats" />

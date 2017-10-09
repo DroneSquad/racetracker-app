@@ -1,3 +1,6 @@
+// NOTE: this is basically the Pilot class contained in all 3 HeatResult/HeatBuilder/RacingHeat files
+// the commented code was left as we need to use it to put lazy loading back in....
+
 import React, { Component } from 'react';
 import uuid from 'uuid';
 
@@ -10,7 +13,7 @@ import { BLANK_PNG } from '../../../utils';
 import { TableRow, TableRowColumn } from 'material-ui';
 
 /** Used to display the pilot info for the heat builder */
-export default class Pilot extends Component {
+export default class Racer extends Component {
   props: {
     name: string
   };
@@ -53,12 +56,10 @@ export default class Pilot extends Component {
           {avatar}
           {name}
         </TableRowColumn>
-
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn className="no-clip">01:00</TableRowColumn>
         <TableRowColumn className="no-clip">01:00</TableRowColumn>
         <TableRowColumn>F7</TableRowColumn>
-
       </TableRow>
     );
   }

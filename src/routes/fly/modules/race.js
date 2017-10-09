@@ -1,43 +1,51 @@
 /** types */
-import _ from 'lodash';
-import uuid from 'uuid';
+import raceMngr from '../../../services/racemanager';
 
-export const CREATE_RACE = 'CREATE_RACE';
-export const CREATE_HEAT = 'CREATE_HEAT';
+import _ from 'lodash';
+
+export const NEW_RACE = 'NEW_RACE';
+export const NEW_HEAT = 'NEW_HEAT';
 
 /** actions */
-export const createRace = (trackerId: string) => ({
-  type: CREATE_RACE,
-  payload: trackerId
+export const newRace = (request: object) => ({
+  type: NEW_RACE,
+  payload: request
 });
 
-export const createHeat = (heat: Object) => ({
-  type: CREATE_HEAT,
-  payload: heat
+export const newHeat = (request: object) => ({
+  type: NEW_HEAT,
+  payload: request
 });
 
-/** initial state of a race */
-const initialRace = {
-  id: '',
-  name: '',
-  date: new Date().toISOString().split('T')[0],
-  location: '',
-  trackerId: '',
-  activeHeat: '',
-  isActive: false,
+export const createRace = (request: object) => {
+  // TODO update this for multi tracker, and race creation for a later date
+  return dispatch => {
+    raceMngr.createRace(response => {
+      dispatch(newRace(response.race));
+      dispatch(newHeat(response.heat));
+    }, request);
+  };
 };
 
 /** reducers */
-export default function(state = initialRace, action: Action) {
+export default function(state = {}, action: Action) {
   switch (action.type) {
-    case CREATE_RACE:
+    case NEW_RACE:
+      console.log("NEW_RACE");
+      return action.payload;
+      // return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
+      /*return {
+        ...state,
+        race: action.payload
+      };*/
+    case NEW_HEAT:
+      console.log("NEW_HEAT");
+      console.log(state);
+      console.log(action.payload);
       return {
         ...state,
-        trackerId: action.payload,
-        isActive: true,
+        heats: _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id)
       };
-    case CREATE_HEAT:
-      return _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id);
     default:
       return state
   }

@@ -16,8 +16,6 @@ export type RaceTracker = {
   isConnected: boolean,
   wasConnected: boolean,
   isReconnecting: boolean,
-  connectedMsg: string,
-  connectingMsg: string,
   recover: boolean,
   reconnects: number,
   batteryLevel: string,
@@ -29,6 +27,9 @@ export type AuthToken = {
   ttl: string,
   created: string
 };
+
+
+
 
 // all action types with according payload
 declare type ActionType = 'CONNECT_TRACKER' | 'DISCOVER_TRACKER' | 'BT_IS_AVAILABLE';

@@ -1,8 +1,5 @@
 // @flow
-import _ from 'lodash';
-
 import React, { Component} from 'react';
-
 import { List, ListItem } from 'material-ui';
 
 import Heat from '../containers/HeatContainer';
@@ -14,54 +11,75 @@ export default class Racing extends Component {
     connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
     activeTrackerId: string,
-    racerChannels: Object,
-    //heats: Array<Object>
   };
 
   componentDidMount() {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length === 1) {
-        this.props.createRace(this.props.connectedTrackers[0].id);
+        this.createRace();
       }
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    // TODO: update for multitracker support
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
-          this.props.createRace(this.props.connectedTrackers[0].id);
-        }
-      }
-    }
-    if (this.props.isRaceActive !== nextProps.isRaceActive) {
-      if (nextProps.isRaceActive) {
-        if (this.props.heats.length === 0) {
-          // this.props.createHeat(this.props.activeTrackerId);
+          this.createRace();
         }
       }
     }
   }
 
-/*  newHeat() {
-    this.props.createHeat({
-      id: 1,
-      trackerId: this.props.activeTrackerId,
-      isPending: true,
-      isComplete: false,
-      isReRun: false
-      // channels: this.props.racerChannels
-    })
-  };
-*/
+  // TODO: enhance for multitracker support and additional parameters
+  createRace() {
+    this.props.createRace({
+      trackerId: this.props.connectedTrackers[0].id,
+      racerChannels: this.props.connectedTrackers[0].racerChannels,
+      raceMode: this.props.connectedTrackers[0].raceMode,
+    });
+  }
+
+/** displays all connected/available racetrackers */
+/*rtDiscoveryList = () => {
+  return (
+    <div>
+      <TrackerList
+        history={this.props.history}
+        filter="SHOW_CONNECTED"
+        headerText="Connected RaceTrackers"
+        emptyText="No connected race trackers"
+      />
+      <Divider />
+      <TrackerList
+        history={this.props.history}
+        filter="SHOW_AVAILABLE"
+        headerText="Available RaceTrackers"
+        emptyText="No available race trackers"
+      />
+    </div>
+  );
+};*/
+
+
+
   raceInterface = () => {
     return (
-      <div>
         <Stopwatch />
-        <List className="heat-list">
-          <ListItem key="HeatKey" className="small-screen" disabled primaryText={<Heat {...this.props} id="heatKey" />} />
-        </List>
-      </div>
+    );
+  };
+
+  heatList = () => {
+    let { heats } = this.props;
+    console.log(heats);
+    return (
+      <List className="heat-list">
+        {heats.map(heat =>
+          <ListItem key={heat.id} className="small-screen" disabled
+            primaryText={ <Heat {...this.props} id={heat.number} /> }
+          />)}
+      </List>
     );
   };
 
@@ -74,6 +92,7 @@ export default class Racing extends Component {
     return (
       <div>
         {isRaceActive && <this.raceInterface />}
+        {isRaceActive && <this.heatList />}
         {!isRaceActive && connectedTrackers.length > 1 ?
           <RacetrackerCard
             title="Multi-tracker racing is not yet supported"
@@ -93,16 +112,13 @@ export default class Racing extends Component {
             text="Click below to discover, connect, and configure Racetrackers"
             button="Racetracker Management"
           /> : null}
+
       </div>
     );
   }
 }
 
-
 /*
-
-
           { heats.map(heat =>
             <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
-
 */

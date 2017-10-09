@@ -14,7 +14,7 @@ import {
   MenuItem
 } from 'material-ui';
 
-import Pilot from '../containers/PilotContainer';
+import Pilot from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
@@ -41,6 +41,7 @@ export default class Heat extends Component {
   };
 
   render() {
+    console.log("RENDER-HEAT");
     let title = <span>{`Heat ${this.props.id} Results`}</span>;
     return (
       <Card expanded={false}>
@@ -56,14 +57,12 @@ export default class Heat extends Component {
             </TableRow>
           </TableHeader>
 
-
           <TableBody displayRowCheckbox={false}>
             <Pilot name="Racer1" id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
             <Pilot id={Math.floor(Math.random() * 10000)} />
           </TableBody>
-
 
         </Table>
       </Card>
