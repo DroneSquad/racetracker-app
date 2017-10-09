@@ -14,7 +14,7 @@ import {
   MenuItem
 } from 'material-ui';
 
-import Pilot from '../containers/RacerContainer';
+import Racer from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
@@ -41,29 +41,25 @@ export default class Heat extends Component {
   };
 
   render() {
-    console.log("RENDER-HEAT");
-    let title = <span>{`Heat ${this.props.id} Results`}</span>;
+    let { racerChannels } = this.props;
+    let title = <span>{`Heat ${this.props.number}`}</span>;
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
         <Table>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
-              <TableHeaderColumn className="pilot-name">Pilot</TableHeaderColumn>
+              <TableHeaderColumn className="pilot-name">Racer</TableHeaderColumn>
               <TableHeaderColumn>Lap</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
               <TableHeaderColumn>Total</TableHeaderColumn>
               <TableHeaderColumn>Band</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-
           <TableBody displayRowCheckbox={false}>
-            <Pilot name="Racer1" id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
+            {racerChannels.map(slot =>
+              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} /> )}
           </TableBody>
-
         </Table>
       </Card>
     );

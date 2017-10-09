@@ -22,7 +22,6 @@ export default class Racing extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // TODO: update for multitracker support
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
@@ -32,7 +31,7 @@ export default class Racing extends Component {
     }
   }
 
-  // TODO: enhance for multitracker support and additional parameters
+  // TODO: enhance for multitracker support
   createRace() {
     this.props.createRace({
       trackerId: this.props.connectedTrackers[0].id,
@@ -41,43 +40,21 @@ export default class Racing extends Component {
     });
   }
 
-/** displays all connected/available racetrackers */
-/*rtDiscoveryList = () => {
-  return (
-    <div>
-      <TrackerList
-        history={this.props.history}
-        filter="SHOW_CONNECTED"
-        headerText="Connected RaceTrackers"
-        emptyText="No connected race trackers"
-      />
-      <Divider />
-      <TrackerList
-        history={this.props.history}
-        filter="SHOW_AVAILABLE"
-        headerText="Available RaceTrackers"
-        emptyText="No available race trackers"
-      />
-    </div>
-  );
-};*/
-
-
-
   raceInterface = () => {
     return (
+
+
         <Stopwatch />
     );
   };
 
   heatList = () => {
     let { heats } = this.props;
-    console.log(heats);
     return (
       <List className="heat-list">
         {heats.map(heat =>
           <ListItem key={heat.id} className="small-screen" disabled
-            primaryText={ <Heat {...this.props} id={heat.number} /> }
+            primaryText={ <Heat {...heat} id={heat.id} /> }
           />)}
       </List>
     );
@@ -112,13 +89,7 @@ export default class Racing extends Component {
             text="Click below to discover, connect, and configure Racetrackers"
             button="Racetracker Management"
           /> : null}
-
       </div>
     );
   }
 }
-
-/*
-          { heats.map(heat =>
-            <ListItem key={heat.id} className="small-screen" disabled primaryText={ <Heat {...this.props} id={heat.id} />} />)}
-*/

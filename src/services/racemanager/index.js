@@ -38,8 +38,6 @@ export class RaceMngr {
       isRerun: false,
       racerChannels: request.racerChannels
     }
-    console.log(race);
-    console.log(heat);
     // send it...
     cb({ race: race, heat: heat })
   }
