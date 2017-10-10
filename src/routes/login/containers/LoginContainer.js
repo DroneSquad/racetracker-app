@@ -9,7 +9,7 @@ import Login from '../components/Login';
     wiring in the actions and state necessary to render a presentational
     component - in this case, the Login:   */
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = state => ({
   loading: state.auth.loading,
   token: state.auth.token,
   error: state.auth.error,
@@ -17,9 +17,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  authLogin(cert) {
-    dispatch(loginRequest(cert));
-  }
+  authLogin: cert => dispatch(loginRequest(cert))
 });
 
 const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -16,7 +16,7 @@ export default class TrackerDevice extends Component {
     goToSettings: Function
   };
 
-  DeviceProperties = (props: { name: string, rssi: string }) => {
+  deviceProperties = (props: { name: string, rssi: string }) => {
     return (
       <div className="device">
         <h3>
@@ -45,7 +45,7 @@ export default class TrackerDevice extends Component {
   render() {
     let { id, name, rssi, isConnected } = this.props;
     let deviceLogo = <FontIcon className="ds-blue-text pull-icon-down mdi mdi-timer" />;
-    let deviceComponent = <this.DeviceProperties name={name} rssi={rssi} />;
+    let deviceComponent = <this.deviceProperties name={name} rssi={rssi} />;
     let extraProps = { key: id, primaryText: deviceComponent, leftIcon: deviceLogo };
     let icon = <FontIcon className="pull-icon-down mdi mdi-settings" />;
     if (isConnected) {

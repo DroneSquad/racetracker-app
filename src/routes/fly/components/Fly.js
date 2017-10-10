@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
-//import RaceHeats from './RaceHeats';
-//import Racing from './Racing';
+// import RaceHeats from './RaceHeats';
+import Racing from '../containers/RacingContainer';
 
 import './fly.css';
 
-/** This will display tabs for each section for tab, they keep their state across tabs */
-export default class Race extends React.Component {
-  /** The drop down menu for the options menu */
+// TODO: state does not appear to be managed across tabs ..? investigate and fix
+export default class Race extends Component {
+  props: {
+    goToTrackerHome: Function
+  };
+
   menuDropdown = () => {
     let icon = (
       <IconButton>
@@ -18,7 +21,7 @@ export default class Race extends React.Component {
     );
     return (
       <IconMenu iconButtonElement={icon}>
-        <MenuItem primaryText="RaceTracker Settings" onTouchTap={() => this.props.history.push('/tracker')} />
+        <MenuItem primaryText="RaceTracker Management" onTouchTap={() => this.props.goToTrackerHome()} />
       </IconMenu>
     );
   };
@@ -30,14 +33,13 @@ export default class Race extends React.Component {
           <AppBar title="Fly" iconElementRight={this.menuDropdown()} />
         </header>
         <main>
-          <Tabs initialSelectedIndex={1}>
+          <Tabs initialSelectedIndex={0}>
             <Tab label="Racing">
-              {/*<Racing history={this.props.history} />*/}
-              <div className="center-text">Racing Tab Temp Disabled for Testing</div>
+              <Racing history={this.props.history} />
             </Tab>
             <Tab label="Heats">
               {/*<RaceHeats history={this.props.history} />*/}
-              <div className="center-text">Heats Tab Temp Disabled for Testing</div>
+              {<div className="center-text">Heats Tab Currently Disabled</div>}
             </Tab>
             <Tab label="Stats" />
           </Tabs>

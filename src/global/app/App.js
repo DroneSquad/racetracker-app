@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
 import RecoverySnackbar from './containers/RecoverySnackbarContainer';
+import ErrorPopup from './containers/ErrorPopupContainer';
 
 import Main from './components/Main';
 import Forgot from '../../routes/login/containers/ForgotContainer';
@@ -15,6 +16,7 @@ import NewPilot from '../../routes/people/components/NewPilot';
 import People from '../../routes/people/containers/PeopleContainer';
 import HeatLineUp from '../../routes/fly/components/HeatLineUp';
 import HeatResultEdit from '../../routes/fly/components/HeatResultEdit';
+import Home from '../../routes/home';
 
 /** This is the main app that the user will see, one will get here after loading is done */
 export default class App extends React.Component {
@@ -34,10 +36,12 @@ export default class App extends React.Component {
             <AuthRoute path="/fly/heat/results/edit" component={HeatResultEdit} />
             <AuthRoute path="/fly/heat/edit" component={HeatLineUp} />
             <AuthRoute path="/tracker" component={Tracker} />
+            <AuthRoute path="/test" component={Home} />
             <AuthRoute path="/" component={Main} />
           </Switch>
         </ConnectedRouter>
         <RecoverySnackbar />
+        <ErrorPopup />
       </div>
     );
   }

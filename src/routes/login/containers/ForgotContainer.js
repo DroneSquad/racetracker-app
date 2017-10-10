@@ -16,9 +16,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  forgotLogin(email) {
-    dispatch(forgotRequest(email));
-  }
+  forgotLogin: email => dispatch(forgotRequest(email))
 });
 
 const ForgotContainer = connect(mapStateToProps, mapDispatchToProps)(Forgot);

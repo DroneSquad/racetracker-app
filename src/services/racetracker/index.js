@@ -11,6 +11,14 @@ import config from './config.json';
 const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
 const RE_ALPHANUM = /[a-z0-9]+/i;
+// regex replace arrays to convert channel prefixes: [user -> racetracker] ex. R3 -> C3
+const R2C = ['R', /r+/i, 'C'];
+const L2D = ['L', /l+/i, 'D'];
+// regex replace arrays to convert channel prefixes: [racetracker -> user] ex. C3 -> R3
+const C2R = ['C', /c+/i, 'R'];
+const D2L = ['D', /d+/i, 'L'];
+// regex replace function that uses to above arrays to fix channel prefixes
+const RE_CHANNEL = (c, r) => (c.charAt(0) === r[0] ? c.replace(r[1], r[2]) : c);
 
 export class TbsRt {
   constructor() {
@@ -55,7 +63,10 @@ export class TbsRt {
           cmd = cmd + ' ' + options.slot;
           break;
         case 'setRacerChannel':
-          cmd = cmd + ' ' + options.racer + ' ' + options.channel;
+          let chan = options.channel;
+          chan = RE_CHANNEL(chan, R2C);
+          chan = RE_CHANNEL(chan, L2D);
+          cmd = cmd + ' ' + options.racer + ' ' + chan;
           break;
         case 'getTotalRounds':
           cmd = cmd + ' ' + options.racer;
@@ -99,6 +110,8 @@ export class TbsRt {
         case 'getRacerChannel':
         case 'setRacerChannel':
           response = response.split(':')[1].match(RE_ALPHANUM)[0];
+          response = RE_CHANNEL(response, C2R);
+          response = RE_CHANNEL(response, D2L);
           break;
         default:
           break;
@@ -155,9 +168,7 @@ export class TbsRt {
               resolve();
             }
           },
-          error => {
-            reject(error);
-          }
+          error => reject(error)
         );
       }, interval);
     });
@@ -169,9 +180,7 @@ export class TbsRt {
       device_id,
       this._config.device_service,
       this._config.firmware,
-      response => {
-        cb({ device_id: device_id, firmware: this.bytesToStr(response) });
-      },
+      response => cb({ device_id: device_id, firmware: this.bytesToStr(response) }),
       error => cb({ error: error })
     );
   }
@@ -311,8 +320,8 @@ export class TbsRt {
           this.writeCommand(cmd, device_id).then(
             this.readCommand(device_id).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
+                // FF indicates unassigned
                 if (response !== 'FF') {
-                  // FF indicates unassigned
                   channels.push({ racer: racer, channel: response });
                 }
               })
