@@ -70,18 +70,6 @@
       "name": "Raceband",
       "frequencies": [
         {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
           "imd": 1.0,
           "bands": ["r1", "r2", "r4", "r5"]
         }
@@ -90,18 +78,6 @@
     {
       "name": "Raceband & Fatshark",
       "frequencies": [
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
         {
           "imd": 1.0,
           "bands": ["r1", "r2", "f3", "f5"]
@@ -112,18 +88,6 @@
       "name": "Raceband & B",
       "frequencies": [
         {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
           "imd": 1.0,
           "bands": ["r1", "r2", "b3", "b5"]
         }
@@ -133,22 +97,6 @@
       "name": "ETA5A",
       "frequencies": [
         {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
           "imd": 0.65,
           "bands": ["e3", "b2", "f4", "a1", "e6"]
         }
@@ -157,26 +105,6 @@
     {
       "name": "IMD6C",
       "frequencies": [
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
-        {
-          "imd": 0.0,
-          "bands": []
-        },
         {
           "imd": 0.29,
           "bands": ["r1", "r2", "f2", "f4", "f8", "r8"]
