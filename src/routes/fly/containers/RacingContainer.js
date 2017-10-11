@@ -14,13 +14,13 @@ const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   activeTrackerId: state.race.trackerId,
   raceMode: state.race.raceMode,
-  heats: (state.race.heats) ? state.race.heats : [],
+  heats: state.race.heats ? state.race.heats : []
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  createRace: object => dispatch(createRace(object)),
+  createRace: object => dispatch(createRace(object))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);

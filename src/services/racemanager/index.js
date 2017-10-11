@@ -25,8 +25,8 @@ export class RaceMngr {
       trackerId: request.trackerId,
       activeHeat: 1,
       raceMode: request.raceMode,
-      isActive: true  // by default auto start for now
-    }
+      isActive: true // by default auto start for now
+    };
     // create the first heat for the race
     let heat = {
       id: uuid.v4(),
@@ -37,15 +37,12 @@ export class RaceMngr {
       isComplete: false,
       isRerun: false,
       racerChannels: request.racerChannels
-    }
+    };
     // send it...
-    cb({ race: race, heat: heat })
+    cb({ race: race, heat: heat });
   }
 
-  startRace(cb, request) {
-
-  }
-
+  startRace(cb, request) {}
 }
 
 export default RaceMngr.get();

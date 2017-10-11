@@ -62,7 +62,9 @@ export default class Racer extends Component {
         <TableRowColumn>1</TableRowColumn>
         <TableRowColumn className="no-clip">0:00</TableRowColumn>
         <TableRowColumn className="no-clip">0:00</TableRowColumn>
-        <TableRowColumn>{channel}</TableRowColumn>
+        <TableRowColumn>
+          {channel}
+        </TableRowColumn>
       </TableRow>
     );
   }

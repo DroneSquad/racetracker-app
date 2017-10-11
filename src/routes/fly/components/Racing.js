@@ -1,5 +1,5 @@
 // @flow
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { List, ListItem } from 'material-ui';
 
 import Heat from '../containers/HeatContainer';
@@ -10,7 +10,7 @@ export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
-    activeTrackerId: string,
+    activeTrackerId: string
   };
 
   componentDidMount() {
@@ -36,14 +36,12 @@ export default class Racing extends Component {
     this.props.createRace({
       trackerId: this.props.connectedTrackers[0].id,
       racerChannels: this.props.connectedTrackers[0].racerChannels,
-      raceMode: this.props.connectedTrackers[0].raceMode,
+      raceMode: this.props.connectedTrackers[0].raceMode
     });
   }
 
   raceInterface = () => {
-    return (
-        <Stopwatch />
-    );
+    return <Stopwatch />;
   };
 
   heatList = () => {
@@ -51,16 +49,15 @@ export default class Racing extends Component {
     return (
       <List className="heat-list">
         {heats.map(heat =>
-          <ListItem key={heat.id} className="small-screen" disabled
-            primaryText={ <Heat {...heat} id={heat.id} /> }
-          />)}
+          <ListItem key={heat.id} className="small-screen" disabled primaryText={<Heat {...heat} id={heat.id} />} />
+        )}
       </List>
     );
   };
 
   handleListClick = (event: RaceTracker) => {
     this.props.createRace(event.id);
-  }
+  };
 
   render() {
     let { isRaceActive, connectedTrackers } = this.props;
@@ -68,25 +65,32 @@ export default class Racing extends Component {
       <div>
         {isRaceActive && <this.raceInterface />}
         {isRaceActive && <this.heatList />}
-        {!isRaceActive && connectedTrackers.length > 1 ?
-          <RacetrackerCard
-            title="Multi-tracker racing is not yet supported"
-            subtitle="Select the Racetracker you want to use for racing"
-            button=""
-            text={
-            <List>
-              {connectedTrackers.map(tracker =>
-                <ListItem primaryText={tracker.name} id={tracker.id}
-                  onClick={this.handleListClick.bind(this, tracker)}/>)}
-            </List>
-          }/> : null }
-        {!isRaceActive && connectedTrackers.length === 0 ?
-          <RacetrackerCard
-            title="Racetracker connection required"
-            subtitle="Race mode requires the connection of a TBS Racetracker"
-            text="Click below to discover, connect, and configure Racetrackers"
-            button="Racetracker Management"
-          /> : null}
+        {!isRaceActive && connectedTrackers.length > 1
+          ? <RacetrackerCard
+              title="Multi-tracker racing is not yet supported"
+              subtitle="Select the Racetracker you want to use for racing"
+              button=""
+              text={
+                <List>
+                  {connectedTrackers.map(tracker =>
+                    <ListItem
+                      primaryText={tracker.name}
+                      id={tracker.id}
+                      onClick={this.handleListClick.bind(this, tracker)}
+                    />
+                  )}
+                </List>
+              }
+            />
+          : null}
+        {!isRaceActive && connectedTrackers.length === 0
+          ? <RacetrackerCard
+              title="Racetracker connection required"
+              subtitle="Race mode requires the connection of a TBS Racetracker"
+              text="Click below to discover, connect, and configure Racetrackers"
+              button="Racetracker Management"
+            />
+          : null}
       </div>
     );
   }

@@ -8,13 +8,9 @@ import Heat from '../components/Heat';
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => ({});
 
-});
-
-const mapDispatchToProps = (dispatch: Function) => ({
-
-});
+const mapDispatchToProps = (dispatch: Function) => ({});
 
 const HeatContainer = connect(mapStateToProps, mapDispatchToProps)(Heat);
 

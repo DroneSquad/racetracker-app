@@ -20,7 +20,7 @@ export default class RacetrackerCard extends Component {
           {this.props.text}
         </CardText>
         <CardActions>
-          {!!this.props.button && <FlatButton label={this.props.button} onClick={() => this.props.goToTrackerHome()}/>}
+          {!!this.props.button && <FlatButton label={this.props.button} onClick={() => this.props.goToTrackerHome()} />}
         </CardActions>
       </Card>
     );

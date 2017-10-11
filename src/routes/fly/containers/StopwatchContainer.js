@@ -8,11 +8,9 @@ import Stopwatch from '../components/Stopwatch';
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
-const mapStateToProps = (state, ownProps) => ({
-});
+const mapStateToProps = (state, ownProps) => ({});
 
-const mapDispatchToProps = (dispatch: Function) => ({
-});
+const mapDispatchToProps = (dispatch: Function) => ({});
 
 const StopwatchContainer = connect(mapStateToProps, mapDispatchToProps)(Stopwatch);
 

@@ -9,13 +9,10 @@ import Racer from '../components/Racer';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-
   //  isRaceActive: state.race.isActive,
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({
-
-});
+const mapDispatchToProps = (dispatch: Function) => ({});
 
 const RacerContainer = connect(mapStateToProps, mapDispatchToProps)(Racer);
 

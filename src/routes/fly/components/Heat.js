@@ -18,7 +18,6 @@ import Racer from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
-
   /** The drop down menu for the options menu */
   menuDropdown = () => {
     let styleIcons = { margin: '0 0 0 8px' };
@@ -43,7 +42,7 @@ export default class Heat extends Component {
   render() {
     let { racerChannels, id } = this.props;
     let title = <span>{`Heat ${this.props.number}`}</span>;
-    console.log("render-Heat")
+    console.log('render-Heat');
     console.log(racerChannels);
     return (
       <Card expanded={false}>
@@ -60,7 +59,8 @@ export default class Heat extends Component {
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {racerChannels.map(slot =>
-              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={id} /> )}
+              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={id} />
+            )}
           </TableBody>
         </Table>
       </Card>

@@ -18,7 +18,8 @@ export default class Frequencies extends React.Component {
       profiles: _.map(frequencies.profiles, profile => profile.name),
       amount: 0,
       channel: 0,
-      data: (() => { // todp update with map reduce
+      data: (() => {
+        // todp update with map reduce
         let data = {};
         for (let index in frequencies.profiles) {
           let profile = frequencies.profiles[index];
@@ -29,7 +30,7 @@ export default class Frequencies extends React.Component {
             if (bands) {
               bands.push(i);
             } else {
-              data[band.bands.length] = [i]
+              data[band.bands.length] = [i];
             }
           }
         }
@@ -40,7 +41,10 @@ export default class Frequencies extends React.Component {
 
   /** When the frequency amount changes */
   onFrequencyAmount = (event, value) => {
-    this.setState({ amount: value, channel: this.state.channel > this.state.data[value + 1].length - 1 ? 0 : this.state.channel });
+    this.setState({
+      amount: value,
+      channel: this.state.channel > this.state.data[value + 1].length - 1 ? 0 : this.state.channel
+    });
   };
 
   /** When the frequency amount changes */

@@ -39,6 +39,6 @@ export default function(state = {}, action: Action) {
         heats: _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id)
       };
     default:
-      return state
+      return state;
   }
 }
