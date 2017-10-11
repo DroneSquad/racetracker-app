@@ -76,11 +76,20 @@
       ]
     },
     {
-      "name": "Raceband & Fatshark",
+      "name": "Raceband & Fatshark 1",
       "frequencies": [
         {
           "imd": 1.0,
           "bands": ["r1", "r2", "f3", "f5"]
+        }
+      ]
+    },
+    {
+      "name": "Raceband & Fatshark 2",
+      "frequencies": [
+        {
+          "imd": 1.0,
+          "bands": ["f2", "f4", "f8", "r8"]
         }
       ]
     },
@@ -94,10 +103,28 @@
       ]
     },
     {
+      "name": "E and Fatshark",
+      "frequencies": [
+        {
+          "imd": 0.98,
+          "bands": ["e4", "e2", "f2", "e6", "e8"]
+        }
+      ]
+    },
+    {
       "name": "ETA5A",
       "frequencies": [
         {
           "imd": 0.65,
+          "bands": ["e3", "b2", "f4", "b8", "e6"]
+        }
+      ]
+    },
+    {
+      "name": "ETA5B",
+      "frequencies": [
+        {
+          "imd": 0.58,
           "bands": ["e3", "b2", "f4", "a1", "e6"]
         }
       ]
