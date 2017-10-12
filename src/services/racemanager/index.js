@@ -15,13 +15,13 @@ export class RaceMngr {
   }
 
   createRace(cb, request) {
-    console.log("raceManger-createRace")
+    console.log('raceManger-createRace');
     let rUid = uuid.v4(); // race uid
     let hUid = uuid.v4(); // heat uid
-    console.log("INSIDE");
-    let racers = request[0].racerChannels.map(slot =>
-      console.log(slot.racer + " " + slot.channel)
-    )
+    console.log('INSIDE');
+    // let racers = request[0].racerChannels.map(slot =>
+    //   console.log(slot.racer + " " + slot.channel)
+    // )
     // request[0].racerChannels
     // create the first heat for the race
     let heat = {

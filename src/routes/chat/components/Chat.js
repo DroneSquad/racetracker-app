@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { /*Link,*/ Route, Switch } from 'react-router-dom';
 
 import { AppBar, Paper } from 'material-ui';
 
@@ -11,7 +11,8 @@ const Dialogs = () =>
     </header>
     <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>
       <h3 style={{ color: '#000' }}>Drone Squad Chat</h3>
-      Our new chat system and other community features will be added after the RaceTracker race management features are complete.
+      Our new chat system and other community features will be added after the RaceTracker race management features are
+      complete.
     </Paper>
   </div>;
 

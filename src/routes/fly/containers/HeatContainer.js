@@ -13,7 +13,6 @@ const mapStateToProps = (state, ownProps) => ({
   ownProps: ownProps,
   activeHeat: state.race.heats.filter(t => t.id === ownProps.id)[0],
   heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels
-
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({});

@@ -68,11 +68,22 @@ export default class extends React.Component {
       <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>
         <h3 style={{ color: '#000' }}>Welcome to our Beta</h3>
         Thanks for finding bugs and providing feedback.
-        <br /><br />
+        <br />
+        <br />
         Please visit the private “Drone Squad Test Pilot” FaceBook group to submit reports and ideas.
         <br />
-        <FlatButton secondary style={{ color: 'var(--ds-blue)' }} onTouchTap={() => this.props.history.push('/fly')} label="RaceTracker" />
-        <FlatButton secondary style={{ color: 'var(--ds-blue)' }} onTouchTap={() => window.location = ('https://www.facebook.com/groups/335400053585698/')} label="Facebook" />
+        <FlatButton
+          secondary
+          style={{ color: 'var(--ds-blue)' }}
+          onTouchTap={() => this.props.history.push('/fly')}
+          label="RaceTracker"
+        />
+        <FlatButton
+          secondary
+          style={{ color: 'var(--ds-blue)' }}
+          onTouchTap={() => (window.location = 'https://www.facebook.com/groups/335400053585698/')}
+          label="Facebook"
+        />
       </Paper>
     );
     // let { rsvps, groups } = this.props;

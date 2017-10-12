@@ -9,25 +9,25 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
-    isRaceActive: boolean,
+    isRaceActive: boolean
   };
 
   componentDidMount() {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length === 1) {
-        console.log("componentDidMount-createRace");
+        console.log('componentDidMount-createRace');
         this.createRace(this.props.connectedTrackers[0]);
       }
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps-Racing");
+    console.log('componentWillReceiveProps-Racing');
     console.log(nextProps);
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
-          console.log("componentWillReceiveProps-createRace");
+          console.log('componentWillReceiveProps-createRace');
           this.createRace(this.props.connectedTrackers[0]);
         }
       }
@@ -36,36 +36,34 @@ export default class Racing extends Component {
 
   createRace(tracker) {
     // TODO: handle multitracker support
-    console.log("-createRace-");
+    console.log('-createRace-');
     console.log(tracker);
     this.props.createRace([tracker]);
   }
 
   raceInterface = () => {
     //        {isRaceActive && <this.raceInterface />}
-  //  return <Stopwatch />;
+    //  return <Stopwatch />;
   };
 
   heatList = () => {
-    console.log("Racing.heatList-render");
+    console.log('Racing.heatList-render');
     let { activeHeatId } = this.props;
     console.log(activeHeatId);
     return (
       <List className="heat-list">
-          <ListItem key={activeHeatId} className="small-screen" disabled primaryText={
-            <Heat id={activeHeatId} />
-          } />
+        <ListItem key={activeHeatId} className="small-screen" disabled primaryText={<Heat id={activeHeatId} />} />
       </List>
     );
   };
 
   handleListClick = (event: RaceTracker) => {
-    console.log("handleListClick-createRace");
+    console.log('handleListClick-createRace');
     this.props.createRace(event);
   };
 
   render() {
-    console.log("Racing.render");
+    console.log('Racing.render');
     let { isRaceActive, activeHeatId, connectedTrackers } = this.props;
     console.log(isRaceActive);
     console.log(activeHeatId);
