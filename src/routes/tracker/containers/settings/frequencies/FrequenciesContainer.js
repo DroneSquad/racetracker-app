@@ -18,7 +18,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSave: deviceId => dispatch(saveFrequencies(deviceId)),
+  onSave: (deviceId, channels) => dispatch(saveFrequencies(deviceId, channels)),
   readFrequencies: deviceId => dispatch(readFrequencies(deviceId)),
   updateProfile: profile => dispatch(updateProfile(profile))
 });

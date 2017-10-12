@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { RT_RACER_CHANS, writeRacerChannels, readRacerChannels } from './racetracker';
 import { goBack } from 'react-router-redux';
 
-export const FREQ_LOADING_DONE = 'FREQ_LOADING_DONE';
 export const FREQ_UPDATE_PROFILE = 'FREQ_UPDATE_PROFILE';
 export const FREQ_SAVING = 'FREQ_SAVING';
 export const FREQ_SAVING_DONE = 'FREQ_SAVING_DONE';
@@ -27,13 +26,17 @@ export const updateProfile = profile => {
 /** Start saving the frequencies */
 export const saveFrequencies = (deviceId, channels) => {
   return dispatch => {
-    dispatch({ type: FREQ_SAVING, payload: true, done: () => dispatch(goBack()) });
+    dispatch({ type: FREQ_SAVING });
     dispatch(
       writeRacerChannels({
         device_id: deviceId,
         channels: _.map(channels, (channel, index) => ({ racer: index + 1, channel: channel }))
       })
     ); // when done it will call RT_RACER_CHANS
+    setTimeout(() => {
+      dispatch({ type: FREQ_SAVING_DONE });
+      dispatch(goBack());
+    }, 1500); // need a proper response
   };
 };
 
@@ -45,9 +48,8 @@ export default function(state = {}, action) {
       return { ...state, profile: action.payload };
     case FREQ_SAVING:
       return { ...state, saving: true };
-    case RT_RACER_CHANS:
-      action.done && action.done(); // does this work?
-      return { ...state, channels: action.payload, loading: false, saving: false };
+    case FREQ_SAVING_DONE:
+      return { ...state, saving: false };
     default:
       return { ...state, loading: false };
   }
