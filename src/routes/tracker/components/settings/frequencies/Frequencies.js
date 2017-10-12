@@ -54,7 +54,8 @@ export default class Frequencies extends React.Component {
 
   /** When the user clicks on the frequency */
   onFrequencyClick = () => {
-    this.props.history.push('/tracker/settings/frequencies/edit');
+    // todo allow editing frequencies
+    //this.props.history.push('/tracker/settings/frequencies/edit');
   };
 
   render() {

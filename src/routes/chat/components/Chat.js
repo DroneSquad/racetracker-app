@@ -9,8 +9,9 @@ const Dialogs = () =>
     <header>
       <AppBar title="Chat" />
     </header>
-    <Paper style={{margin: '16px', padding: '8px', textAlign: 'center' }}>
-      Coming soon to a drone near you
+    <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>
+      <h3 style={{ color: '#000' }}>Drone Squad Chat</h3>
+      Our new chat system and other community features will be added after the RaceTracker race management features are complete.
     </Paper>
   </div>;
 
