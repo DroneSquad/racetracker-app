@@ -36,15 +36,12 @@ export default function(state = {}, action: Action) {
   switch (action.type) {
     case NEW_RACE:
       console.log("NEW_RACE");
-      let x = {
+      return {
           ...action.payload.race,
           heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id)
       };
-      console.log(x);
-      console.log("RETURN")
-      return x;
       // only a single race can be running at a time. thus new replaces any existing race
-    //  return action.payload;
+      //  return action.payload;
     case NEW_HEAT:
       console.log("NEW_HEAT");
       return {

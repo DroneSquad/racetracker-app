@@ -311,21 +311,18 @@ export class TbsRt {
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
     var racerPromises = [
-      this.getRacersChannelPromise({ device_id: device_id, racer: 1}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 2}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 3}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 4}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 5}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 6}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 7}),
-      this.getRacersChannelPromise({ device_id: device_id, racer: 8})
+      this.getRacerChannelPromise({ device_id: device_id, racer: 1}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 2}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 3}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 4}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 5}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 6}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 7}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 8})
     ]
-    Promise.all(racerPromises).then(function(response){
-      let channels = response.filter(Boolean);
-      cb({ device_id: device_id, channels: channels });
-    }).catch(function(error){
-      cb(error);
-    })
+    Promise.all(racerPromises)
+      .then(response => cb({ device_id: device_id, channels: response.filter(Boolean) }))
+      .catch(error => cb(error));
   }
 
   /** Read all channels from available racer slots (used on initial set) */
@@ -354,13 +351,11 @@ export class TbsRt {
     if (errors.length > 0) {
       cb({ errors: errors });
     } else {
-      console.log("RETRURNED")
-      console.log({ device_id: device_id, channels: channels })
       cb({ device_id: device_id, channels: channels });
     }
   }*/
 
-  getRacersChannelPromise(request){
+  getRacerChannelPromise(request){
     return new Promise((resolve, reject) => {
       let cmdStr = 'getRacerChannel';
       let slot = this._config.slots[request.racer]; // get the handle of the racer slot
