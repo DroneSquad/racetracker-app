@@ -52,9 +52,9 @@ export default class Racer extends Component {
       </span>
     );
     let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
-    // console.log(heatId);
-    // console.log(name);
-    // console.log(channel)
+    console.log(heatId);
+    console.log(name);
+    console.log(channel)
     return (
       <TableRow /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/>
         <TableRowColumn className="pilot-name">

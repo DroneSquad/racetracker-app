@@ -18,11 +18,15 @@ export const newHeat = (request: object) => ({
 });
 
 export const createRace = (request: array) => {
+  console.log("race.module-createRace")
+
   // TODO update this for multi tracker
   return dispatch => {
     raceMngr.createRace(response => {
-      dispatch(newRace(response.race));
-      dispatch(newHeat(response.heat));
+      console.log("-callback-");
+      console.log(response);
+      dispatch(newRace(response));
+      // dispatch(newHeat(response.heat));
     }, request);
   };
 };
@@ -31,9 +35,18 @@ export const createRace = (request: array) => {
 export default function(state = {}, action: Action) {
   switch (action.type) {
     case NEW_RACE:
+      console.log("NEW_RACE");
+      let x = {
+          ...action.payload.race,
+          heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id)
+      };
+      console.log(x);
+      console.log("RETURN")
+      return x;
       // only a single race can be running at a time. thus new replaces any existing race
-      return action.payload;
+    //  return action.payload;
     case NEW_HEAT:
+      console.log("NEW_HEAT");
       return {
         ...state,
         heats: _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id)

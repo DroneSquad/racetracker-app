@@ -9,12 +9,15 @@ import { createRace } from '../modules/race';
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   connectedTrackers: state.trackers.filter(t => t.isConnected),
   isRaceActive: state.race.isActive,
-  activeTrackerId: state.race.trackerId,
-  raceMode: state.race.raceMode,
-  heats: state.race.heats ? state.race.heats : []
+  activeHeatId: state.race.activeHeat,
+  // activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null
+  // activeTrackerId: state.race.trackerId,
+  // raceMode: state.race.raceMode,
+  // heats: state.race.heats ? state.race.heats : [],
+  // raceState: state.race ? state.race : {}
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
 });

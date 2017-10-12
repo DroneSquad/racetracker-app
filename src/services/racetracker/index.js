@@ -290,6 +290,7 @@ export class TbsRt {
   }
 
   /** perform mass update with an array of channels, write to rt and then redux */
+  // TODO: convert this to use a promise.all
   writeRacerChannels(cb, request) {
     let errors = [];
     let cmdStr = 'setRacerChannel';
@@ -309,6 +310,26 @@ export class TbsRt {
 
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
+    var racerPromises = [
+      this.getRacersChannelPromise({ device_id: device_id, racer: 1}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 2}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 3}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 4}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 5}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 6}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 7}),
+      this.getRacersChannelPromise({ device_id: device_id, racer: 8})
+    ]
+    Promise.all(racerPromises).then(function(response){
+      let channels = response.filter(Boolean);
+      cb({ device_id: device_id, channels: channels });
+    }).catch(function(error){
+      cb(error);
+    })
+  }
+
+  /** Read all channels from available racer slots (used on initial set) */
+  /*readRacerChannels(cb, device_id) {
     let channels = [];
     let errors = [];
     let cmdStr = 'getRacerChannel';
@@ -333,8 +354,32 @@ export class TbsRt {
     if (errors.length > 0) {
       cb({ errors: errors });
     } else {
+      console.log("RETRURNED")
+      console.log({ device_id: device_id, channels: channels })
       cb({ device_id: device_id, channels: channels });
     }
+  }*/
+
+  getRacersChannelPromise(request){
+    return new Promise((resolve, reject) => {
+      let cmdStr = 'getRacerChannel';
+      let slot = this._config.slots[request.racer]; // get the handle of the racer slot
+      this.prepareCommand(cmdStr, { slot: slot })
+        .then(cmd =>
+          this.writeCommand(cmd, request.device_id).then(
+            this.readCommand(request.device_id).then(result =>
+              this.prepareResponse(cmdStr, result).then(response => {
+                if (response !== 'FF') {
+                  resolve({ racer: request.racer, channel: response });
+                } else {
+                  resolve(null);
+                }
+              })
+            )
+          )
+        )
+        .catch(error => reject({ error: error }));
+    })
   }
 
   /** Get the channel info for an individual racer slot */
