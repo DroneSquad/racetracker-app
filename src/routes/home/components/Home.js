@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
-import { Tabs, Tab, List, ListItem } from 'material-ui';
+import { Tabs, Tab, List, ListItem, Paper } from 'material-ui';
 
 import LoadingSpinner from '../../../global/app/LoadingSpinner';
 import PilotAvatar from '../../../global/app/PilotAvatar';
@@ -40,8 +40,8 @@ export default class extends React.Component {
     if (groups) {
       if (_.size(groups) > 0) {
         return _.map(_.sortBy(groups, 'name'), (group, key) =>
-          <ListItem key={key} rightIcon={<PilotAvatar src={api.urls.banner(group.id)} />}>
-            <Link to={`/group/${group.id}`}>
+          <ListItem key={key} rightIcon={<PilotAvatar style={{ marginTop: '6px' }} src={api.urls.banner(group.id)} />}>
+            <Link to={`/group/${group.id}`} style={{ color: '#000', textDecoration: 'none' }}>
               {group.name}
             </Link>
           </ListItem>
@@ -70,9 +70,12 @@ export default class extends React.Component {
         <main>
           <Tabs initialSelectedIndex={this.state.index} onChange={this.handleChange}>
             <Tab value={0} label="Calendar">
-              <List className="group-meetup-list">
-                {this.state.index === 0 && this.rsvps(rsvps)}
-              </List>
+              <Paper style={{margin: '16px', padding: '8px', textAlign: 'center' }}>
+                Coming soon to a drone near you
+              </Paper>
+              {/*<List className="group-meetup-list">*/}
+                {/*{this.state.index === 0 && this.rsvps(rsvps)}*/}
+              {/*</List>*/}
             </Tab>
             <Tab value={1} label="Groups">
               <List className="group-meetup-list">
