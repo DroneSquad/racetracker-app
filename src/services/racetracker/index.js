@@ -290,6 +290,7 @@ export class TbsRt {
   }
 
   /** perform mass update with an array of channels, write to rt and then redux */
+  // TODO: convert this to use a promise.all
   writeRacerChannels(cb, request) {
     let errors = [];
     let cmdStr = 'setRacerChannel';
@@ -309,6 +310,23 @@ export class TbsRt {
 
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
+    var racerPromises = [
+      this.getRacerChannelPromise({ device_id: device_id, racer: 1}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 2}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 3}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 4}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 5}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 6}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 7}),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 8})
+    ]
+    Promise.all(racerPromises)
+      .then(response => cb({ device_id: device_id, channels: response.filter(Boolean) }))
+      .catch(error => cb(error));
+  }
+
+  /** Read all channels from available racer slots (used on initial set) */
+  /*readRacerChannels(cb, device_id) {
     let channels = [];
     let errors = [];
     let cmdStr = 'getRacerChannel';
@@ -335,6 +353,28 @@ export class TbsRt {
     } else {
       cb({ device_id: device_id, channels: channels });
     }
+  }*/
+
+  getRacerChannelPromise(request){
+    return new Promise((resolve, reject) => {
+      let cmdStr = 'getRacerChannel';
+      let slot = this._config.slots[request.racer]; // get the handle of the racer slot
+      this.prepareCommand(cmdStr, { slot: slot })
+        .then(cmd =>
+          this.writeCommand(cmd, request.device_id).then(
+            this.readCommand(request.device_id).then(result =>
+              this.prepareResponse(cmdStr, result).then(response => {
+                if (response !== 'FF') {
+                  resolve({ racer: request.racer, channel: response });
+                } else {
+                  resolve(null);
+                }
+              })
+            )
+          )
+        )
+        .catch(error => reject({ error: error }));
+    })
   }
 
   /** Get the channel info for an individual racer slot */

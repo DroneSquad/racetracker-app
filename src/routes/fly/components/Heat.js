@@ -39,11 +39,37 @@ export default class Heat extends Component {
     );
   };
 
+  componentWillReceiveProps(nextProps) {
+    console.log("Heat-componentWillReceiveProps");
+    console.log(nextProps);
+  }
+
   render() {
-    let { racerChannels, id } = this.props;
-    let title = <span>{`Heat ${this.props.number}`}</span>;
-    console.log('render-Heat');
-    console.log(racerChannels);
+    let { activeHeat, ownProps, heatChannels } = this.props;
+    console.log("heatRender");
+    console.log(ownProps);
+    console.log(activeHeat);
+    console.log(activeHeat.racerChannels);
+    console.log(activeHeat.racerChannels.length);
+    console.log(heatChannels);
+    console.log(heatChannels.length)
+    console.log("---map---")
+    for (let chan of heatChannels) {
+      console.log(chan);
+    }
+    console.log("---end---")
+    console.log("---map2---")
+    for (let rchan of activeHeat.racerChannels) {
+      console.log(rchan);
+    }
+    console.log("---end2---")
+    /*heatChannels.map(slot =>
+      console.log(slot.racer + " " + slot.channel)
+    );*/
+    /*for (let slot of heatChannels) {
+      console.log(slot.racer + " " + slot.channel)
+    }*/
+    let title = <span>{`Heat ${activeHeat.number}`}</span>;
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
@@ -53,14 +79,17 @@ export default class Heat extends Component {
               <TableHeaderColumn className="pilot-name">Racer</TableHeaderColumn>
               <TableHeaderColumn>Lap</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
-              <TableHeaderColumn>Total</TableHeaderColumn>
+              <TableHeaderColumn>Best</TableHeaderColumn>
               <TableHeaderColumn>Band</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            {racerChannels.map(slot =>
-              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={id} />
+
+            {heatChannels.map(slot =>
+              console.log(slot.racer + " " + slot.channel)
+              /*<Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={activeHeat.id} />*/
             )}
+
           </TableBody>
         </Table>
       </Card>

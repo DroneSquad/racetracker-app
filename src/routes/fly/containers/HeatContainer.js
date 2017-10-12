@@ -8,7 +8,13 @@ import Heat from '../components/Heat';
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  // activeHeatId: ownProps.id,
+  ownProps: ownProps,
+  activeHeat: state.race.heats.filter(t => t.id === ownProps.id)[0],
+  heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels
+
+});
 
 const mapDispatchToProps = (dispatch: Function) => ({});
 
