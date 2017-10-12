@@ -20,7 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  createRace: object => dispatch(createRace(object))
+  createRace: array => dispatch(createRace(array))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);

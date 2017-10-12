@@ -17,7 +17,7 @@ export const newHeat = (request: object) => ({
   payload: request
 });
 
-export const createRace = (request: object) => {
+export const createRace = (request: array) => {
   // TODO update this for multi tracker
   return dispatch => {
     raceMngr.createRace(response => {

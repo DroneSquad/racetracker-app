@@ -22,9 +22,9 @@ export class RaceMngr {
       name: 'race_' + uid,
       date: new Date().toISOString().split('T')[0],
       location: '',
-      trackerId: request.trackerId,
+      trackerId: request[0].id,
       activeHeat: 1,
-      raceMode: request.raceMode,
+      raceMode: request[0].raceMode,
       isActive: true // by default auto start for now
     };
     // create the first heat for the race
@@ -36,7 +36,7 @@ export class RaceMngr {
       isActive: false,
       isComplete: false,
       isRerun: false,
-      racerChannels: request.racerChannels
+      racerChannels: request[0].racerChannels
     };
     // send it...
     cb({ race: race, heat: heat });

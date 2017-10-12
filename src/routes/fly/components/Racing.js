@@ -16,7 +16,7 @@ export default class Racing extends Component {
   componentDidMount() {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length === 1) {
-        this.createRace();
+        this.createRace(this.props.connectedTrackers[0]);
       }
     }
   }
@@ -25,19 +25,15 @@ export default class Racing extends Component {
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers.length !== nextProps.connectedTrackers.length) {
         if (nextProps.connectedTrackers.length === 1) {
-          this.createRace();
+          this.createRace(this.props.connectedTrackers[0]);
         }
       }
     }
   }
 
-  // TODO: enhance for multitracker support
-  createRace() {
-    this.props.createRace({
-      trackerId: this.props.connectedTrackers[0].id,
-      racerChannels: this.props.connectedTrackers[0].racerChannels,
-      raceMode: this.props.connectedTrackers[0].raceMode
-    });
+  createRace(tracker) {
+    // TODO: handle multitracker support
+    this.props.createRace([tracker]);
   }
 
   raceInterface = () => {
@@ -56,7 +52,7 @@ export default class Racing extends Component {
   };
 
   handleListClick = (event: RaceTracker) => {
-    this.props.createRace(event.id);
+    this.props.createRace(event);
   };
 
   render() {

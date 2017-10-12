@@ -42,8 +42,6 @@ export default class Heat extends Component {
   render() {
     let { racerChannels, id } = this.props;
     let title = <span>{`Heat ${this.props.number}`}</span>;
-    console.log('render-Heat');
-    console.log(racerChannels);
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
@@ -53,7 +51,7 @@ export default class Heat extends Component {
               <TableHeaderColumn className="pilot-name">Racer</TableHeaderColumn>
               <TableHeaderColumn>Lap</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
-              <TableHeaderColumn>Total</TableHeaderColumn>
+              <TableHeaderColumn>Best</TableHeaderColumn>
               <TableHeaderColumn>Band</TableHeaderColumn>
             </TableRow>
           </TableHeader>
