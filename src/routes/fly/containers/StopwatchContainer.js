@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
   raceMode: state.race.raceMode,
   trackerId: state.race.trackerId,
   racerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels,
-  heatLaps: state.race.laps.filter(h => h.heat === state.race.activeHeat)
+  // heatLaps: state.race.laps.filter(h => h.heat === state.race.activeHeat)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

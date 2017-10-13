@@ -22,14 +22,13 @@ export default class Stopwatch extends Component {
   startIntervalQuery = () => {
     let timer = setInterval(() => {
       this.intervalQuery();
-    }, 1000);
+    }, 3000);
     this.setState({timer});
   }
 
   intervalQuery = () => {
     let r = {
-      laps: this.props.heatLaps,
-      racers: this.props.racerChannels.map(slot => slot.racer),
+      heat: this.props.activeHeat.id,
       device_id : this.props.trackerId
     }
     this.props.updateLaps(r)

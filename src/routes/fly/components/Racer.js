@@ -18,6 +18,11 @@ export default class Racer extends Component {
     name: string
   };
 
+  /*componentWillReceiveProps(nextProps) {
+    console.log("racer-render-next-props")
+    console.log(nextProps);
+  }*/
+
   /*constructor(props) {
     super(props);
     this.uuid = uuid.v4();
@@ -58,9 +63,9 @@ export default class Racer extends Component {
           {avatar}
           {racerName}
         </TableRowColumn>
-        <TableRowColumn>{lap.lapNumber}</TableRowColumn>
+        <TableRowColumn>{lap.lap}</TableRowColumn>
         <TableRowColumn className="no-clip">{lap.lapTime}</TableRowColumn>
-        <TableRowColumn className="no-clip">{lap.bestTime}</TableRowColumn>
+        <TableRowColumn className="no-clip">00:00</TableRowColumn>
         <TableRowColumn>
           {channel}
         </TableRowColumn>

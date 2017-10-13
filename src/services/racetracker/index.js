@@ -123,10 +123,6 @@ export class TbsRt {
         case 'stopRace':
           response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false
           break;
-        case 'getRaceUpdate':
-          let arr = response.split(RE_RACEUPDATE)
-          response =  { racer: arr[1], lap: arr[2], lapTime: arr[3], totalTime: arr[4].match(RE_NUMBER)[0] }
-          break;
         default:
           break;
       }
@@ -264,10 +260,10 @@ export class TbsRt {
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
     this.readCommand(request.device_id).then(result =>
-      this.prepareResponse("getRaceUpdate", result).then(response =>
-        console.log(response)
-        // cb({ device_id: request.device_id, round: request.round, lapTime: response })
-      )
+      this.prepareResponse("getRaceUpdate", result).then(response => {
+        let arr = response.split(RE_RACEUPDATE)
+        cb({ racer: Number(arr[1]), lap: Number(arr[2]), lapTime: arr[3], totalTime: arr[4].match(RE_NUMBER)[0], heat: request.heat })
+      })
     )
     .catch(error => cb({ error: error }));
   }

@@ -22,11 +22,9 @@ export class RaceMngr {
     let laps = request[0].racerChannels.map(slot =>
       ({
         racer: slot.racer,
-        lapNumber: 1,
+        lap: 1,
         lapTime: '00:00',
         totalTime: '00:00',
-        bestTime: '00:00',
-        channel: slot.channel,
         heat: hUid
       })
     )
@@ -61,11 +59,9 @@ export class RaceMngr {
     let laps = request.racerChannels.map(slot =>
       ({
         racer: slot.racer,
-        lapNumber: 1,
+        lap: 1,
         lapTime: '00:00',
         totalTime: '00:00',
-        bestTime: '00:00',
-        channel: slot.channel,
         heat: hUid
       })
     )
@@ -92,13 +88,7 @@ export class RaceMngr {
   }
 
   updateLaps(cb, request) {
-    let opt = { device_id: request.device_id, racer: 4, lap: 1 }
-    // laps: this.props.heatLaps,
-    // racers: this.props.racerChannels.map(slot => slot.racer),
-    // device_id : this.props.trackerId
-    tbs.readRaceUpdate(cb, opt);// => {
-    // tbs.readLapTime(cb, opt);// => {
-    // tbs.readLapTime(cb, request)
+    tbs.readRaceUpdate(cb, request);// => {
   }
 
   /** Get the total number of rounds by a a selected racer */
