@@ -20,15 +20,18 @@ export default class Stopwatch extends Component {
   }
 
   startHeat = () => {
-    console.log("startHeat");
+    console.log("startHeat")
+    this.props.startHeat(this.props.activeHeat)
   };
 
   endHeat = () => {
-    console.log("endHeat");
+    console.log("endHeat")
+    this.props.stopHeat(this.props.activeHeat)
   };
 
   newHeat = () => {
-    console.log("newHeat");
+    console.log("nextHeat")
+    this.props.nextHeat(this.props.activeHeat)
   };
 
   render() {

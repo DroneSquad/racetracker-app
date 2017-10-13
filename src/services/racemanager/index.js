@@ -44,7 +44,11 @@ export class RaceMngr {
     cb({ race: race, heat: heat });
   }
 
-  startRace(cb, request) {}
+  startHeat(cb, request) {
+
+
+  }
+
 }
 
 export default RaceMngr.get();

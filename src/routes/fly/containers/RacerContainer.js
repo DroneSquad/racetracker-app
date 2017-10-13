@@ -10,7 +10,6 @@ import Racer from '../components/Racer';
 
 const mapStateToProps = (state, ownProps) => ({
   ownProps: ownProps
-  //  isRaceActive: state.race.isActive,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({});

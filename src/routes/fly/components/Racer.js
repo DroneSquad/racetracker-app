@@ -46,10 +46,6 @@ export default class Racer extends Component {
 
   render() {
     let { name, channel, heatId, id } = this.props;
-    /*console.log(name);
-    console.log(channel);
-    console.log(heatId);
-    console.log(id);*/
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}
