@@ -13,8 +13,7 @@ import { startHeat, stopHeat } from '../modules/race';
 const mapStateToProps = (state, ownProps) => ({
   activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null,
   raceMode: state.race.raceMode,
-  trackerId: state.race.trackerId,
-    state: state,
+  trackerId: state.race.trackerId
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

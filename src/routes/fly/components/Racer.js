@@ -60,7 +60,7 @@ export default class Racer extends Component {
         </TableRowColumn>
         <TableRowColumn>{lap.lapNumber}</TableRowColumn>
         <TableRowColumn className="no-clip">{lap.lapTime}</TableRowColumn>
-        <TableRowColumn className="no-clip">X:XX</TableRowColumn>
+        <TableRowColumn className="no-clip">{lap.bestTime}</TableRowColumn>
         <TableRowColumn>
           {channel}
         </TableRowColumn>

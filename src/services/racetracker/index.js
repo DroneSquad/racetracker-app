@@ -113,6 +113,13 @@ export class TbsRt {
           response = RE_CHANNEL(response, C2R);
           response = RE_CHANNEL(response, D2L);
           break;
+        case 'startRaceShotgun':
+        case 'startRaceFlyby':
+          response = response.substring(0, 5).toUpperCase() === 'READY' ? true : false
+          break;
+        case 'stopRace':
+          response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false
+          break;
         default:
           break;
       }
@@ -468,6 +475,40 @@ export class TbsRt {
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  stopHeat(cb, request) {
+    let cmdStr = 'stopRace';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, heatId: request.heatId, heatStopped: response }))
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  startHeat(cb, request) {
+    let vrxStr = 'activateVrx'  // enables the vrx for race tracking
+    let cmdStr = ((request.raceMode === 'shotgun') ? 'startRaceShotgun' : 'startRaceFlyby');  // race start type
+    this.prepareCommand(vrxStr, request)
+      .then(vrx =>
+        this.writeCommand(vrx, request.device_id).then(
+          this.prepareCommand(cmdStr, request)
+            .then(cmd =>
+              this.writeCommand(cmd, request.device_id).then(
+                this.readCommand(request.device_id).then(result =>
+                  this.prepareResponse(cmdStr, result).then(response =>
+                    cb({ device_id: request.device_id, heatId: request.heatId, heatStarted: response })
+                  )
+                )
+              )
+            )
+          )
+        )
+        .catch(error => cb({ error: error }));
   }
 
   /** Perform a gate calibration for a RaceTracker by device id */

@@ -1,7 +1,7 @@
 import config from './config.json';
 
 import uuid from 'uuid';
-import rt from '../racetracker';
+import tbs from '../racetracker';
 
 export class RaceMngr {
   constructor() {
@@ -25,6 +25,7 @@ export class RaceMngr {
         lapNumber: 1,
         lapTime: '00:00',
         totalTime: '00:00',
+        bestTime: '00:00',
         channel: slot.channel,
         heat: hUid
       })
@@ -56,10 +57,11 @@ export class RaceMngr {
   }
 
   startHeat(cb, request) {
+    tbs.startHeat(cb, request);
+  }
 
-
-
-
+  stopHeat(cb, request) {
+    tbs.stopHeat(cb, request);
   }
 
 }

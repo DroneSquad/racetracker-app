@@ -49,9 +49,9 @@ export const startHeat = (request: object) => {
 
 export const stopHeat = (request: object) => {
   return dispatch => {
-    // raceMngr.stopHeat(response => {
-      dispatch(setStopHeat(request.id));
-    // }, request);
+    raceMngr.stopHeat(response => {
+      dispatch(setStopHeat(response));
+    }, request);
   };
 };
 
@@ -83,7 +83,7 @@ export default function(state = {}, action: Action) {
       console.log("START_HEAT");
       return {
         ...state,
-        heats: state.heats.map(heat => heat.id === action.payload ? {
+        heats: state.heats.map(heat => heat.id === action.payload.heatId ? {
           ...heat,
           isPending:false,
           isComplete:false,
@@ -94,7 +94,7 @@ export default function(state = {}, action: Action) {
       console.log("STOP_HEAT");
       return {
         ...state,
-        heats: state.heats.map(heat => heat.id === action.payload ? {
+        heats: state.heats.map(heat => heat.id === action.payload.heatId ? {
           ...heat,
           isPending:false,
           isActive:false,
