@@ -11,7 +11,10 @@ import { startHeat, stopHeat } from '../modules/race';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-  activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null
+  activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null,
+  raceMode: state.race.raceMode,
+  trackerId: state.race.trackerId,
+    state: state,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

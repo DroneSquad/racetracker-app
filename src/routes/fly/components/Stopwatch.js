@@ -17,11 +17,17 @@ export default class Stopwatch extends Component {
     this.state = {
       // initial state, fetch from props?
     };
+    console.log(this.props.state);
   }
 
   startHeat = () => {
     console.log("startHeat")
-    this.props.startHeat(this.props.activeHeat)
+    let r = {
+      activeHeat: this.props.activeHeat,
+      trackerId: this.props.trackerId,
+      raceMode: this.props.taceMode
+    }
+    this.props.startHeat(r)
   };
 
   endHeat = () => {

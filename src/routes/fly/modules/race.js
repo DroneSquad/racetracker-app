@@ -25,10 +25,10 @@ export const setStopHeat = (request: object) => ({
   payload: request
 });
 
-/*export const newHeat = (request: object) => ({
+export const newHeat = (request: object) => ({
   type: NEW_HEAT,
   payload: request
-});*/
+});
 
 export const createRace = (request: array) => {
   // TODO update this for multi tracker
@@ -41,9 +41,9 @@ export const createRace = (request: array) => {
 
 export const startHeat = (request: object) => {
   return dispatch => {
-    // raceMngr.startHeat(response => {
-      dispatch(setStartHeat(request.id));
-    // }, request);
+    raceMngr.startHeat(response => {
+      dispatch(setStartHeat(response));
+    }, request);
   };
 };
 
@@ -55,6 +55,14 @@ export const stopHeat = (request: object) => {
   };
 };
 
+export const createHeat = (request: object) => {
+  return dispatch => {
+    // raceMngr.stopHeat(response => {
+      dispatch(newHeat(request.id));
+    // }, request);
+  };
+};
+
 /** reducers */
 export default function(state = {}, action: Action) {
   switch (action.type) {
@@ -62,7 +70,8 @@ export default function(state = {}, action: Action) {
       console.log("NEW_RACE");
       return {
         ...action.payload.race,
-        heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id)
+        heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
+        laps: action.payload.laps /* action.payload.laps.map(lap => _.unionWith(state.laps, [lap], (left, right) => left.heatId === right.heatId && left.racer === right.racer)) */
       };
     case NEW_HEAT:
       console.log("NEW_HEAT");
@@ -71,6 +80,7 @@ export default function(state = {}, action: Action) {
         heats: _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id)
       };
     case START_HEAT:
+      console.log("START_HEAT");
       return {
         ...state,
         heats: state.heats.map(heat => heat.id === action.payload ? {
@@ -81,6 +91,7 @@ export default function(state = {}, action: Action) {
          } : heat)
       };
     case STOP_HEAT:
+      console.log("STOP_HEAT");
       return {
         ...state,
         heats: state.heats.map(heat => heat.id === action.payload ? {
