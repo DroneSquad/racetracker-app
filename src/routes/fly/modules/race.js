@@ -57,9 +57,9 @@ export const stopHeat = (request: object) => {
 
 export const createHeat = (request: object) => {
   return dispatch => {
-    // raceMngr.stopHeat(response => {
-      dispatch(newHeat(request.id));
-    // }, request);
+    raceMngr.createHeat(response => {
+      dispatch(newHeat(response));
+    }, request);
   };
 };
 
@@ -67,20 +67,19 @@ export const createHeat = (request: object) => {
 export default function(state = {}, action: Action) {
   switch (action.type) {
     case NEW_RACE:
-      console.log("NEW_RACE");
       return {
         ...action.payload.race,
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: action.payload.laps /* action.payload.laps.map(lap => _.unionWith(state.laps, [lap], (left, right) => left.heatId === right.heatId && left.racer === right.racer)) */
       };
     case NEW_HEAT:
-      console.log("NEW_HEAT");
       return {
         ...state,
-        heats: _.unionWith(state.heats, [action.payload], (left, right) => left.id === right.id)
+        activeHeat: action.payload.heat.id,
+        heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
+        laps: state.laps.concat(action.payload.laps)
       };
     case START_HEAT:
-      console.log("START_HEAT");
       return {
         ...state,
         heats: state.heats.map(heat => heat.id === action.payload.heatId ? {
@@ -91,7 +90,6 @@ export default function(state = {}, action: Action) {
          } : heat)
       };
     case STOP_HEAT:
-      console.log("STOP_HEAT");
       return {
         ...state,
         heats: state.heats.map(heat => heat.id === action.payload.heatId ? {

@@ -477,6 +477,7 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
+  /** End the currently running race heat */
   stopHeat(cb, request) {
     let cmdStr = 'stopRace';
     this.prepareCommand(cmdStr)
@@ -490,6 +491,7 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
+  /* Start a race heat according to start style, device id, and heat id */
   startHeat(cb, request) {
     let vrxStr = 'activateVrx'  // enables the vrx for race tracking
     let cmdStr = ((request.raceMode === 'shotgun') ? 'startRaceShotgun' : 'startRaceFlyby');  // race start type

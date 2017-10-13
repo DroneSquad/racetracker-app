@@ -12,13 +12,6 @@ export default class Stopwatch extends Component {
     elapsedTime: number
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      // initial state, fetch from props?
-    };
-  }
-
   startHeat = () => {
     console.log("startHeat")
     let r = {
@@ -37,9 +30,13 @@ export default class Stopwatch extends Component {
     this.props.stopHeat(r)
   };
 
-  newHeat = () => {
-    console.log("newHeat")
-    this.props.nextHeat(this.props.activeHeat)
+  createHeat = () => {
+    let r = {
+      raceId : this.props.activeHeat.raceId,
+      racerChannels: this.props.racerChannels,
+      currentHeat: this.props.activeHeat
+    }
+    this.props.createHeat(r)
   };
 
   render() {
@@ -52,7 +49,7 @@ export default class Stopwatch extends Component {
         {heat.isComplete && <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>{`Heat ${heat.number} Finished`}</p>}
         {heat.isPending && <FlatButton onClick={this.startHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="Start Race" />}
         {heat.isActive && <FlatButton onClick={this.endHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="End Race" />}
-        {heat.isComplete && <FlatButton onClick={this.newHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="New Heat" />}
+        {heat.isComplete && <FlatButton onClick={this.createHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="New Heat" />}
       </Paper>
     );
   }
