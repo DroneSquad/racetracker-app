@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Stopwatch from '../components/Stopwatch';
 
-import { startHeat, stopHeat, createHeat } from '../modules/race';
+import { startHeat, stopHeat, createHeat, updateLaps } from '../modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -14,13 +14,14 @@ const mapStateToProps = (state, ownProps) => ({
   raceMode: state.race.raceMode,
   trackerId: state.race.trackerId,
   racerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels,
-  state: state
+  heatLaps: state.race.laps.filter(h => h.heat === state.race.activeHeat)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   startHeat: object => dispatch(startHeat(object)),
   stopHeat: object => dispatch(stopHeat(object)),
-  createHeat: object => dispatch(createHeat(object))
+  createHeat: object => dispatch(createHeat(object)),
+  updateLaps: object => dispatch(updateLaps(object))
 });
 
 const StopwatchContainer = connect(mapStateToProps, mapDispatchToProps)(Stopwatch);

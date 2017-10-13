@@ -12,6 +12,33 @@ export default class Stopwatch extends Component {
     elapsedTime: number
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      timer: null,
+    };
+  }
+
+  startIntervalQuery = () => {
+    let timer = setInterval(() => {
+      this.intervalQuery();
+    }, 3000);
+    this.setState({timer});
+  }
+
+  intervalQuery = () => {
+    let r = {
+      laps: this.props.heatLaps,
+      racers: this.props.racerChannels.map(slot => slot.racer),
+      device_id : this.props.trackerId
+    }
+    this.props.updateLaps(r)
+  }
+
+  stopIntervalQuery = () => {
+    clearInterval(this.state.timer);
+  }
+
   startHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
@@ -19,6 +46,7 @@ export default class Stopwatch extends Component {
       device_id : this.props.trackerId
     }
     this.props.startHeat(r)
+    this.startIntervalQuery()
   };
 
   endHeat = () => {
@@ -27,6 +55,7 @@ export default class Stopwatch extends Component {
       device_id : this.props.trackerId
     }
     this.props.stopHeat(r)
+    this.stopIntervalQuery()
   };
 
   createHeat = () => {

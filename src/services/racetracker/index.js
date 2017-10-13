@@ -72,7 +72,7 @@ export class TbsRt {
           cmd = cmd + ' ' + options.racer;
           break;
         case 'getLaptime':
-          cmd = cmd + ' ' + options.racer + ' ' + options.round;
+          cmd = cmd + ' ' + options.racer + ' ' + options.lap;
           break;
         case 'setMaxRounds':
           cmd = cmd + ' ' + options.maxRounds;
@@ -228,7 +228,8 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, totalRounds: response })
+              console.log(response)
+              // cb({ device_id: request.device_id, totalRounds: response })
             )
           )
         )
@@ -244,7 +245,8 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, round: request.round, lapTime: response })
+              console.log(response)
+              // cb({ device_id: request.device_id, round: request.round, lapTime: response })
             )
           )
         )
@@ -331,36 +333,6 @@ export class TbsRt {
       .then(response => cb({ device_id: device_id, channels: response.filter(Boolean) }))
       .catch(error => cb(error));
   }
-
-  /** Read all channels from available racer slots (used on initial set) */
-  /*readRacerChannels(cb, device_id) {
-    let channels = [];
-    let errors = [];
-    let cmdStr = 'getRacerChannel';
-    let racers = [1, 2, 3, 4, 5, 6, 7, 8]; // all available racer slots
-    for (let racer of racers) {
-      let slot = this._config.slots[racer]; // get the handle of the racer slot
-      this.prepareCommand(cmdStr, { slot: slot })
-        .then(cmd =>
-          this.writeCommand(cmd, device_id).then(
-            this.readCommand(device_id).then(result =>
-              this.prepareResponse(cmdStr, result).then(response => {
-                // FF indicates unassigned
-                if (response !== 'FF') {
-                  channels.push({ racer: racer, channel: response });
-                }
-              })
-            )
-          )
-        )
-        .catch(error => errors.push(error));
-    }
-    if (errors.length > 0) {
-      cb({ errors: errors });
-    } else {
-      cb({ device_id: device_id, channels: channels });
-    }
-  }*/
 
   getRacerChannelPromise(request){
     return new Promise((resolve, reject) => {

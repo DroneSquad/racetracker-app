@@ -55,14 +55,6 @@ export class RaceMngr {
     cb({ race: race, heat: heat, laps: laps });
   }
 
-  startHeat(cb, request) {
-    tbs.startHeat(cb, request);
-  }
-
-  stopHeat(cb, request) {
-    tbs.stopHeat(cb, request);
-  }
-
   createHeat(cb, request) {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
@@ -90,6 +82,53 @@ export class RaceMngr {
     // send it...
     cb({ heat: heat, laps: laps });
   }
+
+  startHeat(cb, request) {
+    tbs.startHeat(cb, request);
+  }
+
+  stopHeat(cb, request) {
+    tbs.stopHeat(cb, request);
+  }
+
+  updateLaps(cb, request) {
+    let opt = { device_id: request.device_id, racer: 1 }
+    // laps: this.props.heatLaps,
+    // racers: this.props.racerChannels.map(slot => slot.racer),
+    // device_id : this.props.trackerId
+
+    tbs.readTotalRounds(cb, opt);// => {
+    // tbs.readLapTime(cb, request)
+  }
+
+  /** Get the total number of rounds by a a selected racer */
+  /*export const readTotalRounds = (request: object) => {
+    return dispatch => {
+      tbs.readTotalRounds(response => {
+        if (response.error) {
+          console.log(response.error); // TODO: log the error properly to device
+          dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+        } else {
+          dispatch(setTotalRounds(response)); // update the redux value
+        }
+      }, request);
+    };
+  };*/
+
+  /** Get the laptime of a specific round of a chosen racer */
+  /*export const readLapTime = (request: object) => {
+    return dispatch => {
+      tbs.readLapTime(response => {
+        if (response.error) {
+          console.log(response.error); // TODO: log the error properly to device
+          dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+        } else {
+          dispatch(setLaptime(response)); // update the redux value
+        }
+      }, request);
+    };
+  };*/
+
 
 }
 

@@ -39,6 +39,14 @@ export const createRace = (request: array) => {
   };
 };
 
+export const createHeat = (request: object) => {
+  return dispatch => {
+    raceMngr.createHeat(response => {
+      dispatch(newHeat(response));
+    }, request);
+  };
+};
+
 export const startHeat = (request: object) => {
   return dispatch => {
     raceMngr.startHeat(response => {
@@ -55,10 +63,12 @@ export const stopHeat = (request: object) => {
   };
 };
 
-export const createHeat = (request: object) => {
+export const updateLaps = (request: object) => {
   return dispatch => {
-    raceMngr.createHeat(response => {
-      dispatch(newHeat(response));
+    raceMngr.stopHeat(response => {
+      // TODO: the response determines what dispatch to perform
+      // console.log(response);
+      // dispatch(setStopHeat(response));
     }, request);
   };
 };
@@ -99,6 +109,8 @@ export default function(state = {}, action: Action) {
           isComplete:true
          } : heat)
       };
+
+
     default:
       return state;
   }
