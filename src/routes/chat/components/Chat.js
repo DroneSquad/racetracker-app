@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { /*Link,*/ Route, Switch } from 'react-router-dom';
 
-import AppBar from 'material-ui/AppBar';
+import { AppBar, Paper } from 'material-ui';
 
 /** The basic component for displaying the chat dialogs */
 const Dialogs = () =>
@@ -9,8 +9,11 @@ const Dialogs = () =>
     <header>
       <AppBar title="Chat" />
     </header>
-    dialogs
-    <Link to="/chat/1">1</Link>
+    <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>
+      <h3 style={{ color: '#000' }}>Drone Squad Chat</h3>
+      Our new chat system and other community features will be added after the RaceTracker race management features are
+      complete.
+    </Paper>
   </div>;
 
 /** The basic component for displaying the messages */

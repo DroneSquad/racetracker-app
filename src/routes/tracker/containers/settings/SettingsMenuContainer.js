@@ -7,8 +7,8 @@ import SettingsMenu from '../../components/settings/SettingsMenu';
     wiring in the actions and state necessary to render a presentational
     component - in this case, a SettingsMenu */
 
-const mapStateToProps = (state, ownProps) => ({
-  id: ownProps.location.state // passed in via react-router-redux push command
+const mapStateToProps = (state, props) => ({
+  id: props.match.params.id || props.location.state // passed in via react-router-redux push command
 });
 
 const SettingsMenuContainer = connect(mapStateToProps)(SettingsMenu);

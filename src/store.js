@@ -6,8 +6,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { connect as _connect } from 'react-redux';
 
-import { notNull } from './utils';
-
 import { combineReducers } from 'redux';
 // allows dispatch of actions from anywhere: store.dispatch(push('/foo'))
 import { routerReducer } from 'react-router-redux';
@@ -16,6 +14,7 @@ import authReducer from './routes/login/modules/login';
 import raceReducer from './routes/fly/modules/race';
 import trackerReducer from './routes/tracker/modules/racetracker';
 import bluetoothReducer from './routes/tracker/modules/bluetooth';
+import freqReducer from './routes/tracker/modules/frequencies';
 import voiceReducer from './global/voice/modules/voice';
 
 const config = {
@@ -29,6 +28,7 @@ let reducers = {
   auth: authReducer,
   race: raceReducer,
   trackers: trackerReducer,
+  frequencies: freqReducer,
   bluetooth: bluetoothReducer,
   voice: voiceReducer
 };

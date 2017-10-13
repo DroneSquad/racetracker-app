@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import { AppBar, List, ListItem, Divider, DropDownMenu, MenuItem } from 'material-ui';
+import LoadingSpinner from '../../../../../global/app/LoadingSpinner';
 
 import { historyBackButton, toPercent } from '../../../../../utils';
 
@@ -39,22 +40,35 @@ export default class Frequencies extends React.Component {
     };
   }
 
+  componentWillMount() {
+    //this.props.readFrequencies(this.props.id);
+    this.saveProfile();
+  }
+
+  saveProfile() {
+    console.log('dispatching profile');
+    this.props.updateProfile(frequencies.profiles[this.state.data[this.state.amount + 1][this.state.channel]]);
+  }
+
   /** When the frequency amount changes */
   onFrequencyAmount = (event, value) => {
     this.setState({
       amount: value,
       channel: this.state.channel > this.state.data[value + 1].length - 1 ? 0 : this.state.channel
     });
+    this.saveProfile();
   };
 
   /** When the frequency amount changes */
   onFrequencyChannel = (event, value) => {
     this.setState({ channel: value });
+    this.saveProfile();
   };
 
   /** When the user clicks on the frequency */
   onFrequencyClick = () => {
-    this.props.history.push('/tracker/settings/frequencies/edit');
+    // todo allow editing frequencies
+    //this.props.history.push('/tracker/settings/frequencies/edit');
   };
 
   render() {
@@ -65,28 +79,35 @@ export default class Frequencies extends React.Component {
         <header>
           <AppBar
             title="Video Frequencies"
-            iconClassNameLeft="mdi mdi-arrow-left"
+            iconClassNameLeft="mdi mdi-close"
             onLeftIconButtonTouchTap={historyBackButton.bind(this)}
+            iconClassNameRight={this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check'}
+            onRightIconButtonTouchTap={() => this.props.onSave(this.props.id, videoFrequencies.bands)}
           />
         </header>
         <main>
-          <DropDownMenu value={this.state.amount} onChange={this.onFrequencyAmount}>
-            {_.map(this.state.data, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
-          </DropDownMenu>
-          <DropDownMenu value={this.state.channel} onChange={this.onFrequencyChannel}>
-            {_.map(this.state.data[this.state.amount + 1], (value, index) =>
-              <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
-            )}
-          </DropDownMenu>
-          <p>
-            Drone Squad quality rating: {toPercent(videoFrequencies.imd)} <br />
-            Reduce frequencies to improve timing accuracy.
-          </p>
+          {!this.props.loading &&
+            <DropDownMenu disabled={this.props.saving} value={this.state.amount} onChange={this.onFrequencyAmount}>
+              {_.map(this.state.data, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
+            </DropDownMenu>}
+          {!this.props.loading &&
+            <DropDownMenu disabled={this.props.saving} value={this.state.channel} onChange={this.onFrequencyChannel}>
+              {_.map(this.state.data[this.state.amount + 1], (value, index) =>
+                <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
+              )}
+            </DropDownMenu>}
+          {!this.props.loading &&
+            <p>
+              Drone Squad quality rating: {toPercent(videoFrequencies.imd)} <br />
+              Reduce frequencies to improve timing accuracy.
+            </p>}
           <List>
-            {videoFrequencies &&
+            {!this.props.loading &&
+              videoFrequencies &&
               _.map(videoFrequencies.bands, (band, index) =>
                 <div key={++index}>
                   <ListItem
+                    disabled={this.props.saving}
                     primaryText={'Frequency ' + index}
                     rightIcon={
                       <span style={{ width: '100%', textAlign: 'right' }}>
@@ -98,6 +119,10 @@ export default class Frequencies extends React.Component {
                   <Divider />
                 </div>
               )}
+            {this.props.loading &&
+              <ListItem>
+                <LoadingSpinner />
+              </ListItem>}
           </List>
         </main>
         <footer>

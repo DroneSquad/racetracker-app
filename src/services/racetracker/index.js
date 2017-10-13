@@ -334,15 +334,15 @@ export class TbsRt {
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
     var racerPromises = [
-      this.getRacerChannelPromise({ device_id: device_id, racer: 1}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 2}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 3}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 4}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 5}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 6}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 7}),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 8})
-    ]
+      this.getRacerChannelPromise({ device_id: device_id, racer: 1 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 2 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 3 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 4 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 5 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 6 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 7 }),
+      this.getRacerChannelPromise({ device_id: device_id, racer: 8 })
+    ];
     Promise.all(racerPromises)
       .then(response => cb({ device_id: device_id, channels: response.filter(Boolean) }))
       .catch(error => cb(error));
@@ -367,7 +367,7 @@ export class TbsRt {
           )
         )
         .catch(error => reject({ error: error }));
-    })
+    });
   }
 
   /** Get the channel info for an individual racer slot */

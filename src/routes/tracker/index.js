@@ -11,9 +11,9 @@ export default class Tracker extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/tracker/settings/frequencies/edit" component={Frequency} />
-        <Route path="/tracker/settings/frequencies" component={Frequencies} />*/
-        <Route path="/tracker/settings" component={SettingsMenu} />
+        <Route path="/tracker/:id/settings/frequencies/edit" component={Frequency} />
+        <Route path="/tracker/:id/settings/frequencies" component={Frequencies} />*/
+        <Route path="/tracker/:id/settings" component={SettingsMenu} />
         <Route path="/tracker" component={TrackerHome} />
       </Switch>
     );

@@ -2,15 +2,27 @@
 import { connect } from 'react-redux';
 import Frequencies from '../../../components/settings/frequencies/Frequencies';
 
+import { saveFrequencies, updateProfile, readFrequencies } from '../../../modules/frequencies';
+
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
     component - in this case, a Frequencies */
 
-const mapStateToProps = (state, ownProps) => ({
-  id: ownProps.location.state // passed in via react-router-redux push command
+const mapStateToProps = (state, props) => ({
+  id: props.match.params.id || props.location.state, // passed in via react-router-redux push command,
+  //channelCount: state.trackers.filter(t => t.id === props.match.params.id || props.location.state)[0].racerChannels.length,
+  saving: state.frequencies.saving,
+  loading: state.frequencies.loading,
+  profile: state.frequencies.profile
 });
 
-const FrequenciesContainer = connect(mapStateToProps)(Frequencies);
+const mapDispatchToProps = dispatch => ({
+  onSave: (deviceId, channels) => dispatch(saveFrequencies(deviceId, channels)),
+  readFrequencies: deviceId => dispatch(readFrequencies(deviceId)),
+  updateProfile: profile => dispatch(updateProfile(profile))
+});
+
+const FrequenciesContainer = connect(mapStateToProps, mapDispatchToProps)(Frequencies);
 
 export default FrequenciesContainer;

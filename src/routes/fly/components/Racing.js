@@ -9,7 +9,7 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
-    isRaceActive: boolean,
+    isRaceActive: boolean
   };
 
   componentDidMount() {
