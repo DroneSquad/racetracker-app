@@ -39,11 +39,6 @@ export default class Heat extends Component {
     );
   };
 
-  componentWillReceiveProps(nextProps) {
-    console.log("Heat-componentWillReceiveProps");
-    console.log(nextProps);
-  }
-
   render() {
     let { activeHeat, heatChannels } = this.props;
     let title = <span>{`Heat ${activeHeat.number}`}</span>;

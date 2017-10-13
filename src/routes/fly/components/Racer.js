@@ -45,9 +45,7 @@ export default class Racer extends Component {
   }*/
 
   render() {
-    console.log("racer-Render")
     let { name, channel, lap } = this.props;
-    console.log(lap);
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}

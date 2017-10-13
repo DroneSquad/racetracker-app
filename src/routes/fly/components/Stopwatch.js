@@ -13,7 +13,6 @@ export default class Stopwatch extends Component {
   };
 
   startHeat = () => {
-    console.log("startHeat")
     let r = {
       heatId: this.props.activeHeat.id,
       raceMode: this.props.raceMode,
