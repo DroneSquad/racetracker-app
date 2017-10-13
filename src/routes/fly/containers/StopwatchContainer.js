@@ -8,7 +8,10 @@ import Stopwatch from '../components/Stopwatch';
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  // activeHeatId: state.race.activeHeat,
+  activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null
+});
 
 const mapDispatchToProps = (dispatch: Function) => ({});
 

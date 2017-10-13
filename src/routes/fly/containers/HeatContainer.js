@@ -9,11 +9,8 @@ import Heat from '../components/Heat';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-  // activeHeatId: ownProps.id,
-  ownProps: ownProps,
   activeHeat: state.race.heats.filter(t => t.id === ownProps.id)[0],
   heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels
-
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({});

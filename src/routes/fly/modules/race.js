@@ -18,13 +18,9 @@ export const newHeat = (request: object) => ({
 });
 
 export const createRace = (request: array) => {
-  console.log("race.module-createRace")
-
   // TODO update this for multi tracker
   return dispatch => {
     raceMngr.createRace(response => {
-      console.log("-callback-");
-      console.log(response);
       dispatch(newRace(response));
       // dispatch(newHeat(response.heat));
     }, request);

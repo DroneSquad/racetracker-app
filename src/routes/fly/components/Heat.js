@@ -45,30 +45,7 @@ export default class Heat extends Component {
   }
 
   render() {
-    let { activeHeat, ownProps, heatChannels } = this.props;
-    console.log("heatRender");
-    console.log(ownProps);
-    console.log(activeHeat);
-    console.log(activeHeat.racerChannels);
-    console.log(activeHeat.racerChannels.length);
-    console.log(heatChannels);
-    console.log(heatChannels.length)
-    console.log("---map---")
-    for (let chan of heatChannels) {
-      console.log(chan);
-    }
-    console.log("---end---")
-    console.log("---map2---")
-    for (let rchan of activeHeat.racerChannels) {
-      console.log(rchan);
-    }
-    console.log("---end2---")
-    /*heatChannels.map(slot =>
-      console.log(slot.racer + " " + slot.channel)
-    );*/
-    /*for (let slot of heatChannels) {
-      console.log(slot.racer + " " + slot.channel)
-    }*/
+    let { activeHeat, heatChannels } = this.props;
     let title = <span>{`Heat ${activeHeat.number}`}</span>;
     return (
       <Card expanded={false}>
@@ -84,12 +61,9 @@ export default class Heat extends Component {
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-
             {heatChannels.map(slot =>
-              console.log(slot.racer + " " + slot.channel)
-              /*<Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={activeHeat.id} />*/
+              <Racer id={slot.racer} name={`Racer ${slot.racer}`} channel={slot.channel} heatId={activeHeat.id} />
             )}
-
           </TableBody>
         </Table>
       </Card>

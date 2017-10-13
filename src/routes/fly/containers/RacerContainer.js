@@ -9,6 +9,7 @@ import Racer from '../components/Racer';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
+  ownProps: ownProps
   //  isRaceActive: state.race.isActive,
 });
 

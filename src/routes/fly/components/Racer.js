@@ -45,16 +45,17 @@ export default class Racer extends Component {
   }*/
 
   render() {
-    let { name, channel, heatId } = this.props;
+    let { name, channel, heatId, id } = this.props;
+    /*console.log(name);
+    console.log(channel);
+    console.log(heatId);
+    console.log(id);*/
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}
       </span>
     );
     let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
-    console.log(heatId);
-    console.log(name);
-    console.log(channel)
     return (
       <TableRow /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/>
         <TableRowColumn className="pilot-name">
