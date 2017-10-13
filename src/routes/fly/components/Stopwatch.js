@@ -22,7 +22,7 @@ export default class Stopwatch extends Component {
   startIntervalQuery = () => {
     let timer = setInterval(() => {
       this.intervalQuery();
-    }, 3000);
+    }, 1000);
     this.setState({timer});
   }
 

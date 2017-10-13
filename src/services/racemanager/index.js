@@ -92,12 +92,12 @@ export class RaceMngr {
   }
 
   updateLaps(cb, request) {
-    let opt = { device_id: request.device_id, racer: 1 }
+    let opt = { device_id: request.device_id, racer: 4, lap: 1 }
     // laps: this.props.heatLaps,
     // racers: this.props.racerChannels.map(slot => slot.racer),
     // device_id : this.props.trackerId
-
-    tbs.readTotalRounds(cb, opt);// => {
+    tbs.readRaceUpdate(cb, opt);// => {
+    // tbs.readLapTime(cb, opt);// => {
     // tbs.readLapTime(cb, request)
   }
 

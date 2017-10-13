@@ -65,7 +65,8 @@ export const stopHeat = (request: object) => {
 
 export const updateLaps = (request: object) => {
   return dispatch => {
-    raceMngr.stopHeat(response => {
+    raceMngr.updateLaps(response => {
+      console.log("module-raceMngr-update");
       // TODO: the response determines what dispatch to perform
       // console.log(response);
       // dispatch(setStopHeat(response));

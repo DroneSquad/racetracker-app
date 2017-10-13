@@ -11,6 +11,8 @@ import config from './config.json';
 const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
 const RE_ALPHANUM = /[a-z0-9]+/i;
+const RE_RACEUPDATE = /[PRT,]+/;
+
 // regex replace arrays to convert channel prefixes: [user -> racetracker] ex. R3 -> C3
 const R2C = ['R', /r+/i, 'C'];
 const L2D = ['L', /l+/i, 'D'];
@@ -71,7 +73,7 @@ export class TbsRt {
         case 'getTotalRounds':
           cmd = cmd + ' ' + options.racer;
           break;
-        case 'getLaptime':
+        case 'getLapTime':
           cmd = cmd + ' ' + options.racer + ' ' + options.lap;
           break;
         case 'setMaxRounds':
@@ -101,6 +103,7 @@ export class TbsRt {
         case 'getGateAdc':
         case 'setGateAdc':
         case 'getRssiAdc':
+        case 'getTotalRounds':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         case 'getActiveMode':
@@ -119,6 +122,10 @@ export class TbsRt {
           break;
         case 'stopRace':
           response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false
+          break;
+        case 'getRaceUpdate':
+          let arr = response.split(RE_RACEUPDATE)
+          response =  { racer: arr[1], lap: arr[2], lapTime: arr[3], totalTime: arr[4].match(RE_NUMBER)[0] }
           break;
         default:
           break;
@@ -228,7 +235,7 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              console.log(response)
+              console.log(response)  // numeric value 0
               // cb({ device_id: request.device_id, totalRounds: response })
             )
           )
@@ -252,6 +259,17 @@ export class TbsRt {
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  /** Get the latest lap update of an active race heat */
+  readRaceUpdate(cb, request) {
+    this.readCommand(request.device_id).then(result =>
+      this.prepareResponse("getRaceUpdate", result).then(response =>
+        console.log(response)
+        // cb({ device_id: request.device_id, round: request.round, lapTime: response })
+      )
+    )
+    .catch(error => cb({ error: error }));
   }
 
   /** Get the maximum allowed number of rounds allowed */
