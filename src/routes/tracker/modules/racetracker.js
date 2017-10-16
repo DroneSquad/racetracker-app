@@ -30,8 +30,8 @@ export const RT_RACER_CHANS = 'RT_RACER_CHANS';
 export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 
 // TODO: create reducer with race/heat structure and attach these two
-export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
-export const RT_LAPTIME = 'RT_LAPTIME';
+// export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
+// export const RT_LAPTIME = 'RT_LAPTIME';
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -143,15 +143,15 @@ export const setRacerChannel = (request: Object) => ({
   payload: request
 });
 
-export const setTotalRounds = (request: Object) => ({
+/*export const setTotalRounds = (request: Object) => ({
   type: RT_TOTAL_ROUNDS,
   payload: request
-});
+});*/
 
-export const setLaptime = (request: Object) => ({
+/*export const setLaptime = (request: Object) => ({
   type: RT_LAPTIME,
   payload: request
-});
+});*/
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
@@ -304,10 +304,6 @@ export const readRacerChannels = (device_id: string) => {
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
-        console.log('--DISPATCH_TO_REDUX--');
-        console.log(response.channels.length);
-        console.log(response);
-        console.log('--=================--');
         dispatch(setRacerChannels(response)); // update the redux value
       }
     }, device_id);
@@ -357,7 +353,7 @@ export const readRssiAdc = (device_id: string) => {
 };
 
 /** Get the total number of rounds by a a selected racer */
-export const readTotalRounds = (request: object) => {
+/*export const readTotalRounds = (request: object) => {
   return dispatch => {
     tbs.readTotalRounds(response => {
       if (response.error) {
@@ -368,10 +364,10 @@ export const readTotalRounds = (request: object) => {
       }
     }, request);
   };
-};
+};*/
 
 /** Get the laptime of a specific round of a chosen racer */
-export const readLapTime = (request: object) => {
+/*export const readLapTime = (request: object) => {
   return dispatch => {
     tbs.readLapTime(response => {
       if (response.error) {
@@ -382,7 +378,7 @@ export const readLapTime = (request: object) => {
       }
     }, request);
   };
-};
+};*/
 
 /** Get the maximum number of allowed rounds for a ractracker */
 export const readMaxRounds = (device_id: string) => {

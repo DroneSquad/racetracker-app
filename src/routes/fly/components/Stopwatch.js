@@ -15,16 +15,68 @@ export default class Stopwatch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // initial state, fetch from props?
+      timer: null,
     };
   }
 
+  startIntervalQuery = () => {
+    let timer = setInterval(() => {
+      this.intervalQuery();
+    }, 3000);
+    this.setState({timer});
+  }
+
+  intervalQuery = () => {
+    let r = {
+      heat: this.props.activeHeat.id,
+      device_id : this.props.trackerId
+    }
+    this.props.updateLaps(r)
+  }
+
+  stopIntervalQuery = () => {
+    clearInterval(this.state.timer);
+  }
+
+  startHeat = () => {
+    let r = {
+      heatId: this.props.activeHeat.id,
+      raceMode: this.props.raceMode,
+      device_id : this.props.trackerId
+    }
+    this.props.startHeat(r)
+    this.startIntervalQuery()
+  };
+
+  endHeat = () => {
+    let r = {
+      heatId: this.props.activeHeat.id,
+      device_id : this.props.trackerId
+    }
+    this.props.stopHeat(r)
+    this.stopIntervalQuery()
+  };
+
+  createHeat = () => {
+    let r = {
+      raceId : this.props.activeHeat.raceId,
+      racerChannels: this.props.racerChannels,
+      currentHeat: this.props.activeHeat
+    }
+    this.props.createHeat(r)
+  };
+
   render() {
-    // let title = <span>{`Heat ${this.props.id} Results`}</span>;
+    let heat = this.props.activeHeat;
+    //Race Clock: 1:00:00
     return (
       <Paper className="heat-action" style={{ display: 'flex' }}>
-        <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>Race Clock: 1:00:00</p>
-        <FlatButton primary style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="Stop Race" />
+        {heat.isPending && <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>{`Heat ${heat.number} Ready`}</p>}
+        {heat.isActive && <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>{`Heat ${heat.number} Running`}</p>}
+        {heat.isComplete && <p style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}>{`Heat ${heat.number} Finished`}</p>}
+        {heat.isPending && <FlatButton onClick={this.startHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="Start Race" />}
+        {heat.isActive && <FlatButton onClick={this.endHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="End Race" />}
+        {heat.isComplete && <FlatButton onClick={this.createHeat} style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }} label="New Heat" />}
       </Paper>
     );
   }

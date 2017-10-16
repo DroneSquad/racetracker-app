@@ -18,6 +18,11 @@ export default class Racer extends Component {
     name: string
   };
 
+  /*componentWillReceiveProps(nextProps) {
+    console.log("racer-render-next-props")
+    console.log(nextProps);
+  }*/
+
   /*constructor(props) {
     super(props);
     this.uuid = uuid.v4();
@@ -45,25 +50,22 @@ export default class Racer extends Component {
   }*/
 
   render() {
-    let { name, channel, heatId } = this.props;
+    let { name, channel, lap } = this.props;
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}
       </span>
     );
     let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
-    console.log(heatId);
-    console.log(name);
-    console.log(channel);
     return (
       <TableRow /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/>
         <TableRowColumn className="pilot-name">
           {avatar}
           {racerName}
         </TableRowColumn>
-        <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn className="no-clip">0:00</TableRowColumn>
-        <TableRowColumn className="no-clip">0:00</TableRowColumn>
+        <TableRowColumn>{lap.lap}</TableRowColumn>
+        <TableRowColumn className="no-clip">{lap.lapTime}</TableRowColumn>
+        <TableRowColumn className="no-clip">00:00</TableRowColumn>
         <TableRowColumn>
           {channel}
         </TableRowColumn>

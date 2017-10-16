@@ -11,6 +11,8 @@ import config from './config.json';
 const RE_PERCENT = /(\d+.\d+)%/;
 const RE_NUMBER = /\d+/g;
 const RE_ALPHANUM = /[a-z0-9]+/i;
+const RE_RACEUPDATE = /[PRT,]+/;
+
 // regex replace arrays to convert channel prefixes: [user -> racetracker] ex. R3 -> C3
 const R2C = ['R', /r+/i, 'C'];
 const L2D = ['L', /l+/i, 'D'];
@@ -71,8 +73,8 @@ export class TbsRt {
         case 'getTotalRounds':
           cmd = cmd + ' ' + options.racer;
           break;
-        case 'getLaptime':
-          cmd = cmd + ' ' + options.racer + ' ' + options.round;
+        case 'getLapTime':
+          cmd = cmd + ' ' + options.racer + ' ' + options.lap;
           break;
         case 'setMaxRounds':
           cmd = cmd + ' ' + options.maxRounds;
@@ -101,6 +103,7 @@ export class TbsRt {
         case 'getGateAdc':
         case 'setGateAdc':
         case 'getRssiAdc':
+        case 'getTotalRounds':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         case 'getActiveMode':
@@ -112,6 +115,13 @@ export class TbsRt {
           response = response.split(':')[1].match(RE_ALPHANUM)[0];
           response = RE_CHANNEL(response, C2R);
           response = RE_CHANNEL(response, D2L);
+          break;
+        case 'startRaceShotgun':
+        case 'startRaceFlyby':
+          response = response.substring(0, 5).toUpperCase() === 'READY' ? true : false
+          break;
+        case 'stopRace':
+          response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false
           break;
         default:
           break;
@@ -221,7 +231,8 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, totalRounds: response })
+              console.log(response)  // numeric value 0
+              // cb({ device_id: request.device_id, totalRounds: response })
             )
           )
         )
@@ -237,12 +248,24 @@ export class TbsRt {
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, round: request.round, lapTime: response })
+              console.log(response)
+              // cb({ device_id: request.device_id, round: request.round, lapTime: response })
             )
           )
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  /** Get the latest lap update of an active race heat */
+  readRaceUpdate(cb, request) {
+    this.readCommand(request.device_id).then(result =>
+      this.prepareResponse("getRaceUpdate", result).then(response => {
+        let arr = response.split(RE_RACEUPDATE)
+        cb({ racer: Number(arr[1]), lap: Number(arr[2]), lapTime: arr[3], totalTime: arr[4].match(RE_NUMBER)[0], heat: request.heat })
+      })
+    )
+    .catch(error => cb({ error: error }));
   }
 
   /** Get the maximum allowed number of rounds allowed */
@@ -325,37 +348,7 @@ export class TbsRt {
       .catch(error => cb(error));
   }
 
-  /** Read all channels from available racer slots (used on initial set) */
-  /*readRacerChannels(cb, device_id) {
-    let channels = [];
-    let errors = [];
-    let cmdStr = 'getRacerChannel';
-    let racers = [1, 2, 3, 4, 5, 6, 7, 8]; // all available racer slots
-    for (let racer of racers) {
-      let slot = this._config.slots[racer]; // get the handle of the racer slot
-      this.prepareCommand(cmdStr, { slot: slot })
-        .then(cmd =>
-          this.writeCommand(cmd, device_id).then(
-            this.readCommand(device_id).then(result =>
-              this.prepareResponse(cmdStr, result).then(response => {
-                // FF indicates unassigned
-                if (response !== 'FF') {
-                  channels.push({ racer: racer, channel: response });
-                }
-              })
-            )
-          )
-        )
-        .catch(error => errors.push(error));
-    }
-    if (errors.length > 0) {
-      cb({ errors: errors });
-    } else {
-      cb({ device_id: device_id, channels: channels });
-    }
-  }*/
-
-  getRacerChannelPromise(request) {
+  getRacerChannelPromise(request){
     return new Promise((resolve, reject) => {
       let cmdStr = 'getRacerChannel';
       let slot = this._config.slots[request.racer]; // get the handle of the racer slot
@@ -468,6 +461,42 @@ export class TbsRt {
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  /** End the currently running race heat */
+  stopHeat(cb, request) {
+    let cmdStr = 'stopRace';
+    this.prepareCommand(cmdStr)
+      .then(cmd =>
+        this.writeCommand(cmd, request.device_id).then(
+          this.readCommand(request.device_id).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, heatId: request.heatId, heatStopped: response }))
+          )
+        )
+      )
+      .catch(error => cb({ error: error }));
+  }
+
+  /* Start a race heat according to start style, device id, and heat id */
+  startHeat(cb, request) {
+    let vrxStr = 'activateVrx'  // enables the vrx for race tracking
+    let cmdStr = ((request.raceMode === 'shotgun') ? 'startRaceShotgun' : 'startRaceFlyby');  // race start type
+    this.prepareCommand(vrxStr, request)
+      .then(vrx =>
+        this.writeCommand(vrx, request.device_id).then(
+          this.prepareCommand(cmdStr, request)
+            .then(cmd =>
+              this.writeCommand(cmd, request.device_id).then(
+                this.readCommand(request.device_id).then(result =>
+                  this.prepareResponse(cmdStr, result).then(response =>
+                    cb({ device_id: request.device_id, heatId: request.heatId, heatStarted: response })
+                  )
+                )
+              )
+            )
+          )
+        )
+        .catch(error => cb({ error: error }));
   }
 
   /** Perform a gate calibration for a RaceTracker by device id */
