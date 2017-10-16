@@ -6,7 +6,7 @@
     </description>
     <content src="/index.html" />
     <preference name="BackgroundColor" value="0xff26687f" />
-    <preference name="Orientation" value="portrait" />
+    <preference name="Orientation" value="default" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarBackgroundColor" value="#15576e" />
