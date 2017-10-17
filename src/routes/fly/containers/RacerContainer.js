@@ -11,6 +11,7 @@ import Racer from '../components/Racer';
 const mapStateToProps = (state, ownProps) => ({
   lap: state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heat === ownProps.heatId).reverse()[0].lap,
   lapTime: msToClock(state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heat === ownProps.heatId).reverse()[0].lapTime),
+  bestTime: state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heat === ownProps.heatId).sort(function(a, b){return a.lapTime-b.lapTime})[0].lapTime,
   // totalTime: state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heat === ownProps.heatId).reverse()[0].lap.totalTime
 
 });
