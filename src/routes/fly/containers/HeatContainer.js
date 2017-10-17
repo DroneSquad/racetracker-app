@@ -13,8 +13,6 @@ const mapStateToProps = (state, ownProps) => ({
   heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({});
-
-const HeatContainer = connect(mapStateToProps, mapDispatchToProps)(Heat);
+const HeatContainer = connect(mapStateToProps)(Heat);
 
 export default HeatContainer;

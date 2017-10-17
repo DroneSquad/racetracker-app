@@ -59,7 +59,7 @@
 }
 
 .fly .pilot-name {
-  width: 100px !important;
+  width: 50px !important;
   text-overflow: clip !important;
 }
 
@@ -69,7 +69,7 @@
   }
 
   .fly .pilot-name {
-    width: 70px !important;
+    width: 20px !important;
   }
 }
 

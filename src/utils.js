@@ -54,6 +54,21 @@ export function rssiToPercentage(value) {
   return Math.min(Math.max(2 * (~~value + 100), 0), 100) + '%';
 }
 
+/** convert milliseconds into human clock format of m:ss:sss */
+export function msToClock(millisec) {
+  let sms = (millisec / 1000).toFixed(3);
+  var arr = sms.split(".");
+  let secs = arr[0];
+  let mins = Math.floor(secs / 60);
+  secs = Math.floor(secs % 60);
+  secs = (secs >= 10) ? secs : "0" + secs;
+  let mils = "000";
+  if (arr.length > 1) {
+    mils = arr[1];
+  }
+  return mins + ":" + secs + ":" + mils;
+}
+
 /** Generate a list of random number from min to max */
 export function randomPilotIds() {
   return _.range(3100, 3350);
