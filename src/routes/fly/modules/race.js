@@ -1,7 +1,9 @@
 /** types */
-import raceMngr from '../../../services/racemanager';
 
 import _ from 'lodash';
+
+import raceMngr from '../../../services/racemanager';
+import { sendVoice } from '../../../global/voice/modules/voice';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -75,6 +77,7 @@ export const updateLaps = (request: object) => {
         console.log("DISPATCH-RESPONSE")
         console.log(response)
         dispatch(setLap(response));
+        dispatch(sendVoice(response))
       }
     }, request);
   };
