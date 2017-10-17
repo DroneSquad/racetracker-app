@@ -50,7 +50,7 @@ export default class Racer extends Component {
   }*/
 
   render() {
-    let { name, channel, lap } = this.props;
+    let { name, channel, lap, lapTime } = this.props;
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}
@@ -63,8 +63,8 @@ export default class Racer extends Component {
           {avatar}
           {racerName}
         </TableRowColumn>
-        <TableRowColumn>{lap.lap}</TableRowColumn>
-        <TableRowColumn className="no-clip">{lap.lapTime}</TableRowColumn>
+        <TableRowColumn>{lap}</TableRowColumn>
+        <TableRowColumn className="no-clip">{lapTime}</TableRowColumn>
         <TableRowColumn className="no-clip">00:00</TableRowColumn>
         <TableRowColumn>
           {channel}

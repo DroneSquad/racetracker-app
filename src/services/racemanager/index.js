@@ -23,8 +23,8 @@ export class RaceMngr {
       ({
         racer: slot.racer,
         lap: 1,
-        lapTime: '00:00',
-        totalTime: '00:00',
+        lapTime: 0,
+        totalTime: 0,
         heat: hUid
       })
     )
@@ -60,8 +60,8 @@ export class RaceMngr {
       ({
         racer: slot.racer,
         lap: 1,
-        lapTime: '00:00',
-        totalTime: '00:00',
+        lapTime: 0,
+        totalTime: 0,
         heat: hUid
       })
     )
