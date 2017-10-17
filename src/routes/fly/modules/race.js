@@ -72,8 +72,6 @@ export const updateLaps = (request: object) => {
   return dispatch => {
     raceMngr.updateLaps(response => {
       if (!response.error) {
-        console.log("DISPATCH-RESPONSE")
-        console.log(response)
         dispatch(setLap(response));
       }
     }, request);
@@ -87,7 +85,7 @@ export default function(state = {}, action: Action) {
       return {
         ...action.payload.race,
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
-        laps: action.payload.laps /* action.payload.laps.map(lap => _.unionWith(state.laps, [lap], (left, right) => left.heatId === right.heatId && left.racer === right.racer)) */
+        laps: action.payload.laps
       };
     case NEW_HEAT:
       return {
@@ -97,9 +95,6 @@ export default function(state = {}, action: Action) {
         laps: state.laps.concat(action.payload.laps)
       };
     case SET_LAP:
-      console.log("SET_LAP");
-      console.log(state.laps)
-      console.log(action.payload)
       return {
         ...state,
         laps: _.unionWith(state.laps, [action.payload], (left, right) => left.heat === right.heat && left.racer === right.racer && left.lap === right.lap)

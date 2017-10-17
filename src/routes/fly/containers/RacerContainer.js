@@ -12,8 +12,6 @@ const mapStateToProps = (state, ownProps) => ({
   lap: state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heat === ownProps.heatId).reverse()[0]
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({});
-
-const RacerContainer = connect(mapStateToProps, mapDispatchToProps)(Racer);
+const RacerContainer = connect(mapStateToProps)(Racer);
 
 export default RacerContainer;
