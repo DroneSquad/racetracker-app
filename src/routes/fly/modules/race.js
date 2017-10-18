@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { sendVoice } from '../../../global/voice/modules/voice';
+import { announceLapsFromResponse, announcePilotsFromResponse } from './announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -42,6 +42,7 @@ export const createRace = (request: array) => {
   return dispatch => {
     raceMngr.createRace(response => {
       dispatch(newRace(response));
+      dispatch(announcePilotsFromResponse(response))
     }, request);
   };
 };
@@ -75,7 +76,7 @@ export const updateLaps = (request: object) => {
     raceMngr.updateLaps(response => {
       if (!response.error) {
         dispatch(setLap(response));
-        dispatch(sendVoice(response))
+        dispatch(announceLapsFromResponse(response))
       }
     }, request);
   };
