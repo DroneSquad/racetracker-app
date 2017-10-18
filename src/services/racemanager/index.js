@@ -27,7 +27,7 @@ export class RaceMngr {
         totalTime: 0,
         heat: hUid
       })
-    )
+    );
     // create the first heat for the race
     let heat = {
       id: hUid,

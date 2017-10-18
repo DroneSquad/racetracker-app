@@ -16,7 +16,7 @@ export function announceLapsFromResponse(response) {
   console.log(response);
   console.log(JSON.stringify(response));
   return dispatch => {
-    dispatch(announceLap('1', '01:32'))
+    dispatch(announceLap(response.racer, response.lapTime));
   };
 }
 
