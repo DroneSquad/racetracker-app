@@ -17,6 +17,7 @@ export function sendVoice(text, locale = 'en-US', rate = 1) {
         reason => dispatch({ type: VOICE_SEND_ERROR, payload: reason })
       );
     } else {
+      console.log(text);
       dispatch({ type: VOICE_SEND_ERROR, payload: 'Plugin not loaded' });
     }
   };
