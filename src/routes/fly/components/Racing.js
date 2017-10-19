@@ -9,7 +9,11 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 export default class Racing extends Component {
   props: {
     connectedTrackers: Array<RaceTracker>,
-    isRaceActive: boolean
+    isRaceActive: boolean,
+    activeHeatId: string,
+    activeRaceId: string,
+    createRace: Function,
+    updateRaceMode: Function
   };
 
   componentDidMount() {
@@ -27,6 +31,12 @@ export default class Racing extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (this.props.isRaceActive) {
+      if (this.props.connectedTrackers[0].raceMode !== nextProps.connectedTrackers[0].raceMode) {
+        console.log("UPDATE_RACEMODE");
+        this.updateRaceMode({ raceId: this.props.activeRaceId, raceMode: this.props.nextProps.connectedTrackers[0].raceMode });
+      }
+    }
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
         if (this.props.connectedTrackers[0].racerChannels) {
@@ -34,8 +44,6 @@ export default class Racing extends Component {
             if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
               if (!this.props.isRaceActive) {
                 this.createRace(nextProps.connectedTrackers[0]);
-              } else {
-                console.log("UPDATE-RACE-CHANNELS")
               }
             }
           }
