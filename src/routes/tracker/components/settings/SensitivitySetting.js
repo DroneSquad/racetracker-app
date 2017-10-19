@@ -7,7 +7,7 @@ import loadingImg from '../../../../media/ds-logo-spin.svg';
 export default class SensitivitySetting extends Setting {
   props: {
     id: string,
-    gateADC: string,
+    // gateADC: string,
     calibrate: Function
   };
 
@@ -52,7 +52,7 @@ export default class SensitivitySetting extends Setting {
           open={this.state.calibrateDialog || false}
           onRequestClose={this.handleCancel}
         >
-          Power up your video transmitter and set it to {this.state.channel || 'N/A'}
+          Power up your video transmitter and set it to {this.props.racerChannel}
         </Dialog>
         <h3 className="no-margin left push-down-text">Sensitivity</h3>
         <div className="clear">

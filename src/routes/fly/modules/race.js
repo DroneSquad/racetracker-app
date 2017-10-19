@@ -10,10 +10,16 @@ export const NEW_HEAT = 'NEW_HEAT';
 export const START_HEAT = 'START_HEAT';
 export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
+export const SET_RACEMODE = 'SET_RACEMODE';
 
 /** actions */
 export const newRace = (request: object) => ({
   type: NEW_RACE,
+  payload: request
+});
+
+export const setRaceMode = (request: object) => ({
+  type: SET_RACEMODE,
   payload: request
 });
 
@@ -90,6 +96,11 @@ export default function(state = {}, action: Action) {
         ...action.payload.race,
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: action.payload.laps
+      };
+    case SET_RACEMODE:
+      return {
+        ...state,
+        raceMode: action.payload.raceMode
       };
     case NEW_HEAT:
       return {
