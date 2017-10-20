@@ -312,25 +312,6 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** perform mass update with an array of channels, write to rt and then redux */
-  // TODO: convert this to use a promise.all
-  writeRacerChannels(cb, request) {
-    let errors = [];
-    let cmdStr = 'setRacerChannel';
-    for (let channel of request.channels) {
-      if (channel.channel && channel.channel !== 'FF') {
-        this.prepareCommand(cmdStr, channel)
-          .then(cmd => this.writeCommand(cmd, request.device_id).then(this.readCommand(request.device_id)))
-          .catch(error => errors.push(error));
-      }
-    }
-    if (errors.length > 0) {
-      cb({ errors: errors });
-    } else {
-      cb(request);
-    }
-  }
-
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, device_id) {
     var racerPromises = [
@@ -385,6 +366,41 @@ export class TbsRt {
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  /** Write all channels to racetracker */
+  writeRacerChannels(cb, request) {
+    var racerPromises = []
+    for (let channel of request.channels) {
+      if (channel.channel && channel.channel.toUpperCase() !== 'FF') {
+        racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }))
+      }
+    }
+    Promise.all(racerPromises)
+      .then(response => cb({ device_id: request.device_id, channels: response }))
+      .catch(error => cb(error));
+  }
+
+  /* Set the channel of a specified racer slot, empty values or 'FF' indicate array removal */
+  setRacerChannelPromise(request) {
+    return new Promise((resolve, reject) => {
+      let cmdStr = 'setRacerChannel';
+      this.prepareCommand(cmdStr, { racer: request.channel.racer, channel: request.channel.channel.toUpperCase() })
+        .then(cmd =>
+          this.writeCommand(cmd, request.device_id).then(
+            this.readCommand(request.device_id).then(result =>
+              this.prepareResponse(cmdStr, result).then(response => {
+                if (response !== 'FF') {
+                  resolve({ racer: request.channel.racer, channel: response });
+                } else {
+                  resolve(null);
+                }
+              })
+            )
+          )
+        )
+        .catch(error => reject({ error: error }));
+    });
   }
 
   /* Set the channel of a specified racer slot, empty values or 'FF' indicate array removal */
