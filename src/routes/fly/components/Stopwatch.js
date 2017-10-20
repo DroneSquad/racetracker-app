@@ -9,7 +9,8 @@ export default class Stopwatch extends Component {
     isRunning: boolean,
     hasStarted: boolean,
     displayTime: string,
-    elapsedTime: number
+    elapsedTime: number,
+    queryInterval: string,
   };
 
   constructor(props) {
@@ -20,9 +21,16 @@ export default class Stopwatch extends Component {
   }
 
   startIntervalQuery = () => {
+    console.log("TIMER");
+    console.log(this.props.queryInterval)
+    let interval = 1000;
+    if (this.props.queryInterval) {
+      interval = this.props.queryInterval * 1000
+    }
+    console.log(interval)
     let timer = setInterval(() => {
       this.intervalQuery();
-    }, 3000);
+    }, interval);
     this.setState({timer});
   }
 

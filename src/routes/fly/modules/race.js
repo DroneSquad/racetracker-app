@@ -11,10 +11,16 @@ export const START_HEAT = 'START_HEAT';
 export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
+export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 
 /** actions */
 export const newRace = (request: object) => ({
   type: NEW_RACE,
+  payload: request
+});
+
+export const setQueryInterval = (request: object) => ({
+  type: SET_QUERY_INTERVAL,
   payload: request
 });
 
@@ -101,6 +107,11 @@ export default function(state = {}, action: Action) {
         ...state,
         raceMode: action.payload.raceMode
       };
+    case SET_QUERY_INTERVAL:
+        return {
+          ...state,
+          queryInterval: action.payload
+        };
     case NEW_HEAT:
       return {
         ...state,
