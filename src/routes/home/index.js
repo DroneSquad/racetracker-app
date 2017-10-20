@@ -18,17 +18,14 @@ import { connect } from '../../store';
 export default class Home extends React.Component {
 
   componentWillMount() {
-    console.log("CONSTRUCTOR");
     let interval = 1
-    console.log(interval);
     if (this.props.raceQueryInterval) {
-      console.log("INHERE")
       interval = this.props.raceQueryInterval
     }
-    console.log("BEFORE");
     this.setState({ interval: interval });
-    console.log(this.state.interval);
   }
+
+  state = {}
 
   static mapStateToProps = states => ({
     token: states.auth.token,
@@ -44,16 +41,13 @@ export default class Home extends React.Component {
     setInterval: value => dispatch(setQueryInterval(value)),
   });
 
-  handleChange = event => {
-    console.log(event)
-    if (event.target.value) {
-      this.props.setInterval(event.target.value);
+  handleChange = (event, value) => {
+    if (value) {
+      this.props.setInterval(value);
     }
   };
 
   render() {
-    console.log("RENDER");
-    console.log(this.state.interval);
     return (
       <div>
         <AppBar
@@ -67,10 +61,9 @@ export default class Home extends React.Component {
           <ListItem onTouchTap={this.props.onTracker}>TBS RaceTracker</ListItem>
           <ListItem onTouchTap={this.props.onVoiceSend}>Send Voice</ListItem>
           <ListItem onTouchTap={this.props.onFakeLap}>Fake Lap</ListItem>
-          <ListItem
-            primaryText={<TextField className="right" type="number" value={this.state.interval} onChange={this.props.handleChange} />}
-          />
         </List>
+        Interval Value:
+        <TextField className="right" type="number" defaultValue={this.state.interval} onChange={this.handleChange} />
       </div>
     );
   }

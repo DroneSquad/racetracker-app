@@ -19,7 +19,7 @@ export const newRace = (request: object) => ({
   payload: request
 });
 
-export const setQueryInterval = (request: object) => ({
+export const setQueryInterval = (request: string) => ({
   type: SET_QUERY_INTERVAL,
   payload: request
 });

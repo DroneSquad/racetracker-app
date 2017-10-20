@@ -13,6 +13,7 @@ const mapStateToProps = (state, ownProps) => ({
   activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null,
   raceMode: state.race.raceMode,
   queryInterval: state.race.queryInterval,
+  state: state,
   trackerId: state.race.trackerId,
   racerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels,
   // heatLaps: state.race.laps.filter(h => h.heat === state.race.activeHeat)
