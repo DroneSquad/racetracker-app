@@ -14,7 +14,7 @@ function humanSpeech(millis) {
 export function announceLapsFromResponse(response) {
   return (dispatch, getStore) => {
     let store = getStore();
-    let key = (0x1 << response.racer) * response.lap;
+    let key = (0x1 << response.racer) * response.racer + response.lap;
     let heatTable = cacheTable[response.heat.id] || (cacheTable[response.heat.id] = {});
     console.log(cacheTable);
     if (!(key in heatTable)) {
