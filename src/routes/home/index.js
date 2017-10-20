@@ -2,6 +2,7 @@ import React from 'react';
 import { push } from 'react-router-redux';
 
 import uuid from 'uuid';
+import moment from 'moment';
 
 import { AppBar, List, ListItem } from 'material-ui';
 
@@ -23,7 +24,7 @@ export default class Home extends React.Component {
     onLogout: token => dispatch(logoutRequest(token)),
     onVoiceSend: () => dispatch(sendVoice('hello world')),
     onTracker: () => dispatch(push('/tracker')),
-    onFakeLap: () => dispatch(announceLapsFromResponse({ racer: Number(1), lap: Number(1), lapTime: '5:55.5', totalTime: '12:12.12', heat: { id: uuid.v4() } }))
+    onFakeLap: () => dispatch(announceLapsFromResponse({ racer: Number(1), lap: Number(1), lapTime: moment().format('mm:ss.SS'), totalTime: '12345', heat: { id: uuid.v4() } }))
   });
 
   render() {

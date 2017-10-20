@@ -2,9 +2,13 @@ import moment from 'moment';
 
 import { sendVoice } from '../../../global/voice/modules/voice';
 
-const FAKE_DATE = '1/1/1 0:';
-
 let cacheTable = window.__announcer_cacheTable = {}; // cache table prevent multiple laps from being called out
+
+/** Make the speech of the announcer sound normal */
+function humanSpeech(millis) {
+  // todo fancy announcer stuff
+  return moment().startOf('day').add(millis, 'ms').format('mm:ss.SS');
+}
 
 /** Read the response from the payload and announce the values */
 export function announceLapsFromResponse(response) {
@@ -25,11 +29,9 @@ export function announceLapsFromResponse(response) {
 
 /** Will announce the lap */
 export function announceLap(person, time) {
-  // console.log(FAKE_DATE + time)
-  let humanTime = moment(FAKE_DATE + time).format('mm [minutes] ss [point] SS [seconds]');
   return (dispatch, getStore) => {
     //let store = getStore();
     let racerToPilot = person; // todo map id with pilots name from current heat
-    dispatch(sendVoice(`Racer ${racerToPilot}, ${humanTime}`));
+    dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
   };
 }
