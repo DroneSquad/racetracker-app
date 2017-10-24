@@ -167,7 +167,6 @@ export class TbsRt {
   readCommandAtInterval(device_id, interval, complete) {
     return new Promise((resolve, reject) => {
       let intId = setInterval(() => {
-        console.log("INTERVAL");
         window.ble.read(
           device_id,
           this._config.racetracker_service,
@@ -175,7 +174,6 @@ export class TbsRt {
           data => {
             data = this.bytesToStr(data);
             if (complete(data)) {
-              console.log("COMPLETE");
               clearInterval(intId);
               resolve();
             }

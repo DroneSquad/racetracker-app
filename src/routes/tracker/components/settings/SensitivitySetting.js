@@ -9,18 +9,14 @@ export default class SensitivitySetting extends Setting {
     id: string,
     gateADC: string,
     racerChannel: string,
+    isCalibrating: boolean,
     calibrate: Function
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps");
-    if (this.state.calibrating) {
-      console.log("calibrating");
-      console.log(this.props.gateADC);
-      console.log(nextProps.gateADC);
-      if (nextProps.gateADC) {
-        console.log("----CALIBRATION COMPLETE----")
-        this.setState({ calibrating: false, calibrateDialog: false });
+    if (this.props.isCalibrating) {
+      if (!nextProps.isCalibrating) {
+        this.setState({ calibrateDialog: false });
       }
     }
   }
@@ -28,7 +24,6 @@ export default class SensitivitySetting extends Setting {
   /** Calibrate the race tracker */
   calibrate = () => {
     this.props.calibrate(this.props.id);
-    this.setState({ calibrating: true });
   };
 
   /** Open the dialog */
@@ -46,8 +41,8 @@ export default class SensitivitySetting extends Setting {
   render() {
     let loadingComponent = <img src={loadingImg} style={{ height: '16px', width: '16px' }} alt="Loading..." />;
     let actions = [
-      <FlatButton label="Cancel" disabled={this.state.calibrating} primary={true} onClick={this.handleCancel} />,
-      <FlatButton label={this.state.calibrating ? loadingComponent : 'Calibrate'} primary onClick={this.calibrate} />
+      <FlatButton label="Cancel" disabled={this.props.isCalibrating} primary={true} onClick={this.handleCancel} />,
+      <FlatButton label={this.props.isCalibrating ? loadingComponent : 'Calibrate'} primary onClick={this.calibrate} />
     ];
     return (
       <div className={this.isLoadingClass()} style={{ padding: '0 16px' }}>
