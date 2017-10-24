@@ -629,7 +629,7 @@ export default function(state = [], action: Action) {
                 ...tracker,
                 isCalibrating: action.payload.calibrating
               }
-              : tracker
+            : tracker
       );
     case RT_RSSI_ADC:
       return state.map(

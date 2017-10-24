@@ -10,9 +10,9 @@ import { calibrateGate } from '../../modules/racetracker';
     component - in this case, a SensitivitySetting */
 
 const mapStateToProps = (state, ownProps) => ({
-  racerChannel: state.trackers.filter(
-    t => t.id === ownProps.id)[0].racerChannels[0] ? state.trackers.filter(
-      t => t.id === ownProps.id)[0].racerChannels[0].channel : "N/A",
+  racerChannel: state.trackers.filter(t => t.id === ownProps.id)[0].racerChannels[0]
+    ? state.trackers.filter(t => t.id === ownProps.id)[0].racerChannels[0].channel
+    : 'N/A',
   isCalibrating: state.trackers.filter(t => t.id === ownProps.id)[0].isCalibrating,
   gateADC: state.trackers.filter(t => t.id === ownProps.id)[0].gateADC
 });

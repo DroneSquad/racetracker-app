@@ -51,7 +51,8 @@ export default class SensitivitySetting extends Setting {
           actions={actions}
           modal={false}
           open={this.state.calibrateDialog || false}
-          onRequestClose={this.handleCancel} >
+          onRequestClose={this.handleCancel}
+        >
           Power up your video transmitter and set it to {this.props.racerChannel}
         </Dialog>
         <h3 className="no-margin left push-down-text">Sensitivity</h3>

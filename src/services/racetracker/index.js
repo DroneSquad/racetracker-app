@@ -179,8 +179,8 @@ export class TbsRt {
             }
           },
           error => {
-            clearInterval(intId);  // kill the interval loop
-            reject(error)
+            clearInterval(intId); // kill the interval loop
+            reject(error);
           }
         );
       }, interval);
@@ -529,14 +529,15 @@ export class TbsRt {
   /** Perform a gate calibration for a RaceTracker by device id */
   calibrateGate(cb, device_id) {
     let cmdStr = 'calibrateGate';
-    this.prepareCommand(cmdStr, device_id).then(cmd =>
-      this.writeCommand(cmd, device_id).then(
-        this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(() =>
-          this.readGateAdc(cb, device_id)
+    this.prepareCommand(cmdStr, device_id)
+      .then(cmd =>
+        this.writeCommand(cmd, device_id).then(
+          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(() =>
+            this.readGateAdc(cb, device_id)
+          )
         )
       )
-    )
-    .catch(error => cb({ error: error }));
+      .catch(error => cb({ error: error }));
   }
 
   /** validation function to determine when the calibration process has completed */
