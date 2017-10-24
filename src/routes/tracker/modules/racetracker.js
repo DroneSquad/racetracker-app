@@ -28,6 +28,7 @@ export const RT_GATE_ADC = 'RT_GATE_ADC';
 export const RT_RSSI_ADC = 'RT_RSSI_ADC';
 export const RT_RACER_CHANS = 'RT_RACER_CHANS';
 export const RT_RACER_CHAN = 'RT_RACER_CHAN';
+export const RT_CALIBRATING = 'RT_CALIBRATING';
 
 // TODO: create reducer with race/heat structure and attach these two
 // export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
@@ -53,6 +54,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     wasConnected: false,
     isConnecting: false,
     isReconnecting: false,
+    isCalibrating: false,
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS
   }
@@ -80,6 +82,11 @@ export const setReconnecting = (id: string) => ({
 
 export const updateConnected = (request: Object) => ({
   type: RT_UPDATE_CONNECT,
+  payload: request
+});
+
+export const setCalibrating = (request: Object) => ({
+  type: RT_CALIBRATING,
   payload: request
 });
 
@@ -439,10 +446,11 @@ export const writeMinLapTime = (request: object) => {
 /** write a new min lap time value to a racetracker */
 export const calibrateGate = (device_id: string) => {
   return dispatch => {
+    dispatch(setCalibrating({ device_id: device_id, calibrating: true }));
     tbs.calibrateGate(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        dispatch(isTrackerConnected(device_id)); // verify/update connection state
+        dispatch(setCalibrating({ device_id: device_id, calibrating: false })); // turn off calibration
       } else {
         dispatch(setGateAdc(response)); // update the redux value
       }
@@ -608,7 +616,18 @@ export default function(state = [], action: Action) {
           tracker.id === action.payload.device_id
             ? {
                 ...tracker,
-                gateADC: action.payload.gateADC
+                gateADC: action.payload.gateADC,
+                isCalibrating: false
+              }
+            : tracker
+      );
+    case RT_CALIBRATING:
+      return state.map(
+        tracker =>
+          tracker.id === action.payload.device_id
+            ? {
+                ...tracker,
+                isCalibrating: action.payload.calibrating
               }
             : tracker
       );

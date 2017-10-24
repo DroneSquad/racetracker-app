@@ -178,7 +178,10 @@ export class TbsRt {
               resolve();
             }
           },
-          error => reject(error)
+          error => {
+            clearInterval(intId); // kill the interval loop
+            reject(error);
+          }
         );
       }, interval);
     });
@@ -529,7 +532,9 @@ export class TbsRt {
     this.prepareCommand(cmdStr, device_id)
       .then(cmd =>
         this.writeCommand(cmd, device_id).then(
-          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(this.readGateAdc(cb, device_id))
+          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(() =>
+            this.readGateAdc(cb, device_id)
+          )
         )
       )
       .catch(error => cb({ error: error }));
