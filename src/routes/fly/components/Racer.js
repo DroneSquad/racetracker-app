@@ -63,9 +63,15 @@ export default class Racer extends Component {
           {avatar}
           {racerName}
         </TableRowColumn>
-        <TableRowColumn>{lap}</TableRowColumn>
-        <TableRowColumn className="no-clip">{lapTime}</TableRowColumn>
-        <TableRowColumn className="no-clip">{bestTime}</TableRowColumn>
+        <TableRowColumn>
+          {lap}
+        </TableRowColumn>
+        <TableRowColumn className="no-clip">
+          {lapTime}
+        </TableRowColumn>
+        <TableRowColumn className="no-clip">
+          {bestTime}
+        </TableRowColumn>
         <TableRowColumn>
           {channel}
         </TableRowColumn>

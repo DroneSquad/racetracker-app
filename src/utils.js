@@ -57,16 +57,16 @@ export function rssiToPercentage(value) {
 /** convert milliseconds into human clock format of m:ss:sss */
 export function msToClock(millisec) {
   let sms = (millisec / 1000).toFixed(3);
-  var arr = sms.split(".");
+  var arr = sms.split('.');
   let secs = arr[0];
   let mins = Math.floor(secs / 60);
   secs = Math.floor(secs % 60);
-  secs = (secs >= 10) ? secs : "0" + secs;
-  let mils = "000";
+  secs = secs >= 10 ? secs : '0' + secs;
+  let mils = '000';
   if (arr.length > 1) {
     mils = arr[1];
   }
-  return mins + ":" + secs + ":" + mils;
+  return mins + ':' + secs + ':' + mils;
 }
 
 /** Generate a list of random number from min to max */

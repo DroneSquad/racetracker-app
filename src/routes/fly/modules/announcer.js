@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import { sendVoice } from '../../../global/voice/modules/voice';
 
-let cacheTable = window.__announcer_cacheTable = {}; // cache table prevent multiple laps from being called out
+let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 
 /** Make the speech of the announcer sound normal */
 function humanSpeech(millis) {
@@ -19,7 +19,8 @@ export function announceLapsFromResponse(response) {
     console.log(cacheTable);
     if (!(key in heatTable)) {
       heatTable[key] = true;
-      if (!store.race.laps && false) { // todo check if current lap is the fastest lap
+      if (!store.race.laps && false) {
+        // todo check if current lap is the fastest lap
         dispatch(sendVoice('New Fastest Lap'));
       }
       dispatch(announceLap(response.racer, response.lapTime));
