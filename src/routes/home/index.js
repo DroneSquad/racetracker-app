@@ -16,16 +16,15 @@ import { connect } from '../../store';
 /** This component is used to test things in the app */
 @connect()
 export default class Home extends React.Component {
-
   componentWillMount() {
-    let interval = 1
+    let interval = 1;
     if (this.props.raceQueryInterval) {
-      interval = this.props.raceQueryInterval
+      interval = this.props.raceQueryInterval;
     }
     this.setState({ interval: interval });
   }
 
-  state = {}
+  state = {};
 
   static mapStateToProps = states => ({
     token: states.auth.token,
@@ -35,10 +34,19 @@ export default class Home extends React.Component {
   static mapDispatchToProps = dispatch => ({
     onHome: () => dispatch(push('/')),
     onLogout: token => dispatch(logoutRequest(token)),
-    onVoiceSend: () => dispatch(sendVoice('hello world')),
+    onVoiceSend: value => dispatch(sendVoice(value)),
     onTracker: () => dispatch(push('/tracker')),
-    onFakeLap: () => dispatch(announceLapsFromResponse({ racer: Number(1), lap: Number(1), lapTime: moment().format('mm:ss.SS'), totalTime: '12345', heat: { id: uuid.v4() } })),
-    setInterval: value => dispatch(setQueryInterval(value)),
+    onFakeLap: () =>
+      dispatch(
+        announceLapsFromResponse({
+          racer: Number(1),
+          lap: Number(1),
+          lapTime: moment().format('mm:ss.SS'),
+          totalTime: '12345',
+          heat: { id: uuid.v4() }
+        })
+      ),
+    setInterval: value => dispatch(setQueryInterval(value))
   });
 
   handleChange = (event, value) => {
@@ -59,9 +67,27 @@ export default class Home extends React.Component {
         />
         <List>
           <ListItem onTouchTap={this.props.onTracker}>TBS RaceTracker</ListItem>
-          <ListItem onTouchTap={this.props.onVoiceSend}>Send Voice</ListItem>
+          <ListItem
+            onTouchTap={() => this.props.onVoiceSend(this._tts.input.value)}
+            rightIconButton={
+              <TextField className="right" type="text" defaultValue="Hello World" ref={ref => (this._tts = ref)} />
+            }
+          >
+            Send Voice
+          </ListItem>
           <ListItem onTouchTap={this.props.onFakeLap}>Fake Lap</ListItem>
-          <ListItem rightIconButton={<TextField className="right" type="number" defaultValue={this.state.interval} onChange={this.handleChange} />}> Interval Value:</ListItem>
+          <ListItem
+            rightIconButton={
+              <TextField
+                className="right"
+                type="number"
+                defaultValue={this.state.interval}
+                onChange={this.handleChange}
+              />
+            }
+          >
+            {' '}Interval Value:
+          </ListItem>
         </List>
       </div>
     );

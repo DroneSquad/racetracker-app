@@ -4,8 +4,15 @@ import { sendVoice } from '../../../global/voice/modules/voice';
 
 let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 
-/** Make the speech of the announcer sound normal */
+/** Split the mills into an array of mins, seconds, mills */
+function splitMillsToArray(ms) {
+  return [Math.floor(ms / 60000), Math.floor(ms / 1000), Math.floor(ms % 1000) * 0.001];
+}
+
+/** Make the speech of the announcer sound normal, though with out a proper text to speech engine this will */
 function humanSpeech(millis) {
+  let [mins, seconds, ms] = splitMillsToArray(millis);
+  console.log(mins, seconds, ms);
   // todo fancy announcer stuff
   return moment().startOf('day').add(millis, 'ms').format('mm:ss.SS');
 }
