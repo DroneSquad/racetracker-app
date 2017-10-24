@@ -19,15 +19,13 @@ export class RaceMngr {
     let rUid = uuid.v4(); // race uid
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
-    let laps = request[0].racerChannels.map(slot =>
-      ({
-        racer: slot.racer,
-        lap: 1,
-        lapTime: 0,
-        totalTime: 0,
-        heat: hUid
-      })
-    );
+    let laps = request[0].racerChannels.map(slot => ({
+      racer: slot.racer,
+      lap: 1,
+      lapTime: 0,
+      totalTime: 0,
+      heat: hUid
+    }));
     // create the first heat for the race
     let heat = {
       id: hUid,
@@ -56,15 +54,13 @@ export class RaceMngr {
   createHeat(cb, request) {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
-    let laps = request.racerChannels.map(slot =>
-      ({
-        racer: slot.racer,
-        lap: 1,
-        lapTime: 0,
-        totalTime: 0,
-        heat: hUid
-      })
-    )
+    let laps = request.racerChannels.map(slot => ({
+      racer: slot.racer,
+      lap: 1,
+      lapTime: 0,
+      totalTime: 0,
+      heat: hUid
+    }));
     // create the first heat for the race
     let heat = {
       id: hUid,
@@ -88,7 +84,7 @@ export class RaceMngr {
   }
 
   updateLaps(cb, request) {
-    tbs.readRaceUpdate(cb, request);// => {
+    tbs.readRaceUpdate(cb, request); // => {
   }
 
   /** Get the total number of rounds by a a selected racer */
@@ -118,8 +114,6 @@ export class RaceMngr {
       }, request);
     };
   };*/
-
-
 }
 
 export default RaceMngr.get();

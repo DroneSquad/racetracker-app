@@ -87,7 +87,7 @@ export const updateLaps = (request: object) => {
     raceMngr.updateLaps(response => {
       if (!response.error) {
         dispatch(setLap(response));
-        dispatch(announceLapsFromResponse(response))
+        dispatch(announceLapsFromResponse(response));
       }
     }, request);
   };
@@ -108,10 +108,10 @@ export default function(state = {}, action: Action) {
         raceMode: action.payload.raceMode
       };
     case SET_QUERY_INTERVAL:
-        return {
-          ...state,
-          queryInterval: action.payload
-        };
+      return {
+        ...state,
+        queryInterval: action.payload
+      };
     case NEW_HEAT:
       return {
         ...state,
@@ -122,27 +122,41 @@ export default function(state = {}, action: Action) {
     case SET_LAP:
       return {
         ...state,
-        laps: _.unionWith(state.laps, [action.payload], (left, right) => left.heat === right.heat && left.racer === right.racer && left.lap === right.lap)
+        laps: _.unionWith(
+          state.laps,
+          [action.payload],
+          (left, right) => left.heat === right.heat && left.racer === right.racer && left.lap === right.lap
+        )
       };
     case START_HEAT:
       return {
         ...state,
-        heats: state.heats.map(heat => heat.id === action.payload.heatId ? {
-          ...heat,
-          isPending:false,
-          isComplete:false,
-          isActive:true
-         } : heat)
+        heats: state.heats.map(
+          heat =>
+            heat.id === action.payload.heatId
+              ? {
+                  ...heat,
+                  isPending: false,
+                  isComplete: false,
+                  isActive: true
+                }
+              : heat
+        )
       };
     case STOP_HEAT:
       return {
         ...state,
-        heats: state.heats.map(heat => heat.id === action.payload.heatId ? {
-          ...heat,
-          isPending:false,
-          isActive:false,
-          isComplete:true
-         } : heat)
+        heats: state.heats.map(
+          heat =>
+            heat.id === action.payload.heatId
+              ? {
+                  ...heat,
+                  isPending: false,
+                  isActive: false,
+                  isComplete: true
+                }
+              : heat
+        )
       };
     default:
       return state;

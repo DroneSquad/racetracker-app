@@ -118,10 +118,10 @@ export class TbsRt {
           break;
         case 'startRaceShotgun':
         case 'startRaceFlyby':
-          response = response.substring(0, 5).toUpperCase() === 'READY' ? true : false
+          response = response.substring(0, 5).toUpperCase() === 'READY' ? true : false;
           break;
         case 'stopRace':
-          response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false
+          response = response.substring(0, 4).toUpperCase() === 'IDLE' ? true : false;
           break;
         default:
           break;
@@ -230,8 +230,8 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              console.log(response)  // numeric value 0
+            this.prepareResponse(cmdStr, result).then(
+              response => console.log(response) // numeric value 0
               // cb({ device_id: request.device_id, totalRounds: response })
             )
           )
@@ -247,8 +247,8 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              console.log(response)
+            this.prepareResponse(cmdStr, result).then(
+              response => console.log(response)
               // cb({ device_id: request.device_id, round: request.round, lapTime: response })
             )
           )
@@ -259,13 +259,20 @@ export class TbsRt {
 
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
-    this.readCommand(request.device_id).then(result =>
-      this.prepareResponse("getRaceUpdate", result).then(response => {
-        let arr = response.split(RE_RACEUPDATE)
-        cb({ racer: Number(arr[1]), lap: Number(arr[2]), lapTime: arr[3], totalTime: arr[4].match(RE_NUMBER)[0], heat: request.heat })
-      })
-    )
-    .catch(error => cb({ error: error }));
+    this.readCommand(request.device_id)
+      .then(result =>
+        this.prepareResponse('getRaceUpdate', result).then(response => {
+          let arr = response.split(RE_RACEUPDATE);
+          cb({
+            racer: Number(arr[1]),
+            lap: Number(arr[2]),
+            lapTime: arr[3],
+            totalTime: arr[4].match(RE_NUMBER)[0],
+            heat: request.heat
+          });
+        })
+      )
+      .catch(error => cb({ error: error }));
   }
 
   /** Get the maximum allowed number of rounds allowed */
@@ -329,7 +336,7 @@ export class TbsRt {
       .catch(error => cb(error));
   }
 
-  getRacerChannelPromise(request){
+  getRacerChannelPromise(request) {
     return new Promise((resolve, reject) => {
       let cmdStr = 'getRacerChannel';
       let slot = this._config.slots[request.racer]; // get the handle of the racer slot
@@ -370,10 +377,10 @@ export class TbsRt {
 
   /** Write all channels to racetracker */
   writeRacerChannels(cb, request) {
-    var racerPromises = []
+    var racerPromises = [];
     for (let channel of request.channels) {
       if (channel.channel && channel.channel.toUpperCase() !== 'FF') {
-        racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }))
+        racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }));
       }
     }
     Promise.all(racerPromises)
@@ -486,7 +493,9 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.device_id).then(
           this.readCommand(request.device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: request.device_id, heatId: request.heatId, heatStopped: response }))
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({ device_id: request.device_id, heatId: request.heatId, heatStopped: response })
+            )
           )
         )
       )
@@ -495,24 +504,23 @@ export class TbsRt {
 
   /* Start a race heat according to start style, device id, and heat id */
   startHeat(cb, request) {
-    let vrxStr = 'activateVrx'  // enables the vrx for race tracking
-    let cmdStr = ((request.raceMode === 'shotgun') ? 'startRaceShotgun' : 'startRaceFlyby');  // race start type
+    let vrxStr = 'activateVrx'; // enables the vrx for race tracking
+    let cmdStr = request.raceMode === 'shotgun' ? 'startRaceShotgun' : 'startRaceFlyby'; // race start type
     this.prepareCommand(vrxStr, request)
       .then(vrx =>
         this.writeCommand(vrx, request.device_id).then(
-          this.prepareCommand(cmdStr, request)
-            .then(cmd =>
-              this.writeCommand(cmd, request.device_id).then(
-                this.readCommand(request.device_id).then(result =>
-                  this.prepareResponse(cmdStr, result).then(response =>
-                    cb({ device_id: request.device_id, heatId: request.heatId, heatStarted: response })
-                  )
+          this.prepareCommand(cmdStr, request).then(cmd =>
+            this.writeCommand(cmd, request.device_id).then(
+              this.readCommand(request.device_id).then(result =>
+                this.prepareResponse(cmdStr, result).then(response =>
+                  cb({ device_id: request.device_id, heatId: request.heatId, heatStarted: response })
                 )
               )
             )
           )
         )
-        .catch(error => cb({ error: error }));
+      )
+      .catch(error => cb({ error: error }));
   }
 
   /** Perform a gate calibration for a RaceTracker by device id */

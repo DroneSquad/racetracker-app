@@ -33,14 +33,19 @@ export default class Racing extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.isRaceActive) {
       if (this.props.connectedTrackers[0].raceMode !== nextProps.connectedTrackers[0].raceMode) {
-        console.log("UPDATE_RACEMODE");
-        this.updateRaceMode({ raceId: this.props.activeRaceId, raceMode: this.props.nextProps.connectedTrackers[0].raceMode });
+        console.log('UPDATE_RACEMODE');
+        this.updateRaceMode({
+          raceId: this.props.activeRaceId,
+          raceMode: this.props.nextProps.connectedTrackers[0].raceMode
+        });
       }
     }
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
         if (this.props.connectedTrackers[0].racerChannels) {
-          if (this.props.connectedTrackers[0].racerChannels.length !== nextProps.connectedTrackers[0].racerChannels.length) {
+          if (
+            this.props.connectedTrackers[0].racerChannels.length !== nextProps.connectedTrackers[0].racerChannels.length
+          ) {
             if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
               if (!this.props.isRaceActive) {
                 this.createRace(nextProps.connectedTrackers[0]);
@@ -65,9 +70,7 @@ export default class Racing extends Component {
     let { activeHeatId } = this.props;
     return (
       <List className="heat-list">
-        <ListItem key={activeHeatId} className="small-screen" disabled primaryText={
-          <Heat id={activeHeatId} />
-        } />
+        <ListItem key={activeHeatId} className="small-screen" disabled primaryText={<Heat id={activeHeatId} />} />
       </List>
     );
   };

@@ -61,9 +61,8 @@ export default class Home extends React.Component {
           <ListItem onTouchTap={this.props.onTracker}>TBS RaceTracker</ListItem>
           <ListItem onTouchTap={this.props.onVoiceSend}>Send Voice</ListItem>
           <ListItem onTouchTap={this.props.onFakeLap}>Fake Lap</ListItem>
+          <ListItem rightIconButton={<TextField className="right" type="number" defaultValue={this.state.interval} onChange={this.handleChange} />}> Interval Value:</ListItem>
         </List>
-        Interval Value:
-        <TextField className="right" type="number" defaultValue={this.state.interval} onChange={this.handleChange} />
       </div>
     );
   }
