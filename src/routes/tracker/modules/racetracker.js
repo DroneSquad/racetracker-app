@@ -30,10 +30,6 @@ export const RT_RACER_CHANS = 'RT_RACER_CHANS';
 export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 export const RT_CALIBRATING = 'RT_CALIBRATING';
 
-// TODO: create reducer with race/heat structure and attach these two
-// export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
-// export const RT_LAPTIME = 'RT_LAPTIME';
-
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
   type: RT_DISCOVER,
@@ -149,16 +145,6 @@ export const setRacerChannel = (request: Object) => ({
   type: RT_RACER_CHAN,
   payload: request
 });
-
-/*export const setTotalRounds = (request: Object) => ({
-  type: RT_TOTAL_ROUNDS,
-  payload: request
-});*/
-
-/*export const setLaptime = (request: Object) => ({
-  type: RT_LAPTIME,
-  payload: request
-});*/
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
@@ -358,34 +344,6 @@ export const readRssiAdc = (device_id: string) => {
     }, device_id);
   };
 };
-
-/** Get the total number of rounds by a a selected racer */
-/*export const readTotalRounds = (request: object) => {
-  return dispatch => {
-    tbs.readTotalRounds(response => {
-      if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
-        dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
-      } else {
-        dispatch(setTotalRounds(response)); // update the redux value
-      }
-    }, request);
-  };
-};*/
-
-/** Get the laptime of a specific round of a chosen racer */
-/*export const readLapTime = (request: object) => {
-  return dispatch => {
-    tbs.readLapTime(response => {
-      if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
-        dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
-      } else {
-        dispatch(setLaptime(response)); // update the redux value
-      }
-    }, request);
-  };
-};*/
 
 /** Get the maximum number of allowed rounds for a ractracker */
 export const readMaxRounds = (device_id: string) => {
