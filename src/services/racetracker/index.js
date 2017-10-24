@@ -167,6 +167,7 @@ export class TbsRt {
   readCommandAtInterval(device_id, interval, complete) {
     return new Promise((resolve, reject) => {
       let intId = setInterval(() => {
+        console.log("INTERVAL");
         window.ble.read(
           device_id,
           this._config.racetracker_service,
@@ -174,11 +175,15 @@ export class TbsRt {
           data => {
             data = this.bytesToStr(data);
             if (complete(data)) {
+              console.log("COMPLETE");
               clearInterval(intId);
               resolve();
             }
           },
-          error => reject(error)
+          error => {
+            clearInterval(intId);  // kill the interval loop
+            reject(error)
+          }
         );
       }, interval);
     });
@@ -518,13 +523,14 @@ export class TbsRt {
   /** Perform a gate calibration for a RaceTracker by device id */
   calibrateGate(cb, device_id) {
     let cmdStr = 'calibrateGate';
-    this.prepareCommand(cmdStr, device_id)
-      .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(this.readGateAdc(cb, device_id))
+    this.prepareCommand(cmdStr, device_id).then(cmd =>
+      this.writeCommand(cmd, device_id).then(
+        this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(() =>
+          this.readGateAdc(cb, device_id)
         )
       )
-      .catch(error => cb({ error: error }));
+    )
+    .catch(error => cb({ error: error }));
   }
 
   /** validation function to determine when the calibration process has completed */

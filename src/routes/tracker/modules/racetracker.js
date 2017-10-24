@@ -53,6 +53,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     wasConnected: false,
     isConnecting: false,
     isReconnecting: false,
+    isCalibrating: false,
     recover: ATTEMPT_RECOVERY,
     reconnects: RECOVERY_ATTEMPTS
   }
@@ -441,9 +442,12 @@ export const calibrateGate = (device_id: string) => {
   return dispatch => {
     tbs.calibrateGate(response => {
       if (response.error) {
+        console.log("ERROR");
         console.log(response.error); // TODO: log the error properly to device
         dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
+        console.log("SUCCESS");
+        console.log(response);
         dispatch(setGateAdc(response)); // update the redux value
       }
     }, device_id);
@@ -603,6 +607,7 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_GATE_ADC:
+      console.log("RT_GATE_ADC")
       return state.map(
         tracker =>
           tracker.id === action.payload.device_id
