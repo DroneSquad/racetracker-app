@@ -41,7 +41,7 @@ export default class Home extends React.Component {
         announceLapsFromResponse({
           racer: Number(1),
           lap: Number(1),
-          lapTime: moment().format('mm:ss.SS'),
+          lapTime: '654535',
           totalTime: '12345',
           heat: { id: uuid.v4() }
         })
@@ -49,6 +49,16 @@ export default class Home extends React.Component {
     setInterval: value => dispatch(setQueryInterval(value))
   });
 
+  /** Listen for the return key and trigger the announcer*/
+  onKeyPressVoiceText = event => {
+    if (event.charCode === 13) { // Return key
+      event.preventDefault();
+      event.stopPropagation();
+      this.props.onVoiceSend(this._tts.input.value);
+    }
+  };
+
+  /** Handle the change for the interval setting */
   handleChange = (event, value) => {
     if (value) {
       this.props.setInterval(value);
@@ -70,7 +80,7 @@ export default class Home extends React.Component {
           <ListItem
             onTouchTap={() => this.props.onVoiceSend(this._tts.input.value)}
             rightIconButton={
-              <TextField className="right" type="text" defaultValue="Hello World" ref={ref => (this._tts = ref)} />
+              <TextField className="right" type="text" defaultValue="Hello World" ref={ref => (this._tts = ref)} onKeyPress={this.onKeyPressVoiceText} />
             }
           >
             Send Voice
