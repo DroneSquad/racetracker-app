@@ -297,7 +297,7 @@ export const writeRacerChannels = (request: object, callback) => {
         dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
-        callback(dispatch, getStore);
+        callback && callback(dispatch, getStore);
       }
     }, request);
   };
