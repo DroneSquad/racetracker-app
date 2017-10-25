@@ -76,7 +76,7 @@ export default class Racing extends Component {
   };
 
   handleListClick = (event: RaceTracker) => {
-    this.props.createRace(event);
+    this.props.createRace([event]);
   };
 
   render() {

@@ -86,10 +86,10 @@ export const setCalibrating = (request: Object) => ({
   payload: request
 });
 
-export const refreshTrackerList = () => ({
+/*export const refreshTrackerList = () => ({
   type: RT_REFRESH_LIST,
   payload: null
-});
+});*/
 
 export const setBatteryLevel = (request: Object) => ({
   type: RT_BATTERY_LEVEL,
@@ -609,8 +609,8 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    case RT_REFRESH_LIST:
-      return state.filter(tracker => tracker.isConnected);
+    /*case RT_REFRESH_LIST:
+      return state.filter(tracker => tracker.isConnected);*/
     default:
       return state;
   }
