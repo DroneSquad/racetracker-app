@@ -20,14 +20,14 @@ export default class extends ErrorPopup {
   }
 
   /** The error handler to view errors with out the console.log */
-  onErrorHandler = (error) => {
+  onErrorHandler = (error, forced) => {
     if (!error) {
       console.log('Caught an error with no value!');
       return;
     }
     // console.error(error);
     // console.log(JSON.stringify(error));
-    if (window.developer === true) { // only developers can see this currently
+    if (window.developer === true || forced) { // only developers can see this currently
       this.setState({
         opened: true,
         title: String(error.message),

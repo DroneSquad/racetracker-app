@@ -31,12 +31,11 @@ export const saveFrequencies = (deviceId, channels) => {
       writeRacerChannels({
         device_id: deviceId,
         channels: _.map(channels, (channel, index) => ({ racer: index + 1, channel: channel }))
+      }, dispatch => {  // when done it will call RT_RACER_CHANS and this callback
+        dispatch({ type: FREQ_SAVING_DONE });
+        dispatch(goBack());
       })
-    ); // when done it will call RT_RACER_CHANS
-    setTimeout(() => {
-      dispatch({ type: FREQ_SAVING_DONE });
-      dispatch(goBack());
-    }, 1500); // need a proper response
+    );
   };
 };
 
@@ -49,6 +48,8 @@ export default function(state = {}, action) {
       return { ...state, saving: true };
     case FREQ_SAVING_DONE:
       return { ...state, saving: false };
+    case RT_RACER_CHANS:
+      return { ...state, test: action.payload };
     default:
       return { ...state, loading: false };
   }

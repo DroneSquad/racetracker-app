@@ -352,14 +352,15 @@ export const writeRacerChannel = (request: object) => {
 
 /** Write an array or objects to the racetracker and update redux if successful */
 /*  request: { device_id: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
-export const writeRacerChannels = (request: object) => {
-  return dispatch => {
+export const writeRacerChannels = (request: object, callback) => {
+  return (dispatch, getStore) => {
     tbs.writeRacerChannels(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
         // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
+        callback(dispatch, getStore);
       }
     }, request);
   };
