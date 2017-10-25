@@ -16,6 +16,13 @@ export default class TrackerDevice extends Component {
     goToSettings: Function
   };
 
+  /** Attach the error handler */
+  componentDidMount() {
+    console.log("componentDidMount-validateDevice");
+    console.log(this.props.isBtScanning);
+    this.validateDevice();
+  }
+
   deviceProperties = (props: { name: string, rssi: string }) => {
     return (
       <div className="device">
@@ -30,10 +37,17 @@ export default class TrackerDevice extends Component {
     );
   };
 
+  /** Validate that the device exists on the internal bluetooth scan list */
+  validateDevice = () => {
+    this.props.validateTracker({ device_id: this.props.id, connected: this.props.isConnected });
+  }
+
   /** Connect to the tracker */
   // TODO: some sort of check, no need to connect if already connected
   // TODO: also need to handle on restarts when no scan exists (rehydration?)
   connectTracker = () => {
+    console.log("connectTracker");
+    console.log(this.props.isConnected);
     this.props.connect(this.props.id);
   };
 

@@ -11,8 +11,6 @@ import {
   stopDeviceScan
 } from '../modules/bluetooth';
 
-// import { refreshTrackerList } from '../modules/racetracker';
-
 import TrackerHome from '../components/TrackerHome';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -34,7 +32,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
   // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
-  // refreshTrackerList: () => dispatch(refreshTrackerList()),
   startBtDeviceScan: () => dispatch(startDeviceScan()),
   stopBtDeviceScan: () => dispatch(stopDeviceScan())
 });
