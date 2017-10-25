@@ -42,7 +42,6 @@ export const saveFrequencies = (deviceId, channels) => {
 
 /** reducers */
 export default function(state = {}, action) {
-  console.log(action);
   switch (action.type) {
     case FREQ_UPDATE_PROFILE:
       return { ...state, profile: action.payload };
