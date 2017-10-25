@@ -15,7 +15,7 @@ import './main.css';
 /** This is the main screen of the app, this will display the routes for the buttons */
 export default class Main extends Component {
   props: {
-    isDeviceConnected: boolean
+
   };
 
   /** On developer mode */

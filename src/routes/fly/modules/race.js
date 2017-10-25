@@ -13,6 +13,10 @@ export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 
+// TODO:
+// export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
+// export const RT_LAPTIME = 'RT_LAPTIME';
+
 /** actions */
 export const newRace = (request: object) => ({
   type: NEW_RACE,
@@ -48,6 +52,16 @@ export const setLap = (request: object) => ({
   type: SET_LAP,
   payload: request
 });
+
+/*export const setTotalRounds = (request: Object) => ({
+  type: RT_TOTAL_ROUNDS,
+  payload: request
+});*/
+
+/*export const setLaptime = (request: Object) => ({
+  type: RT_LAPTIME,
+  payload: request
+});*/
 
 export const createRace = (request: array) => {
   // TODO update this for multi tracker
@@ -92,6 +106,34 @@ export const updateLaps = (request: object) => {
     }, request);
   };
 };
+
+/** Get the total number of rounds by a a selected racer */
+/*export const readTotalRounds = (request: object) => {
+  return dispatch => {
+    tbs.readTotalRounds(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        // dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+      } else {
+        dispatch(setTotalRounds(response)); // update the redux value
+      }
+    }, request);
+  };
+};*/
+
+/** Get the laptime of a specific round of a chosen racer */
+/*export const readLapTime = (request: object) => {
+  return dispatch => {
+    tbs.readLapTime(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+        // dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+      } else {
+        dispatch(setLaptime(response)); // update the redux value
+      }
+    }, request);
+  };
+};*/
 
 /** reducers */
 export default function(state = {}, action: Action) {

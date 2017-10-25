@@ -20,18 +20,19 @@ export default class extends Component {
     checkIsBtEnabled: Function,
     startBtStateNotifications: Function,
     startBtDeviceScan: Function,
-    stopBtDeviceScan: Function,
-    refreshTrackerList: Function
+    stopBtDeviceScan: Function
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.isBtAvailable) {
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
-        // TODO: validate if this is ever actually fired on a rehydration, if not remove
-        console.log('componentWillMount:startDiscovery');
+        console.log('componentDidMount-startDiscovery');
         this.startDiscovery();
+      } else {
+        console.log('componentDidMount-validateConnectedTrackers');
+        // this.validateConnectedTrackers();
       }
     }
   }
@@ -40,14 +41,18 @@ export default class extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
-        // TODO: currently this is never stopped, find a good spot to halt notifications
+        // TODO: currently this is never stopped, when/where should we handle that
         this.props.startBtStateNotifications();
       }
     }
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
         if (this.props.trackers.length === 0) {
+          console.log('componentDidUpdate-startDiscovery');
           this.startDiscovery();
+        } else {
+          console.log('componentDidUpdate-validateConnectedTrackers');
+          // this.validateConnectedTrackers();
         }
       }
     }
@@ -58,9 +63,7 @@ export default class extends Component {
     if (!this.props.isBtEnabled) {
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
-      if (!this.props.isBtScanning) {
-        // prevent scanning if already running
-        this.props.refreshTrackerList(); // remove any unpaired devices from prev scan
+      if (!this.props.isBtScanning) {  // prevent scanning if already running
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }
     }

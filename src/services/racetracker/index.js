@@ -179,7 +179,7 @@ export class TbsRt {
             }
           },
           error => {
-            clearInterval(intId); // kill the interval loop
+            clearInterval(intId);
             reject(error);
           }
         );

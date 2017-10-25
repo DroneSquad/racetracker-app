@@ -10,7 +10,6 @@ import {
   startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
-import { refreshTrackerList } from '../modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 
@@ -33,7 +32,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
   // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
-  refreshTrackerList: () => dispatch(refreshTrackerList()),
   startBtDeviceScan: () => dispatch(startDeviceScan()),
   stopBtDeviceScan: () => dispatch(stopDeviceScan())
 });
