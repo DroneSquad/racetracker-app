@@ -221,6 +221,10 @@ export const isTrackerConnected = (device_id: string) => {
   };
 };
 
+export const validateTrackers = (request: array) => {
+
+}
+
 export const validateTracker = (request: object) => {
   return dispatch => {
     // we really dont care about the rssi value here, the command is being used
