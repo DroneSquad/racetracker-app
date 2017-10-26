@@ -271,18 +271,12 @@ export const validateTrackers = (request: array) => {
     }
     Promise.all(trackerPromises)
       .then(response => {
-        console.log("PROMISE-RESOLVED");
-        console.log(response);
         var sync = [];
         for (let r of response) {
-          console.log(r);
           var t = typeof r;
-          console.log(t);
           if (t === "function") {
-            console.log("DISPATH-FUNCTION")
             dispatch(r);
           } else {
-            console.log("ADD-TO-SYNC")
             sync.push(r);
           }
         }
