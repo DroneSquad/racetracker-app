@@ -149,6 +149,7 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
+  console.log("DISPATCH-CONNECT-TRACKER")
   return dispatch => {
     dispatch(setConnecting(device_id));
     ble.connectDevice(response => {
@@ -170,83 +171,87 @@ export const stopScanForDevice = (device_id: string) => {
     ble.stopDeviceScan(response => {
       if (response.error) {
         console.log("stopScanForDevice-ERROR");
-        console.log(response);
         dispatch(isTrackerConnected(device_id));
-        // dispatch(isTrackerConnected(request.device_id));
-        // dispatch(setError(response.error));
       } else {
         console.log("stopScanForDevice-SUCCESS")
-        console.log(response);
-        // fired on device scan stop manually (no timeout)
-        // dispatch(setIsScanning(false));
       }
     });
   };
 };
 
 export const scanForDevice = (request: object) => {
-  console.log("scanForDevice");
-  console.log(request);
+  console.log("DISPATCH-SCAN-FOR-DEVICE")
+  console.log(request)
   return dispatch => {
     ble.startDeviceScan(response => {
-      if (response.error) {
-        console.log("ERROR on scanForDevice");
+      if (response.device) {
+        console.log("DEVICE FOUND")
         console.log(response);
-      } else if (response.device) {
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
-            console.log("TRACKER FOUND");
             if (response.device.id === request.device_id) {
               console.log("TRACKER MATCH");
-              console.log(response.device.id);
-              console.log(request.device_id);
-              dispatch(stopScanForDevice(request.device_id))
+              console.log(request);
+              // dispatch(stopScanForDevice(request.device_id))
               if (request.connected) {
                 // try and make that connection happen now
                 console.log("ATTEMPT RECONNECTION")
+                console.log()
                 dispatch(connectTracker(request.device_id))
               }
             }
           }
         }
       } else {
-        // device scan completed via timer, update the device connected state
         console.log("REMOVE TRACKER");
-        // console.log(response);
-        // console.log(request.device_id);
+        console.log(request);
         // dispatch(removeTracker(request.device_id));
       }
+
     });
+  };
+};
+
+export const isTrackerConnected = (device_id: string) => {
+  console.log("DISPATCH-IS-TRACKER-CONNECTED")
+  return dispatch => {
+    ble.isDeviceConnected(response => {
+      dispatch(updateConnected(response));
+    }, device_id);
   };
 };
 
 export const validateTracker = (request: object) => {
   return dispatch => {
-    console.log("validateTracker");
-    console.log(request);
+    // we really dont care about the rssi value here, the command is being used
+    // to determine the connection state of the tracker within the bluetooth library
     ble.readDeviceRssi(response => {
       if(response.error) {
-        console.log('BLE DOES NOT HAVE');
-        console.log(request.device_id);
-        dispatch(scanForDevice(request));
+        // error response indicates either the tracker is not connected, or not found with
+        // the bluetooth library determine the type of errort and handle accordingly
+        let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
+        if (err === 'CONNECTED') {
+          // indicates the tracker is available to the bluetooth library but not curently connected
+          console.log('BLE NOT CONNECTED');
+          console.log(request);
+          if (request.connected) {
+            console.log('ATTEMPT RECONNECTION')
+            dispatch(connectTracker(request.device_id))
+          }
+        } else if (err === 'FOUND') {
+          // indicates that the tracker is NOT currently available to the bluetooth library
+          console.log('BLE NOT AVAILABLE');
+          console.log(request);
+          dispatch(scanForDevice(request));
+        }
       } else {
-        console.log('BLE DOES HAVE');
-        console.log(request.device_id);
+        // a proper rssi response indicates that the tracker is 'connected'
+        // dispatch action verifies the connected state of redux matches
+        console.log('BLE CONNECTED');
+        console.log(request);
         dispatch(isTrackerConnected(request.device_id));
       }
     }, request.device_id);
-  };
-};
-
-export const isTrackerConnected = (device_id: string) => {
-  console.log("isTrackerConnected");
-  console.log(device_id);
-  return dispatch => {
-    ble.isDeviceConnected(response => {
-      console.log("updateConnectedState");
-      console.log(response);
-      dispatch(updateConnected(response));
-    }, device_id);
   };
 };
 
@@ -256,7 +261,6 @@ export const disconnectTracker = (device_id: string) => {
     ble.disconnectDevice(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setDisconnected(response.device_id));
       }
@@ -270,7 +274,6 @@ export const readActiveMode = (device_id: string) => {
     tbs.readActiveMode(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setActiveMode(response)); // update the redux value
       }
@@ -284,7 +287,6 @@ export const readRssiLevel = (device_id: string) => {
     ble.readDeviceRssi(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setRssiLevel(response));
       }
@@ -298,7 +300,6 @@ export const readFirmwareVersion = (device_id: string) => {
     tbs.readFirmwareVersion(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setFirmwareVersion(response));
       }
@@ -312,7 +313,6 @@ export const readBatteryLevel = (device_id: string) => {
     tbs.readBatteryLevel(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setBatteryLevel(response));
       }
@@ -327,7 +327,6 @@ export const readRacerChannel = (request: object) => {
     tbs.readRacerChannel(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannel(response)); // update the redux value
       }
@@ -342,7 +341,6 @@ export const writeRacerChannel = (request: object) => {
     tbs.writeRacerChannel(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannel(response)); // update the redux value
       }
@@ -357,7 +355,6 @@ export const writeRacerChannels = (request: object, callback) => {
     tbs.writeRacerChannels(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
         callback(dispatch, getStore);
@@ -373,7 +370,6 @@ export const readRacerChannels = (device_id: string) => {
     tbs.readRacerChannels(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
       }
@@ -387,7 +383,6 @@ export const writeGateAdc = (request: object) => {
     tbs.writeGateAdc(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response)); // verify/update connection state
       } else {
         dispatch(setGateAdc(response)); // update the redux value
       }
@@ -401,7 +396,6 @@ export const readGateAdc = (device_id: string) => {
     tbs.readGateAdc(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setGateAdc(response)); // update the redux value
       }
@@ -415,7 +409,6 @@ export const readRssiAdc = (device_id: string) => {
     tbs.readRssiAdc(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setRssiAdc(response)); // update the redux value
       }
@@ -429,7 +422,6 @@ export const readMaxRounds = (device_id: string) => {
     tbs.readMaxRounds(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setMaxRounds(response)); // update the redux value
       }
@@ -443,7 +435,6 @@ export const writeMaxRounds = (request: object) => {
     tbs.writeMaxRounds(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(response.device)); // verify/update connection state
       } else {
         dispatch(setMaxRounds(response)); // update the redux value
       }
@@ -457,7 +448,6 @@ export const readMinLapTime = (device_id: string) => {
     tbs.readMinLapTime(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(device_id)); // verify/update connection state
       } else {
         dispatch(setMinLapTime(response)); // update the redux value
       }
@@ -471,7 +461,6 @@ export const writeMinLapTime = (request: object) => {
     tbs.writeMinLapTime(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
       } else {
         dispatch(setMinLapTime(response)); // update the redux value
       }
@@ -689,8 +678,6 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    /*case RT_REFRESH_LIST:
-      return state.filter(tracker => tracker.isConnected);*/
     default:
       return state;
   }

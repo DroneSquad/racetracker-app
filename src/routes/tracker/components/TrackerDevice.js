@@ -12,15 +12,16 @@ export default class TrackerDevice extends Component {
     name: string,
     rssi: string,
     isConnected: boolean,
+    isBtScanning: boolean,
     connect: Function,
-    goToSettings: Function
+    goToSettings: Function,
+    validateTracker: Function
   };
 
-  /** Attach the error handler */
   componentDidMount() {
-    console.log("componentDidMount-validateDevice");
-    console.log(this.props.isBtScanning);
-    this.validateDevice();
+    if (!this.props.isBtScanning) {
+      this.validateDevice();
+    }
   }
 
   deviceProperties = (props: { name: string, rssi: string }) => {
@@ -39,6 +40,7 @@ export default class TrackerDevice extends Component {
 
   /** Validate that the device exists on the internal bluetooth scan list */
   validateDevice = () => {
+    console.log("FIRE-VALIDATE-TRACKER");
     this.props.validateTracker({ device_id: this.props.id, connected: this.props.isConnected });
   }
 
