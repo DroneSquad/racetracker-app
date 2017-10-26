@@ -28,13 +28,17 @@ export const saveFrequencies = (deviceId, channels) => {
   return dispatch => {
     dispatch({ type: FREQ_SAVING });
     dispatch(
-      writeRacerChannels({
-        device_id: deviceId,
-        channels: _.map(channels, (channel, index) => ({ racer: index + 1, channel: channel }))
-      }, dispatch => {  // when done it will call RT_RACER_CHANS and this callback
-        dispatch({ type: FREQ_SAVING_DONE });
-        dispatch(goBack());
-      })
+      writeRacerChannels(
+        {
+          device_id: deviceId,
+          channels: _.map(channels, (channel, index) => ({ racer: index + 1, channel: channel }))
+        },
+        dispatch => {
+          // when done it will call RT_RACER_CHANS and this callback
+          dispatch({ type: FREQ_SAVING_DONE });
+          dispatch(goBack());
+        }
+      )
     );
   };
 };

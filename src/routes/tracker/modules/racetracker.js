@@ -60,7 +60,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
 export const removeTracker = (id: string) => ({
   type: RT_REMOVE,
   payload: id
-})
+});
 
 export const setConnected = (tracker: RaceTracker) => ({
   type: RT_CONNECT,
@@ -177,48 +177,48 @@ export const stopTrackerSearch = () => {
 
 export const startTrackerSearch = (request: array) => {
   var matchArr = request.slice(0);
-  console.log("START-TRACKER-SEARCH")
-  console.log(matchArr)
   return dispatch => {
     ble.startDeviceScan(response => {
       if (response.device) {
-        console.log("DEVICE FOUND")
+        console.log('DEVICE FOUND');
         console.log(response);
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
-            console.log("TRACKER FOUND");
+            console.log('TRACKER FOUND');
             // determine if this tracker is in the current array of trackers
-            let idx = matchArr.map(function(e) { return e.device_id; }).indexOf(response.device.id);
-            console.log("INDEX-OF-DEVICE")
-            console.log(idx)
+            let idx = matchArr
+              .map(function(e) {
+                return e.device_id;
+              })
+              .indexOf(response.device.id);
+            console.log('INDEX-OF-DEVICE');
+            console.log(idx);
             if (idx !== -1) {
               if (matchArr[idx].connected) {
-                console.log("-- ATTEMPT RECONNECTION --")
-                var x = matchArr[idx].device_id;
-                console.log(x);
-                dispatch(connectTracker(x))
+                console.log('-- ATTEMPT RECONNECTION --');
+                var id = matchArr[idx].device_id;
+                dispatch(connectTracker(id));
               }
               // remove this tracker from our search array
-              console.log("REMOVE FROM ARRAY")
+              console.log('REMOVE FROM ARRAY');
               console.log(matchArr);
-	            matchArr.splice(idx, 1);
-              console.log("REMOVED FROM ARRAY")
+              matchArr.splice(idx, 1);
+              console.log('REMOVED FROM ARRAY');
               console.log(matchArr);
-              console.log(matchArr.length)
+              console.log(matchArr.length);
               if (matchArr.length === 0) {
-                console.log("ZERO MATCH");
                 dispatch(stopTrackerSearch());
               }
             }
           }
         }
       } else {
-        console.log("TIMED OUT SCAN")
+        console.log('TIMED OUT SCAN');
         if (matchArr.length > 0) {
-          console.log("REMOVE REMAINING TRACKERS");
+          console.log('REMOVE REMAINING TRACKERS');
           console.log(matchArr);
           for (let rt of matchArr) {
-            console.log("REMOVE THIS")
+            console.log('REMOVE THIS');
             console.log(rt);
             dispatch(removeTracker(rt.device_id));
           }
@@ -241,7 +241,7 @@ export const validateTrackerPromise = (request: object) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
     ble.readDeviceRssi(response => {
-      if(response.error) {
+      if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
         // the bluetooth library determine the type of errort and handle accordingly
         var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
@@ -259,7 +259,7 @@ export const validateTrackerPromise = (request: object) => {
         // dispatch action verifies the connected state of redux matches
         resolve(isTrackerConnected(request.device_id));
       }
-    }, request.device_id)
+    }, request.device_id);
   });
 };
 
@@ -274,22 +274,19 @@ export const validateTrackers = (request: array) => {
         var sync = [];
         for (let r of response) {
           var t = typeof r;
-          if (t === "function") {
+          if (t === 'function') {
             dispatch(r);
           } else {
             sync.push(r);
           }
         }
         if (sync.length > 0) {
-          dispatch(startTrackerSearch(sync))
+          dispatch(startTrackerSearch(sync));
         }
       })
-      .catch(error => {
-        // TODO: add proper error handling/logging
-        console.log(error)
-      })
-    }
-}
+      .catch(error => console.log(error)); // TODO: add proper error handling/logging
+  };
+};
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (device_id: string) => {

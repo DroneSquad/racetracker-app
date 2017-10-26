@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
   startBtDeviceScan: () => dispatch(startDeviceScan()),
   stopBtDeviceScan: () => dispatch(stopDeviceScan()),
-  validateTrackers: array => dispatch(validateTrackers(array)),
+  validateTrackers: array => dispatch(validateTrackers(array))
 });
 
 const TrackerHomeContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerHome);
