@@ -149,7 +149,6 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
-  console.log("CONNECT-TRACKER")
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
@@ -166,14 +165,11 @@ export const connectTracker = (device_id: string) => {
 };
 
 export const stopTrackerSearch = () => {
-  console.log("STOP-TRACKER-SEARCH")
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {
-        console.log("stopSearch-ERROR")
+        // TODO: do some proper error handling/logging
         console.log(response.error);
-      } else {
-        console.log("stopSearch-SUCCESS")
       }
     });
   };
@@ -233,7 +229,6 @@ export const startTrackerSearch = (request: array) => {
 };
 
 export const isTrackerConnected = (device_id: string) => {
-  console.log("DISPATCH-IS-TRACKER-CONNECTED")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -246,33 +241,22 @@ export const validateTrackerPromise = (request: object) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
     ble.readDeviceRssi(response => {
-      console.log("READ-DEVICE-RSSI")
-      console.log(request);
-      console.log(response);
       if(response.error) {
         // error response indicates either the tracker is not connected, or not found with
         // the bluetooth library determine the type of errort and handle accordingly
         var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
-          console.log('BLE NOT CONNECTED');
-          console.log(request);
           if (request.connected) {
-            console.log('ATTEMPT RECONNECTION')
             resolve(connectTracker(request.device_id));
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
-          console.log('BLE NOT AVAILABLE');
-          console.log(request);
-          resolve(request);
+          resolve(request); // return the object and populate the search array
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux matches
-        console.log('BLE CONNECTED');
-        console.log(request);
-        // TODO: realistically we likely dont need this call, it just adds unneeded calls * I THINK *
         resolve(isTrackerConnected(request.device_id));
       }
     }, request.device_id)
@@ -285,7 +269,6 @@ export const validateTrackers = (request: array) => {
     for (let rt of request) {
       trackerPromises.push(validateTrackerPromise({ device_id: rt.id, connected: rt.isConnected }));
     }
-    console.log("PROMISE-ALL-FIRING")
     Promise.all(trackerPromises)
       .then(response => {
         console.log("PROMISE-RESOLVED");
@@ -303,15 +286,12 @@ export const validateTrackers = (request: array) => {
             sync.push(r);
           }
         }
-        console.log("PRE-SYNC")
         if (sync.length > 0) {
-          console.log("PERFORM-SYNC");
-          console.log(sync);
           dispatch(startTrackerSearch(sync))
         }
       })
       .catch(error => {
-        console.log("PROMISE-ERROR");
+        // TODO: add proper error handling/logging
         console.log(error)
       })
     }
