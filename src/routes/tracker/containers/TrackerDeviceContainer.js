@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { connectTracker, validateTracker } from '../modules/racetracker';
+import { connectTracker, setConnecting, validateTracker } from '../modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 
@@ -19,6 +19,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
+  setConnecting: device_id => dispatch(setConnecting(device_id)),
   validateTracker: object => dispatch(validateTracker(object)),
   goToSettings: device_id => dispatch(push(`/tracker/${device_id}/settings`, device_id))
 });

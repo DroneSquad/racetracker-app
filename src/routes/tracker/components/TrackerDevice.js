@@ -20,7 +20,7 @@ export default class TrackerDevice extends Component {
 
   componentDidMount() {
     if (!this.props.isBtScanning) {
-      this.validateDevice();
+      this.validateTracker();
     }
   }
 
@@ -39,18 +39,18 @@ export default class TrackerDevice extends Component {
   };
 
   /** Validate that the device exists on the internal bluetooth scan list */
-  validateDevice = () => {
+  validateTracker = () => {
     console.log("FIRE-VALIDATE-TRACKER");
     this.props.validateTracker({ device_id: this.props.id, connected: this.props.isConnected });
   }
 
   /** Connect to the tracker */
-  // TODO: some sort of check, no need to connect if already connected
-  // TODO: also need to handle on restarts when no scan exists (rehydration?)
   connectTracker = () => {
-    console.log("connectTracker");
-    console.log(this.props.isConnected);
-    this.props.connect(this.props.id);
+    if (!this.props.isConnected) {
+      console.log("connectTracker");
+      this.props.setConnecting(this.props.id);
+      this.props.connect(this.props.id);
+    }
   };
 
   /** Go to the Tracker Settings page */

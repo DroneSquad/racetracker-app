@@ -151,7 +151,7 @@ export const setRacerChannel = (request: Object) => ({
 export const connectTracker = (device_id: string) => {
   console.log("DISPATCH-CONNECT-TRACKER")
   return dispatch => {
-    dispatch(setConnecting(device_id));
+    // dispatch(setConnecting(device_id)); (moved to external calls, to not fuck with in)
     ble.connectDevice(response => {
       if (response.connected) {
         // successful device connection, long running, on error fires below
@@ -192,7 +192,7 @@ export const scanForDevice = (request: object) => {
             if (response.device.id === request.device_id) {
               console.log("TRACKER MATCH");
               console.log(request);
-              // dispatch(stopScanForDevice(request.device_id))
+              dispatch(stopScanForDevice(request.device_id))
               if (request.connected) {
                 // try and make that connection happen now
                 console.log("ATTEMPT RECONNECTION")
@@ -205,6 +205,7 @@ export const scanForDevice = (request: object) => {
       } else {
         console.log("REMOVE TRACKER");
         console.log(request);
+        console.log(response);
         // dispatch(removeTracker(request.device_id));
       }
 
@@ -220,6 +221,26 @@ export const isTrackerConnected = (device_id: string) => {
     }, device_id);
   };
 };
+
+/*export const validateTracker = (request: object) => {
+  return dispatch => {
+    // we really dont care about the rssi value here, the command is being used
+    // to determine the connection state of the tracker within the bluetooth library
+    console.log("VALIDATE-TRACKER");
+    console.log(request);
+
+    ble.isDeviceConnected(response => {
+      console.log("IS-DEVICE-CONNECTED");
+      console.log(response);
+    },  request.device_id);
+
+    ble.readDeviceRssi(response => {
+      console.log("READ-DEVICE-RSSI");
+      console.log(response);
+    }, request.device_id);
+
+  };
+};*/
 
 export const validateTracker = (request: object) => {
   return dispatch => {
