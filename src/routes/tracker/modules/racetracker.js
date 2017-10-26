@@ -166,12 +166,11 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
-export const stopScanForDevice = (device_id: string) => {
+export const stopScanForDevices = () => {
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {
-        console.log("stopScanForDevice-ERROR");
-        dispatch(isTrackerConnected(device_id));
+        console.log(response.error);
       } else {
         console.log("stopScanForDevice-SUCCESS")
       }
@@ -179,7 +178,7 @@ export const stopScanForDevice = (device_id: string) => {
   };
 };
 
-export const scanForDevice = (request: object) => {
+export const scanForDevices = (request: array) => {
   console.log("DISPATCH-SCAN-FOR-DEVICE")
   console.log(request)
   return dispatch => {
@@ -189,25 +188,32 @@ export const scanForDevice = (request: object) => {
         console.log(response);
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
-            if (response.device.id === request.device_id) {
-              console.log("TRACKER MATCH");
-              console.log(request);
-              // dispatch(stopScanForDevice(request.device_id))
-              if (request.connected) {
-                // try and make that connection happen now
+            // determine if this tracker is in the current array of trackers
+            let idx = request.map(function(e) { return e.device_id; }).indexOf(response.device.id);
+            if (idx !== -1) {
+              if (request[idx].connected) {
                 console.log("ATTEMPT RECONNECTION")
-                console.log()
-                dispatch(connectTracker(request.device_id))
+                dispatch(connectTracker(request[idx].device_id))
+              }
+              // now remove this tracker from our search array
+	            request.splice(idx, 1);
+              if (request.length === 0) {
+                // no more trackers to search for stop the scan
+                dispatch(stopScanForDevices());
               }
             }
           }
         }
       } else {
-        console.log("REMOVE TRACKER");
-        console.log(request);
-        // dispatch(removeTracker(request.device_id));
+        console.log("TIMED OUT SCAN")
+        if (request.length > 0) {
+          console.log("REMOVE TRACKERS");
+          console.log(request);
+          for (let rt of request) {
+            dispatch(removeTracker(rt.device_id));
+          }
+        }
       }
-
     });
   };
 };
@@ -222,10 +228,49 @@ export const isTrackerConnected = (device_id: string) => {
 };
 
 export const validateTrackers = (request: array) => {
-
+  return dispatch => {
+    let sync = [];
+    for (let rt of request) {
+      // we really dont care about the rssi value here, the command is being used
+      // to determine the connection state of the tracker within the bluetooth library
+      ble.readDeviceRssi(response => {
+        if(response.error) {
+          // error response indicates either the tracker is not connected, or not found with
+          // the bluetooth library determine the type of errort and handle accordingly
+          let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
+          if (err === 'CONNECTED') {
+            // indicates the tracker is available to the bluetooth library but not curently connected
+            console.log('BLE NOT CONNECTED');
+            console.log(rt);
+            if (rt.isConnected) {
+              console.log('ATTEMPT RECONNECTION')
+              dispatch(connectTracker(rt.id))
+            }
+          } else if (err === 'FOUND') {
+            // indicates that the tracker is NOT currently available to the bluetooth library
+            console.log('BLE NOT AVAILABLE');
+            console.log(rt);
+            sync.push({ device_id: rt.id, connected: rt.isConnected} );
+            // dispatch(scanForDevice(request));
+          }
+        } else {
+          // a proper rssi response indicates that the tracker is 'connected'
+          // dispatch action verifies the connected state of redux matches
+          console.log('BLE CONNECTED');
+          console.log(rt);
+          dispatch(isTrackerConnected(rt.id));
+        }
+      }, rt.id);
+    };
+    console.log("LOOP COMPLETE");
+    if (sync.length > 0) {
+      console.log("perform sync");
+      dispatch(scanForDevices(sync))
+    }
+  }
 }
 
-export const validateTracker = (request: object) => {
+/*export const validateTracker = (request: object) => {
   return dispatch => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
@@ -257,7 +302,7 @@ export const validateTracker = (request: object) => {
       }
     }, request.device_id);
   };
-};
+};*/
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (device_id: string) => {
