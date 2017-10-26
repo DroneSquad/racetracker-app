@@ -221,27 +221,8 @@ export const isTrackerConnected = (device_id: string) => {
   };
 };
 
-/*export const validateTracker = (request: object) => {
-  return dispatch => {
-    // we really dont care about the rssi value here, the command is being used
-    // to determine the connection state of the tracker within the bluetooth library
-    console.log("VALIDATE-TRACKER");
-    console.log(request);
-
-    ble.isDeviceConnected(response => {
-      console.log("IS-DEVICE-CONNECTED");
-      console.log(response);
-    },  request.device_id);
-
-    ble.readDeviceRssi(response => {
-      console.log("READ-DEVICE-RSSI");
-      console.log(response);
-    }, request.device_id);
-
-  };
-};*/
-
 export const validateTracker = (request: object) => {
+
   return dispatch => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library

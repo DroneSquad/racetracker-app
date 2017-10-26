@@ -14,6 +14,7 @@ export default class TrackerDevice extends Component {
     isConnected: boolean,
     isBtScanning: boolean,
     connect: Function,
+    setConnecting: Function,
     goToSettings: Function,
     validateTracker: Function
   };
