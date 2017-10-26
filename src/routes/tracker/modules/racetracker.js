@@ -196,7 +196,6 @@ export const scanForDevice = (request: object) => {
               if (request.connected) {
                 // try and make that connection happen now
                 console.log("ATTEMPT RECONNECTION")
-                console.log()
                 dispatch(connectTracker(request.device_id))
               }
             }
