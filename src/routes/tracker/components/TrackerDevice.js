@@ -13,6 +13,7 @@ export default class TrackerDevice extends Component {
     rssi: string,
     isConnected: boolean,
     connect: Function,
+    setConnecting: Function,
     goToSettings: Function
   };
 
