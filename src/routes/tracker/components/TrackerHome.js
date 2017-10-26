@@ -28,11 +28,9 @@ export default class extends Component {
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
-        console.log("componentDidMount-startDiscovery")
         this.startDiscovery();
       } else {
         if (!this.props.isBtScanning) {
-          console.log('componentDidMount-validateTrackers');
           this.validateTrackers();
         }
       }
@@ -50,10 +48,8 @@ export default class extends Component {
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
         if (this.props.trackers.length === 0) {
-          console.log("componentDidUpdate-startDiscovery")
           this.startDiscovery();
         } else {
-          console.log('componentDidUpdate-validateTrackers');
           this.validateTrackers();
         }
       }
@@ -62,8 +58,7 @@ export default class extends Component {
 
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
-    // console.log("FIRE-VALIDATE-TRACKERS");
-    // this.props.validateTrackers(this.props.trackers);
+    this.props.validateTrackers(this.props.trackers);
   }
 
   /** Start racetracker discovery if possible */
@@ -72,7 +67,6 @@ export default class extends Component {
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
       if (!this.props.isBtScanning) {  // prevent scanning if already running
-        console.log("FIRE-START-DISCOVERY")
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }
     }
