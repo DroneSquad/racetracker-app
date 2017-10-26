@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { connectTracker, disconnectTracker, setDisconnected } from '../../../routes/tracker/modules/racetracker';
+import { connectTracker, setConnecting, disconnectTracker, setDisconnected } from '../../../routes/tracker/modules/racetracker';
 
 import RecoverySnackbar from '../components/RecoverySnackbar';
 
@@ -18,6 +18,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
+  setConnecting: device_id => dispatch(setConnecting(device_id)),
   disconnect: device_id => dispatch(disconnectTracker(device_id)),
   setDisconnected: device_id => dispatch(setDisconnected(device_id))
 });

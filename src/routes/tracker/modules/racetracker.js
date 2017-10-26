@@ -151,7 +151,7 @@ export const setRacerChannel = (request: Object) => ({
 export const connectTracker = (device_id: string) => {
   console.log("CONNECT-TRACKER")
   return dispatch => {
-    dispatch(setConnecting(device_id));
+    // dispatch(setConnecting(device_id));
     ble.connectDevice(response => {
       if (response.connected) {
         // successful device connection, long running, on error fires below

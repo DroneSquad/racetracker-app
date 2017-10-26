@@ -158,6 +158,7 @@ export default class RecoverySnackbar extends React.PureComponent {
     let { id, clicked, default_action, clicked_action } = this.state;
     if (clicked) {
       if (clicked_action === 'connect') {
+        this.props.isConnecting(id);
         this.props.connect(id);
       }
       if (clicked_action === 'disconnect') {
@@ -165,6 +166,7 @@ export default class RecoverySnackbar extends React.PureComponent {
       }
     } else {
       if (default_action === 'connect') {
+        this.props.isConnecting(id);
         this.props.connect(id);
       }
       if (default_action === 'disconnect') {
