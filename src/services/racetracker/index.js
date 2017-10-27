@@ -267,14 +267,27 @@ export class TbsRt {
     this.readCommand(request.device_id)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
-          let arr = response.split(RE_RACEUPDATE);
-          cb({
-            racer: Number(arr[1]),
-            lap: Number(arr[2]),
-            lapTime: arr[3],
-            totalTime: arr[4].match(RE_NUMBER)[0],
-            heat: request.heat
-          });
+          if (!response.startsWith("READY")) {
+            let arr = response.split(RE_RACEUPDATE);
+            // there are 2 different responses depending on a single racer or more
+            if (arr.length === 4){
+              cb({
+                racer: 1,
+                lap: Number(arr[1]),
+                lapTime: arr[2],
+                totalTime: arr[3].match(RE_NUMBER)[0],
+                heat: request.heat
+              });
+            } else {
+              cb({
+                racer: Number(arr[1]),
+                lap: Number(arr[2]),
+                lapTime: arr[3],
+                totalTime: arr[4].match(RE_NUMBER)[0],
+                heat: request.heat
+              });
+            }
+          }
         })
       )
       .catch(error => cb({ error: error }));
