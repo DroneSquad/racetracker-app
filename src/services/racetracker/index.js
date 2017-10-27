@@ -5,6 +5,8 @@
 // DEVICE_SERVICE = 0000180a-0000-1000-8000-00805f9b34fb (180a) @ handle: 0x0010
 // FIRMWARE_CHARACTERISTIC = 00002a26-0000-1000-8000-00805f9b34fb (2a26) @ handle 0x0018
 
+import _ from 'lodash';
+
 import config from './config.json';
 
 // regex expressions used to cleanup tracker responses
@@ -385,7 +387,7 @@ export class TbsRt {
       racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }));
     }
     Promise.all(racerPromises)
-      .then(response => cb({ device_id: request.device_id, channels: response }))
+      .then(response => cb({ device_id: request.device_id, channels: _.pull(response, null) }))
       .catch(error => cb(error));
   }
 

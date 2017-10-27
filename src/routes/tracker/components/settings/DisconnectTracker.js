@@ -19,6 +19,7 @@ export default class DisconnectTracker extends Setting {
 
   /** Disconnect the race tracker */
   disconnect = () => {
+    // should dispatch the push `this.props.goToTrackers()` after we get the command back
     this.props.disconnect(this.props.id);
   };
 
