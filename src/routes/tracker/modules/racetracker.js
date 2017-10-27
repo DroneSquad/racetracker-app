@@ -372,14 +372,20 @@ export const writeRacerChannel = (request: object) => {
 /*  request: { device_id: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
 export const writeRacerChannels = (request: object, callback) => {
   return (dispatch, getStore) => {
-    tbs.writeRacerChannels(response => {
-      if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
-      } else {
-        dispatch(setRacerChannels(response)); // update the redux value
-        callback && callback(dispatch, getStore);
-      }
-    }, request);
+    const promise = new Promise((success, fail) => {
+      tbs.writeRacerChannels(response => {
+        if (response.error) {
+          fail(response);
+        } else {
+          success(response);
+        }
+      }, request);
+    });
+
+    promise
+      .then(response => dispatch(setRacerChannels(response)))
+      .catch(response => console.error(response))
+      .then(() => callback && callback(promise, dispatch, getStore));
   };
 };
 

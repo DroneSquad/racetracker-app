@@ -28,14 +28,16 @@ export const updateProfile = profile => {
 
 /** Start saving the frequencies */
 export const saveFrequencies = (deviceId, channels) => {
-  let channelMapToDevice = _.map(channels, (channel, index) => ({ racer: index + 1, channel: channel }));
+  let defaults = ['FF', 'FF', 'FF', 'FF', 'FF', 'FF', 'FF', 'FF']; // Must have a fixed size of 8 to clear channels
+  _.forEach(channels, (channel, index) => defaults[index] = channel);
+  let channelMapToDevice = _.map(defaults, (channel, index) => ({ racer: index + 1, channel: channel }));
   return dispatch => {
     dispatch({ type: FREQ_SAVING });
     dispatch(
       writeRacerChannels({
         device_id: deviceId,
         channels: channelMapToDevice
-      }, dispatch => {  // when done it will call RT_RACER_CHANS and this callback
+      }, (promise, dispatch) => {  // when done it will call RT_RACER_CHANS and this callback
         dispatch({ type: FREQ_SAVING_DONE, payload: channelMapToDevice });
         dispatch(goBack());
       })

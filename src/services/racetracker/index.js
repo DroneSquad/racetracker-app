@@ -380,11 +380,9 @@ export class TbsRt {
 
   /** Write all channels to racetracker */
   writeRacerChannels(cb, request) {
-    var racerPromises = [];
+    let racerPromises = [];
     for (let channel of request.channels) {
-      if (channel.channel && channel.channel.toUpperCase() !== 'FF') {
-        racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }));
-      }
+      racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }));
     }
     Promise.all(racerPromises)
       .then(response => cb({ device_id: request.device_id, channels: response }))
