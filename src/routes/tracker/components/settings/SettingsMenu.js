@@ -5,7 +5,7 @@ import { AppBar, List, ListItem, Divider } from 'material-ui';
 
 import DeviceSettings from '../../containers/settings/DeviceSettingsContainer';
 import FlyoverSetting from '../../containers/settings/FlyoverSettingContainer';
-import DisconnectTracker from  '../../containers/settings/DisconnectTrackerContainer';
+import DisconnectTracker from '../../containers/settings/DisconnectTrackerContainer';
 import SensitivitySetting from '../../containers/settings/SensitivitySettingContainer';
 import TimeDelaySetting from '../../containers/settings/TimeDelaySettingContainer';
 

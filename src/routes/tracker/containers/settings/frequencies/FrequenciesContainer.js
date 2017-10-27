@@ -12,8 +12,7 @@ import { saveFrequencies, updateProfile, readFrequencies } from '../../../module
 const mapStateToProps = (state, props) => ({
   id: props.match.params.id || props.location.state, // passed in via react-router-redux push command,
   saving: state.frequencies.saving,
-  loading: state.frequencies.loading,
-  profile: state.frequencies.profile,
+  videoProfile: state.frequencies.profile,
   frequencies: state.frequencies.frequencies,
   profiles: state.frequencies.profiles,
   profilesMap: state.frequencies.profilesMap

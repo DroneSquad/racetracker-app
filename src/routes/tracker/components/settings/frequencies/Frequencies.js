@@ -13,32 +13,43 @@ export default class Frequencies extends React.Component {
 
   state = {
     amount: 0,
-    channel: 0,
+    channel: 0
   };
 
   componentWillMount() {
     this.props.readFrequencies(this.props.id);
-    this.saveProfile();
   }
 
-  saveProfile() {
-    console.log('dispatching profile');
-    //this.props.updateProfile(frequencies.profiles[this.state.data[this.state.amount + 1][this.state.channel]]);
+  saveProfile(amount, channel) {
+    let profile = this.props.frequencies.profiles[this.props.profilesMap[amount][channel]];
+    this.props.updateProfile(profile);
   }
 
   /** When the frequency amount changes */
   onFrequencyAmount = (event, value) => {
+    let channel = this.state.channel > this.props.profilesMap[value + 1].length - 1 ? 0 : this.state.channel;
     this.setState({
       amount: value,
-      channel: this.state.channel > this.props.profilesMap[value + 1].length - 1 ? 0 : this.state.channel
+      channel: channel
     });
-    this.saveProfile();
+    this.saveProfile(value + 1, channel);
   };
 
   /** When the frequency amount changes */
   onFrequencyChannel = (event, value) => {
     this.setState({ channel: value });
-    this.saveProfile();
+    this.saveProfile(this.state.amount + 1, value);
+  };
+
+  /** When the frequency amount changes */
+  onDeviceFrequencyChannel = (event, value, amount) => {
+    if (value > 0) {
+      this.setState({ amount: amount, channel: value - 1 });
+      this.saveProfile(amount + 1, value - 1);
+    } else {
+      this.props.updateProfile(); // clear profile to show loading
+      this.props.readFrequencies(this.props.id); // Re read from the device
+    }
   };
 
   /** When the user clicks on the frequency */
@@ -48,9 +59,21 @@ export default class Frequencies extends React.Component {
   };
 
   render() {
-    let { frequencies, profilesMap } = this.props;
-    let videoProfile = frequencies.profiles[profilesMap[this.state.amount + 1][this.state.channel]];
-    let videoFrequencies = _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1);
+    let { frequencies, profilesMap, videoProfile } = this.props;
+    let isDeviceProfile = videoProfile && videoProfile.name === 'Device';
+    let amount = this.state.amount; // the number of racers/pilots
+    let channel = this.state.channel; // the index for the channel name
+    let videoFrequencies;
+    if (videoProfile) {
+      videoFrequencies =
+        _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1) ||
+        videoProfile.frequencies[0];
+      amount = videoFrequencies.bands.length - 1;
+      if (isDeviceProfile) {
+        channel = -1;
+      }
+    }
+    let isLoading = !videoProfile || !videoFrequencies;
     return (
       <div className="main video-frequencies">
         <header>
@@ -58,29 +81,31 @@ export default class Frequencies extends React.Component {
             title="Video Frequencies"
             iconClassNameLeft="mdi mdi-close"
             onLeftIconButtonTouchTap={historyBackButton.bind(this)}
-            iconClassNameRight={this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check'}
-            onRightIconButtonTouchTap={() => this.props.onSave(this.props.id, videoFrequencies.bands)}
+            iconClassNameRight={!isLoading && (this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check')}
+            onRightIconButtonTouchTap={() =>
+              !isLoading && this.props.onSave(this.props.id, (videoFrequencies && videoFrequencies.bands) || [])}
           />
         </header>
         <main>
-          {!this.props.loading &&
-            <DropDownMenu disabled={this.props.saving} value={this.state.amount} onChange={this.onFrequencyAmount}>
+          {!isLoading &&
+            <DropDownMenu disabled={this.props.saving} value={amount} onChange={this.onFrequencyAmount}>
               {_.map(profilesMap, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
             </DropDownMenu>}
-          {!this.props.loading &&
-            <DropDownMenu disabled={this.props.saving} value={this.state.channel} onChange={this.onFrequencyChannel}>
-              {_.map(profilesMap[this.state.amount + 1], (value, index) =>
+          {!isLoading &&
+            <DropDownMenu disabled={this.props.saving} value={channel} onChange={isDeviceProfile ? (event, value) => this.onDeviceFrequencyChannel(event, value, amount) : this.onFrequencyChannel}>
+              {isDeviceProfile && <MenuItem key={-1} value={-1} primaryText={videoProfile.name} />}
+              {_.map(profilesMap[amount + 1], (value, index) =>
                 <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
               )}
             </DropDownMenu>}
-          {!this.props.loading &&
+          {!isLoading &&
+            videoFrequencies.imd >= 0 &&
             <p>
               Drone Squad quality rating: {toPercent(videoFrequencies.imd)} <br />
               Reduce frequencies to improve timing accuracy.
             </p>}
           <List>
-            {!this.props.loading &&
-              videoFrequencies &&
+            {!isLoading &&
               _.map(videoFrequencies.bands, (band, index) =>
                 <div key={++index}>
                   <ListItem
@@ -88,7 +113,7 @@ export default class Frequencies extends React.Component {
                     primaryText={'Frequency ' + index}
                     rightIcon={
                       <span style={{ width: '100%', textAlign: 'right' }}>
-                        {_.upperCase(band)} - {frequencies.bands[band]}
+                        {band.toUpperCase()} - {frequencies.bands[band.toLowerCase()] || '0000'}
                       </span>
                     }
                     onTouchTap={this.onFrequencyClick}
@@ -96,9 +121,9 @@ export default class Frequencies extends React.Component {
                   <Divider />
                 </div>
               )}
-            {this.props.loading &&
-              <ListItem>
-                <LoadingSpinner />
+            {isLoading &&
+              <ListItem disabled>
+                <LoadingSpinner size={30}/>
               </ListItem>}
           </List>
         </main>

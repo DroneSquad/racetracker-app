@@ -2,8 +2,8 @@
 import React from 'react';
 
 import { List, Subheader, ListItem } from 'material-ui';
-import loadingImg from '../../../media/ds-logo-spin.svg';
 
+import LoadingSpinner from '../../../global/app/LoadingSpinner';
 import TrackerDevice from '../containers/TrackerDeviceContainer';
 
 export default class TrackerList extends React.Component {
@@ -17,11 +17,9 @@ export default class TrackerList extends React.Component {
 
   render() {
     let spinner = (
-      <ListItem
-        className="center-text"
-        disabled
-        primaryText={<img src={loadingImg} className="scanning" alt="Loading..." />}
-      />
+      <ListItem disabled>
+        <LoadingSpinner />
+      </ListItem>
     );
     let trackers =
       this.props.trackers.length > 0

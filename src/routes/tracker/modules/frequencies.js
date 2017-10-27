@@ -29,25 +29,28 @@ export const updateProfile = profile => {
 /** Start saving the frequencies */
 export const saveFrequencies = (deviceId, channels) => {
   let defaults = ['FF', 'FF', 'FF', 'FF', 'FF', 'FF', 'FF', 'FF']; // Must have a fixed size of 8 to clear channels
-  _.forEach(channels, (channel, index) => defaults[index] = channel);
+  _.forEach(channels, (channel, index) => (defaults[index] = channel));
   let channelMapToDevice = _.map(defaults, (channel, index) => ({ racer: index + 1, channel: channel }));
   return dispatch => {
     dispatch({ type: FREQ_SAVING });
     dispatch(
-      writeRacerChannels({
-        device_id: deviceId,
-        channels: channelMapToDevice
-      }, (promise, dispatch) => {  // when done it will call RT_RACER_CHANS and this callback
-        dispatch({ type: FREQ_SAVING_DONE, payload: channelMapToDevice });
-        dispatch(goBack());
-      })
+      writeRacerChannels(
+        {
+          device_id: deviceId,
+          channels: channelMapToDevice
+        },
+        (promise, dispatch) => {
+          // when done it will call RT_RACER_CHANS and this callback
+          dispatch({ type: FREQ_SAVING_DONE, payload: channelMapToDevice });
+          dispatch(goBack());
+        }
+      )
     );
   };
 };
 
 /** reducers */
 export default function(state = {}, action) {
-  console.log(state);
   switch (action.type) {
     case FREQ_UPDATE_PROFILE:
       return { ...state, profile: action.payload };
@@ -56,7 +59,18 @@ export default function(state = {}, action) {
     case FREQ_SAVING_DONE:
       return { ...state, saving: false };
     case RT_RACER_CHANS:
-      return { ...state, test: action.payload };
+      return {
+        ...state,
+        profile: {
+          name: 'Device',
+          frequencies: [
+            {
+              imd: -1.0,
+              bands: _.map(action.payload.channels, channel => channel.channel.toLowerCase())
+            }
+          ]
+        }
+      };
     default:
       return {
         ...state,
@@ -80,7 +94,8 @@ export default function(state = {}, action) {
             }
           }
           return data;
-        })()
+        })(),
+        profile: null // null means loading
       };
   }
 }

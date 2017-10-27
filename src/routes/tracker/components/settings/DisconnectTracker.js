@@ -1,7 +1,7 @@
 import React from 'react';
 import Setting from './Setting';
 
-import { FlatButton} from 'material-ui';
+import { FlatButton } from 'material-ui';
 
 export default class DisconnectTracker extends Setting {
   props: {
@@ -13,7 +13,7 @@ export default class DisconnectTracker extends Setting {
   /** Watch the racetracker connection status */
   componentWillReceiveProps(nextProps) {
     if (!nextProps.isConnected) {
-      this.props.goToTrackers()
+      this.props.goToTrackers();
     }
   }
 
