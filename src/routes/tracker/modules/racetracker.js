@@ -358,7 +358,7 @@ export const writeRacerChannels = (request: object, callback) => {
         console.log(response.error); // TODO: log the error properly to device
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
-        callback(dispatch, getStore);
+        callback && callback(dispatch, getStore);
       }
     }, request);
   };

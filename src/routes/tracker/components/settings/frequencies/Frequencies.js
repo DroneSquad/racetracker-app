@@ -6,55 +6,31 @@ import LoadingSpinner from '../../../../../global/app/LoadingSpinner';
 
 import { historyBackButton, toPercent } from '../../../../../utils';
 
-import frequencies from '../../../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles
 import './frequencies.css';
 
 export default class Frequencies extends React.Component {
   static MAX_FREQUENCY_AMOUNT = 8;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      bands: frequencies.bands,
-      profiles: _.map(frequencies.profiles, profile => profile.name),
-      amount: 0,
-      channel: 0,
-      data: (() => {
-        // todp update with map reduce
-        let data = {};
-        for (let index in frequencies.profiles) {
-          let profile = frequencies.profiles[index];
-          for (let indexBands in profile.frequencies) {
-            let band = profile.frequencies[indexBands];
-            let bands = data[band.bands.length];
-            let i = Number(index);
-            if (bands) {
-              bands.push(i);
-            } else {
-              data[band.bands.length] = [i];
-            }
-          }
-        }
-        return data;
-      })()
-    };
-  }
+  state = {
+    amount: 0,
+    channel: 0,
+  };
 
   componentWillMount() {
-    //this.props.readFrequencies(this.props.id);
+    this.props.readFrequencies(this.props.id);
     this.saveProfile();
   }
 
   saveProfile() {
     console.log('dispatching profile');
-    this.props.updateProfile(frequencies.profiles[this.state.data[this.state.amount + 1][this.state.channel]]);
+    //this.props.updateProfile(frequencies.profiles[this.state.data[this.state.amount + 1][this.state.channel]]);
   }
 
   /** When the frequency amount changes */
   onFrequencyAmount = (event, value) => {
     this.setState({
       amount: value,
-      channel: this.state.channel > this.state.data[value + 1].length - 1 ? 0 : this.state.channel
+      channel: this.state.channel > this.props.profilesMap[value + 1].length - 1 ? 0 : this.state.channel
     });
     this.saveProfile();
   };
@@ -72,7 +48,8 @@ export default class Frequencies extends React.Component {
   };
 
   render() {
-    let videoProfile = frequencies.profiles[this.state.data[this.state.amount + 1][this.state.channel]];
+    let { frequencies, profilesMap } = this.props;
+    let videoProfile = frequencies.profiles[profilesMap[this.state.amount + 1][this.state.channel]];
     let videoFrequencies = _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1);
     return (
       <div className="main video-frequencies">
@@ -88,11 +65,11 @@ export default class Frequencies extends React.Component {
         <main>
           {!this.props.loading &&
             <DropDownMenu disabled={this.props.saving} value={this.state.amount} onChange={this.onFrequencyAmount}>
-              {_.map(this.state.data, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
+              {_.map(profilesMap, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
             </DropDownMenu>}
           {!this.props.loading &&
             <DropDownMenu disabled={this.props.saving} value={this.state.channel} onChange={this.onFrequencyChannel}>
-              {_.map(this.state.data[this.state.amount + 1], (value, index) =>
+              {_.map(profilesMap[this.state.amount + 1], (value, index) =>
                 <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
               )}
             </DropDownMenu>}
