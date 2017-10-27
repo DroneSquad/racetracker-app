@@ -15,7 +15,8 @@ const mapStateToProps = (state, props) => ({
   videoProfile: state.frequencies.profile,
   frequencies: state.frequencies.frequencies,
   profiles: state.frequencies.profiles,
-  profilesMap: state.frequencies.profilesMap
+  profilesMap: state.frequencies.profilesMap,
+  isDeviceProfile: state.frequencies.profile && state.frequencies.deviceProfile
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -53,20 +53,32 @@ export const saveFrequencies = (deviceId, channels) => {
 export default function(state = {}, action) {
   switch (action.type) {
     case FREQ_UPDATE_PROFILE:
-      return { ...state, profile: action.payload };
+      return { ...state, deviceProfile: false, profile: action.payload };
     case FREQ_SAVING:
       return { ...state, saving: true };
     case FREQ_SAVING_DONE:
       return { ...state, saving: false };
     case RT_RACER_CHANS:
+      let bands = _.map(action.payload.channels, channel => channel.channel.toLowerCase());
+      // will try and find the correct profile to use.
+      let knownProfile = _.find(frequencies.profiles, profile => {
+        for (let indexBands in profile.frequencies) {
+          let band = profile.frequencies[indexBands];
+          if (_.isEqual(bands, band.bands)) {
+            return true;
+          }
+        }
+        return false;
+      });
       return {
         ...state,
-        profile: {
+        deviceProfile: true,
+        profile: knownProfile || {
           name: 'Device',
           frequencies: [
             {
               imd: -1.0,
-              bands: _.map(action.payload.channels, channel => channel.channel.toLowerCase())
+              bands: bands
             }
           ]
         }
@@ -94,8 +106,7 @@ export default function(state = {}, action) {
             }
           }
           return data;
-        })(),
-        profile: null // null means loading
+        })()
       };
   }
 }

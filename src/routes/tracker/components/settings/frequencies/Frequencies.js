@@ -59,8 +59,7 @@ export default class Frequencies extends React.Component {
   };
 
   render() {
-    let { frequencies, profilesMap, videoProfile } = this.props;
-    let isDeviceProfile = videoProfile && videoProfile.name === 'Device';
+    let { frequencies, profilesMap, videoProfile, isDeviceProfile } = this.props;
     let amount = this.state.amount; // the number of racers/pilots
     let channel = this.state.channel; // the index for the channel name
     let videoFrequencies;
