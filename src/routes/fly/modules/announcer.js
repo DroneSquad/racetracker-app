@@ -13,25 +13,31 @@ function humanSpeech(millis) {
   let speech = '';
   let [mins, seconds, ms] = splitMillsToArray(millis);
 
-  if (ms > 100 && ms % 10 >= 5 ) { // round to the 10th position
+  if (ms > 100 && ms % 10 >= 5) {
+    // round to the 10th position
     ms = `${Math.floor(ms % 1000 / 100)}${Math.floor(ms % 100 / 10) + 1}`;
-  } else if (ms > 100 && ms % 10 < 5 ) {
+  } else if (ms > 100 && ms % 10 < 5) {
     ms = `${Math.floor(ms % 1000 / 100)}${Math.floor(ms % 100 / 10)}`;
   }
 
-  while (ms > 0 && ms % 10 === 0) { // Only show leading zeros
+  while (ms > 0 && ms % 10 === 0) {
+    // Only show leading zeros
     ms /= 10;
   }
 
-  if (mins > 0) { // show minutes is it has minutes
+  if (mins > 0) {
+    // show minutes is it has minutes
     speech += mins + ' minute(s), ';
   }
 
-  if (seconds > 0 && ms > 0) { // Show both seconds and millis
+  if (seconds > 0 && ms > 0) {
+    // Show both seconds and millis
     speech += seconds + '.' + ms + ' second(s)';
-  } else if (seconds > 0 && ms <= 0) { // Only show the seconds
+  } else if (seconds > 0 && ms <= 0) {
+    // Only show the seconds
     speech += seconds + ' second(s)';
-  } else { // Only show the point of a seconds
+  } else {
+    // Only show the point of a seconds
     speech += '.' + ms + ' second(s)';
   }
 

@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { connectTracker, setConnecting, validateTracker } from '../modules/racetracker';
+import { connectTracker, setConnecting } from '../modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 
@@ -13,14 +13,12 @@ import TrackerDevice from '../components/TrackerDevice';
 
 const mapStateToProps = (state, ownProps) => ({
   rssi: state.trackers.filter(t => t.id === ownProps.id)[0].rssi,
-  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected,
-  isBtScanning: state.bluetooth.isScanning,
+  isConnected: state.trackers.filter(t => t.id === ownProps.id)[0].isConnected
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: device_id => dispatch(connectTracker(device_id)),
   setConnecting: device_id => dispatch(setConnecting(device_id)),
-  validateTracker: object => dispatch(validateTracker(object)),
   goToSettings: device_id => dispatch(push(`/tracker/${device_id}/settings`, device_id))
 });
 

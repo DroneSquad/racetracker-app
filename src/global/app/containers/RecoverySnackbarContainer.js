@@ -1,7 +1,12 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { connectTracker, setConnecting, disconnectTracker, setDisconnected } from '../../../routes/tracker/modules/racetracker';
+import {
+  connectTracker,
+  setConnecting,
+  disconnectTracker,
+  setDisconnected
+} from '../../../routes/tracker/modules/racetracker';
 
 import RecoverySnackbar from '../components/RecoverySnackbar';
 

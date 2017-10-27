@@ -28,11 +28,12 @@ export default class extends Component {
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
-        console.log('TRACKERHOME-componentDidMount-startDiscovery');
         this.startDiscovery();
       } else {
-        // console.log('TRACKERHOME-componentDidMount-validateConnectedTrackers');
-        // this.validateConnectedTrackers();
+        if (!this.props.isBtScanning) {
+          console.log('componentDidMount-validateTrackers');
+          this.validateTrackers();
+        }
       }
     }
   }
@@ -48,23 +49,28 @@ export default class extends Component {
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
         if (this.props.trackers.length === 0) {
-          console.log('TRACKERHOME-componentDidUpdate-startDiscovery');
           this.startDiscovery();
         } else {
-          // console.log('TRACKERHOME-componentDidUpdate-validateConnectedTrackers');
-          // this.validateConnectedTrackers();
+          console.log('componentDidUpdate-validateTrackers');
+          this.validateTrackers();
         }
       }
     }
   }
+
+  /** Validate that the device exists on the internal bluetooth scan list */
+  validateTrackers = () => {
+    console.log('FIRE-VALIDATE-TRACKERS');
+    this.props.validateTrackers(this.props.trackers);
+  };
 
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtEnabled) {
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
-      if (!this.props.isBtScanning) {  // prevent scanning if already running
-        console.log("TRACKERHOME-STARTDISCOVERY")
+      if (!this.props.isBtScanning) {
+        // prevent scanning if already running
         this.props.startBtDeviceScan(); // begin bluetooth discovery scan
       }
     }

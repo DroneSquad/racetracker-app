@@ -9,6 +9,7 @@ export default class RecoverySnackbar extends React.PureComponent {
     connectingTrackers: Array<RaceTracker>,
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
+    setConnecting: Function,
     disconnect: Function, // disconnect a connected tracker
     setDisconnected: Function // update prop of already disconnected tracker
   };
@@ -116,7 +117,7 @@ export default class RecoverySnackbar extends React.PureComponent {
             // if it was connected and then failed
             message = tracker.name + ' connection lost';
           } else {
-            // if has never actually connected
+            // if it has never actually connected
             message = tracker.name + ' connection error';
           }
         } else {

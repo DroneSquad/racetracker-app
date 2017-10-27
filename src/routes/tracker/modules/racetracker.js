@@ -60,7 +60,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
 export const removeTracker = (id: string) => ({
   type: RT_REMOVE,
   payload: id
-})
+});
 
 export const setConnected = (tracker: RaceTracker) => ({
   type: RT_CONNECT,
@@ -149,9 +149,7 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (device_id: string) => {
-  console.log("DISPATCH-CONNECT-TRACKER")
   return dispatch => {
-    // dispatch(setConnecting(device_id)); (moved to external calls, to not fuck with in)
     ble.connectDevice(response => {
       if (response.connected) {
         // successful device connection, long running, on error fires below
@@ -166,54 +164,58 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
-export const stopScanForDevice = (device_id: string) => {
+export const stopTrackerSearch = () => {
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {
-        console.log("stopScanForDevice-ERROR");
-        dispatch(isTrackerConnected(device_id));
-      } else {
-        console.log("stopScanForDevice-SUCCESS")
+        // TODO: do some proper error handling/logging
+        console.log(response.error);
       }
     });
   };
 };
 
-export const scanForDevice = (request: object) => {
-  console.log("DISPATCH-SCAN-FOR-DEVICE")
-  console.log(request)
+export const startTrackerSearch = (request: array) => {
+  var matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
       if (response.device) {
-        console.log("DEVICE FOUND")
-        console.log(response);
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
-            if (response.device.id === request.device_id) {
-              console.log("TRACKER MATCH");
-              console.log(request);
-              dispatch(stopScanForDevice(request.device_id))
-              if (request.connected) {
-                // try and make that connection happen now
-                console.log("ATTEMPT RECONNECTION")
-                dispatch(connectTracker(request.device_id))
+            // determine if this tracker is in the current array of trackers
+            let idx = matchArr
+              .map(function(e) {
+                return e.device_id;
+              })
+              .indexOf(response.device.id);
+            if (idx !== -1) {
+              if (matchArr[idx].connected) {
+                var id = matchArr[idx].device_id;
+                dispatch(connectTracker(id));
+              }
+              // remove this tracker from our search array
+              matchArr.splice(idx, 1);
+              if (matchArr.length === 0) {
+                dispatch(stopTrackerSearch());
               }
             }
           }
         }
       } else {
-        console.log("REMOVE TRACKER");
-        console.log(request);
-        console.log(response);
-        // dispatch(removeTracker(request.device_id));
+        // if we made it here then the scan completed its full timer
+        // any trackers remaining in the array were not found, and should
+        // be removed from the redux store now
+        if (matchArr.length > 0) {
+          for (let rt of matchArr) {
+            dispatch(removeTracker(rt.device_id));
+          }
+        }
       }
-
     });
   };
 };
 
 export const isTrackerConnected = (device_id: string) => {
-  console.log("DISPATCH-IS-TRACKER-CONNECTED")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -221,38 +223,55 @@ export const isTrackerConnected = (device_id: string) => {
   };
 };
 
-export const validateTracker = (request: object) => {
-
-  return dispatch => {
+export const validateTrackerPromise = (request: object) => {
+  return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
     ble.readDeviceRssi(response => {
-      if(response.error) {
+      if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
         // the bluetooth library determine the type of errort and handle accordingly
-        let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
+        var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
-          console.log('BLE NOT CONNECTED');
-          console.log(request);
           if (request.connected) {
-            console.log('ATTEMPT RECONNECTION')
-            dispatch(connectTracker(request.device_id))
+            resolve(connectTracker(request.device_id));
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
-          console.log('BLE NOT AVAILABLE');
-          console.log(request);
-          dispatch(scanForDevice(request));
+          resolve(request); // return the object and populate the search array
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux matches
-        console.log('BLE CONNECTED');
-        console.log(request);
-        dispatch(isTrackerConnected(request.device_id));
+        resolve(isTrackerConnected(request.device_id));
       }
     }, request.device_id);
+  });
+};
+
+export const validateTrackers = (request: array) => {
+  return dispatch => {
+    var trackerPromises = [];
+    for (let rt of request) {
+      trackerPromises.push(validateTrackerPromise({ device_id: rt.id, connected: rt.isConnected }));
+    }
+    Promise.all(trackerPromises)
+      .then(response => {
+        var sync = [];
+        for (let r of response) {
+          var t = typeof r;
+          if (t === 'function') {
+            dispatch(r);
+          } else {
+            sync.push(r);
+          }
+        }
+        if (sync.length > 0) {
+          dispatch(startTrackerSearch(sync));
+        }
+      })
+      .catch(error => console.log(error)); // TODO: add proper error handling/logging
   };
 };
 
