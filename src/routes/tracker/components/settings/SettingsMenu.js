@@ -5,7 +5,7 @@ import { AppBar, List, ListItem, Divider } from 'material-ui';
 
 import DeviceSettings from '../../containers/settings/DeviceSettingsContainer';
 import FlyoverSetting from '../../containers/settings/FlyoverSettingContainer';
-
+import DisconnectTracker from  '../../containers/settings/DisconnectTrackerContainer';
 import SensitivitySetting from '../../containers/settings/SensitivitySettingContainer';
 import TimeDelaySetting from '../../containers/settings/TimeDelaySettingContainer';
 
@@ -36,6 +36,8 @@ export default class extends React.Component {
             <ListItem disabled primaryText={<SensitivitySetting id={this.props.id} />} />
             <Divider />
             <ListItem disabled primaryText={<TimeDelaySetting id={this.props.id} />} />
+            <Divider />
+            <ListItem disabled primaryText={<DisconnectTracker id={this.props.id} />} />
           </List>
         </main>
       </div>
