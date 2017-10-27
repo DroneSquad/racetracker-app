@@ -180,32 +180,21 @@ export const startTrackerSearch = (request: array) => {
   return dispatch => {
     ble.startDeviceScan(response => {
       if (response.device) {
-        console.log('DEVICE FOUND');
-        console.log(response);
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
-            console.log('TRACKER FOUND');
             // determine if this tracker is in the current array of trackers
             let idx = matchArr
               .map(function(e) {
                 return e.device_id;
               })
               .indexOf(response.device.id);
-            console.log('INDEX-OF-DEVICE');
-            console.log(idx);
             if (idx !== -1) {
               if (matchArr[idx].connected) {
-                console.log('-- ATTEMPT RECONNECTION --');
                 var id = matchArr[idx].device_id;
                 dispatch(connectTracker(id));
               }
               // remove this tracker from our search array
-              console.log('REMOVE FROM ARRAY');
-              console.log(matchArr);
               matchArr.splice(idx, 1);
-              console.log('REMOVED FROM ARRAY');
-              console.log(matchArr);
-              console.log(matchArr.length);
               if (matchArr.length === 0) {
                 dispatch(stopTrackerSearch());
               }
@@ -213,13 +202,11 @@ export const startTrackerSearch = (request: array) => {
           }
         }
       } else {
-        console.log('TIMED OUT SCAN');
+        // if we made it here then the scan completed its full timer
+        // any trackers remaining in the array were not found, and should
+        // be removed from the redux store now
         if (matchArr.length > 0) {
-          console.log('REMOVE REMAINING TRACKERS');
-          console.log(matchArr);
           for (let rt of matchArr) {
-            console.log('REMOVE THIS');
-            console.log(rt);
             dispatch(removeTracker(rt.device_id));
           }
         }
