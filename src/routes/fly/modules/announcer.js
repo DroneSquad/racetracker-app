@@ -48,9 +48,9 @@ function humanSpeech(millis) {
 export function announceLapsFromResponse(response) {
   return (dispatch, getStore) => {
     let store = getStore();
+    let activeHeat = store.race.activeHeat;
     let key = (0x1 << response.racer) * response.racer + response.lap;
-    let heatTable = cacheTable[response.heat.id] || (cacheTable[response.heat.id] = {});
-    console.log(cacheTable);
+    let heatTable = cacheTable[activeHeat] || (cacheTable[activeHeat] = {});
     if (!(key in heatTable)) {
       heatTable[key] = true;
       if (!store.race.laps && false) {
