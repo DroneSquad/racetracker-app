@@ -13,6 +13,7 @@ export const FREQ_SAVING_DONE = 'FREQ_SAVING_DONE';
 /** Read the channels */
 export const readFrequencies = deviceId => {
   return dispatch => {
+    dispatch(updateProfile(null));
     dispatch(readRacerChannels(deviceId));
   };
 };
@@ -41,6 +42,7 @@ export const saveFrequencies = (deviceId, channels) => {
         },
         (promise, dispatch) => {
           // when done it will call RT_RACER_CHANS and this callback
+          promise.catch(response => window.alert(response)); // alert any errors
           dispatch({ type: FREQ_SAVING_DONE, payload: channelMapToDevice });
           dispatch(goBack());
         }
@@ -61,10 +63,12 @@ export default function(state = {}, action) {
     case RT_RACER_CHANS:
       let bands = _.map(action.payload.channels, channel => channel.channel.toLowerCase());
       // will try and find the correct profile to use.
+      let bandIndex = 0;
       let knownProfile = _.find(frequencies.profiles, profile => {
         for (let indexBands in profile.frequencies) {
           let band = profile.frequencies[indexBands];
           if (_.isEqual(bands, band.bands)) {
+            bandIndex = indexBands;
             return true;
           }
         }
@@ -72,6 +76,7 @@ export default function(state = {}, action) {
       });
       return {
         ...state,
+        deviceProfileBandIndex: bandIndex,
         deviceProfile: true,
         profile: knownProfile || {
           name: 'Device',

@@ -16,7 +16,8 @@ const mapStateToProps = (state, props) => ({
   frequencies: state.frequencies.frequencies,
   profiles: state.frequencies.profiles,
   profilesMap: state.frequencies.profilesMap,
-  isDeviceProfile: state.frequencies.profile && state.frequencies.deviceProfile
+  isDeviceProfile: state.frequencies.profile && state.frequencies.deviceProfile,
+  deviceProfileBandIndex: state.frequencies.deviceProfileBandIndex
 });
 
 const mapDispatchToProps = dispatch => ({

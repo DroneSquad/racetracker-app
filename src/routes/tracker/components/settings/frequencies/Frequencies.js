@@ -59,14 +59,14 @@ export default class Frequencies extends React.Component {
   };
 
   render() {
-    let { frequencies, profilesMap, videoProfile, isDeviceProfile } = this.props;
+    let { frequencies, profilesMap, videoProfile, isDeviceProfile, deviceProfileBandIndex } = this.props;
     let amount = this.state.amount; // the number of racers/pilots
     let channel = this.state.channel; // the index for the channel name
     let videoFrequencies;
     if (videoProfile) {
       videoFrequencies =
         _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1) ||
-        videoProfile.frequencies[0];
+        videoProfile.frequencies[deviceProfileBandIndex];
       amount = videoFrequencies.bands.length - 1;
       if (isDeviceProfile) {
         channel = -1;
@@ -91,8 +91,21 @@ export default class Frequencies extends React.Component {
               {_.map(profilesMap, (array, i) => <MenuItem key={i - 1} value={i - 1} primaryText={i} />)}
             </DropDownMenu>}
           {!isLoading &&
-            <DropDownMenu disabled={this.props.saving} value={channel} onChange={isDeviceProfile ? (event, value) => this.onDeviceFrequencyChannel(event, value, amount) : this.onFrequencyChannel}>
-              {isDeviceProfile && <MenuItem key={-1} value={-1} primaryText={videoProfile.name} />}
+            <DropDownMenu
+              disabled={this.props.saving}
+              value={channel}
+              onChange={
+                isDeviceProfile
+                  ? (event, value) => this.onDeviceFrequencyChannel(event, value, amount)
+                  : this.onFrequencyChannel
+              }
+            >
+              {isDeviceProfile &&
+                <MenuItem
+                  key={-1}
+                  value={-1}
+                  primaryText={videoProfile.name === 'Device' ? 'Device' : `${videoProfile.name} (Device)`}
+                />}
               {_.map(profilesMap[amount + 1], (value, index) =>
                 <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
               )}
@@ -120,9 +133,12 @@ export default class Frequencies extends React.Component {
                   <Divider />
                 </div>
               )}
+            {!isLoading &&
+              _.size(videoFrequencies.bands) === 0 &&
+              <ListItem primaryText="Error Reading Profile Values" />}
             {isLoading &&
               <ListItem disabled>
-                <LoadingSpinner size={30}/>
+                <LoadingSpinner size={30} />
               </ListItem>}
           </List>
         </main>
