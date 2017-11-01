@@ -5,12 +5,15 @@ import { Paper, FlatButton } from 'material-ui';
 /** Simple react stopwatch used for timing races */
 export default class Stopwatch extends Component {
   props: {
-    seconds: number,
-    isRunning: boolean,
-    hasStarted: boolean,
-    displayTime: string,
-    elapsedTime: number,
-    queryInterval: string
+    activeHeat: Object,
+    raceMode: string,
+    queryInterval: string,
+    trackerId: string,
+    racerChannels: Array<Object>,
+    startHeat: Function,
+    stopHeat: Function,
+    createHeat: Function,
+    updateLaps: Function
   };
 
   constructor(props) {
@@ -49,7 +52,11 @@ export default class Stopwatch extends Component {
       raceMode: this.props.raceMode,
       device_id: this.props.trackerId
     };
-    this.props.startHeat(r);
+    if (this.props.raceMode === 'shotgun') {
+      this.props.startShotgunHeat(r);
+    } else {
+      this.props.startFlyoverHeat(r);
+    }
     this.startIntervalQuery();
   };
 

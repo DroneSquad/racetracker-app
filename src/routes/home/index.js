@@ -2,7 +2,6 @@ import React from 'react';
 import { push } from 'react-router-redux';
 
 import uuid from 'uuid';
-import moment from 'moment';
 
 import { AppBar, List, ListItem, TextField } from 'material-ui';
 

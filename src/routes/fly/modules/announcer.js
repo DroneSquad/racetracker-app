@@ -40,7 +40,6 @@ function humanSpeech(millis) {
     // Only show the point of a seconds
     speech += '.' + ms + ' second(s)';
   }
-
   return speech;
 }
 
@@ -53,20 +52,49 @@ export function announceLapsFromResponse(response) {
     let heatTable = cacheTable[activeHeat] || (cacheTable[activeHeat] = {});
     if (!(key in heatTable)) {
       heatTable[key] = true;
-      if (!store.race.laps && false) {
-        // todo check if current lap is the fastest lap
-        dispatch(sendVoice('New Fastest Lap'));
+      if (isFastestLap(store.race.laps, store.race.activeHeat, response)) {
+        dispatch(announceLap(response.racer, response.lapTime, true));
+      } else {
+        dispatch(announceLap(response.racer, response.lapTime));
       }
-      dispatch(announceLap(response.racer, response.lapTime));
     }
   };
 }
 
+export function announceShotgunStart() {
+  return dispatch => {
+    dispatch(sendVoice('Five, Four, Three, Two, One, Go', 'en-US', 0.15));
+  };
+}
+
+export function announceFlyoverStart() {
+  return dispatch => {
+    dispatch(sendVoice('Start when ready'));
+  };
+}
+
+/** Determine if this lap is the new fastest lap for announce */
+export function isFastestLap(laps, heat, response) {
+  if (laps) {
+    if (response.lap > 1) {
+      return (
+        laps.filter(h => h.heat === heat).sort(function(a, b) {
+          return a.lapTime - b.lapTime;
+        })[0].lapTime === response.lapTime
+      );
+    }
+  }
+  return false;
+}
+
 /** Will announce the lap */
-export function announceLap(person, time) {
-  return (dispatch, getStore) => {
-    //let store = getStore();
+export function announceLap(person, time, fastest = false) {
+  return dispatch => {
     let racerToPilot = person; // todo map id with pilots name from current heat
-    dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
+    if (fastest) {
+      dispatch(sendVoice(`New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`));
+    } else {
+      dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
+    }
   };
 }
