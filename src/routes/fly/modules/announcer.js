@@ -1,4 +1,4 @@
-import { sendVoice, sendVoiceThenDispatch } from '../../../global/voice/modules/voice';
+import { sendVoice } from '../../../global/voice/modules/voice';
 
 let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 
@@ -61,11 +61,9 @@ export function announceLapsFromResponse(response) {
   };
 }
 
-export function announceShotgunStart(action) {
-  console.log("announceShotgunStart");
-  console.log(action);
+export function announceShotgunStart() {
   return dispatch => {
-    dispatch(sendVoiceThenDispatch('5, 4, 3, 2, 1, GO', 'en-US', 0.5, action));
+    dispatch(sendVoice('Five, Four, Three, Two, One, Go', 'en-US', 0.15));
   };
 }
 

@@ -52,7 +52,12 @@ export default class Stopwatch extends Component {
       raceMode: this.props.raceMode,
       device_id: this.props.trackerId
     };
-    this.props.startHeat(r);
+    if (this.props.raceMode === 'shotgun') {
+      this.props.startShotgunHeat(r);
+    } else {
+      // TODO: properly handle flyover mode
+      this.props.startHeat(r);
+    }
     this.startIntervalQuery();
   };
 
