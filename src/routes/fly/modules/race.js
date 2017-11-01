@@ -83,8 +83,7 @@ export const createHeat = (request: object) => {
 export const startShotgunHeat = (request: object) => {
   return dispatch => {
     dispatch(announceShotgunStart());
-    setTimeout(() => dispatch(
-      startHeat(request)), 3100);  // timer accounts for delay of start countdown (HACK)
+    setTimeout(() => dispatch(startHeat(request)), 3100); // timer accounts for delay of start countdown (HACK)
   };
 };
 
@@ -102,7 +101,7 @@ export const startHeat = (request: object) => {
       dispatch(setStart(response));
     }, request);
   };
-}
+};
 
 export const updateLaps = (request: object) => {
   return dispatch => {

@@ -71,17 +71,19 @@ export function announceShotgunStart() {
 export function isFastestLap(laps, heat, response) {
   if (laps) {
     if (response.lap > 1) {
-      return laps.filter(h => h.heat === heat).sort(function(a, b) {
-        return a.lapTime - b.lapTime;
-      })[0].lapTime === response.lapTime
+      return (
+        laps.filter(h => h.heat === heat).sort(function(a, b) {
+          return a.lapTime - b.lapTime;
+        })[0].lapTime === response.lapTime
+      );
     }
   }
   return false;
-};
+}
 
 /** Will announce the lap */
 export function announceLap(person, time, fastest = false) {
-  return (dispatch) => {
+  return dispatch => {
     let racerToPilot = person; // todo map id with pilots name from current heat
     if (fastest) {
       dispatch(sendVoice(`New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`));

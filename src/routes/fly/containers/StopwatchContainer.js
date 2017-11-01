@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
   raceMode: state.race.raceMode,
   queryInterval: state.race.queryInterval,
   trackerId: state.race.trackerId,
-  racerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels,
+  racerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
