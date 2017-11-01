@@ -64,11 +64,12 @@ export default class Frequencies extends React.Component {
     let channel = this.state.channel; // the index for the channel name
     let videoFrequencies;
     if (videoProfile) {
-      videoFrequencies =
-        _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1) ||
-        videoProfile.frequencies[deviceProfileBandIndex];
+      videoFrequencies = _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1);
       amount = videoFrequencies.bands.length - 1;
       if (isDeviceProfile) {
+        // if device profile for an update on all vars
+        videoFrequencies = videoProfile.frequencies[deviceProfileBandIndex];
+        amount = videoFrequencies.bands.length - 1;
         channel = -1;
       }
     }
