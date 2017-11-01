@@ -69,7 +69,7 @@ export function announceShotgunStart() {
 
 export function announceFlyoverStart() {
   return dispatch => {
-    dispatch(sendVoice('Flyover start ready'));
+    dispatch(sendVoice('Start when ready'));
   };
 }
 
