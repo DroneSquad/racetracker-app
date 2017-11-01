@@ -61,12 +61,14 @@ export function announceLapsFromResponse(response) {
   };
 }
 
+/** Announce the start of a heat in shotgun mode */
 export function announceShotgunStart() {
   return dispatch => {
     dispatch(sendVoice('Five, Four, Three, Two, One, Go', 'en-US', 0.15));
   };
 }
 
+/** Announce the start of a heat in flyover mode */
 export function announceFlyoverStart() {
   return dispatch => {
     dispatch(sendVoice('Start when ready'));
