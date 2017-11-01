@@ -176,7 +176,7 @@ export default function(state = {}, action: Action) {
         laps: state.laps.concat(action.payload.laps)
       };
     case SET_LAP:
-      // TODO: this is called on each interval query, which then calls render A LOT, investigate performance improvements
+      // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
       return {
         ...state,
         laps: _.unionWith(

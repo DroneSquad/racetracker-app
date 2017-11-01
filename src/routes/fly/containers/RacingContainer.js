@@ -14,7 +14,6 @@ const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   activeHeatId: state.race.activeHeat,
   activeRaceId: state.race.id
-  // activeHeat: (state.race.heats) ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null
   // activeTrackerId: state.race.trackerId,
   // raceMode: state.race.raceMode,
   // heats: state.race.heats ? state.race.heats : [],
