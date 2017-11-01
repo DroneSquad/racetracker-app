@@ -64,7 +64,7 @@ export function announceLapsFromResponse(response) {
 /** Announce the start of a heat in shotgun mode */
 export function announceShotgunStart() {
   return dispatch => {
-    dispatch(sendVoice('Five, Four, Three, Two, One, Go', 'en-US', 0.15));
+    dispatch(sendVoice('Five, Four, Three, Two, One, Go', 0.15));
   };
 }
 

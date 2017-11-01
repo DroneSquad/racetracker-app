@@ -3,7 +3,7 @@ export const VOICE_SEND_SUCCESS = 'VOICE_SEND_SUCCESS';
 export const VOICE_SEND_ERROR = 'VOICE_SEND_ERROR';
 
 /** Send the voice from the text, and optional locale, speed */
-export function sendVoice(text, locale = 'en-US', rate = 1) {
+export function sendVoice(text, rate = 1, locale = 'en-US') {
   return dispatch => {
     dispatch({
       type: VOICE_SEND,
