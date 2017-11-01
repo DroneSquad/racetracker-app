@@ -61,6 +61,12 @@ export function announceLapsFromResponse(response) {
   };
 }
 
+export function announceShotgunStart() {
+  return (dispatch) => {
+    dispatch(sendVoice('5, 4, 3, 2, 1, GO', 'en-US', 0.5));
+  };
+}
+
 /** Determine if this lap is the new fastest lap for announce */
 export function isFastestLap(laps, heat, response) {
   if (laps) {

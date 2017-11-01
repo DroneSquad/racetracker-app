@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { announceLapsFromResponse } from './announcer';
+import { announceLapsFromResponse, announceShotgunStart } from './announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -82,6 +82,7 @@ export const createHeat = (request: object) => {
 
 export const startHeat = (request: object) => {
   return dispatch => {
+    // dispatch(announceShotgunStart());
     raceMngr.startHeat(response => {
       dispatch(setStart(response));
     }, request);
