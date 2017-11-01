@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { announceLapsFromResponse, announceShotgunStart } from './announcer';
+import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart } from './announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -84,6 +84,13 @@ export const startShotgunHeat = (request: object) => {
   return dispatch => {
     dispatch(announceShotgunStart());
     setTimeout(() => dispatch(startHeat(request)), 3100); // timer accounts for delay of start countdown (HACK)
+  };
+};
+
+export const startFlyoverHeat = (request: object) => {
+  return dispatch => {
+    dispatch(startHeat(request));
+    dispatch(announceFlyoverStart());
   };
 };
 
@@ -169,6 +176,7 @@ export default function(state = {}, action: Action) {
         laps: state.laps.concat(action.payload.laps)
       };
     case SET_LAP:
+      // TODO: this is called on each interval query, which then calls render A LOT, investigate performance improvements
       return {
         ...state,
         laps: _.unionWith(

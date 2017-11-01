@@ -67,6 +67,12 @@ export function announceShotgunStart() {
   };
 }
 
+export function announceFlyoverStart() {
+  return dispatch => {
+    dispatch(sendVoice('Flyover start ready'));
+  };
+}
+
 /** Determine if this lap is the new fastest lap for announce */
 export function isFastestLap(laps, heat, response) {
   if (laps) {

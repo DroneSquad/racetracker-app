@@ -55,8 +55,7 @@ export default class Stopwatch extends Component {
     if (this.props.raceMode === 'shotgun') {
       this.props.startShotgunHeat(r);
     } else {
-      // TODO: properly handle flyover mode
-      this.props.startHeat(r);
+      this.props.startFlyoverHeat(r);
     }
     this.startIntervalQuery();
   };

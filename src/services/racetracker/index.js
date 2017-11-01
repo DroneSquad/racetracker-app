@@ -267,7 +267,7 @@ export class TbsRt {
     this.readCommand(request.device_id)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
-          if (!response.startsWith('READY')) {
+          if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
             let arr = response.split(RE_RACEUPDATE);
             // there are 2 different responses depending on a single racer or more
             if (arr.length === 4) {
