@@ -1,4 +1,6 @@
 // @flow
+import _ from 'lodash';
+
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import FrequencySetting from '../../components/settings/FrequencySetting';
@@ -9,7 +11,7 @@ import FrequencySetting from '../../components/settings/FrequencySetting';
     component - in this case, a FrequencySetting */
 
 const mapStateToProps = (state, ownProps) => ({
-  channelCount: state.trackers.filter(t => t.id === ownProps.id)[0].racerChannels.length
+  channelCount: _.size(_.pull(state.trackers.filter(t => t.id === ownProps.id)[0].racerChannels, null))
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
