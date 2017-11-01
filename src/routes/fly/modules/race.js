@@ -80,12 +80,22 @@ export const createHeat = (request: object) => {
   };
 };
 
-export const startHeat = (request: object) => {
+export const beginHeat = (request: object) => {
   return dispatch => {
-    // dispatch(announceShotgunStart());
     raceMngr.startHeat(response => {
       dispatch(setStart(response));
     }, request);
+  };
+}
+export const startHeat = (request: object) => {
+  return dispatch => {
+
+    /*raceMngr.startHeat(response => {
+      dispatch(setStart(response));
+    }, request);*/
+
+    dispatch(announceShotgunStart(beginHeat(request)));
+
   };
 };
 
