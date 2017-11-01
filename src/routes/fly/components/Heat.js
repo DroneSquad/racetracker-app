@@ -41,7 +41,7 @@ export default class Heat extends Component {
 
   render() {
     let { activeHeat, heatChannels } = this.props;
-    let title = <span>{`Heat ${activeHeat.number}`}</span>;
+    let title = <span>{`Heat ${activeHeat.number}`} {activeHeat.isComplete && `Results`}</span>;
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
