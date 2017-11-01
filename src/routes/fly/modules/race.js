@@ -165,8 +165,8 @@ export default function(state = {}, action: Action) {
       return {
         ...state,
         laps: _.unionWith(
-          state.laps,
           [action.payload],
+          state.laps,
           (left, right) => left.heat === right.heat && left.racer === right.racer && left.lap === right.lap
         )
       };

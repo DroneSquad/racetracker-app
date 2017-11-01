@@ -53,14 +53,28 @@ export function announceLapsFromResponse(response) {
     let heatTable = cacheTable[activeHeat] || (cacheTable[activeHeat] = {});
     if (!(key in heatTable)) {
       heatTable[key] = true;
-      if (!store.race.laps && false) {
+      if (!store.race.laps) {
+        console.log("CHECK FASTEST");
+        checkFastestLap(store.race.laps, response)
         // todo check if current lap is the fastest lap
-        dispatch(sendVoice('New Fastest Lap'));
       }
       dispatch(announceLap(response.racer, response.lapTime));
     }
   };
 }
+
+export function checkFastestLap(laps, response) {
+  console.log(laps);
+  console.log(response);
+/*  if (store.race.laps.length > 1) {
+    if (laps[0].lapTime === 0) {
+      return msToClock(laps[1].lapTime);
+    }
+  }
+  return msToClock(laps[0].lapTime);*/
+  // dispatch(sendVoice('New Fastest Lap'));
+};
+
 
 /** Will announce the lap */
 export function announceLap(person, time) {
