@@ -267,6 +267,12 @@ export class TbsRt {
     this.readCommand(request.device_id)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
+          if (response.startsWith('STARTED')) {
+            // this response occurs when in flyovermode and the first pilot passes the gate
+            cb({
+              start: true
+            });
+          }
           if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
             let arr = response.split(RE_RACEUPDATE);
             // there are 2 different responses depending on a single racer or more

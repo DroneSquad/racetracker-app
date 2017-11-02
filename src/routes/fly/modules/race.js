@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart } from './announcer';
+import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart, announceFlyover } from './announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -113,7 +113,11 @@ export const startHeat = (request: object) => {
 export const updateLaps = (request: object) => {
   return dispatch => {
     raceMngr.updateLaps(response => {
-      if (!response.error) {
+      if (response.start) {
+        // accounts for flyover start in flyovermode
+        dispatch(announceFlyover());
+      }
+      if (!response.error && !response.start) {
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }

@@ -1,6 +1,7 @@
 import { sendVoice } from '../../../global/voice/modules/voice';
 
 let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
+let flyoverAnnounced = false;
 
 /** Split the mills into an array of mins, seconds, mills */
 function splitMillsToArray(ms) {
@@ -70,9 +71,20 @@ export function announceShotgunStart() {
 
 /** Announce the start of a heat in flyover mode */
 export function announceFlyoverStart() {
+  flyoverAnnounced = false;
   return dispatch => {
     dispatch(sendVoice('Start when ready'));
   };
+}
+
+/** Announce the passing of a gate by a racer in flyover mode */
+export function announceFlyover() {
+  if (!flyoverAnnounced) {
+    flyoverAnnounced = true;
+    return dispatch => {
+      dispatch(sendVoice('Race started'));
+    };
+  }
 }
 
 /** Determine if this lap is the new fastest lap for announce */
