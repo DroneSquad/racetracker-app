@@ -2,6 +2,8 @@
 import { connect } from 'react-redux';
 import Frequencies from '../../../components/settings/frequencies/Frequencies';
 
+import frequencies from './frequencies.json';
+
 import { saveFrequencies, updateProfile, readFrequencies } from '../../../modules/frequencies';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -21,8 +23,10 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSave: (deviceId, channels) => dispatch(saveFrequencies(deviceId, channels)),
-  readFrequencies: deviceId => dispatch(readFrequencies(deviceId)),
+  // Only save when device id > 0
+  onSave: (deviceId, channels) => deviceId > 0 && dispatch(saveFrequencies(deviceId, channels)),
+  // Only read frequences when device id > 0 or use first profile
+  readFrequencies: deviceId => deviceId > 0 ? dispatch(readFrequencies(deviceId)) : dispatch(updateProfile(frequencies.profiles[0])),
   updateProfile: profile => dispatch(updateProfile(profile))
 });
 

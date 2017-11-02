@@ -26,5 +26,5 @@
 
 .drop-down-width {
   top: 0 !important;
-  width: 150px !important;
+  min-width: 150px !important;
 }

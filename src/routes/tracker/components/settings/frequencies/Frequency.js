@@ -9,34 +9,39 @@ import frequencies from '../../../containers/settings/frequencies/frequencies.js
 import './frequencies.css';
 
 export default class Frequency extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      band: 0,
-      channel: 0,
-      bands: frequencies.bands,
-      profiles: _.map(frequencies.profiles, profile => profile.name)
-    };
-    setTimeout(() => {
-      this.setState({ loading: false, band: 0, channel: 4 });
-    }, 1000);
-  }
+  state = {
+    saving: false,
+    band: (() => {
+      let i = 0;
+      for (let key in frequencies.band_profiles) {
+        // do checks for lowercase values but also the letter must be the first in the string
+        let bandName = key.toLowerCase();
+        if (bandName[0] === this.props.defaultBand.toLowerCase()) {
+          return i;
+        }
+        i++;
+      }
+      return 0;
+    })(),
+    channel: this.props.defaultChannel - 1,
+    bands: frequencies.bands,
+    profiles: frequencies.band_profiles,
+  };
 
   /** When the user selects a band */
   onBandSelect = (event, value) => {
     this.setState({ band: value });
-    console.log(value);
   };
 
   /** When the user selects a channel */
   onChannelSelect = (event, value) => {
     this.setState({ channel: value });
-    console.log(value);
   };
 
   /** All the frequencies */
   frequencies = () => {
+    let values = this.state.profiles[_.keys(this.state.profiles)[this.state.band]];
+    console.log(this.state.channel, this.state.band);
     return (
       <SelectField
         disabled={this.state.loading}
@@ -46,8 +51,9 @@ export default class Frequency extends React.Component {
       >
         {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
         {!this.state.loading &&
-          _.map(_.keys(this.state.bands), (value, index) => {
-            let text = `${_.upperCase(value)} - ${this.state.bands[value]}`;
+          _.map(values, (value, index) => {
+            console.log(index);
+            let text = `${String(value).toUpperCase()} - ${this.state.bands[value]}`;
             return <MenuItem value={index} primaryText={text} />;
           })}
       </SelectField>
@@ -65,7 +71,7 @@ export default class Frequency extends React.Component {
       >
         {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
         {!this.state.loading &&
-          _.map(this.state.profiles, (value, index) => <MenuItem value={index} primaryText={value} />)}
+          _.map(_.keys(this.state.profiles), (value, index) => <MenuItem value={index} primaryText={value} />)}
       </SelectField>
     );
   };
@@ -82,9 +88,9 @@ export default class Frequency extends React.Component {
         </header>
         <main>
           <List className={this.state.loading ? 'loading-bar' : ''}>
-            <ListItem primaryText="Band" rightToggle={this.bands()} />
+            <ListItem primaryText="Band" rightIconButton={this.bands()} />
             <Divider />
-            <ListItem primaryText="Frequency" rightToggle={this.frequencies()} />
+            <ListItem primaryText="Frequency" rightIconButton={this.frequencies()} />
             <Divider />
           </List>
         </main>
