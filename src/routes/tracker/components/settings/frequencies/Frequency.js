@@ -36,12 +36,12 @@ export default class Frequency extends React.Component {
   /** When the user selects a channel */
   onChannelSelect = (event, value) => {
     this.setState({ channel: value });
+
   };
 
   /** All the frequencies */
   frequencies = () => {
     let values = this.state.profiles[_.keys(this.state.profiles)[this.state.band]];
-    console.log(this.state.channel, this.state.band);
     return (
       <SelectField
         disabled={this.state.loading}
@@ -52,7 +52,6 @@ export default class Frequency extends React.Component {
         {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
         {!this.state.loading &&
           _.map(values, (value, index) => {
-            console.log(index);
             let text = `${String(value).toUpperCase()} - ${this.state.bands[value]}`;
             return <MenuItem value={index} primaryText={text} />;
           })}
