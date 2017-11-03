@@ -34,7 +34,8 @@ export default class DeviceSettings extends Setting {
       if (this.props.rssi) {
         if (this.props.firmware) {
           if (this.state.loading) {
-            this.setState({ loading: false });
+            this.doneLoading()
+            // this.setState({ loading: false });
           }
         }
       }
