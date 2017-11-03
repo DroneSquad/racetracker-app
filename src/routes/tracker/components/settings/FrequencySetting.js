@@ -19,7 +19,7 @@ export default class FrequencySetting extends Setting {
   componentWillReceiveProps(nextProps) {
     if (this.props.channelCount !== nextProps.channelCount) {
       if (this.state.loading) {
-        this.doneLoading();
+        this.setState({ loading: false });
       }
     }
   }

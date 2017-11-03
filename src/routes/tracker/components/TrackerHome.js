@@ -18,9 +18,11 @@ export default class extends Component {
     trackers: Array<RaceTracker>,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
+    enableBt: Function,
     startBtStateNotifications: Function,
     startBtDeviceScan: Function,
-    stopBtDeviceScan: Function
+    stopBtDeviceScan: Function,
+    validateTrackers: Array<RaceTracker>
   };
 
   componentDidMount() {

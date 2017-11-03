@@ -24,6 +24,6 @@ export default class FlyoverSetting extends Setting {
     let text = <h3 className="no-margin">Detect VTx to start timing</h3>;
     let toggleSwitch = <Toggle defaultToggled={toggle} onToggle={this.handleOnToggle} label={text} />;
     let secondary = 'Timing begins when the video transmitter flies over the RaceTracker';
-    return <ListItem disabled primaryText={toggleSwitch} secondaryText={secondary} />;
+    return <ListItem className={this.isLoadingClass()} disabled primaryText={toggleSwitch} secondaryText={secondary} />;
   }
 }

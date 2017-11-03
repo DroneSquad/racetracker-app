@@ -25,7 +25,7 @@ export default class TimeDelaySetting extends Setting {
   componentWillReceiveProps(nextProps) {
     if (this.props.minLapTime !== nextProps.minLapTime) {
       if (this.state.loading) {
-        this.doneLoading();
+        this.setState({ loading: false });
       }
     }
   }

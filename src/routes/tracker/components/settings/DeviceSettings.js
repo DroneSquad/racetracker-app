@@ -21,10 +21,36 @@ export default class DeviceSettings extends Setting {
 
   constructor(props) {
     super(props);
-    // query racetracker for displayed properties
+    // query racetracker for properties
     this.props.getBattery(this.props.id);
     this.props.getRssi(this.props.id);
     this.props.getFirmware(this.props.id);
+    // validate loading state of properties
+    this.checkLoading();
+  }
+
+  checkLoading() {
+    if (this.props.battery) {
+      if (this.props.rssi) {
+        if (this.props.firmware) {
+          if (this.state.loading) {
+            this.setState({ loading: false });
+          }
+        }
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.battery !== prevProps.battery) {
+      this.checkLoading();
+    }
+    if (this.props.rssi !== prevProps.rssi) {
+      this.checkLoading();
+    }
+    if (this.props.firmware !== prevProps.firmware) {
+      this.checkLoading();
+    }
   }
 
   render() {
@@ -39,7 +65,7 @@ export default class DeviceSettings extends Setting {
       </span>
     );
     return (
-      <div>
+      <div className={this.isLoadingClass()} style={{ padding: '0 16px' }}>
         <h2 className="ds-blue-text bar-item">
           {this.props.name}
         </h2>

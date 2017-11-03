@@ -45,7 +45,7 @@ export default class SensitivitySetting extends Setting {
       <FlatButton label={this.props.isCalibrating ? loadingComponent : 'Calibrate'} primary onClick={this.calibrate} />
     ];
     return (
-      <div className={this.isLoadingClass()} style={{ padding: '0 16px' }}>
+      <div style={{ padding: '0 16px' }}>
         <Dialog
           title="Calibrate RaceTracker"
           actions={actions}
