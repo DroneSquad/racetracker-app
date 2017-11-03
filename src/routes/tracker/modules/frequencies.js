@@ -53,7 +53,7 @@ export const saveFrequencies = (deviceId, channels) => {
 
 /** Rebuild the object stuff for the UI and internal frequencie profile structure */
 function rebuildProfileStuff(frequencies) {
-  let profiles =  _.map(frequencies.profiles, profile => profile.name);
+  let profiles = _.map(frequencies.profiles, profile => profile.name);
   let profilesMap = (() => {
     // todo update with map reduce
     let data = {};
@@ -81,39 +81,39 @@ export default function(state = {}, action) {
     case 'FREQ_TEST':
       // todo actually create the custom profile
       frequencies.profiles.unshift({
-        "name": "Custom",
-        "frequencies": [
+        name: 'Custom',
+        frequencies: [
           {
-            "imd": 1.0,
-            "bands": ["a1"]
+            imd: 1.0,
+            bands: ['a1']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2', 'a2', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2", "a2", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2", "a2", "a2", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2']
           },
           {
-            "imd": 1.0,
-            "bands": ["a1", "a2", "a2", "a2", "a2", "a2", "a2", "a2"]
+            imd: 1.0,
+            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2']
           }
         ]
       });

@@ -25,7 +25,7 @@ export default class Frequency extends React.Component {
     })(),
     channel: this.props.defaultChannel - 1,
     bands: frequencies.bands,
-    profiles: frequencies.band_profiles,
+    profiles: frequencies.band_profiles
   };
 
   /** When the user selects a band */
@@ -36,7 +36,7 @@ export default class Frequency extends React.Component {
   /** When the user selects a channel */
   onChannelSelect = (event, value) => {
     this.setState({ channel: value });
-    this.props.rawDispatch({type: 'FREQ_TEST'})
+    this.props.rawDispatch({ type: 'FREQ_TEST' });
   };
 
   /** All the frequencies */
@@ -70,7 +70,9 @@ export default class Frequency extends React.Component {
       >
         {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
         {!this.state.loading &&
-          _.map(_.keys(this.state.profiles), (value, index) => <MenuItem key={index} value={index} primaryText={value} />)}
+          _.map(_.keys(this.state.profiles), (value, index) =>
+            <MenuItem key={index} value={index} primaryText={value} />
+          )}
       </SelectField>
     );
   };

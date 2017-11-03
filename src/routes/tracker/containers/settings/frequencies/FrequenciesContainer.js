@@ -26,7 +26,8 @@ const mapDispatchToProps = dispatch => ({
   // Only save when device id > 0
   onSave: (deviceId, channels) => deviceId !== '0' && dispatch(saveFrequencies(deviceId, channels)),
   // Only read frequences when device id > 0 or use first profile
-  readFrequencies: deviceId => deviceId !== '0' ? dispatch(readFrequencies(deviceId)) : dispatch(updateProfile(frequencies.profiles[0])),
+  readFrequencies: deviceId =>
+    deviceId !== '0' ? dispatch(readFrequencies(deviceId)) : dispatch(updateProfile(frequencies.profiles[0])),
   updateProfile: profile => dispatch(updateProfile(profile))
 });
 

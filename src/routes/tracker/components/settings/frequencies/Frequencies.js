@@ -90,7 +90,7 @@ export default class Frequencies extends React.Component {
             title="Video Frequencies"
             iconClassNameLeft="mdi mdi-close"
             onLeftIconButtonTouchTap={historyBackButton.bind(this)}
-            iconClassNameRight={isLoading ? '' : (this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check')}
+            iconClassNameRight={isLoading ? '' : this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check'}
             onRightIconButtonTouchTap={() =>
               !isLoading && this.props.onSave(this.props.id, (videoFrequencies && videoFrequencies.bands) || [])}
           />

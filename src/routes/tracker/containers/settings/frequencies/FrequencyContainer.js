@@ -12,13 +12,12 @@ const mapStateToProps = (state, props) => ({
   defaultBand: (props.location.state && props.location.state.band) || 'A',
   defaultChannel: (props.location.state && props.location.state.number) || 1,
   videoProfile: state.frequencies.profile,
-  profiles: state.frequencies.profiles,
+  profiles: state.frequencies.profiles
 });
-
 
 const mapDispatchToProps = dispatch => ({
   rawDispatch: value => dispatch(value),
-  onUpdate: () => {},
+  onUpdate: () => {}
 });
 
 const FrequencyContainer = connect(mapStateToProps, mapDispatchToProps)(Frequency);
