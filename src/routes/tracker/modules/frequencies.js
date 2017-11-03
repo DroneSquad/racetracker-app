@@ -51,9 +51,73 @@ export const saveFrequencies = (deviceId, channels) => {
   };
 };
 
+/** Rebuild the object stuff for the UI and internal frequencie profile structure */
+function rebuildProfileStuff(frequencies) {
+  let profiles =  _.map(frequencies.profiles, profile => profile.name);
+  let profilesMap = (() => {
+    // todo update with map reduce
+    let data = {};
+    for (let index in frequencies.profiles) {
+      let profile = frequencies.profiles[index];
+      for (let indexBands in profile.frequencies) {
+        let band = profile.frequencies[indexBands];
+        let bands = data[band.bands.length];
+        let i = Number(index);
+        if (bands) {
+          bands.push(i);
+        } else {
+          data[band.bands.length] = [i];
+        }
+      }
+    }
+    return data;
+  })();
+  return { frequencies, profiles, profilesMap };
+}
+
 /** reducers */
 export default function(state = {}, action) {
   switch (action.type) {
+    case 'FREQ_TEST':
+      // todo actually create the custom profile
+      frequencies.profiles.unshift({
+        "name": "Custom",
+        "frequencies": [
+          {
+            "imd": 1.0,
+            "bands": ["a1"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2", "a2", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2", "a2", "a2", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2", "a2", "a2", "a2", "a2"]
+          },
+          {
+            "imd": 1.0,
+            "bands": ["a1", "a2", "a2", "a2", "a2", "a2", "a2", "a2"]
+          }
+        ]
+      });
+      return { ...state, ...rebuildProfileStuff(frequencies) };
     case FREQ_UPDATE_PROFILE:
       return { ...state, deviceProfile: false, profile: action.payload };
     case FREQ_SAVING:
@@ -89,29 +153,6 @@ export default function(state = {}, action) {
         }
       };
     default:
-      return {
-        ...state,
-        loading: false,
-        frequencies: frequencies,
-        profiles: _.map(frequencies.profiles, profile => profile.name),
-        profilesMap: (() => {
-          // todo update with map reduce
-          let data = {};
-          for (let index in frequencies.profiles) {
-            let profile = frequencies.profiles[index];
-            for (let indexBands in profile.frequencies) {
-              let band = profile.frequencies[indexBands];
-              let bands = data[band.bands.length];
-              let i = Number(index);
-              if (bands) {
-                bands.push(i);
-              } else {
-                data[band.bands.length] = [i];
-              }
-            }
-          }
-          return data;
-        })()
-      };
+      return { ...state, loading: false, ...rebuildProfileStuff(frequencies) };
   }
 }
