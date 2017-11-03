@@ -67,7 +67,7 @@ export default class DeviceSettings extends Setting {
     );
     return (
       <div className={this.isLoadingClass()} style={{ padding: '0 16px' }}>
-        <h2 className="ds-blue-text bar-item">
+        <h2 className="ds-blue-text">
           {this.props.name}
         </h2>
         <h6 className="no-margin bar-item">

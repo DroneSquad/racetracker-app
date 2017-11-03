@@ -15,18 +15,14 @@ export default class TimeDelaySetting extends Setting {
   constructor(props) {
     super(props);
     this.props.getMinLapTime(this.props.id);
-    if (this.props.minLapTime) {
-      this.state.loading = false;
-    } else {
-      this.state.loading = true;
-    }
+    this.state.loading = !this.props.minLapTime;
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.minLapTime !== nextProps.minLapTime) {
       if (this.state.loading) {
-        // this.setState({ loading: false });
-        this.doneLoading()
+         // this.setState({ loading: false });
+         this.doneLoading();
       }
     }
   }
@@ -38,7 +34,7 @@ export default class TimeDelaySetting extends Setting {
   };
 
   LoadingTextField = () => {
-    return <TextField className="right" disabled={this.state.loading} />;
+    return <TextField className="right" disabled />;
   };
 
   LoadedTextField = () => {

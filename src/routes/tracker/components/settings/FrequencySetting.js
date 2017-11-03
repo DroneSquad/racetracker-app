@@ -20,14 +20,16 @@ export default class FrequencySetting extends Setting {
     if (this.props.channelCount !== nextProps.channelCount) {
       if (this.state.loading) {
         // this.setState({ loading: false });
-        this.doneLoading()
+        this.doneLoading();
       }
     }
   }
 
   /** Open the frequencies settings for the race tracker */
   openFrequencies = () => {
-    this.props.goToFrequencies(this.props.id);
+    if (!this.state.loading) {
+      this.props.goToFrequencies(this.props.id);
+    }
   };
 
   render() {
@@ -49,7 +51,7 @@ export default class FrequencySetting extends Setting {
           leftIcon={<FontIcon className="mdi mdi-radio-tower" />}
           primaryText="Frequencies"
           secondaryText={frequencies}
-          onTouchTap={this.openFrequencies}
+          onClick={this.openFrequencies}
         />
       </div>
     );
