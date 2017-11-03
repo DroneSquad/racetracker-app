@@ -12,12 +12,16 @@ export default class Frequencies extends React.Component {
   static MAX_FREQUENCY_AMOUNT = 8;
 
   state = {
-    amount: 0,
-    channel: 0
+    amount: (this.props.location.state && this.props.location.state.amount) || 0,
+    channel: (this.props.location.state && this.props.location.state.channel) || 0
   };
 
   componentWillMount() {
-    this.props.readFrequencies(this.props.id);
+    // fetch from device if we are not navagating back to page
+    if (!this.props.location.state) {
+      this.props.readFrequencies(this.props.id);
+    }
+    console.log(this.props);
   }
 
   saveProfile(amount, channel) {
@@ -53,9 +57,10 @@ export default class Frequencies extends React.Component {
   };
 
   /** When the user clicks on the frequency */
-  onFrequencyClick = channel => {
-    let band = channel[0];
-    let number = Number(channel[1]);
+  onFrequencyClick = (freq, amount, channel) => {
+    this.props.history.replace(this.props.location.pathname, { amount, channel });
+    let band = freq[0];
+    let number = Number(freq[1]);
     this.props.history.push(`/tracker/${this.props.id}/settings/frequencies/edit`, { band, number });
   };
 
@@ -76,6 +81,7 @@ export default class Frequencies extends React.Component {
         channel = -1;
       }
     }
+    console.log(videoProfile, videoFrequencies);
     let isLoading = !videoProfile || !videoFrequencies;
     return (
       <div className="main video-frequencies">
@@ -84,7 +90,7 @@ export default class Frequencies extends React.Component {
             title="Video Frequencies"
             iconClassNameLeft="mdi mdi-close"
             onLeftIconButtonTouchTap={historyBackButton.bind(this)}
-            iconClassNameRight={!isLoading && (this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check')}
+            iconClassNameRight={isLoading ? '' : (this.props.saving ? 'mdi mdi-loading spinner' : 'mdi mdi-check')}
             onRightIconButtonTouchTap={() =>
               !isLoading && this.props.onSave(this.props.id, (videoFrequencies && videoFrequencies.bands) || [])}
           />
@@ -132,7 +138,7 @@ export default class Frequencies extends React.Component {
                         {band.toUpperCase()} - {frequencies.bands[band.toLowerCase()] || '0000'}
                       </span>
                     }
-                    onTouchTap={() => this.onFrequencyClick(band)}
+                    onTouchTap={() => this.onFrequencyClick(band, amount, channel)}
                   />
                   <Divider />
                 </div>
@@ -147,7 +153,8 @@ export default class Frequencies extends React.Component {
           </List>
         </main>
         <footer>
-          <span>Pro video profiles by Alex "IBCrazy" Greve</span>
+          {this.props.id === '0' && <span>No Device Present (DEBUG MODE)</span>}
+          {this.props.id !== '0' && <span>Pro video profiles by Alex "IBCrazy" Greve</span>}
         </footer>
       </div>
     );

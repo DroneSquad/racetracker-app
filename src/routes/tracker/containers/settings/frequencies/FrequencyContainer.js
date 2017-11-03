@@ -15,6 +15,12 @@ const mapStateToProps = (state, props) => ({
   profiles: state.frequencies.profiles,
 });
 
-const FrequencyContainer = connect(mapStateToProps)(Frequency);
+
+const mapDispatchToProps = dispatch => ({
+  rawDispatch: value => dispatch(value),
+  onUpdate: () => {},
+});
+
+const FrequencyContainer = connect(mapStateToProps, mapDispatchToProps)(Frequency);
 
 export default FrequencyContainer;

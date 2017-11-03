@@ -36,7 +36,7 @@ export default class Frequency extends React.Component {
   /** When the user selects a channel */
   onChannelSelect = (event, value) => {
     this.setState({ channel: value });
-
+    this.props.rawDispatch({type: 'FREQ_TEST'})
   };
 
   /** All the frequencies */
@@ -53,7 +53,7 @@ export default class Frequency extends React.Component {
         {!this.state.loading &&
           _.map(values, (value, index) => {
             let text = `${String(value).toUpperCase()} - ${this.state.bands[value]}`;
-            return <MenuItem value={index} primaryText={text} />;
+            return <MenuItem key={index} value={index} primaryText={text} />;
           })}
       </SelectField>
     );
@@ -70,7 +70,7 @@ export default class Frequency extends React.Component {
       >
         {this.state.loading && <MenuItem value={0} primaryText={<span className="bar-item">Loading...</span>} />}
         {!this.state.loading &&
-          _.map(_.keys(this.state.profiles), (value, index) => <MenuItem value={index} primaryText={value} />)}
+          _.map(_.keys(this.state.profiles), (value, index) => <MenuItem key={index} value={index} primaryText={value} />)}
       </SelectField>
     );
   };
