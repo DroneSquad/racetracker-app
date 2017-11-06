@@ -22,7 +22,7 @@ export default class extends Component {
     startBtStateNotifications: Function,
     startBtDeviceScan: Function,
     stopBtDeviceScan: Function,
-    validateTrackers: Array<RaceTracker>
+    validateTrackers: Function
   };
 
   componentDidMount() {
