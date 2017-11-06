@@ -1,6 +1,6 @@
 import ble from '../../../services/bluetooth';
 
-import { discoverTracker } from './racetracker';
+import { startTrackerSearch } from './racetracker';
 
 /** types */
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
@@ -78,10 +78,15 @@ export const stopStateNotifications = () => {
   };
 };
 
-export const startDeviceScan = () => {
+export const startDeviceScan = (request: array = []) => {
+  console.log("startDeviceScan")
+  console.log(request);
   return dispatch => {
     dispatch(setIsScanning(true));
-    ble.startDeviceScan(response => {
+    console.log("startDeviceScan-startTrackerSearch");
+    console.log(request);
+    dispatch(startTrackerSearch(request, true));
+    /*ble.startDeviceScan(response => {
       if (response.error) {
         dispatch(setError(response.error));
       } else if (response.device) {
@@ -96,11 +101,12 @@ export const startDeviceScan = () => {
         // called on device scan completed by timeout
         dispatch(setIsScanning(false));
       }
-    });
+    });*/
   };
 };
 
 export const stopDeviceScan = () => {
+  console.log("stopDeviceScan");
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {

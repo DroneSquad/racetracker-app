@@ -4,6 +4,8 @@ import _ from 'lodash';
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
 
+import { stopDeviceScan, setError, setIsScanning } from './bluetooth';
+
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 1;
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
@@ -164,40 +166,51 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
-export const stopTrackerSearch = () => {
-  return dispatch => {
-    ble.stopDeviceScan(response => {
-      if (response.error) {
-        // TODO: do some proper error handling/logging
-        console.log(response.error);
-      }
-    });
-  };
-};
-
-export const startTrackerSearch = (request: array) => {
+export const startTrackerSearch = (request: array =  [], timeout: boolean = false) => {
+  console.log("startDeviceScan-START");
   var matchArr = request.slice(0);
+  console.log(matchArr);
   return dispatch => {
     ble.startDeviceScan(response => {
-      if (response.device) {
+      if (response.error) {
+        console.log("ERROR")
+        console.log(response.error);
+        dispatch(setError(response.error));
+      } else if (response.device) {
         if (response.device.name) {
           if (response.device.name.startsWith('TBSRT')) {
+            console.log("RESPONSE-DEVICE-NAME");
+            console.log(response.device);
             // determine if this tracker is in the current array of trackers
             let idx = matchArr
               .map(function(e) {
-                return e.device_id;
+                return e.id;
               })
               .indexOf(response.device.id);
+            console.log("IDXFUNCTION");
+            console.log(idx);
             if (idx !== -1) {
-              if (matchArr[idx].connected) {
-                var id = matchArr[idx].device_id;
+              console.log("MATCHED-EXISTING")
+              if (matchArr[idx].isConnected) {
+                console.log("CONNECTED-ATTTEMPT-RECONNECT");
+                var id = matchArr[idx].id;
+                console.log(id);
                 dispatch(connectTracker(id));
               }
               // remove this tracker from our search array
+              console.log("REMOVE-FROM-MATCHARR");
               matchArr.splice(idx, 1);
-              if (matchArr.length === 0) {
-                dispatch(stopTrackerSearch());
+              if (!timeout) { // timeout=true, indicates a full discovery scan
+                console.log("TIMEOUT==FALSE-END ASAP");
+                if (matchArr.length === 0) {
+                  console.log("TIMEOUT=ARRAY EMPTY-END NOW");
+                  dispatch(stopDeviceScan());
+                }
               }
+            } else {
+              console.log("DISCOVER TRACKER")
+              console.log(response.device);
+              dispatch(discoverTracker(response.device));
             }
           }
         }
@@ -205,11 +218,19 @@ export const startTrackerSearch = (request: array) => {
         // if we made it here then the scan completed its full timer
         // any trackers remaining in the array were not found, and should
         // be removed from the redux store now
+        console.log("remove-UnfoundTrackers");
+        console.log(matchArr);
         if (matchArr.length > 0) {
           for (let rt of matchArr) {
-            dispatch(removeTracker(rt.device_id));
+            console.log("REMOVE");
+            console.log(rt);
+            dispatch(removeTracker(rt.id));
           }
         }
+        console.log("setIsScanning-false");
+        // called on device scan completed via timeout
+        dispatch(setIsScanning(false));
+        console.log("startDeviceScan-END");
       }
     });
   };
@@ -234,8 +255,8 @@ export const validateTrackerPromise = (request: object) => {
         var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
-          if (request.connected) {
-            resolve(connectTracker(request.device_id));
+          if (request.isConnected) {
+            resolve(connectTracker(request.id));
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
@@ -244,9 +265,9 @@ export const validateTrackerPromise = (request: object) => {
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux matches
-        resolve(isTrackerConnected(request.device_id));
+        resolve(isTrackerConnected(request.id));
       }
-    }, request.device_id);
+    }, request.id);
   });
 };
 
@@ -254,7 +275,7 @@ export const validateTrackers = (request: array) => {
   return dispatch => {
     var trackerPromises = [];
     for (let rt of request) {
-      trackerPromises.push(validateTrackerPromise({ device_id: rt.id, connected: rt.isConnected }));
+      trackerPromises.push(validateTrackerPromise({ id: rt.id, isConnected: rt.isConnected }));
     }
     Promise.all(trackerPromises)
       .then(response => {
@@ -516,7 +537,10 @@ export default function(state = [], action: Action) {
       // use a union to remove dupes of tracker ids
       return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
     case RT_REMOVE:
-      return state.filter(tracker => tracker.id !== action.payload.id);
+      console.log("RT_REMOVE");
+      console.log(state);
+      console.log(action);
+      return state.filter(tracker => tracker.id !== action.payload);
     case RT_CONNECT:
       return state.map(
         tracker =>

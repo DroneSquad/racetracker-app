@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
   // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
-  startBtDeviceScan: () => dispatch(startDeviceScan()),
+  startBtDeviceScan: array => dispatch(startDeviceScan(array)),
   stopBtDeviceScan: () => dispatch(stopDeviceScan()),
   validateTrackers: array => dispatch(validateTrackers(array))
 });
