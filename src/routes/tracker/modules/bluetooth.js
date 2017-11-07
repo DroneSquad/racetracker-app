@@ -76,19 +76,6 @@ export const stopStateNotifications = () => {
   };
 };
 
-export const stopDeviceScan = () => {
-  return dispatch => {
-    ble.stopDeviceScan(response => {
-      if (response.error) {
-        dispatch(setError(response.error));
-      } else {
-        // fired on device scan stop manually (no timeout)
-        dispatch(setIsScanning(false));
-      }
-    });
-  };
-};
-
 /** initial state */
 const initialState = {
   error: '',

@@ -27,17 +27,17 @@ export default class extends Component {
 
   componentDidMount() {
     if (!this.props.isBtAvailable) {
-      console.log("componentDidMount-checkIsBtAvailable")
+      // console.log("componentDidMount-checkIsBtAvailable")
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
         if (!this.props.isBtScanning) {
-          console.log("componentDidMount-startDiscovery")
+          // console.log("componentDidMount-startDiscovery")
           this.startDiscovery();
         }
       } else {
         if (!this.props.isBtScanning) {
-          console.log("componentDidMount-validateTrackers")
+          // console.log("componentDidMount-validateTrackers")
           this.validateTrackers();
         }
       }
@@ -49,17 +49,17 @@ export default class extends Component {
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         // TODO: currently this is never stopped, when/where should we handle that
-        console.log("componentDidUpdate-startBtStateNotifications")
+        // console.log("componentDidUpdate-startBtStateNotifications")
         this.props.startBtStateNotifications();
       }
     }
     if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
       if (this.props.isBtEnabled) {
         if (this.props.trackers.length === 0) {
-          console.log("componentDidUpdate-startDiscovery")
+          // console.log("componentDidUpdate-startDiscovery")
           this.startDiscovery();
         } else {
-          console.log("componentDidUpdate-validateTrackers")
+          // console.log("componentDidUpdate-validateTrackers")
           this.validateTrackers();
         }
       }
@@ -68,26 +68,33 @@ export default class extends Component {
 
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
-    // TODO: duplicate the btcheck below
-    console.log("validateTrackers");
-    console.log(this.props.trackers);
-    this.props.validateTrackers(this.props.trackers);
+    if (!this.props.isBtScanning) {
+      // console.log("validateTrackers");
+      this.props.validateTrackers(this.props.trackers);
+    }
   };
 
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtEnabled) {
-      console.log("startDiscovery-checkIsBtEnabled")
+      // console.log("startDiscovery-checkIsBtEnabled")
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
       if (!this.props.isBtScanning) {
         // prevent scanning if already running
-        console.log("startDiscovery-startTrackerScan")
-        console.log(this.props.trackers);
+        // console.log("startDiscovery-startTrackerScan")
         this.props.startTrackerScan(this.props.trackers); // begin bluetooth discovery scan
       }
     }
   };
+
+  stopDiscovery = () => {
+    // TODO: determine if we should run the validation on a manually stopped scan
+    // see the racetracker module function stopTrackerScan, where this call is used
+    // -----------------------------------------------------
+    // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
+    this.props.stopTrackerScan();
+  }
 
   /** change button purpose: start/stop scan based on scanning state */
   btScanButton = () => {
@@ -98,7 +105,7 @@ export default class extends Component {
     if (isBtScanning) {
       attrs = {
         ...attrs,
-        onClick: this.props.stopTrackerScan,
+        onClick: this.stopDiscovery,
         label: 'stop'
       };
     } else {
