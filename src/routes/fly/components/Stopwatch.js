@@ -37,7 +37,7 @@ export default class Stopwatch extends Component {
   intervalQuery = () => {
     let r = {
       heat: this.props.activeHeat.id,
-      device_id: this.props.trackerId
+      deviceId: this.props.trackerId
     };
     this.props.updateLaps(r);
   };
@@ -50,7 +50,7 @@ export default class Stopwatch extends Component {
     let r = {
       heatId: this.props.activeHeat.id,
       raceMode: this.props.raceMode,
-      device_id: this.props.trackerId
+      deviceId: this.props.trackerId
     };
     if (this.props.raceMode === 'shotgun') {
       this.props.startShotgunHeat(r);
@@ -63,7 +63,7 @@ export default class Stopwatch extends Component {
   endHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      device_id: this.props.trackerId
+      deviceId: this.props.trackerId
     };
     this.props.stopHeat(r);
     this.stopIntervalQuery();

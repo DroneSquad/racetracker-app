@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  getMinLapTime: device_id => dispatch(readMinLapTime(device_id)),
+  getMinLapTime: deviceId => dispatch(readMinLapTime(deviceId)),
   setMinLapTime: object => dispatch(writeMinLapTime(object))
 });
 

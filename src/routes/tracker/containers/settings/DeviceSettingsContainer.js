@@ -17,9 +17,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  getBattery: device_id => dispatch(readBatteryLevel(device_id)),
-  getRssi: device_id => dispatch(readRssiLevel(device_id)),
-  getFirmware: device_id => dispatch(readFirmwareVersion(device_id))
+  getBattery: deviceId => dispatch(readBatteryLevel(deviceId)),
+  getRssi: deviceId => dispatch(readRssiLevel(deviceId)),
+  getFirmware: deviceId => dispatch(readFirmwareVersion(deviceId))
 });
 
 const DeviceSettingsContainer = connect(mapStateToProps, mapDispatchToProps)(DeviceSettings);

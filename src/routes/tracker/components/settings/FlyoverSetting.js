@@ -13,9 +13,9 @@ export default class FlyoverSetting extends Setting {
 
   handleOnToggle = (event: Object, isInputChecked: boolean) => {
     if (isInputChecked) {
-      this.props.setRaceMode({ device_id: this.props.id, raceMode: 'flyby' });
+      this.props.setRaceMode({ deviceId: this.props.id, raceMode: 'flyby' });
     } else {
-      this.props.setRaceMode({ device_id: this.props.id, raceMode: 'shotgun' });
+      this.props.setRaceMode({ deviceId: this.props.id, raceMode: 'shotgun' });
     }
   };
 

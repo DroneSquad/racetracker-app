@@ -18,9 +18,9 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  connect: device_id => dispatch(connectTracker(device_id)),
-  setConnecting: device_id => dispatch(setConnecting(device_id)),
-  goToSettings: device_id => dispatch(push(`/tracker/${device_id}/settings`, device_id))
+  connect: deviceId => dispatch(connectTracker(deviceId)),
+  setConnecting: deviceId => dispatch(setConnecting(deviceId)),
+  goToSettings: deviceId => dispatch(push(`/tracker/${deviceId}/settings`, deviceId))
 });
 
 const TrackerDeviceContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerDevice);

@@ -16,7 +16,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  disconnect: device_id => dispatch(disconnectTracker(device_id)),
+  disconnect: deviceId => dispatch(disconnectTracker(deviceId)),
   goToTrackers: () => dispatch(push(`/tracker`))
 });
 

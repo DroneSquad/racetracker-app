@@ -31,7 +31,7 @@ export default class Racing extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isRaceActive) {
+    /*if (this.props.isRaceActive) {
       if (this.props.connectedTrackers[0].raceMode !== nextProps.connectedTrackers[0].raceMode) {
         console.log('UPDATE_RACEMODE');
         this.updateRaceMode({
@@ -39,7 +39,7 @@ export default class Racing extends Component {
           raceMode: this.props.nextProps.connectedTrackers[0].raceMode
         });
       }
-    }
+    }*/
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
         if (this.props.connectedTrackers[0].racerChannels) {

@@ -37,7 +37,7 @@ export const saveFrequencies = (deviceId, channels) => {
     dispatch(
       writeRacerChannels(
         {
-          device_id: deviceId,
+          deviceId: deviceId,
           channels: channelMapToDevice
         },
         (promise, dispatch) => {
