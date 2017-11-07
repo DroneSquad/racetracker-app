@@ -7,11 +7,10 @@ import {
   enable,
   startStateNotifications,
   // stopStateNotifications, TODO: implement this on application close?
-  startDeviceScan,
   stopDeviceScan
 } from '../modules/bluetooth';
 
-import { validateTrackers } from '../modules/racetracker';
+import { validateTrackers, discoverTrackers } from '../modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 
@@ -34,8 +33,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   enableBt: () => dispatch(enable()),
   startBtStateNotifications: () => dispatch(startStateNotifications()),
   // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
-  startBtDeviceScan: array => dispatch(startDeviceScan(array)),
-  stopBtDeviceScan: () => dispatch(stopDeviceScan()),
+  startTrackerScan: array => dispatch(discoverTrackers(array)),
+  stopTrackerScan: () => dispatch(stopDeviceScan()),
   validateTrackers: array => dispatch(validateTrackers(array))
 });
 

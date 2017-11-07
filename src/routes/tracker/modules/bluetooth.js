@@ -1,7 +1,5 @@
 import ble from '../../../services/bluetooth';
 
-import { startTrackerSearch } from './racetracker';
-
 /** types */
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
 export const BT_IS_ENABLED = 'BT_IS_ENABLED';
@@ -78,35 +76,7 @@ export const stopStateNotifications = () => {
   };
 };
 
-export const startDeviceScan = (request: array = []) => {
-  console.log("startDeviceScan")
-  console.log(request);
-  return dispatch => {
-    dispatch(setIsScanning(true));
-    console.log("startDeviceScan-startTrackerSearch");
-    console.log(request);
-    dispatch(startTrackerSearch(request, true));
-    /*ble.startDeviceScan(response => {
-      if (response.error) {
-        dispatch(setError(response.error));
-      } else if (response.device) {
-        // some devices have no name
-        if (response.device.name) {
-          // filter for TBS RaceTrackers
-          if (response.device.name.startsWith('TBSRT')) {
-            dispatch(discoverTracker(response.device));
-          }
-        }
-      } else {
-        // called on device scan completed by timeout
-        dispatch(setIsScanning(false));
-      }
-    });*/
-  };
-};
-
 export const stopDeviceScan = () => {
-  console.log("stopDeviceScan");
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {

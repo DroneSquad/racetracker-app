@@ -20,18 +20,21 @@ export default class extends Component {
     checkIsBtEnabled: Function,
     enableBt: Function,
     startBtStateNotifications: Function,
-    startBtDeviceScan: Function,
-    stopBtDeviceScan: Function,
+    startTrackerScan: Function,
+    stopTrackerScan: Function,
     validateTrackers: Function
   };
 
   componentDidMount() {
     if (!this.props.isBtAvailable) {
+      console.log("componentDidMount-checkIsBtAvailable")
       this.props.checkIsBtAvailable();
     } else {
       if (this.props.trackers.length === 0) {
-        console.log("componentDidMount-startDiscovery")
-        this.startDiscovery();
+        if (!this.props.isBtScanning) {
+          console.log("componentDidMount-startDiscovery")
+          this.startDiscovery();
+        }
       } else {
         if (!this.props.isBtScanning) {
           console.log("componentDidMount-validateTrackers")
@@ -46,6 +49,7 @@ export default class extends Component {
     if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         // TODO: currently this is never stopped, when/where should we handle that
+        console.log("componentDidUpdate-startBtStateNotifications")
         this.props.startBtStateNotifications();
       }
     }
@@ -64,7 +68,8 @@ export default class extends Component {
 
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
-    console.log("VALIDATE");
+    // TODO: duplicate the btcheck below
+    console.log("validateTrackers");
     console.log(this.props.trackers);
     this.props.validateTrackers(this.props.trackers);
   };
@@ -72,12 +77,14 @@ export default class extends Component {
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtEnabled) {
+      console.log("startDiscovery-checkIsBtEnabled")
       this.props.checkIsBtEnabled(); // check/update bluetooth enabled
     } else {
       if (!this.props.isBtScanning) {
         // prevent scanning if already running
-        console.log("startDiscovery-startBtDeviceScan")
-        this.props.startBtDeviceScan(this.props.trackers); // begin bluetooth discovery scan
+        console.log("startDiscovery-startTrackerScan")
+        console.log(this.props.trackers);
+        this.props.startTrackerScan(this.props.trackers); // begin bluetooth discovery scan
       }
     }
   };
@@ -91,7 +98,7 @@ export default class extends Component {
     if (isBtScanning) {
       attrs = {
         ...attrs,
-        onClick: this.props.stopBtDeviceScan,
+        onClick: this.props.stopTrackerScan,
         label: 'stop'
       };
     } else {

@@ -166,7 +166,7 @@ export const connectTracker = (device_id: string) => {
   };
 };
 
-export const startTrackerSearch = (request: array =  [], timeout: boolean = false) => {
+export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
   console.log("startDeviceScan-START");
   var matchArr = request.slice(0);
   console.log(matchArr);
@@ -200,7 +200,7 @@ export const startTrackerSearch = (request: array =  [], timeout: boolean = fals
               // remove this tracker from our search array
               console.log("REMOVE-FROM-MATCHARR");
               matchArr.splice(idx, 1);
-              if (!timeout) { // timeout=true, indicates a full discovery scan
+              if (!discoveryScan) { // timeout=true, indicates a full discovery scan
                 console.log("TIMEOUT==FALSE-END ASAP");
                 if (matchArr.length === 0) {
                   console.log("TIMEOUT=ARRAY EMPTY-END NOW");
@@ -208,9 +208,11 @@ export const startTrackerSearch = (request: array =  [], timeout: boolean = fals
                 }
               }
             } else {
-              console.log("DISCOVER TRACKER")
-              console.log(response.device);
-              dispatch(discoverTracker(response.device));
+              if (discoveryScan) {
+                console.log("DISCOVER TRACKER")
+                console.log(response.device);
+                dispatch(discoverTracker(response.device));
+              }
             }
           }
         }
@@ -229,7 +231,9 @@ export const startTrackerSearch = (request: array =  [], timeout: boolean = fals
         }
         console.log("setIsScanning-false");
         // called on device scan completed via timeout
-        dispatch(setIsScanning(false));
+        if (discoveryScan) {
+          dispatch(setIsScanning(false));
+        }
         console.log("startDeviceScan-END");
       }
     });
@@ -245,24 +249,33 @@ export const isTrackerConnected = (device_id: string) => {
 };
 
 export const validateTrackerPromise = (request: object) => {
+  console.log("validateTrackerPromise");
+  console.log(request);
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
     ble.readDeviceRssi(response => {
       if (response.error) {
+        console.log("X1")
         // error response indicates either the tracker is not connected, or not found with
         // the bluetooth library determine the type of errort and handle accordingly
         var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
+          console.log("X2")
           // indicates the tracker is available to the bluetooth library but not curently connected
           if (request.isConnected) {
+            console.log("X3")
             resolve(connectTracker(request.id));
+          } else {
+            resolve(request)
           }
         } else if (err === 'FOUND') {
+          console.log("X4")
           // indicates that the tracker is NOT currently available to the bluetooth library
           resolve(request); // return the object and populate the search array
         }
       } else {
+        console.log("X5")
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux matches
         resolve(isTrackerConnected(request.id));
@@ -271,29 +284,56 @@ export const validateTrackerPromise = (request: object) => {
   });
 };
 
-export const validateTrackers = (request: array) => {
+export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
+  console.log("validateTrackers");
+  console.log(request);
+  console.log(discoveryScan);
   return dispatch => {
+    console.log("A")
     var trackerPromises = [];
+    console.log("B")
     for (let rt of request) {
       trackerPromises.push(validateTrackerPromise({ id: rt.id, isConnected: rt.isConnected }));
     }
+    console.log("C")
+    console.log(trackerPromises);
     Promise.all(trackerPromises)
       .then(response => {
+        console.log("D")
         var sync = [];
         for (let r of response) {
           var t = typeof r;
+          console.log("TYPE");
+          console.log(t);
           if (t === 'function') {
             dispatch(r);
-          } else {
+          } else if (t !== undefined) {
             sync.push(r);
           }
         }
-        if (sync.length > 0) {
-          dispatch(startTrackerSearch(sync));
+        console.log("E")
+        if (discoveryScan) {
+          dispatch(startTrackerSearch(sync, discoveryScan));
+        } else {
+          if (sync.length > 0) {
+            dispatch(startTrackerSearch(sync));
+          }
         }
       })
       .catch(error => console.log(error)); // TODO: add proper error handling/logging
   };
+};
+
+export const discoverTrackers = (request: array) => {
+  console.log("discoverTrackers");
+  console.log(request);
+  return dispatch => {
+    console.log("1")
+    dispatch(setIsScanning(true));
+    console.log("2")
+    dispatch(validateTrackers(request, true));
+    console.log("3")
+  }
 };
 
 /** disconnect a racetracker from the device/app */
