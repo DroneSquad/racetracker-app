@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 import { AppBar, List, ListItem, Divider, SelectField, MenuItem } from 'material-ui';
 
-import { historyBackButton } from '../../../../../utils';
 import frequencies from '../../../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles
 
 import './frequencies.css';
@@ -36,7 +35,6 @@ export default class Frequency extends React.Component {
   /** When the user selects a channel */
   onChannelSelect = (event, value) => {
     this.setState({ channel: value });
-    this.props.rawDispatch({ type: 'FREQ_TEST' });
   };
 
   /** All the frequencies */
@@ -84,7 +82,7 @@ export default class Frequency extends React.Component {
           <AppBar
             title="Video Frequency Selection"
             iconClassNameLeft="mdi mdi-arrow-left"
-            onLeftIconButtonTouchTap={historyBackButton.bind(this)}
+            onLeftIconButtonTouchTap={this.props.onUpdate.bind(this)}
           />
         </header>
         <main>

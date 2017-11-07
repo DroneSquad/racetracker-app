@@ -57,11 +57,16 @@ export default class Frequencies extends React.Component {
   };
 
   /** When the user clicks on the frequency */
-  onFrequencyClick = (freq, amount, channel) => {
+  onFrequencyClick = (freq, amount, channel, copyBands, bandIndex) => {
     this.props.history.replace(this.props.location.pathname, { amount, channel });
     let band = freq[0];
     let number = Number(freq[1]);
-    this.props.history.push(`/tracker/${this.props.id}/settings/frequencies/edit`, { band, number });
+    this.props.history.push(`/tracker/${this.props.id}/settings/frequencies/edit`, {
+      band,
+      number,
+      copyBands,
+      bandIndex
+    });
   };
 
   render() {
@@ -81,7 +86,6 @@ export default class Frequencies extends React.Component {
         channel = -1;
       }
     }
-    console.log(videoProfile, videoFrequencies);
     let isLoading = !videoProfile || !videoFrequencies;
     return (
       <div className="main video-frequencies">
@@ -138,7 +142,7 @@ export default class Frequencies extends React.Component {
                         {band.toUpperCase()} - {frequencies.bands[band.toLowerCase()] || '0000'}
                       </span>
                     }
-                    onTouchTap={() => this.onFrequencyClick(band, amount, channel)}
+                    onTouchTap={() => this.onFrequencyClick(band, amount, channel, videoFrequencies.bands, index - 1)}
                   />
                   <Divider />
                 </div>

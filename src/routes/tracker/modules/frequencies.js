@@ -5,7 +5,7 @@ import { goBack } from 'react-router-redux';
 
 import frequencies from '../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles
 
-export const FREQ_PROFILE_INIT = 'FREQ_PROFILE_INIT';
+export const FREQ_CUSTOM_PROFILE = 'FREQ_CUSTOM_PROFILE';
 export const FREQ_UPDATE_PROFILE = 'FREQ_UPDATE_PROFILE';
 export const FREQ_SAVING = 'FREQ_SAVING';
 export const FREQ_SAVING_DONE = 'FREQ_SAVING_DONE';
@@ -75,49 +75,44 @@ function rebuildProfileStuff(frequencies) {
   return { frequencies, profiles, profilesMap };
 }
 
+/** get or create the profile template to create custom profile */
+function getOrCreateCustomProfile() {
+  let customProfile = { name: 'Custom', frequencies: [] };
+  if (_.size(frequencies.profiles) > 0 && frequencies.profiles[0].name === 'Custom') {
+    customProfile = frequencies.profiles[0]; // The custom profile should be the first in the array
+  } else {
+    frequencies.profiles.unshift(customProfile);
+  }
+  return customProfile;
+}
+
+/** Update the actual band in the custom profile */
+function updateCustomProfile(profile, actions) {
+  let updatedBands = _.cloneDeep(actions.lastBands);
+  updatedBands[actions.position] = actions.newBand;
+  // check for existing custom band profiles
+  for (let band in profile.frequencies) {
+    band = profile.frequencies[band];
+    if (_.size(band.bands) === _.size(updatedBands)) {
+      band.bands = updatedBands;
+      return profile;
+    }
+  }
+  // at this time if we did not find it add it
+  profile.frequencies.push({ imd: -1, bands: updatedBands });
+  return profile;
+}
+
+/** The benfits of function composition */
+function customProfile(payload) {
+  return updateCustomProfile(getOrCreateCustomProfile(), payload);
+}
+
 /** reducers */
 export default function(state = {}, action) {
   switch (action.type) {
-    case 'FREQ_TEST':
-      // todo actually create the custom profile
-      frequencies.profiles.unshift({
-        name: 'Custom',
-        frequencies: [
-          {
-            imd: 1.0,
-            bands: ['a1']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2', 'a2', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2']
-          },
-          {
-            imd: 1.0,
-            bands: ['a1', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2', 'a2']
-          }
-        ]
-      });
-      return { ...state, ...rebuildProfileStuff(frequencies) };
+    case FREQ_CUSTOM_PROFILE:
+      return { ...state, profile: customProfile(action.payload), ...rebuildProfileStuff(frequencies) };
     case FREQ_UPDATE_PROFILE:
       return { ...state, deviceProfile: false, profile: action.payload };
     case FREQ_SAVING:
