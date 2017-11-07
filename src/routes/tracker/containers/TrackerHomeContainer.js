@@ -5,7 +5,7 @@ import {
   isAvailable,
   isEnabled,
   enable,
-  startStateNotifications,
+  startStateNotifications
   // stopStateNotifications, TODO: implement this on application close?
   // stopDeviceScan
 } from '../modules/bluetooth';

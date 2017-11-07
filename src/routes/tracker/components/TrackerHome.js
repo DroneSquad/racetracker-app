@@ -94,7 +94,7 @@ export default class extends Component {
     // -----------------------------------------------------
     // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
     this.props.stopTrackerScan();
-  }
+  };
 
   /** change button purpose: start/stop scan based on scanning state */
   btScanButton = () => {

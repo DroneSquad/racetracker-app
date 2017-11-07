@@ -188,7 +188,8 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
               }
               // remove this tracker from our search array
               matchArr.splice(idx, 1);
-              if (!discoveryScan) { // timeout=true, indicates a full discovery scan
+              if (!discoveryScan) {
+                // timeout=true, indicates a full discovery scan
                 if (matchArr.length === 0) {
                   dispatch(stopTrackerScan());
                 }
@@ -240,7 +241,7 @@ export const validateTrackerPromise = (request: object) => {
           if (request.isConnected) {
             resolve(connectTracker(request.id));
           } else {
-            resolve(request)
+            resolve(request);
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
@@ -288,7 +289,7 @@ export const discoverTrackers = (request: array) => {
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
-  }
+  };
 };
 
 export const stopTrackerScan = (request: array = []) => {
@@ -550,7 +551,7 @@ export default function(state = [], action: Action) {
       // use a union to remove dupes of tracker ids
       return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
     case RT_REMOVE:
-      console.log("RT_REMOVE");
+      console.log('RT_REMOVE');
       console.log(state);
       console.log(action);
       return state.filter(tracker => tracker.id !== action.payload);
