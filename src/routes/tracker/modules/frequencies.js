@@ -89,7 +89,10 @@ function getOrCreateCustomProfile() {
 /** Update the actual band in the custom profile */
 function updateCustomProfile(profile, actions) {
   let updatedBands = _.cloneDeep(actions.lastBands);
-  updatedBands[actions.position] = actions.newBand;
+  if (actions.position >= 0 && actions.newBand) {
+    // update if exists will be null if reading from device
+    updatedBands[actions.position] = actions.newBand;
+  }
   // check for existing custom band profiles
   for (let band in profile.frequencies) {
     band = profile.frequencies[band];
@@ -112,7 +115,12 @@ function customProfile(payload) {
 export default function(state = {}, action) {
   switch (action.type) {
     case FREQ_CUSTOM_PROFILE:
-      return { ...state, profile: customProfile(action.payload), ...rebuildProfileStuff(frequencies) };
+      return {
+        ...state,
+        deviceProfile: false,
+        profile: customProfile(action.payload),
+        ...rebuildProfileStuff(frequencies)
+      };
     case FREQ_UPDATE_PROFILE:
       return { ...state, deviceProfile: false, profile: action.payload };
     case FREQ_SAVING:
@@ -137,15 +145,8 @@ export default function(state = {}, action) {
         ...state,
         deviceProfileBandIndex: bandIndex,
         deviceProfile: true,
-        profile: knownProfile || {
-          name: 'Device',
-          frequencies: [
-            {
-              imd: -1.0,
-              bands: bands
-            }
-          ]
-        }
+        profile: knownProfile || customProfile({ lastBands: bands }),
+        ...rebuildProfileStuff(frequencies)
       };
     default:
       return { ...state, loading: false, ...rebuildProfileStuff(frequencies) };

@@ -17,11 +17,10 @@ export default class Frequencies extends React.Component {
   };
 
   componentWillMount() {
-    // fetch from device if we are not navagating back to page
-    if (!this.props.location.state) {
+    // fetch from device if we are not navigating back to page
+    if (!this.props.location.state || !this.props.videoProfile) {
       this.props.readFrequencies(this.props.id);
     }
-    console.log(this.props);
   }
 
   saveProfile(amount, channel) {
@@ -40,20 +39,9 @@ export default class Frequencies extends React.Component {
   };
 
   /** When the frequency amount changes */
-  onFrequencyChannel = (event, value) => {
-    this.setState({ channel: value });
-    this.saveProfile(this.state.amount + 1, value);
-  };
-
-  /** When the frequency amount changes */
-  onDeviceFrequencyChannel = (event, value, amount) => {
-    if (value > 0) {
-      this.setState({ amount: amount, channel: value - 1 });
-      this.saveProfile(amount + 1, value - 1);
-    } else {
-      this.props.updateProfile(); // clear profile to show loading
-      this.props.readFrequencies(this.props.id); // Re read from the device
-    }
+  onFrequencyChannel = (event, value, amount) => {
+    this.setState({ amount: amount, channel: value });
+    this.saveProfile(amount + 1, value);
   };
 
   /** When the user clicks on the frequency */
@@ -75,7 +63,7 @@ export default class Frequencies extends React.Component {
     let channel = this.state.channel; // the index for the channel name
     let videoFrequencies;
     if (videoProfile) {
-      videoFrequencies = _.find(videoProfile.frequencies, freq => freq.bands.length === this.state.amount + 1);
+      videoFrequencies = _.find(videoProfile.frequencies, freq => freq.bands.length === amount + 1);
       if (videoFrequencies) {
         amount = videoFrequencies.bands.length - 1;
       }
@@ -83,9 +71,13 @@ export default class Frequencies extends React.Component {
         // if device profile for an update on all vars
         videoFrequencies = videoProfile.frequencies[deviceProfileBandIndex];
         amount = videoFrequencies.bands.length - 1;
-        channel = -1;
+        channel =
+          videoProfile.name === 'Custom'
+            ? 0
+            : _.findIndex(profilesMap[amount + 1], id => videoProfile.name === this.props.profiles[id]);
       }
     }
+    console.log(amount, channel);
     let isLoading = !videoProfile || !videoFrequencies;
     return (
       <div className="main video-frequencies">
@@ -108,18 +100,8 @@ export default class Frequencies extends React.Component {
             <DropDownMenu
               disabled={this.props.saving}
               value={channel}
-              onChange={
-                isDeviceProfile
-                  ? (event, value) => this.onDeviceFrequencyChannel(event, value, amount)
-                  : this.onFrequencyChannel
-              }
+              onChange={(event, value) => this.onFrequencyChannel(event, value, amount)}
             >
-              {isDeviceProfile &&
-                <MenuItem
-                  key={-1}
-                  value={-1}
-                  primaryText={videoProfile.name === 'Device' ? 'Device' : `${videoProfile.name} (Device)`}
-                />}
               {_.map(profilesMap[amount + 1], (value, index) =>
                 <MenuItem key={index} value={index} primaryText={frequencies.profiles[value].name} />
               )}
