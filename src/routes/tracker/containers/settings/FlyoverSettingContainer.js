@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import FlyoverSetting from '../../components/settings/FlyoverSetting';
 
-import { setRaceMode } from '../../modules/racetracker';
+import { writeRaceMode } from '../../modules/racetracker';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  setRaceMode: object => dispatch(setRaceMode(object))
+  setRaceMode: object => dispatch(writeRaceMode(object))
 });
 
 const FlyoverSettingContainer = connect(mapStateToProps, mapDispatchToProps)(FlyoverSetting);

@@ -12,8 +12,7 @@ export default class Racing extends Component {
     isRaceActive: boolean,
     activeHeatId: string,
     activeRaceId: string,
-    createRace: Function,
-    updateRaceMode: Function
+    createRace: Function
   };
 
   componentDidMount() {
@@ -30,16 +29,8 @@ export default class Racing extends Component {
     }
   }
 
+// check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
-    /*if (this.props.isRaceActive) {
-      if (this.props.connectedTrackers[0].raceMode !== nextProps.connectedTrackers[0].raceMode) {
-        console.log('UPDATE_RACEMODE');
-        this.updateRaceMode({
-          raceId: this.props.activeRaceId,
-          raceMode: this.props.nextProps.connectedTrackers[0].raceMode
-        });
-      }
-    }*/
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
         if (this.props.connectedTrackers[0].racerChannels) {

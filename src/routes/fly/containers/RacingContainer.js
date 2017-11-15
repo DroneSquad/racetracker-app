@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
-import { createRace, setRaceMode } from '../modules/race';
+import { createRace } from '../modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -24,7 +24,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   createRace: array => dispatch(createRace(array)),
-  updateRaceMode: object => dispatch(setRaceMode(object))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);

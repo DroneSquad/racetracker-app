@@ -87,6 +87,9 @@ export class RaceMngr {
     tbs.readRaceUpdate(cb, request); // => {
   }
 
+  updateRaceMode(cb, request) {
+
+  }
   /** Get the total number of rounds by a a selected racer */
   /*export const readTotalRounds = (request: object) => {
     return dispatch => {

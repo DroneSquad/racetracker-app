@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
+import mngr from '../../../services/racemanager';
 
 import { setError, setIsScanning } from './bluetooth';
 
@@ -189,7 +190,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
               // remove this tracker from our search array
               matchArr.splice(idx, 1);
               if (!discoveryScan) {
-                // timeout=true, indicates a full discovery scan
+                // indicates if this is a full discovery scan
                 if (matchArr.length === 0) {
                   dispatch(stopTrackerScan());
                 }
@@ -246,6 +247,10 @@ export const validateTrackerPromise = (request: object) => {
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
           resolve(request); // return the object and populate the search array
+        } else {
+          // this should never happen
+          console.log(err);
+          reject();
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
@@ -375,6 +380,14 @@ export const readBatteryLevel = (deviceId: string) => {
   };
 };
 
+export const writeRaceMode = (request: object) => {
+  return dispatch => {
+    dispatch(setRaceMode(request));
+    // TODO:
+    // dispatch(mngrRaceMode(request));
+  };
+};
+
 /** read the channel of a selected racer from racetracker, updating redux if successful */
 /*  request: { deviceId: tracker_id, racer: racer_position } */
 export const readRacerChannel = (request: object) => {
@@ -402,6 +415,7 @@ export const writeRacerChannel = (request: object) => {
     }, request);
   };
 };
+
 
 /** Write an array or objects to the racetracker and update redux if successful */
 /*  request: { deviceId: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
@@ -651,6 +665,8 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACEMODE:
+      console.log("RT_RACEMODE");
+      console.log(action.payload);
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId
