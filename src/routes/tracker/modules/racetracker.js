@@ -43,7 +43,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
-    raceMode: RACEMODE_DEFAULT,  // TODO we should store the previous race mode and use it on discovery
+    raceMode: RACEMODE_DEFAULT, // TODO we should store the previous race mode and use it on discovery
     minLapTime: '',
     maxRounds: '',
     gateADC: '',
@@ -416,7 +416,6 @@ export const writeRacerChannel = (request: object) => {
   };
 };
 
-
 /** Write an array or objects to the racetracker and update redux if successful */
 /*  request: { deviceId: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
 export const writeRacerChannels = (request: object, callback) => {
@@ -665,7 +664,7 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACEMODE:
-      console.log("RT_RACEMODE");
+      console.log('RT_RACEMODE');
       console.log(action.payload);
       return state.map(
         tracker =>

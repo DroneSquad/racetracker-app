@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   activeHeatId: state.race.activeHeat,
   activeRaceId: state.race.id,
-  isBtScanning: state.bluetooth.isScanning,
+  isBtScanning: state.bluetooth.isScanning
   // activeTrackerId: state.race.trackerId,
   // raceMode: state.race.raceMode,
   // heats: state.race.heats ? state.race.heats : [],

@@ -66,7 +66,7 @@ export default class extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
     if (!this.props.isBtScanning) {
-      console.log("validateTrackers-TRACKERHOME");
+      console.log('validateTrackers-TRACKERHOME');
       this.props.validateTrackers(this.props.trackers);
     }
   };

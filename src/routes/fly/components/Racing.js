@@ -32,7 +32,7 @@ export default class Racing extends Component {
     }
   }
 
-// check here if race exists already check heat?
+  // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
