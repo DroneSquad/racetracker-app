@@ -131,7 +131,7 @@ export const updateLaps = (request: object) => {
     tbs.readTotalRounds(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+        // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
       } else {
         dispatch(setTotalRounds(response)); // update the redux value
       }
@@ -145,7 +145,7 @@ export const updateLaps = (request: object) => {
     tbs.readLapTime(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(request.device_id)); // verify/update connection state
+        // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
       } else {
         dispatch(setLaptime(response)); // update the redux value
       }

@@ -102,9 +102,9 @@ export class Ble {
   }
 
   /** connect to bluetooth device via device id */
-  connectDevice(cb, device_id) {
+  connectDevice(cb, deviceId) {
     window.ble.connect(
-      device_id,
+      deviceId,
       // callback fired on successful device connection
       device => cb({ device: device, connected: true }),
       // callback fired on device disconnection/error
@@ -113,29 +113,29 @@ export class Ble {
   }
 
   /** disconnect bluetooth device via device id */
-  disconnectDevice(cb, device_id) {
+  disconnectDevice(cb, deviceId) {
     window.ble.disconnect(
-      device_id,
-      () => cb({ device_id: device_id, connected: false }),
+      deviceId,
+      () => cb({ deviceId: deviceId, connected: false }),
       () => {
-        let err = Error('Error disconnecting Bluetooth device: ' + device_id);
+        let err = Error('Error disconnecting Bluetooth device: ' + deviceId);
         cb({ error: err });
       }
     );
   }
 
   /** check if a device is currently connected w/ device id */
-  isDeviceConnected(cb, device_id) {
+  isDeviceConnected(cb, deviceId) {
     window.ble.isConnected(
-      device_id,
-      () => cb({ device_id: device_id, connected: true }),
-      () => cb({ device_id: device_id, connected: false })
+      deviceId,
+      () => cb({ deviceId: deviceId, connected: true }),
+      () => cb({ deviceId: deviceId, connected: false })
     );
   }
 
   /** read the rssi value of a device with device id */
-  readDeviceRssi(cb, device_id) {
-    window.ble.readRSSI(device_id, rssi => cb({ device_id: device_id, rssi: rssi }), error => cb({ error: error }));
+  readDeviceRssi(cb, deviceId) {
+    window.ble.readRSSI(deviceId, rssi => cb({ deviceId: deviceId, rssi: rssi }), error => cb({ error: error }));
   }
 }
 

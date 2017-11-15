@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
+import mngr from '../../../services/racemanager';
 
 import { setError, setIsScanning } from './bluetooth';
 
@@ -42,7 +43,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
-    raceMode: RACEMODE_DEFAULT,
+    raceMode: RACEMODE_DEFAULT,  // TODO we should store the previous race mode and use it on discovery
     minLapTime: '',
     maxRounds: '',
     gateADC: '',
@@ -150,7 +151,7 @@ export const setRacerChannel = (request: Object) => ({
 });
 
 /** connect the device/app to a racetracker */
-export const connectTracker = (device_id: string) => {
+export const connectTracker = (deviceId: string) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
@@ -162,7 +163,7 @@ export const connectTracker = (device_id: string) => {
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -189,7 +190,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
               // remove this tracker from our search array
               matchArr.splice(idx, 1);
               if (!discoveryScan) {
-                // timeout=true, indicates a full discovery scan
+                // indicates if this is a full discovery scan
                 if (matchArr.length === 0) {
                   dispatch(stopTrackerScan());
                 }
@@ -219,11 +220,11 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
   };
 };
 
-export const isTrackerConnected = (device_id: string) => {
+export const isTrackerConnected = (deviceId: string) => {
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -246,6 +247,10 @@ export const validateTrackerPromise = (request: object) => {
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
           resolve(request); // return the object and populate the search array
+        } else {
+          // this should never happen
+          console.log(err);
+          reject();
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
@@ -311,20 +316,20 @@ export const stopTrackerScan = (request: array = []) => {
 };
 
 /** disconnect a racetracker from the device/app */
-export const disconnectTracker = (device_id: string) => {
+export const disconnectTracker = (deviceId: string) => {
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        dispatch(setDisconnected(response.device_id));
+        dispatch(setDisconnected(response.deviceId));
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /** get the current mode of a racetracker by device id */
-export const readActiveMode = (device_id: string) => {
+export const readActiveMode = (deviceId: string) => {
   return dispatch => {
     tbs.readActiveMode(response => {
       if (response.error) {
@@ -332,12 +337,12 @@ export const readActiveMode = (device_id: string) => {
       } else {
         dispatch(setActiveMode(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /** get the current rssi value of a racetracker to the device/app */
-export const readRssiLevel = (device_id: string) => {
+export const readRssiLevel = (deviceId: string) => {
   return dispatch => {
     ble.readDeviceRssi(response => {
       if (response.error) {
@@ -345,12 +350,12 @@ export const readRssiLevel = (device_id: string) => {
       } else {
         dispatch(setRssiLevel(response));
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /* get the firmware version of a racetracker */
-export const readFirmwareVersion = (device_id: string) => {
+export const readFirmwareVersion = (deviceId: string) => {
   return dispatch => {
     tbs.readFirmwareVersion(response => {
       if (response.error) {
@@ -358,12 +363,12 @@ export const readFirmwareVersion = (device_id: string) => {
       } else {
         dispatch(setFirmwareVersion(response));
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /** get the current battery level of a racetracker */
-export const readBatteryLevel = (device_id: string) => {
+export const readBatteryLevel = (deviceId: string) => {
   return dispatch => {
     tbs.readBatteryLevel(response => {
       if (response.error) {
@@ -371,12 +376,20 @@ export const readBatteryLevel = (device_id: string) => {
       } else {
         dispatch(setBatteryLevel(response));
       }
-    }, device_id);
+    }, deviceId);
+  };
+};
+
+export const writeRaceMode = (request: object) => {
+  return dispatch => {
+    dispatch(setRaceMode(request));
+    // TODO:
+    // dispatch(mngrRaceMode(request));
   };
 };
 
 /** read the channel of a selected racer from racetracker, updating redux if successful */
-/*  request: { device_id: tracker_id, racer: racer_position } */
+/*  request: { deviceId: tracker_id, racer: racer_position } */
 export const readRacerChannel = (request: object) => {
   return dispatch => {
     tbs.readRacerChannel(response => {
@@ -390,7 +403,7 @@ export const readRacerChannel = (request: object) => {
 };
 
 /* write a channel to a racer position on a racetracker and update redux */
-/* request: { device_id: tracker_id, racer: racer_position, channel: channel_value } */
+/* request: { deviceId: tracker_id, racer: racer_position, channel: channel_value } */
 export const writeRacerChannel = (request: object) => {
   return dispatch => {
     tbs.writeRacerChannel(response => {
@@ -403,8 +416,9 @@ export const writeRacerChannel = (request: object) => {
   };
 };
 
+
 /** Write an array or objects to the racetracker and update redux if successful */
-/*  request: { device_id: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
+/*  request: { deviceId: tracker_id, channels:[{ racer: racer_position, channel: channel_value }] } */
 export const writeRacerChannels = (request: object, callback) => {
   return (dispatch, getStore) => {
     const promise = new Promise((success, fail) => {
@@ -425,8 +439,8 @@ export const writeRacerChannels = (request: object, callback) => {
 };
 
 /** Get all the currently configured channels for available racers, save to redux */
-/*  device_id: tracker_id */
-export const readRacerChannels = (device_id: string) => {
+/*  deviceId: tracker_id */
+export const readRacerChannels = (deviceId: string) => {
   return dispatch => {
     tbs.readRacerChannels(response => {
       if (response.error) {
@@ -434,7 +448,7 @@ export const readRacerChannels = (device_id: string) => {
       } else {
         dispatch(setRacerChannels(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -452,7 +466,7 @@ export const writeGateAdc = (request: object) => {
 };
 
 /** Get the currently calibrated gate ADC value for a tracker */
-export const readGateAdc = (device_id: string) => {
+export const readGateAdc = (deviceId: string) => {
   return dispatch => {
     tbs.readGateAdc(response => {
       if (response.error) {
@@ -460,12 +474,12 @@ export const readGateAdc = (device_id: string) => {
       } else {
         dispatch(setGateAdc(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /** Get the RSSI value of the VTX related to the gate ADC value */
-export const readRssiAdc = (device_id: string) => {
+export const readRssiAdc = (deviceId: string) => {
   return dispatch => {
     tbs.readRssiAdc(response => {
       if (response.error) {
@@ -473,12 +487,12 @@ export const readRssiAdc = (device_id: string) => {
       } else {
         dispatch(setRssiAdc(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
 /** Get the maximum number of allowed rounds for a ractracker */
-export const readMaxRounds = (device_id: string) => {
+export const readMaxRounds = (deviceId: string) => {
   return dispatch => {
     tbs.readMaxRounds(response => {
       if (response.error) {
@@ -486,7 +500,7 @@ export const readMaxRounds = (device_id: string) => {
       } else {
         dispatch(setMaxRounds(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -504,7 +518,7 @@ export const writeMaxRounds = (request: object) => {
 };
 
 /** get the current minimum lap time of a racetracker */
-export const readMinLapTime = (device_id: string) => {
+export const readMinLapTime = (deviceId: string) => {
   return dispatch => {
     tbs.readMinLapTime(response => {
       if (response.error) {
@@ -512,7 +526,7 @@ export const readMinLapTime = (device_id: string) => {
       } else {
         dispatch(setMinLapTime(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -530,17 +544,17 @@ export const writeMinLapTime = (request: object) => {
 };
 
 /** write a new min lap time value to a racetracker */
-export const calibrateGate = (device_id: string) => {
+export const calibrateGate = (deviceId: string) => {
   return dispatch => {
-    dispatch(setCalibrating({ device_id: device_id, calibrating: true }));
+    dispatch(setCalibrating({ deviceId: deviceId, calibrating: true }));
     tbs.calibrateGate(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
-        dispatch(setCalibrating({ device_id: device_id, calibrating: false })); // turn off calibration
+        dispatch(setCalibrating({ deviceId: deviceId, calibrating: false })); // turn off calibration
       } else {
         dispatch(setGateAdc(response)); // update the redux value
       }
-    }, device_id);
+    }, deviceId);
   };
 };
 
@@ -613,7 +627,7 @@ export default function(state = [], action: Action) {
     case RT_UPDATE_CONNECT:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 isConnected: action.payload.connected
@@ -623,7 +637,7 @@ export default function(state = [], action: Action) {
     case RT_BATTERY_LEVEL:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 battery: action.payload.battery
@@ -633,7 +647,7 @@ export default function(state = [], action: Action) {
     case RT_RSSI_LEVEL:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 rssi: action.payload.rssi
@@ -643,7 +657,7 @@ export default function(state = [], action: Action) {
     case RT_FIRMWARE_VERSION:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 firmware: action.payload.firmware
@@ -651,9 +665,11 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACEMODE:
+      console.log("RT_RACEMODE");
+      console.log(action.payload);
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 raceMode: action.payload.raceMode
@@ -663,7 +679,7 @@ export default function(state = [], action: Action) {
     case RT_RACER_CHANS:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 racerChannels: action.payload.channels // replace previous entirely
@@ -671,10 +687,10 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACER_CHAN:
-      let chans = state.filter(t => t.id === action.payload.device_id)[0].racerChannels;
+      let chans = state.filter(t => t.id === action.payload.deviceId)[0].racerChannels;
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 racerChannels: _.unionWith(chans, [action.payload.channel], (left, right) => left.racer === right.racer)
@@ -684,7 +700,7 @@ export default function(state = [], action: Action) {
     case RT_MIN_LAPTIME:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 minLapTime: action.payload.minLapTime
@@ -694,7 +710,7 @@ export default function(state = [], action: Action) {
     case RT_MAX_ROUNDS:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 maxRounds: action.payload.maxRounds
@@ -704,7 +720,7 @@ export default function(state = [], action: Action) {
     case RT_GATE_ADC:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 gateADC: action.payload.gateADC,
@@ -715,7 +731,7 @@ export default function(state = [], action: Action) {
     case RT_CALIBRATING:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 isCalibrating: action.payload.calibrating
@@ -725,7 +741,7 @@ export default function(state = [], action: Action) {
     case RT_RSSI_ADC:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 rssiADC: action.payload.rssiADC
@@ -735,7 +751,7 @@ export default function(state = [], action: Action) {
     case RT_ACTIVE_MODE:
       return state.map(
         tracker =>
-          tracker.id === action.payload.device_id
+          tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
                 activeMode: action.payload.activeMode

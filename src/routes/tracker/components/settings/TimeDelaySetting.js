@@ -28,7 +28,7 @@ export default class TimeDelaySetting extends Setting {
 
   handleChange = event => {
     if (event.target.value) {
-      this.props.setMinLapTime({ device_id: this.props.id, minLapTime: event.target.value });
+      this.props.setMinLapTime({ deviceId: this.props.id, minLapTime: event.target.value });
     }
   };
 

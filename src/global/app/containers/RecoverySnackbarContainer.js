@@ -22,10 +22,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  connect: device_id => dispatch(connectTracker(device_id)),
-  setConnecting: device_id => dispatch(setConnecting(device_id)),
-  disconnect: device_id => dispatch(disconnectTracker(device_id)),
-  setDisconnected: device_id => dispatch(setDisconnected(device_id))
+  connect: deviceId => dispatch(connectTracker(deviceId)),
+  setConnecting: deviceId => dispatch(setConnecting(deviceId)),
+  disconnect: deviceId => dispatch(disconnectTracker(deviceId)),
+  setDisconnected: deviceId => dispatch(setDisconnected(deviceId))
 });
 
 const RecoverySnackbarContainer = connect(mapStateToProps, mapDispatchToProps)(RecoverySnackbar);

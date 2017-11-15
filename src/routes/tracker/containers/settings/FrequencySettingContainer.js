@@ -15,7 +15,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  goToFrequencies: device_id => dispatch(push(`/tracker/${device_id}/settings/frequencies`, device_id))
+  goToFrequencies: deviceId => dispatch(push(`/tracker/${deviceId}/settings/frequencies`, deviceId))
 });
 
 const FrequencySettingContainer = connect(mapStateToProps, mapDispatchToProps)(FrequencySetting);

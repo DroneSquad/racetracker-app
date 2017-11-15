@@ -134,11 +134,11 @@ export class TbsRt {
 
   /** Send a command to RaceTracker WRITE_CHARACTERISTIC */
   /*  cmd: raw command to send to RaceTracker */
-  /*  device_id: id of the RaceTracker to send to */
-  writeCommand(cmd, device_id) {
+  /*  deviceId: id of the RaceTracker to send to */
+  writeCommand(cmd, deviceId) {
     return new Promise((resolve, reject) => {
       window.ble.write(
-        device_id,
+        deviceId,
         this._config.racetracker_service,
         this._config.write,
         cmd,
@@ -149,11 +149,11 @@ export class TbsRt {
   }
 
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
-  /*  device_id: id of the racetracker to read result from */
-  readCommand(device_id) {
+  /*  deviceId: id of the racetracker to read result from */
+  readCommand(deviceId) {
     return new Promise((resolve, reject) => {
       window.ble.read(
-        device_id,
+        deviceId,
         this._config.racetracker_service,
         this._config.read,
         data => resolve(data),
@@ -163,14 +163,14 @@ export class TbsRt {
   }
 
   /** Read result of a command sent to a RaceTracker on an interval */
-  /*  device_id: id of the racetracker to read result from */
+  /*  deviceId: id of the racetracker to read result from */
   /*  interval: interval to check result in ms */
   /*  complete: function that determines if the command has completed */
-  readCommandAtInterval(device_id, interval, complete) {
+  readCommandAtInterval(deviceId, interval, complete) {
     return new Promise((resolve, reject) => {
       let intId = setInterval(() => {
         window.ble.read(
-          device_id,
+          deviceId,
           this._config.racetracker_service,
           this._config.read,
           data => {
@@ -190,24 +190,24 @@ export class TbsRt {
   }
 
   /** Get the firmware version on a RaceTracker by device id */
-  readFirmwareVersion(cb, device_id) {
+  readFirmwareVersion(cb, deviceId) {
     window.ble.read(
-      device_id,
+      deviceId,
       this._config.device_service,
       this._config.firmware,
-      response => cb({ device_id: device_id, firmware: this.bytesToStr(response) }),
+      response => cb({ deviceId: deviceId, firmware: this.bytesToStr(response) }),
       error => cb({ error: error })
     );
   }
 
   /** Get the active mode of a RaceTracker by device id */
-  readActiveMode(cb, device_id) {
+  readActiveMode(cb, deviceId) {
     let cmdStr = 'getActiveMode';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result => {
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, activeMode: response }));
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result => {
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, activeMode: response }));
           })
         )
       )
@@ -215,13 +215,13 @@ export class TbsRt {
   }
 
   /** Get the battery level of a RaceTracker by device id */
-  readBatteryLevel(cb, device_id) {
+  readBatteryLevel(cb, deviceId) {
     let cmdStr = 'getBatteryLevel';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, battery: response }))
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, battery: response }))
           )
         )
       )
@@ -233,11 +233,11 @@ export class TbsRt {
     let cmdStr = 'getTotalRounds';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
               response => console.log(response) // numeric value 0
-              // cb({ device_id: request.device_id, totalRounds: response })
+              // cb({ deviceId: request.deviceId, totalRounds: response })
             )
           )
         )
@@ -250,11 +250,11 @@ export class TbsRt {
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
               response => console.log(response)
-              // cb({ device_id: request.device_id, round: request.round, lapTime: response })
+              // cb({ deviceId: request.deviceId, round: request.round, lapTime: response })
             )
           )
         )
@@ -264,7 +264,7 @@ export class TbsRt {
 
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
-    this.readCommand(request.device_id)
+    this.readCommand(request.deviceId)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
           if (response.startsWith('STARTED')) {
@@ -300,13 +300,13 @@ export class TbsRt {
   }
 
   /** Get the maximum allowed number of rounds allowed */
-  readMaxRounds(cb, device_id) {
+  readMaxRounds(cb, deviceId) {
     let cmdStr = 'getMaxRounds';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, maxRounds: response }))
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, maxRounds: response }))
           )
         )
       )
@@ -318,10 +318,10 @@ export class TbsRt {
     let cmdStr = 'setMaxRounds';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, maxRounds: response })
+              cb({ deviceId: request.deviceId, maxRounds: response })
             )
           )
         )
@@ -330,13 +330,13 @@ export class TbsRt {
   }
 
   /** Get the current RSSI value of the ADC */
-  readRssiAdc(cb, device_id) {
+  readRssiAdc(cb, deviceId) {
     let cmdStr = 'getRssiAdc';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, rssiADC: response }))
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, rssiADC: response }))
           )
         )
       )
@@ -344,19 +344,19 @@ export class TbsRt {
   }
 
   /** Read all channels from available racer slots (used on initial set) */
-  readRacerChannels(cb, device_id) {
+  readRacerChannels(cb, deviceId) {
     var racerPromises = [
-      this.getRacerChannelPromise({ device_id: device_id, racer: 1 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 2 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 3 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 4 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 5 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 6 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 7 }),
-      this.getRacerChannelPromise({ device_id: device_id, racer: 8 })
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 1 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 2 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 3 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 4 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 5 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 6 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 7 }),
+      this.getRacerChannelPromise({ deviceId: deviceId, racer: 8 })
     ];
     Promise.all(racerPromises)
-      .then(response => cb({ device_id: device_id, channels: response.filter(Boolean) }))
+      .then(response => cb({ deviceId: deviceId, channels: response.filter(Boolean) }))
       .catch(error => cb(error));
   }
 
@@ -366,8 +366,8 @@ export class TbsRt {
       let slot = this._config.slots[request.racer]; // get the handle of the racer slot
       this.prepareCommand(cmdStr, { slot: slot })
         .then(cmd =>
-          this.writeCommand(cmd, request.device_id).then(
-            this.readCommand(request.device_id).then(result =>
+          this.writeCommand(cmd, request.deviceId).then(
+            this.readCommand(request.deviceId).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
                 if (response !== 'FF') {
                   resolve({ racer: request.racer, channel: response });
@@ -388,10 +388,10 @@ export class TbsRt {
     let slot = this._config.slots[request.racer]; // get the handle of the racer slot
     this.prepareCommand(cmdStr, { slot: slot })
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response => {
-              cb({ device_id: request.device_id, channel: { racer: request.racer, channel: response } });
+              cb({ deviceId: request.deviceId, channel: { racer: request.racer, channel: response } });
             })
           )
         )
@@ -403,10 +403,10 @@ export class TbsRt {
   writeRacerChannels(cb, request) {
     let racerPromises = [];
     for (let channel of request.channels) {
-      racerPromises.push(this.setRacerChannelPromise({ device_id: request.device_id, channel: channel }));
+      racerPromises.push(this.setRacerChannelPromise({ deviceId: request.deviceId, channel: channel }));
     }
     Promise.all(racerPromises)
-      .then(response => cb({ device_id: request.device_id, channels: _.pull(response, null) }))
+      .then(response => cb({ deviceId: request.deviceId, channels: _.pull(response, null) }))
       .catch(error => cb(error));
   }
 
@@ -416,8 +416,8 @@ export class TbsRt {
       let cmdStr = 'setRacerChannel';
       this.prepareCommand(cmdStr, { racer: request.channel.racer, channel: request.channel.channel.toUpperCase() })
         .then(cmd =>
-          this.writeCommand(cmd, request.device_id).then(
-            this.readCommand(request.device_id).then(result =>
+          this.writeCommand(cmd, request.deviceId).then(
+            this.readCommand(request.deviceId).then(result =>
               this.prepareResponse(cmdStr, result).then(response => {
                 if (response !== 'FF') {
                   resolve({ racer: request.channel.racer, channel: response });
@@ -437,10 +437,10 @@ export class TbsRt {
     let cmdStr = 'setRacerChannel';
     this.prepareCommand(cmdStr, { racer: request.racer, channel: request.channel })
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response => {
-              cb({ device_id: request.device_id, channel: { racer: request.racer, channel: response } });
+              cb({ deviceId: request.deviceId, channel: { racer: request.racer, channel: response } });
             })
           )
         )
@@ -449,13 +449,13 @@ export class TbsRt {
   }
 
   /** Get the minimum lap time of a RaceTracker by device id */
-  readMinLapTime(cb, device_id) {
+  readMinLapTime(cb, deviceId) {
     let cmdStr = 'getMinLapTime';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, minLapTime: response }))
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, minLapTime: response }))
           )
         )
       )
@@ -467,10 +467,10 @@ export class TbsRt {
     let cmdStr = 'setMinLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, minLapTime: response })
+              cb({ deviceId: request.deviceId, minLapTime: response })
             )
           )
         )
@@ -479,13 +479,13 @@ export class TbsRt {
   }
 
   /** Get the Gate calibration value of a RaceTracker by device id */
-  readGateAdc(cb, device_id) {
+  readGateAdc(cb, deviceId) {
     let cmdStr = 'getGateAdc';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommand(device_id).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ device_id: device_id, gateADC: response }))
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, gateADC: response }))
           )
         )
       )
@@ -497,10 +497,10 @@ export class TbsRt {
     let cmdStr = 'setGateAdc';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, gateADC: response.gateADC })
+              cb({ deviceId: request.deviceId, gateADC: response.gateADC })
             )
           )
         )
@@ -513,10 +513,10 @@ export class TbsRt {
     let cmdStr = 'stopRace';
     this.prepareCommand(cmdStr)
       .then(cmd =>
-        this.writeCommand(cmd, request.device_id).then(
-          this.readCommand(request.device_id).then(result =>
+        this.writeCommand(cmd, request.deviceId).then(
+          this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ device_id: request.device_id, heatId: request.heatId, heatStopped: response })
+              cb({ deviceId: request.deviceId, heatId: request.heatId, heatStopped: response })
             )
           )
         )
@@ -530,12 +530,12 @@ export class TbsRt {
     let cmdStr = request.raceMode === 'shotgun' ? 'startRaceShotgun' : 'startRaceFlyby'; // race start type
     this.prepareCommand(vrxStr, request)
       .then(vrx =>
-        this.writeCommand(vrx, request.device_id).then(
+        this.writeCommand(vrx, request.deviceId).then(
           this.prepareCommand(cmdStr, request).then(cmd =>
-            this.writeCommand(cmd, request.device_id).then(
-              this.readCommand(request.device_id).then(result =>
+            this.writeCommand(cmd, request.deviceId).then(
+              this.readCommand(request.deviceId).then(result =>
                 this.prepareResponse(cmdStr, result).then(response =>
-                  cb({ device_id: request.device_id, heatId: request.heatId, heatStarted: response })
+                  cb({ deviceId: request.deviceId, heatId: request.heatId, heatStarted: response })
                 )
               )
             )
@@ -546,13 +546,13 @@ export class TbsRt {
   }
 
   /** Perform a gate calibration for a RaceTracker by device id */
-  calibrateGate(cb, device_id) {
+  calibrateGate(cb, deviceId) {
     let cmdStr = 'calibrateGate';
-    this.prepareCommand(cmdStr, device_id)
+    this.prepareCommand(cmdStr, deviceId)
       .then(cmd =>
-        this.writeCommand(cmd, device_id).then(
-          this.readCommandAtInterval(device_id, 1000, this.isCalibrationComplete).then(() =>
-            this.readGateAdc(cb, device_id)
+        this.writeCommand(cmd, deviceId).then(
+          this.readCommandAtInterval(deviceId, 1000, this.isCalibrationComplete).then(() =>
+            this.readGateAdc(cb, deviceId)
           )
         )
       )
@@ -569,11 +569,11 @@ export class TbsRt {
   }
 
   /** Generic raw sending function for development/debug purposes */
-  sendRawCommand(raw_command, device_id) {
+  sendRawCommand(raw_command, deviceId) {
     let cmd = this.strToBytes(raw_command);
-    this.writeCommand(cmd, device_id)
+    this.writeCommand(cmd, deviceId)
       .then(
-        this.readCommand(device_id).then(result => {
+        this.readCommand(deviceId).then(result => {
           console.log('sendRawCommandResponse');
           let response = this.bytesToStr(result);
           console.log(response);
