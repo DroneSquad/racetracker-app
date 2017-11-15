@@ -13,7 +13,7 @@ export default class Racing extends Component {
     activeHeatId: string,
     activeRaceId: string,
     createRace: Function,
-    updateRaceMode: Function
+    validateTrackers: Function
   };
 
   componentDidMount() {
@@ -27,19 +27,12 @@ export default class Racing extends Component {
           }
         }
       }
+    } else {
+      this.validateTrackers();
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isRaceActive) {
-      if (this.props.connectedTrackers[0].raceMode !== nextProps.connectedTrackers[0].raceMode) {
-        console.log('UPDATE_RACEMODE');
-        this.updateRaceMode({
-          raceId: this.props.activeRaceId,
-          raceMode: this.props.nextProps.connectedTrackers[0].raceMode
-        });
-      }
-    }
     if (this.props.connectedTrackers) {
       if (this.props.connectedTrackers.length === 1) {
         if (this.props.connectedTrackers[0].racerChannels) {
@@ -56,6 +49,13 @@ export default class Racing extends Component {
       }
     }
   }
+
+  /** Validate that the device exists on the internal bluetooth scan list */
+  validateTrackers = () => {
+    if (!this.props.isBtScanning) {
+      this.props.validateTrackers([this.props.connectedTrackers[0]]);
+    }
+  };
 
   createRace(tracker) {
     // TODO: handle multitracker support

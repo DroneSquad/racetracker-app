@@ -36,10 +36,7 @@ export default class extends Component {
           this.startDiscovery();
         }
       } else {
-        if (!this.props.isBtScanning) {
-          // console.log("componentDidMount-validateTrackers")
-          this.validateTrackers();
-        }
+        this.validateTrackers();
       }
     }
   }
@@ -69,7 +66,7 @@ export default class extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
     if (!this.props.isBtScanning) {
-      // console.log("validateTrackers");
+      console.log("validateTrackers-TRACKERHOME");
       this.props.validateTrackers(this.props.trackers);
     }
   };

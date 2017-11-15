@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
-import { createRace, setRaceMode } from '../modules/race';
+import { createRace } from '../modules/race';
+
+import { validateTrackers } from '../../tracker/modules/racetracker';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -13,7 +15,8 @@ const mapStateToProps = state => ({
   connectedTrackers: state.trackers.filter(t => t.isConnected),
   isRaceActive: state.race.isActive,
   activeHeatId: state.race.activeHeat,
-  activeRaceId: state.race.id
+  activeRaceId: state.race.id,
+  isBtScanning: state.bluetooth.isScanning,
   // activeTrackerId: state.race.trackerId,
   // raceMode: state.race.raceMode,
   // heats: state.race.heats ? state.race.heats : [],
@@ -24,7 +27,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   createRace: array => dispatch(createRace(array)),
-  updateRaceMode: object => dispatch(setRaceMode(object))
+  validateTrackers: array => dispatch(validateTrackers(array))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);
