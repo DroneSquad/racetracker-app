@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import { AppBar, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
+import { Card, CardTitle, CardText, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
 // import RaceHeats from './RaceHeats';
+import DroneSquadAppBar from '../../../global/app/containers/DroneSquadAppBarContainer';
 import Racing from '../containers/RacingContainer';
 
 import './fly.css';
@@ -13,6 +14,7 @@ export default class Race extends Component {
     goToTrackerHome: Function
   };
 
+  /** The drop down menu when there are more to do on the tracker */
   menuDropdown = () => {
     let icon = (
       <IconButton>
@@ -26,22 +28,29 @@ export default class Race extends Component {
     );
   };
 
+  /** Fast tracker icon to go right to the tracker menu */
+  tracker = () => (
+    <IconButton iconClassName="mdi mdi-timer" onTouchTap={() => this.props.goToTrackerHome()} />
+  );
+
   render() {
     return (
       <div className="fly">
         <header>
-          <AppBar title="Fly" iconElementRight={this.menuDropdown()} />
+          <DroneSquadAppBar iconElementRight={this.tracker()} />
         </header>
         <main>
           <Tabs initialSelectedIndex={0}>
             <Tab label="Racing">
               <Racing history={this.props.history} />
             </Tab>
-            <Tab label="Heats">
-              {/*<RaceHeats history={this.props.history} />*/}
-              {<div className="center-text">Heats Tab Currently Disabled</div>}
-            </Tab>
-            <Tab label="Stats" />
+            {/*<Tab label="Heats">*/}
+              {/*/!*<RaceHeats history={this.props.history} />*!/*/}
+              {/*{card}*/}
+            {/*</Tab>*/}
+            {/*<Tab label="Stats">*/}
+              {/*{card}*/}
+            {/*</Tab>*/}
           </Tabs>
         </main>
       </div>

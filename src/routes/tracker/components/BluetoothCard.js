@@ -19,7 +19,7 @@ export default class BluetoothCard extends Component {
   render() {
     // TODO: handle ios/android diffs for enabling bluetooth use window.device.platform to find type
     return (
-      <Card>
+      <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
         <CardTitle title={this.props.title} subtitle={this.props.subtitle} />
         <CardText>
           {this.props.text}

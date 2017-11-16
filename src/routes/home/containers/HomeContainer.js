@@ -19,7 +19,7 @@ export default class extends Home {
   });
 
   componentWillMount() {
-    this.state.index === 0 && this.props.fetchRsvps();
-    this.state.index === 1 && this.props.fetchGroups();
+    //this.state.index === 0 && this.props.fetchRsvps();
+    //this.state.index === 1 && this.props.fetchGroups();
   }
 }
