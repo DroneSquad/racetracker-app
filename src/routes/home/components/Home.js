@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
 import { Tabs, Tab, List, ListItem, Paper, FlatButton } from 'material-ui';
@@ -64,6 +64,10 @@ export default class extends React.Component {
   };
 
   render() {
+    // temp redirect to the fly page
+    if (true) {
+      return <Redirect to="/fly" />;
+    }
     return (
       <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>
         <h3 style={{ color: '#000' }}>Welcome to our Beta</h3>

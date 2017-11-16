@@ -139,7 +139,7 @@ export default class extends Component {
   render() {
     let { btError, isBtEnabled, isBtAvailable } = this.props;
     return (
-      <div className="main tracker-home">
+      <div className={isBtAvailable && isBtEnabled ? 'main tracker-home' : 'main'}>
         <header>
           <AppBar
             title="RaceTracker"

@@ -14,7 +14,7 @@ export default class RacetrackerCard extends Component {
 
   render() {
     return (
-      <Card>
+      <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
         <CardTitle title={this.props.title} subtitle={this.props.subtitle} />
         <CardText>
           {this.props.text}

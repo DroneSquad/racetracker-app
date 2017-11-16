@@ -1,38 +1,19 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import AppBar from 'material-ui/AppBar';
+import DroneSquadAppBar from '../containers/DroneSquadAppBarContainer';
 
-import Nav from './Nav';
+//import Nav from './Nav';
 import Chat from '../../../routes/chat/components/Chat';
 import Home from '../../../routes/home/containers/HomeContainer';
 import Fly from '../../../routes/fly/containers/FlyContainer';
 import FourOhFour from '../../404/components/FourOhFour';
 import Group from '../../../routes/group/containers/GroupContainer';
-import logo from '../../../media/ds-full-logo-horizontal.svg';
 import './main.css';
 
 /** This is the main screen of the app, this will display the routes for the buttons */
 export default class Main extends Component {
   props: {};
-
-  /** On developer mode */
-  onDeveloperMode = () => {
-    if (window.developer === true) {
-      this.props.history.push('/test');
-    } else {
-      if (!window.developer && window.developer !== 0) {
-        window.developer = 0;
-      } else if (window.developer === 7) {
-        let developerConfirm = window.confirm('Are you a developer?');
-        if (developerConfirm) {
-          window.developer = true;
-        }
-      } else {
-        window.developer++;
-      }
-    }
-  };
 
   render() {
     let { history } = this.props;
@@ -40,7 +21,7 @@ export default class Main extends Component {
     return (
       <content className="main">
         <header>
-          <AppBar title={<img className="logo" src={logo} alt="" onClick={this.onDeveloperMode} />} />
+          <DroneSquadAppBar />
         </header>
         <main>
           <Switch>
@@ -52,9 +33,9 @@ export default class Main extends Component {
             <Route path="/" component={() => <Redirect to="/404" />} /> {/* Must be last */}
           </Switch>
         </main>
-        <footer>
-          <Nav history={history} />
-        </footer>
+        {/*<footer>*/}
+          {/*<Nav history={history} />*/}
+        {/*</footer>*/}
       </content>
     );
   }
