@@ -64,9 +64,13 @@ export const setLap = (request: object) => ({
 });*/
 
 export const createRace = (request: array) => {
+  console.log("module-createRace");
+  console.log(request)
   // TODO update this for multi tracker
   return dispatch => {
     raceMngr.createRace(response => {
+      console.log("manager-response:")
+      console.log(response);
       dispatch(newRace(response));
     }, request);
   };
@@ -165,7 +169,7 @@ export default function(state = {}, action: Action) {
     case SET_RACEMODE:
       return {
         ...state,
-        raceMode: action.payload.raceMode
+        raceMode: action.payload
       };
     case SET_QUERY_INTERVAL:
       return {
@@ -186,7 +190,7 @@ export default function(state = {}, action: Action) {
         laps: _.unionWith(
           [action.payload],
           state.laps,
-          (left, right) => left.heat === right.heat && left.racer === right.racer && left.lap === right.lap
+          (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
         )
       };
     case START_HEAT:

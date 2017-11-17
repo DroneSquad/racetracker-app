@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
-import mngr from '../../../services/racemanager';
 
 import { setError, setIsScanning } from './bluetooth';
 
@@ -381,10 +380,9 @@ export const readBatteryLevel = (deviceId: string) => {
 };
 
 export const writeRaceMode = (request: object) => {
+  console.log("writeRaceMode");
   return dispatch => {
     dispatch(setRaceMode(request));
-    // TODO:
-    // dispatch(mngrRaceMode(request));
   };
 };
 
@@ -564,9 +562,6 @@ export default function(state = [], action: Action) {
       // use a union to remove dupes of tracker ids
       return _.unionWith(state, [action.payload], (left, right) => left.id === right.id);
     case RT_REMOVE:
-      console.log('RT_REMOVE');
-      console.log(state);
-      console.log(action);
       return state.filter(tracker => tracker.id !== action.payload);
     case RT_CONNECT:
       return state.map(
@@ -664,8 +659,6 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_RACEMODE:
-      console.log('RT_RACEMODE');
-      console.log(action.payload);
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId

@@ -12,11 +12,16 @@ export default class Racing extends Component {
     isRaceActive: boolean,
     activeHeatId: string,
     activeRaceId: string,
+    activeTrackerId: string,
+    activeRaceMode: string,
+    isBtScanning: boolean,
+    trackerRaceMode: string,
     createRace: Function,
     validateTrackers: Function
   };
 
   componentDidMount() {
+    console.log("componentDidMount")
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
@@ -34,19 +39,22 @@ export default class Racing extends Component {
 
   // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
-    if (this.props.connectedTrackers) {
-      if (this.props.connectedTrackers.length === 1) {
-        if (this.props.connectedTrackers[0].racerChannels) {
-          if (
-            this.props.connectedTrackers[0].racerChannels.length !== nextProps.connectedTrackers[0].racerChannels.length
-          ) {
-            if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
-              if (!this.props.isRaceActive) {
+    console.log("componentWillReceiveProps")
+    if (!this.props.isRaceActive) {
+      if (this.props.connectedTrackers) {
+        if (this.props.connectedTrackers.length === 1) {
+          if (this.props.connectedTrackers[0].racerChannels) {
+            if (this.props.connectedTrackers[0].racerChannels.length !== nextProps.connectedTrackers[0].racerChannels.length) {
+              if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
                 this.createRace(nextProps.connectedTrackers[0]);
               }
             }
           }
         }
+      }
+    } else {
+      if (nextProps.trackerRaceMode !== this.props.activeRaceMode) {
+        this.props.updateRaceMode(nextProps.trackerRaceMode);
       }
     }
   }
@@ -54,12 +62,15 @@ export default class Racing extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
     if (!this.props.isBtScanning) {
-      this.props.validateTrackers([this.props.connectedTrackers[0]]);
+      console.log("validateTracker");
+      let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId)
+      this.props.validateTrackers(aTracker);
     }
   };
 
   createRace(tracker) {
     // TODO: handle multitracker support
+    console.log("createRace");
     this.props.createRace([tracker]);
   }
 

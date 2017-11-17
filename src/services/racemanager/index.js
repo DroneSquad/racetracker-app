@@ -20,11 +20,11 @@ export class RaceMngr {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
     let laps = request[0].racerChannels.map(slot => ({
-      racer: slot.racer,
+      racer: slot.racer,  // name alias, object eventually
       lap: 1,
       lapTime: 0,
       totalTime: 0,
-      heat: hUid
+      heatId: hUid
     }));
     // create the first heat for the race
     let heat = {
@@ -59,9 +59,9 @@ export class RaceMngr {
       lap: 1,
       lapTime: 0,
       totalTime: 0,
-      heat: hUid
+      heatId: hUid
     }));
-    // create the first heat for the race
+    // create a new heat for the current race
     let heat = {
       id: hUid,
       raceId: request.raceId,
@@ -87,7 +87,11 @@ export class RaceMngr {
     tbs.readRaceUpdate(cb, request); // => {
   }
 
-  updateRaceMode(cb, request) {}
+  updateRaceMode(cb, request) {
+
+
+
+  }
   /** Get the total number of rounds by a a selected racer */
   /*export const readTotalRounds = (request: object) => {
     return dispatch => {

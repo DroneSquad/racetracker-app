@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
-import { createRace } from '../modules/race';
+import { createRace, setRaceMode } from '../modules/race';
 
 import { validateTrackers } from '../../tracker/modules/racetracker';
 
@@ -16,17 +16,17 @@ const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   activeHeatId: state.race.activeHeat,
   activeRaceId: state.race.id,
-  isBtScanning: state.bluetooth.isScanning
-  // activeTrackerId: state.race.trackerId,
-  // raceMode: state.race.raceMode,
-  // heats: state.race.heats ? state.race.heats : [],
-  // raceState: state.race ? state.race : {}
+  activeTrackerId: state.race.trackerId,
+  activeRaceMode: state.race.raceMode,
+  isBtScanning: state.bluetooth.isScanning,
+  trackerRaceMode: (state.race.trackerId) ? state.trackers.filter(t => t.id === state.race.trackerId)[0].raceMode : state.race.raceMode,
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   createRace: array => dispatch(createRace(array)),
+  updateRaceMode: object => dispatch(setRaceMode(object)),
   validateTrackers: array => dispatch(validateTrackers(array))
 });
 
