@@ -36,8 +36,8 @@ export default class Race extends Component {
   render() {
     let card = (
     <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
-      <CardTitle title="Arriving Soon" />
-      <CardText>This feature of the app is arriving soon.</CardText>
+      <CardTitle title="Coming Soon" />
+      <CardText>Previous heats will be listed here.</CardText>
     </Card>
     );
     return (
