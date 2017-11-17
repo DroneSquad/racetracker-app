@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.dronesquad.mobile" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Drone Squad</name>
+<widget id="com.dronesquad.mobile.racetracker" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>RaceTracker</name>
     <description>
-        Drone Squad Mobile App
+        Easily run FPV drone races with the Team Black Sheep RaceTracker
     </description>
     <content src="/index.html" />
     <preference name="BackgroundColor" value="0xff26687f" />
@@ -37,7 +37,7 @@
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <plugin name="cordova-plugin-ble-central" spec="^1.1.4">
-        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Allows app to communicate with the TBS Racetracker" />
+        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Allows app to communicate with the TBS RaceTracker" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-tts" spec="^0.2.3" />
