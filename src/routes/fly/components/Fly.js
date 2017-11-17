@@ -34,6 +34,12 @@ export default class Race extends Component {
   );
 
   render() {
+    let card = (
+    <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
+      <CardTitle title="Coming Soon" />
+      <CardText>Previous heats will be listed here.</CardText>
+    </Card>
+    );
     return (
       <div className="fly">
         <header>
@@ -44,10 +50,10 @@ export default class Race extends Component {
             <Tab label="Racing">
               <Racing history={this.props.history} />
             </Tab>
-            {/*<Tab label="Heats">*/}
-              {/*/!*<RaceHeats history={this.props.history} />*!/*/}
-              {/*{card}*/}
-            {/*</Tab>*/}
+            <Tab label="Heats">
+              {/*<RaceHeats history={this.props.history} />*/}
+              {card}
+            </Tab>
             {/*<Tab label="Stats">*/}
               {/*{card}*/}
             {/*</Tab>*/}
