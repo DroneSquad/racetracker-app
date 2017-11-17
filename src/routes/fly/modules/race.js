@@ -12,6 +12,7 @@ export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
+export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 
 // TODO:
 // export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
@@ -53,6 +54,11 @@ export const setLap = (request: object) => ({
   payload: request
 });
 
+export const setHeatRacers = (request: object) => ({
+  type: SET_HEAT_RACERS,
+  payload: request
+});
+
 /*export const setTotalRounds = (request: Object) => ({
   type: RT_TOTAL_ROUNDS,
   payload: request
@@ -64,13 +70,8 @@ export const setLap = (request: object) => ({
 });*/
 
 export const createRace = (request: array) => {
-  console.log("module-createRace");
-  console.log(request)
-  // TODO update this for multi tracker
   return dispatch => {
     raceMngr.createRace(response => {
-      console.log("manager-response:")
-      console.log(response);
       dispatch(newRace(response));
     }, request);
   };
@@ -129,6 +130,18 @@ export const updateLaps = (request: object) => {
   };
 };
 
+export const updateHeatRacers = (request: object) => {
+  console.log("updateHeatRacers-module")
+  console.log(request);
+  return dispatch => {
+    raceMngr.updateHeatRacers(response => {
+      console.log("call setHeatRacers")
+      console.log(response);
+      dispatch(setHeatRacers(response));
+    }, request);
+  };
+};
+
 /** Get the total number of rounds by a a selected racer */
 /*export const readTotalRounds = (request: object) => {
   return dispatch => {
@@ -183,7 +196,19 @@ export default function(state = {}, action: Action) {
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: state.laps.concat(action.payload.laps)
       };
+    case SET_HEAT_RACERS:
+    console.log("SET_HEAT_RACERS")
+    console.log(action.payload)
+      return {
+        ...state,
+        heats: _.unionWith(
+          [action.payload.heat],
+          state.heat,
+          (left, right) => left.id === right.id),
+        laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
+      };
     case SET_LAP:
+      console.log("SET_LAP")
       // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
       return {
         ...state,

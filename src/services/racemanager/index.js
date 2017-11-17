@@ -75,6 +75,34 @@ export class RaceMngr {
     cb({ heat: heat, laps: laps });
   }
 
+  updateHeatRacers(cb, request) {
+    console.log("updateHeatRacers-manager")
+
+    // create initial lap for each racer
+    let laps = request.racerChannels.map(slot => ({
+      racer: slot.racer,
+      lap: 1,
+      lapTime: 0,
+      totalTime: 0,
+      heatId: request.heat.id
+    }));
+    // create a new heat for the current race
+    let heat = {
+      id: request.heat.id,
+      raceId: request.heat.raceId,
+      number: request.heat.number,
+      isPending: request.heat.isPending,
+      isActive: request.heat.isActive,
+      isComplete: request.heat.isComplete,
+      racerChannels: request.racerChannels
+    };
+    // send it...
+    console.log("sendback")
+    console.log(heat);
+    console.log(laps);
+    cb({ heat: heat, laps: laps });
+  }
+
   startHeat(cb, request) {
     tbs.startHeat(cb, request);
   }
@@ -87,11 +115,6 @@ export class RaceMngr {
     tbs.readRaceUpdate(cb, request); // => {
   }
 
-  updateRaceMode(cb, request) {
-
-
-
-  }
   /** Get the total number of rounds by a a selected racer */
   /*export const readTotalRounds = (request: object) => {
     return dispatch => {

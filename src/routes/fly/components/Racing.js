@@ -70,7 +70,6 @@ export default class Racing extends Component {
 
   createRace(tracker) {
     // TODO: handle multitracker support
-    console.log("createRace");
     this.props.createRace([tracker]);
   }
 
