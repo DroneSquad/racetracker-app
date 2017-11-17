@@ -21,7 +21,6 @@ export default class Racing extends Component {
   };
 
   componentDidMount() {
-    console.log("componentDidMount")
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
@@ -39,7 +38,6 @@ export default class Racing extends Component {
 
   // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps")
     if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
@@ -62,7 +60,6 @@ export default class Racing extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
     if (!this.props.isBtScanning) {
-      console.log("validateTracker");
       let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId)
       this.props.validateTrackers(aTracker);
     }

@@ -20,11 +20,7 @@ import Racer from '../containers/RacerContainer';
 export default class Heat extends Component {
 
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps")
     if (nextProps.trackerChannels !== this.props.heatChannels) {
-      console.log("updatechannels");
-      console.log(this.props.activeHeat);
-      console.log(nextProps.trackerChannels);
       this.props.updateHeatRacers({ heat: this.props.activeHeat, racerChannels: nextProps.trackerChannels })
     }
   }
@@ -52,8 +48,6 @@ export default class Heat extends Component {
 
   render() {
     let { activeHeat, heatChannels } = this.props;
-    console.log("RENDER");
-    console.log(heatChannels)
     let title = (
       <span>
         {`Heat ${activeHeat.number}`} {activeHeat.isComplete && `Results`}
