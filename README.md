@@ -22,7 +22,7 @@ yarn test: start interactive test harness
 cordova builds are handled in the 'cordova' directory.
 be sure to add a cordova platform for development
 
-cordova platform add android
+cordova platform add android@6.2.3
 
 anytime a cordova build/run command is issued a `yarn build` command it auto generated, via a hook.
 
