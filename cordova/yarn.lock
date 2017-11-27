@@ -419,7 +419,7 @@ cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
 
-cordova-android@^6.2.1:
+cordova-android@^6.2.3:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/cordova-android/-/cordova-android-6.4.0.tgz#54ae8da5728a8d7e5efcc6172d3dcca17bc7fe7d"
   dependencies:
@@ -492,9 +492,9 @@ cordova-plugin-console@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-console/-/cordova-plugin-console-1.1.0.tgz#e2fbac10290179e44cb72c5fdbc410a531c1cd6d"
 
-cordova-plugin-device@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-1.1.6.tgz#2d21764cad7c9b801523e4e09a30e024b249334b"
+cordova-plugin-device@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-1.1.7.tgz#fc94111be6932628c66868938ddf3dc82c9fbfe6"
 
 cordova-plugin-disable-bitcode@^1.3.2:
   version "1.3.2"
@@ -510,17 +510,17 @@ cordova-plugin-headercolor@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/cordova-plugin-headercolor/-/cordova-plugin-headercolor-1.0.0.tgz#020acd943787ee039d67f679e8d9ea6d38920316"
 
-cordova-plugin-statusbar@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.2.3.tgz#51c5e02ad433bebd0b0dc977a446eb91dfee1502"
+cordova-plugin-statusbar@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.3.0.tgz#314e1d009c65910cdfde034bfca13bd502c9e5e0"
 
 cordova-plugin-tts@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-tts/-/cordova-plugin-tts-0.2.3.tgz#c5743f6c6f251e8cb4bc45dd33d41a9a22997287"
 
-cordova-plugin-whitelist@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-whitelist/-/cordova-plugin-whitelist-1.3.2.tgz#5b6335feb9f5301f3c013b9096cb8885bdbd5076"
+cordova-plugin-whitelist@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-whitelist/-/cordova-plugin-whitelist-1.3.3.tgz#b5e85ecdbbfe5aeded40a1bf4ee2372e67d96fb4"
 
 cordova-registry-mapper@^1.1.8:
   version "1.1.15"
