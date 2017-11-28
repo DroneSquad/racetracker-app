@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import FlyoverSetting from '../../components/settings/FlyoverSetting';
 
-import { writeRaceMode } from '../../modules/racetracker';
+import { writeRaceMode } from '../../../global/racetracker/modules/racetracker';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for

@@ -6,7 +6,7 @@ import {
   setConnecting,
   disconnectTracker,
   setDisconnected
-} from '../../../routes/tracker/modules/racetracker';
+} from '../../racetracker/modules/racetracker';
 
 import RecoverySnackbar from '../components/RecoverySnackbar';
 

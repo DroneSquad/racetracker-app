@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { RT_RACER_CHANS, writeRacerChannels, readRacerChannels } from './racetracker';
+import { RT_RACER_CHANS, writeRacerChannels, readRacerChannels } from '../../../global/racetracker/module/racetracker';
 import { goBack } from 'react-router-redux';
 
 import frequencies from '../containers/settings/frequencies/frequencies.json'; // the config to generate the profiles

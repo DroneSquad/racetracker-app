@@ -9,7 +9,7 @@ import {
   // stopStateNotifications, TODO: implement this on application close?
 } from '../../../global/bluetooth/modules/bluetooth';
 
-import { stopTrackerScan, validateTrackers, discoverTrackers } from '../modules/racetracker';
+import { stopTrackerScan, validateTrackers, discoverTrackers } from '../../../global/racetracker/modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 

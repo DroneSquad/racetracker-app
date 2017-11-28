@@ -5,7 +5,7 @@ import Racing from '../components/Racing';
 
 import { createRace, setRaceMode } from '../modules/race';
 
-import { validateTrackers } from '../../tracker/modules/racetracker';
+import { validateTrackers } from '../../../global/racetracker/modules/racetracker';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
