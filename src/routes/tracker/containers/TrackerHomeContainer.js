@@ -7,7 +7,7 @@ import {
   enable,
   startStateNotifications
   // stopStateNotifications, TODO: implement this on application close?
-} from '../modules/bluetooth';
+} from '../../../global/bluetooth/modules/bluetooth';
 
 import { stopTrackerScan, validateTrackers, discoverTrackers } from '../modules/racetracker';
 

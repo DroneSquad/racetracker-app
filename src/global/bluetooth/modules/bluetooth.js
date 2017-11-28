@@ -4,6 +4,7 @@ import ble from '../../../services/bluetooth';
 export const BT_IS_SCANNING = 'BT_IS_SCANNING';
 export const BT_IS_ENABLED = 'BT_IS_ENABLED';
 export const BT_IS_AVAILABLE = 'BT_IS_AVAILABLE';
+export const BT_IS_NOTIFYING = 'BT_IS_NOTIFYING';
 export const BT_ERROR = 'BT_ERROR';
 
 /** actions */
@@ -24,6 +25,11 @@ export const setIsEnabled = (value: boolean) => ({
 
 export const setIsScanning = (value: boolean) => ({
   type: BT_IS_SCANNING,
+  payload: value
+});
+
+export const setIsNotifying = (value: boolean) => ({
+  type: BT_IS_NOTIFYING,
   payload: value
 });
 
@@ -60,7 +66,8 @@ export const startStateNotifications = () => {
       if (response.error) {
         dispatch(setError(response.error));
       } else {
-        dispatch(setIsEnabled(response.value));
+        dispatch(setIsEnabled(response));  // update the state of bluetooth
+        dispatch(setIsNotifying(true));  // state notifications activated
       }
     });
   };
@@ -71,6 +78,8 @@ export const stopStateNotifications = () => {
     ble.stopStateNotifications(response => {
       if (response.error) {
         dispatch(setError(response.error));
+      } else {
+        dispatch(setIsNotifying(false));  // state notifications deactivated
       }
     });
   };
@@ -81,7 +90,8 @@ const initialState = {
   error: '',
   isAvailable: false,
   isEnabled: false,
-  isScanning: false
+  isScanning: false,
+  isNotifying: false,
 };
 
 /** reducers */
@@ -109,6 +119,11 @@ export default function(state = initialState, action: Action) {
       return {
         ...state,
         error: action.payload
+      };
+    case BT_IS_NOTIFYING:
+      return {
+        ...state,
+        isNotifying: action.payload
       };
     default:
       return { ...state, error: '' };

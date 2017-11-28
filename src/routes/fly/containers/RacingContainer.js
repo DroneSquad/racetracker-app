@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
   trackerRaceMode: (state.race.trackerId) ? state.trackers.filter(t => t.id === state.race.trackerId)[0].raceMode : state.race.raceMode,
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
+  state: state,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import { enable } from '../modules/bluetooth';
+import { enable } from '../../../global/bluetooth/modules/bluetooth';
 import BluetoothCard from '../components/BluetoothCard';
 
 /*  This is a container component. Notice it does not contain any JSX,
