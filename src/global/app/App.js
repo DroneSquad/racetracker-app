@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
-import RecoverySnackbar from './containers/RecoverySnackbarContainer';
+import RecoverySnackbar from './containers/TrackerManagerContainer';
 import ErrorPopup from './containers/ErrorPopupContainer';
 
 import Main from './components/Main';

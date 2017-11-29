@@ -12,8 +12,8 @@ import { routerReducer } from 'react-router-redux';
 
 import authReducer from './routes/login/modules/login';
 import raceReducer from './routes/fly/modules/race';
-import trackerReducer from './global/racetracker/modules/racetracker';
-import bluetoothReducer from './global/bluetooth/modules/bluetooth';
+import trackerReducer from './global/app/modules/racetracker';
+import bluetoothReducer from './global/app/modules/bluetooth';
 import freqReducer from './routes/tracker/modules/frequencies';
 import voiceReducer from './global/voice/modules/voice';
 

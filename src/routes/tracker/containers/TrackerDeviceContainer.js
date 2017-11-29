@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { connectTracker, setConnecting } from '../../../global/racetracker/modules/racetracker';
+import { connectTracker, setConnecting } from '../../../global/app/modules/racetracker';
 
 import TrackerDevice from '../components/TrackerDevice';
 

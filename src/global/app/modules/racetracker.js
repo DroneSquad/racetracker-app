@@ -4,7 +4,7 @@ import _ from 'lodash';
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
 
-import { setError, setIsScanning } from '../../bluetooth/modules/bluetooth';
+import { setError, setIsScanning } from './bluetooth';
 
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 1;
