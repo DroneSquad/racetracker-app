@@ -21,7 +21,7 @@ export default class BluetoothManager extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    // onmount has found that bluetooth is available for this device
+    // on-mount has found that bluetooth is available for this device
     if (this.props.isBtAvailable !== nextProps.isBtAvailable && nextProps.isBtAvailable) {
       // now check/update the default enabled state of bluetooth on the device
       this.props.checkIsBtEnabled();
@@ -42,7 +42,7 @@ export default class BluetoothManager extends React.PureComponent {
     return false;
   }
 
-  // TODO: Investigate further, called on app minimized, close, ever!?
+  // TODO: Investigate further, called on app minimized, close, WHEN/WHY/EVAR!?
   componentWillUnMount() {
     // stop watching for bluetooth sttus changes
     if (this.props.isBtNotifying) {

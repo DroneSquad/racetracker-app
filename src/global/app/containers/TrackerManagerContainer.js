@@ -16,6 +16,8 @@ import TrackerManager from '../components/TrackerManager';
     component - in this case, the TrackerDevice:   */
 
 const mapStateToProps = state => ({
+  trackers: state.trackers,
+
   reconnectingTrackers: state.trackers.filter(t => t.isReconnecting),
   connectingTrackers: state.trackers.filter(t => t.isConnecting),
   connectedTrackers: state.trackers.filter(t => t.isConnected)
@@ -27,6 +29,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
   disconnect: deviceId => dispatch(disconnectTracker(deviceId)),
   setDisconnected: deviceId => dispatch(setDisconnected(deviceId))
 });
+
+/* Memoized selectors with 'Reselect'
+export const isHeatActive = createSelector(
+  // TODO: check
+) */
+
+
 
 const TrackerManagerContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerManager);
 

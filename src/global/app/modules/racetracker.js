@@ -159,6 +159,7 @@ export const connectTracker = (deviceId: string) => {
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
+        console.log("disconnect error");
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
       }
