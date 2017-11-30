@@ -111,7 +111,6 @@ export default class extends Component {
   };
 
   render() {
-    console.log("TrackerHome-Render")
     let { isBtEnabled, isBtAvailable } = this.props;
     return (
       <div className={isBtAvailable && isBtEnabled ? 'main tracker-home' : 'main'}>

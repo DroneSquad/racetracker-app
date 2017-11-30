@@ -15,6 +15,7 @@ export default class TrackerManager extends React.PureComponent {
   };
 
   constructor(props) {
+    console.log("constructor")
     super(props);
     this.state = {
       id: '',
@@ -23,9 +24,24 @@ export default class TrackerManager extends React.PureComponent {
       timer: true,
       clicked: false,
       default_action: '',
-      clicked_action: ''
+      clicked_action: '',
+      open: false
     };
   }
+
+  /*shouldComponentUpdate(nextProps, nextState) {
+    console.log("shouldComponentUpdate")
+    // the only reason to ever render is if there is a bluetooth error that
+    // needs to be show to the user, otherwise save the cycle and move along
+    // TODO: adapt this to also work with isConnected checks
+    if (nextState.message) {
+      console.log("YES")
+      console.log(nextProps.message);
+      return true;
+      }
+      console.log("NO")
+      return false;
+  }*/
 
   /** Watch tracker array for connection state changes */
   // TODO: improve this through direct use of selectors
@@ -152,11 +168,18 @@ export default class TrackerManager extends React.PureComponent {
     });
   }
 
-  handleTouchTap = () => {
-    this.setState({ clicked: true });
+  handleTouchTap = (event: object) => {
+    console.log("handleTouchTap");
+    console.log(event);
+    this.setState({
+      clicked: true,
+      open: false,
+    });
   };
 
-  handleRequestClose = () => {
+  handleRequestClose = (reason: string) => {
+    console.log("handleRequestClose");
+    console.log(reason)
     let { id, clicked, default_action, clicked_action } = this.state;
     if (clicked) {
       if (clicked_action === 'connect') {
@@ -198,6 +221,8 @@ export default class TrackerManager extends React.PureComponent {
         onActionTouchTap: this.handleTouchTap
       };
     }
+    console.log("----------------")
+    console.log(attrs);
     return <Snackbar {...attrs} />;
   }
 }
