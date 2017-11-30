@@ -159,7 +159,6 @@ export const connectTracker = (deviceId: string) => {
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
-        console.log("disconnect error");
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
       }
@@ -174,7 +173,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
       if (response.error) {
         dispatch(setError(response.error));
       } else if (response.device) {
-        if (response.device.name) {
+        if (response.device.hasOwnProperty('name')) {
           if (response.device.name.startsWith('TBSRT')) {
             // determine if this tracker is in the current array of trackers
             let idx = matchArr
@@ -196,6 +195,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
                 }
               }
             } else {
+              // device not found add it as a new discovery
               if (discoveryScan) {
                 dispatch(discoverTracker(response.device));
               }
@@ -249,7 +249,7 @@ export const validateTrackerPromise = (request: object) => {
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
-          console.log(err);
+          console.log(err);  // TODO: proper error handling
           reject();
         }
       } else {
@@ -381,7 +381,6 @@ export const readBatteryLevel = (deviceId: string) => {
 };
 
 export const writeRaceMode = (request: object) => {
-  console.log("writeRaceMode");
   return dispatch => {
     dispatch(setRaceMode(request));
   };

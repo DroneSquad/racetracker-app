@@ -15,7 +15,6 @@ export default class extends Component {
     isBtEnabled: boolean,
     isBtScanning: boolean,
     trackers: Array<RaceTracker>,
-
     enableBt: Function,
     startTrackerScan: Function,
     stopTrackerScan: Function,
@@ -23,7 +22,6 @@ export default class extends Component {
   };
 
   componentDidMount() {
-    console.log("componentDidMount")
     if (this.props.isBtAvailable && this.props.isBtEnabled) {
       this.initSearchOrScan();
     }
@@ -31,7 +29,6 @@ export default class extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      console.log("componentWillReceiveProps")
       // bluetooth has been enabled do auto-magic stuff
       this.initSearchOrScan();
     }
@@ -47,26 +44,9 @@ export default class extends Component {
     }
   }
 
-  /** Watch bluetooth state properties for changes */
-  /* componentDidUpdate(prevProps, prevState) {
-  /*  if (prevProps.isBtEnabled !== this.props.isBtEnabled) {
-      if (this.props.isBtEnabled) {
-        if (this.props.trackers.length === 0) {
-          // console.log("componentDidUpdate-startDiscovery")
-          this.startDiscovery();
-        } else {
-          // console.log("componentDidUpdate-validateTrackers")
-          this.validateTrackers();
-        }
-      }
-    }
-  }*/
-
   /** Validate that the device exists on the internal bluetooth scan list */
-  verifyTrackers = () => {
+  verifyTrackers() {
     if (!this.props.isBtScanning) {
-      console.log("verifyTrackers")
-      console.log(this.props.trackers)
       this.props.validateTrackers(this.props.trackers);
     }
   };
@@ -74,15 +54,11 @@ export default class extends Component {
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtScanning) {
-      console.log("startDiscovery")
-      console.log(this.props.trackers)
       this.props.startTrackerScan(this.props.trackers);
     }
   };
 
   stopDiscovery = () => {
-    console.log("startDiscovery")
-    console.log(this.props.trackers)
     // TODO: determine if we should run the validation on a manually stopped scan
     // see the racetracker module function stopTrackerScan, where this call is used
     // -----------------------------------------------------

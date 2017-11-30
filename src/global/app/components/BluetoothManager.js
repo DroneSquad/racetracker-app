@@ -51,7 +51,6 @@ export default class BluetoothManager extends React.PureComponent {
   }
 
   render() {
-    console.log("BluetoothManager-Render");
     // TODO: handle the isConnection messages
     let { btError } = this.props;
     return (
