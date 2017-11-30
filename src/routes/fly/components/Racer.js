@@ -56,11 +56,11 @@ export default class Racer extends Component {
         {name}
       </span>
     );
-    let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
+    //let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
     return (
       <TableRow /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/>
         <TableRowColumn className="pilot-name">
-          {avatar}
+          {/*avatar*/}
           {racerName}
         </TableRowColumn>
         <TableRowColumn>

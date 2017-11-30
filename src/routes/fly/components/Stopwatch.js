@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Paper, FlatButton } from 'material-ui';
+import { Paper, RaisedButton } from 'material-ui';
 
 /** Simple react stopwatch used for timing races */
 export default class Stopwatch extends Component {
@@ -81,6 +81,7 @@ export default class Stopwatch extends Component {
   render() {
     let heat = this.props.activeHeat;
     //Race Clock: 1:00:00
+    let btnStyle = { width: '30vw', marginTop: '4px', boxShadow: 'none', marginRight: '24px' };
     return (
       <Paper className="heat-action" style={{ display: 'flex' }}>
         {heat.isPending &&
@@ -96,21 +97,24 @@ export default class Stopwatch extends Component {
             style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}
           >{`Heat ${heat.number} Finished`}</p>}
         {heat.isPending &&
-          <FlatButton
+          <RaisedButton
+            primary
             onClick={this.startHeat}
-            style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }}
+            style={btnStyle}
             label="Start Race"
           />}
         {heat.isActive &&
-          <FlatButton
+          <RaisedButton
+            primary
             onClick={this.endHeat}
-            style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }}
+            style={btnStyle}
             label="End Race"
           />}
         {heat.isComplete &&
-          <FlatButton
+          <RaisedButton
+            primary
             onClick={this.createHeat}
-            style={{ width: '30vw', marginTop: '6px', marginRight: '24px' }}
+            style={btnStyle}
             label="New Heat"
           />}
       </Paper>
