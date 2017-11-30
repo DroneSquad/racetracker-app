@@ -27,6 +27,9 @@ export default class Heat extends Component {
 
   /** The drop down menu for the options menu */
   menuDropdown = () => {
+    if (true) { // temp disable the ...
+      return <span></span>;
+    }
     let styleIcons = { margin: '0 0 0 8px' };
     let icon = (
       <IconButton style={{ margin: '-12px' }}>
