@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
-import { createRace, setRaceMode } from '../modules/race';
+import { createRace, setRaceMode } from '../../../global/app/modules/race';
 
 import { validateTrackers } from '../../../global/app/modules/racetracker';
 

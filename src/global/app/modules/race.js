@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart, announceFlyover } from './announcer';
+import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart, announceFlyover } from '../../../routes/fly/modules/announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
