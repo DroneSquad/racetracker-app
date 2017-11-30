@@ -29,7 +29,7 @@ export default class extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      // bluetooth has been enabled do auto-magic stuff
+      // bluetooth has been enabled do the auto-magic stuff
       this.initSearchOrScan();
     }
   }
@@ -61,6 +61,7 @@ export default class extends Component {
   stopDiscovery = () => {
     // TODO: determine if we should run the validation on a manually stopped scan
     // see the racetracker module function stopTrackerScan, where this call is used
+    // possible options: improved callback, only validate connected trackers, wipe all?
     // -----------------------------------------------------
     // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
     this.props.stopTrackerScan();
@@ -110,6 +111,7 @@ export default class extends Component {
   };
 
   render() {
+    console.log("TrackerHome-Render")
     let { isBtEnabled, isBtAvailable } = this.props;
     return (
       <div className={isBtAvailable && isBtEnabled ? 'main tracker-home' : 'main'}>

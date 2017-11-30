@@ -28,6 +28,7 @@ export default class TrackerManager extends React.PureComponent {
   }
 
   /** Watch tracker array for connection state changes */
+  // TODO: improve this through direct use of selectors
   componentDidUpdate(prevProps, prevState) {
     // handle trakers in a connecting state
     if (prevProps.connectingTrackers.length !== this.props.connectingTrackers.length) {
