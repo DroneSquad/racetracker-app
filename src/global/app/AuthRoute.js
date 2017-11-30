@@ -24,6 +24,7 @@ const AuthRoute = ({ component, ...props }) => {
 };
 
 AuthRoute.propTypes = {
+  // TODO: can we do this in flow? wouldnt check need to happen at runtime? not sure..
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
 };
 

@@ -3,7 +3,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Snackbar } from 'material-ui';
 
-export default class RecoverySnackbar extends React.PureComponent {
+export default class TrackerManager extends React.PureComponent {
   props: {
     reconnectingTrackers: Array<RaceTracker>,
     connectingTrackers: Array<RaceTracker>,
