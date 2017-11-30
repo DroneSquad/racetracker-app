@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
 import TrackerManager from './containers/TrackerManagerContainer';
+import BluetoothManager from './containers/BluetoothManagerContainer';
 import ErrorPopup from './containers/ErrorPopupContainer';
 
 import Main from './components/Main';
@@ -40,6 +41,7 @@ export default class App extends React.Component {
             <AuthRoute path="/" component={Main} />
           </Switch>
         </ConnectedRouter>
+        <BluetoothManager />
         <TrackerManager />
         <ErrorPopup />
       </div>

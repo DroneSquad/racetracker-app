@@ -26,7 +26,8 @@ export default class extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.isBtAvailable) {
+
+/*    if (!this.props.isBtAvailable) {
       // console.log("componentDidMount-checkIsBtAvailable")
       this.props.checkIsBtAvailable();
     } else {
@@ -38,12 +39,12 @@ export default class extends Component {
       } else {
         this.validateTrackers();
       }
-    }
+    }*/
   }
 
   /** Watch bluetooth state properties for changes */
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
+/*    if (prevProps.isBtAvailable !== this.props.isBtAvailable) {
       if (this.props.isBtAvailable) {
         // TODO: currently this is never stopped, when/where should we handle that
         // console.log("componentDidUpdate-startBtStateNotifications")
@@ -60,7 +61,7 @@ export default class extends Component {
           this.validateTrackers();
         }
       }
-    }
+    }*/
   }
 
   /** Validate that the device exists on the internal bluetooth scan list */

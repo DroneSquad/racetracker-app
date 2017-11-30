@@ -66,7 +66,7 @@ export const startStateNotifications = () => {
       if (response.error) {
         dispatch(setError(response.error));
       } else {
-        dispatch(setIsEnabled(response));  // update the state of bluetooth
+        dispatch(setIsEnabled(response.value));  // update the state of bluetooth
         dispatch(setIsNotifying(true));  // state notifications activated
       }
     });
@@ -123,7 +123,8 @@ export default function(state = initialState, action: Action) {
     case BT_IS_NOTIFYING:
       return {
         ...state,
-        isNotifying: action.payload
+        isNotifying: action.payload,
+        error: ''
       };
     default:
       return { ...state, error: '' };
