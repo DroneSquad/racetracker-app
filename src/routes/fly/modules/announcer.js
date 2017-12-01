@@ -6,17 +6,23 @@ let flyoverAnnounced = false;
 /** Split the mills into an array of mins, seconds, mills */
 function splitMillsToArray(ms) {
   let mins = Math.floor(ms / 60000);
-  return [mins, Math.floor(ms / 1000) - mins * 60, Math.floor(ms % 1000)];
+  // milli seconds need to append 1 to the prefix to fix math errors
+  return [mins, Math.floor(ms / 1000) - mins * 60, Math.floor(ms % 1000) + 1000];
 }
 
 /** Make the speech of the announcer sound normal, though with out a proper text to speech engine this will */
 function humanSpeech(millis) {
   let speech = '';
   let [mins, seconds, ms] = splitMillsToArray(millis);
+  console.log(mins, seconds, ms);
 
   if (ms > 100 && ms % 10 >= 5) {
     // round to the 10th position
-    ms = `${Math.floor(ms % 1000 / 100)}${Math.floor(ms % 100 / 10) + 1}`;
+    if (Math.floor(ms % 100 / 10) + 1 === 10) {
+      ms = `${Math.floor(ms % 1000 / 100) + 1}0`;
+    } else {
+      ms = `${Math.floor(ms % 1000 / 100)}${Math.floor(ms % 100 / 10) + 1}`;
+    }
   } else if (ms > 100 && ms % 10 < 5) {
     ms = `${Math.floor(ms % 1000 / 100)}${Math.floor(ms % 100 / 10)}`;
   }

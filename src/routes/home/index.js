@@ -40,7 +40,7 @@ export default class Home extends React.Component {
         announceLapsFromResponse({
           racer: Number(1),
           lap: Number(1),
-          lapTime: '654535',
+          lapTime: '35195',
           totalTime: '12345',
           heat: { id: uuid.v4() }
         })
