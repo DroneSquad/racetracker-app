@@ -168,12 +168,13 @@ export default class TrackerManager extends React.PureComponent {
     });
   }
 
-  handleTouchTap = (event: object) => {
+  handleTouchTap = () => {
     console.log("handleTouchTap");
-    console.log(event);
     this.setState({
       clicked: true,
       open: false,
+      message: '',
+      autoHideDuration: 0,
     });
   };
 
@@ -198,21 +199,24 @@ export default class TrackerManager extends React.PureComponent {
         this.props.setDisconnected(id);
       }
     }
-    this.setState({ message: '', clicked: false });
+    this.setState({ message: '', clicked: false, open: false });
   };
 
   render() {
     let { message, action, timer } = this.state;
+    console.log("RENDER")
     let attrs = {
       open: !!message,
       message: message,
       onRequestClose: this.handleRequestClose
     };
+    console.log(attrs)
     if (timer) {
       attrs = {
         ...attrs,
-        autoHideDuration: 5000
+        autoHideDuration: 4000
       };
+      console.log(attrs)
     }
     if (action) {
       attrs = {
@@ -220,6 +224,7 @@ export default class TrackerManager extends React.PureComponent {
         action: action,
         onActionTouchTap: this.handleTouchTap
       };
+      console.log(attrs)
     }
     console.log("----------------")
     console.log(attrs);
