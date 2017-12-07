@@ -40,11 +40,12 @@ export class Ble {
   startStateNotifications(cb) {
     window.ble.startStateNotifications(
       btState => {
-        // only watch for on/off state changes
-        if (btState === 'on') {
+        // states indicating bluetooth is on
+        if (btState === 'on' || btState === 'turningOn' || btState === 'resetting') {
           cb({ value: true });
         }
-        if (btState === 'off') {
+        // states indicating bluetooth is off
+        if (btState === 'off' || btState === 'turningOff' || btState === 'unknown' || btState === 'unsupported' || btState === 'unauthorized') {
           cb({ value: false });
         }
       },
@@ -58,7 +59,7 @@ export class Ble {
   /** turn off bluetooth state change notifications */
   stopStateNotifications(cb) {
     window.ble.stopStateNotifications(
-      null, // successfully stopped notifications
+      cb({}), // successfully stopped notifications
       () => {
         let err = Error('Error stopping device Bluetooth state notifications');
         cb({ value: false, error: err });

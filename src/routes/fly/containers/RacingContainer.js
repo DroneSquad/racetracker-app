@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
-import { createRace, setRaceMode } from '../modules/race';
+import { createRace, setRaceMode } from '../../../global/app/modules/race';
 
-import { validateTrackers } from '../../tracker/modules/racetracker';
+import { validateTrackers } from '../../../global/app/modules/racetracker';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
   trackerRaceMode: (state.race.trackerId) ? state.trackers.filter(t => t.id === state.race.trackerId)[0].raceMode : state.race.raceMode,
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
+  state: state,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

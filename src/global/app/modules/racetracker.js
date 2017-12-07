@@ -1,5 +1,6 @@
 // @flow
 import _ from 'lodash';
+// import { createSelector } from 'reselect'
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
@@ -32,6 +33,26 @@ export const RT_RSSI_ADC = 'RT_RSSI_ADC';
 export const RT_RACER_CHANS = 'RT_RACER_CHANS';
 export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 export const RT_CALIBRATING = 'RT_CALIBRATING';
+
+/** selectors */
+// racetracker connection filter selectors
+/*const getTrackers = state => state.trackers;
+export const getConnectedFilter = 'CONNECTED';
+export const getAvailableFilter = 'AVAILABLE';
+export const getConnectingFilter = 'CONNECTING';
+export const getReconnectingFilter = 'RECONNECTING';
+export const getDisconnectedFilter = 'DISCONNECTED';
+
+export const getConnectedTrackers = createSelector(
+  [ getConnectedFilter, getTrackers ],
+  (filter, trackers) => {
+    switch(filter) {
+      case 'ALL':
+        return trackers
+      case
+    }
+  }
+)*/
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -167,13 +188,13 @@ export const connectTracker = (deviceId: string) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
-  var matchArr = request.slice(0);
+  let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
       if (response.error) {
         dispatch(setError(response.error));
       } else if (response.device) {
-        if (response.device.name) {
+        if (response.device.hasOwnProperty('name')) {
           if (response.device.name.startsWith('TBSRT')) {
             // determine if this tracker is in the current array of trackers
             let idx = matchArr
@@ -183,7 +204,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
               .indexOf(response.device.id);
             if (idx !== -1) {
               if (matchArr[idx].isConnected) {
-                var id = matchArr[idx].id;
+                let id = matchArr[idx].id;
                 dispatch(connectTracker(id));
               }
               // remove this tracker from our search array
@@ -195,6 +216,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
                 }
               }
             } else {
+              // device not found add it as a new discovery
               if (discoveryScan) {
                 dispatch(discoverTracker(response.device));
               }
@@ -235,7 +257,7 @@ export const validateTrackerPromise = (request: object) => {
       if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
         // the bluetooth library determine the type of errort and handle accordingly
-        var err = response.error.replace('.', '').split(' ').pop().toUpperCase();
+        let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
           if (request.isConnected) {
@@ -248,7 +270,7 @@ export const validateTrackerPromise = (request: object) => {
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
-          console.log(err);
+          console.log(err);  // TODO: proper error handling
           reject();
         }
       } else {
@@ -262,13 +284,13 @@ export const validateTrackerPromise = (request: object) => {
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
   return dispatch => {
-    var trackerPromises = [];
+    let trackerPromises = [];
     for (let rt of request) {
       trackerPromises.push(validateTrackerPromise({ id: rt.id, isConnected: rt.isConnected }));
     }
     Promise.all(trackerPromises)
       .then(response => {
-        var sync = [];
+        let sync = [];
         for (let r of response) {
           var t = typeof r;
           if (t === 'function') {
@@ -380,7 +402,6 @@ export const readBatteryLevel = (deviceId: string) => {
 };
 
 export const writeRaceMode = (request: object) => {
-  console.log("writeRaceMode");
   return dispatch => {
     dispatch(setRaceMode(request));
   };

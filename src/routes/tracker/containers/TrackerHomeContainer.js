@@ -1,15 +1,9 @@
 // @flow
 import { connect } from 'react-redux';
 
-import {
-  isAvailable,
-  isEnabled,
-  enable,
-  startStateNotifications
-  // stopStateNotifications, TODO: implement this on application close?
-} from '../modules/bluetooth';
+import { enable } from '../../../global/app/modules/bluetooth';
 
-import { stopTrackerScan, validateTrackers, discoverTrackers } from '../modules/racetracker';
+import { stopTrackerScan, validateTrackers, discoverTrackers } from '../../../global/app/modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 
@@ -19,7 +13,6 @@ import TrackerHome from '../components/TrackerHome';
     component - in this case, the TrackerHome:   */
 
 const mapStateToProps = state => ({
-  btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
@@ -27,11 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  checkIsBtAvailable: () => dispatch(isAvailable()),
-  checkIsBtEnabled: () => dispatch(isEnabled()),
   enableBt: () => dispatch(enable()),
-  startBtStateNotifications: () => dispatch(startStateNotifications()),
-  // stopBtStateNotifications: () => dispatch(stopStateNotifications()), // TODO:
   startTrackerScan: array => dispatch(discoverTrackers(array)),
   stopTrackerScan: array => dispatch(stopTrackerScan(array)),
   validateTrackers: array => dispatch(validateTrackers(array))

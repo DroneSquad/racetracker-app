@@ -6,9 +6,9 @@ import {
   setConnecting,
   disconnectTracker,
   setDisconnected
-} from '../../../routes/tracker/modules/racetracker';
+} from '../modules/racetracker';
 
-import RecoverySnackbar from '../components/RecoverySnackbar';
+import TrackerManager from '../components/TrackerManager';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -16,6 +16,8 @@ import RecoverySnackbar from '../components/RecoverySnackbar';
     component - in this case, the TrackerDevice:   */
 
 const mapStateToProps = state => ({
+  trackers: state.trackers,
+
   reconnectingTrackers: state.trackers.filter(t => t.isReconnecting),
   connectingTrackers: state.trackers.filter(t => t.isConnecting),
   connectedTrackers: state.trackers.filter(t => t.isConnected)
@@ -28,6 +30,13 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setDisconnected: deviceId => dispatch(setDisconnected(deviceId))
 });
 
-const RecoverySnackbarContainer = connect(mapStateToProps, mapDispatchToProps)(RecoverySnackbar);
+/* Memoized selectors with 'Reselect'
+export const isHeatActive = createSelector(
+  // TODO: check
+) */
 
-export default RecoverySnackbarContainer;
+
+
+const TrackerManagerContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerManager);
+
+export default TrackerManagerContainer;
