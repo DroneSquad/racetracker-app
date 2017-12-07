@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import Heat from '../components/Heat';
 
-import { updateHeatRacers } from '../modules/race';
+import { updateHeatRacers } from '../../../global/app/modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring

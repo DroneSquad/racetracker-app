@@ -8,7 +8,7 @@ import { AppBar, List, ListItem, TextField } from 'material-ui';
 import { sendVoice } from '../../global/voice/modules/voice';
 import { logoutRequest } from '../../routes/login/modules/login';
 import { announceLapsFromResponse } from '../../routes/fly/modules/announcer';
-import { setQueryInterval } from '../../routes/fly/modules/race';
+import { setQueryInterval } from '../../global/app/modules/race';
 
 import { connect } from '../../store';
 

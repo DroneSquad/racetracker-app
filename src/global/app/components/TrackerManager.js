@@ -3,7 +3,7 @@ import _ from 'lodash';
 import React from 'react';
 import { Snackbar } from 'material-ui';
 
-export default class RecoverySnackbar extends React.PureComponent {
+export default class TrackerManager extends React.PureComponent {
   props: {
     reconnectingTrackers: Array<RaceTracker>,
     connectingTrackers: Array<RaceTracker>,
@@ -15,6 +15,7 @@ export default class RecoverySnackbar extends React.PureComponent {
   };
 
   constructor(props) {
+    console.log("constructor")
     super(props);
     this.state = {
       id: '',
@@ -23,11 +24,27 @@ export default class RecoverySnackbar extends React.PureComponent {
       timer: true,
       clicked: false,
       default_action: '',
-      clicked_action: ''
+      clicked_action: '',
+      open: false
     };
   }
 
+  /*shouldComponentUpdate(nextProps, nextState) {
+    console.log("shouldComponentUpdate")
+    // the only reason to ever render is if there is a bluetooth error that
+    // needs to be show to the user, otherwise save the cycle and move along
+    // TODO: adapt this to also work with isConnected checks
+    if (nextState.message) {
+      console.log("YES")
+      console.log(nextProps.message);
+      return true;
+      }
+      console.log("NO")
+      return false;
+  }*/
+
   /** Watch tracker array for connection state changes */
+  // TODO: improve this through direct use of selectors
   componentDidUpdate(prevProps, prevState) {
     // handle trakers in a connecting state
     if (prevProps.connectingTrackers.length !== this.props.connectingTrackers.length) {
@@ -152,10 +169,18 @@ export default class RecoverySnackbar extends React.PureComponent {
   }
 
   handleTouchTap = () => {
-    this.setState({ clicked: true });
+    console.log("handleTouchTap");
+    this.setState({
+      clicked: true,
+      open: false,
+      message: '',
+      autoHideDuration: 0,
+    });
   };
 
-  handleRequestClose = () => {
+  handleRequestClose = (reason: string) => {
+    console.log("handleRequestClose");
+    console.log(reason)
     let { id, clicked, default_action, clicked_action } = this.state;
     if (clicked) {
       if (clicked_action === 'connect') {
@@ -174,21 +199,24 @@ export default class RecoverySnackbar extends React.PureComponent {
         this.props.setDisconnected(id);
       }
     }
-    this.setState({ message: '', clicked: false });
+    this.setState({ message: '', clicked: false, open: false });
   };
 
   render() {
     let { message, action, timer } = this.state;
+    console.log("RENDER")
     let attrs = {
       open: !!message,
       message: message,
       onRequestClose: this.handleRequestClose
     };
+    console.log(attrs)
     if (timer) {
       attrs = {
         ...attrs,
-        autoHideDuration: 5000
+        autoHideDuration: 4000
       };
+      console.log(attrs)
     }
     if (action) {
       attrs = {
@@ -196,7 +224,10 @@ export default class RecoverySnackbar extends React.PureComponent {
         action: action,
         onActionTouchTap: this.handleTouchTap
       };
+      console.log(attrs)
     }
+    console.log("----------------")
+    console.log(attrs);
     return <Snackbar {...attrs} />;
   }
 }

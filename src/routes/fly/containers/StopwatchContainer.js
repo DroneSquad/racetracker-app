@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Stopwatch from '../components/Stopwatch';
 
-import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, updateLaps } from '../modules/race';
+import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, updateLaps } from '../../../global/app/modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring

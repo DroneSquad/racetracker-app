@@ -3,7 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import AuthRoute from './AuthRoute';
-import RecoverySnackbar from './containers/RecoverySnackbarContainer';
+import TrackerManager from './containers/TrackerManagerContainer';
+import BluetoothManager from './containers/BluetoothManagerContainer';
 import ErrorPopup from './containers/ErrorPopupContainer';
 
 import Main from './components/Main';
@@ -40,7 +41,8 @@ export default class App extends React.Component {
             <AuthRoute path="/" component={Main} />
           </Switch>
         </ConnectedRouter>
-        <RecoverySnackbar />
+        <BluetoothManager />
+        <TrackerManager />
         <ErrorPopup />
       </div>
     );
