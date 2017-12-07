@@ -88,6 +88,7 @@ export const createHeat = (request: object) => {
 export const startShotgunHeat = (request: object) => {
   return dispatch => {
     dispatch(announceShotgunStart());
+    // TODO: refactor this and get rid of this hack
     setTimeout(() => dispatch(startHeat(request)), 3100); // timer accounts for delay of start countdown (HACK)
   };
 };
