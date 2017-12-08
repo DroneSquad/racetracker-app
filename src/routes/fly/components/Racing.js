@@ -21,7 +21,7 @@ export default class Racing extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.isRaceActive) {
+  /*  if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
           if (this.props.connectedTrackers[0].racerChannels) {
@@ -33,12 +33,12 @@ export default class Racing extends Component {
       }
     } else {
       this.validateTrackers();
-    }
+    }*/
   }
 
   // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
-    if (!this.props.isRaceActive) {
+/*    if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
           if (this.props.connectedTrackers[0].racerChannels) {
@@ -54,7 +54,7 @@ export default class Racing extends Component {
       if (nextProps.trackerRaceMode !== this.props.activeRaceMode) {
         this.props.updateRaceMode(nextProps.trackerRaceMode);
       }
-    }
+    }*/
   }
 
   /** Validate that the device exists on the internal bluetooth scan list */

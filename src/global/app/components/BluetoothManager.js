@@ -44,7 +44,8 @@ export default class BluetoothManager extends React.PureComponent {
 
   // TODO: Investigate further, called on app minimized, close, WHEN/WHY/EVAR!?
   componentWillUnMount() {
-    // stop watching for bluetooth sttus changes
+    console.log("--> componentWillUnMount <--");
+    // stop watching for bluetooth status changes
     if (this.props.isBtNotifying) {
       this.props.stopBtStateNotifications();
     }

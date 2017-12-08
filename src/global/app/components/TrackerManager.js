@@ -5,12 +5,15 @@ import { Snackbar } from 'material-ui';
 
 export default class TrackerManager extends React.PureComponent {
   props: {
+    isBtEnabled: boolean,
+    isBtScanning: boolean,
     reconnectingTrackers: Array<RaceTracker>,
     connectingTrackers: Array<RaceTracker>,
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
-    setConnecting: Function,
-    setDisconnected: Function // update prop of already disconnected tracker
+    setConnecting: Function,  // set state while trying to connect to tracker
+    setDisconnected: Function, // update prop of already disconnected tracker,
+    validateTrackers: Function // validate connection state of trackers on start/restart
   };
 
   constructor(props) {
@@ -24,6 +27,33 @@ export default class TrackerManager extends React.PureComponent {
       timer: true,
       open: false
     };
+  }
+
+  componentDidMount() {
+    console.log("componentDidMountTrackerManager");
+    console.log("------");
+    console.log(this.props.isBtAvailable);
+    console.log(this.props.isBtEnabled);
+    console.log(this.props.isBtScanning);
+
+    // on mount check if bluetooth is active/enabled and not scanning, then
+    // check if any trackers are connected, if so validate connection states
+    // (this is used on app restart when a tracker/s should be connected)
+    if (this.props.isBtAvailable && this.props.isBtEnabled && !this.props.isBtScanning) {
+      console.log("bluetooth is valid");
+      if (this.props.connectedTrackers.length > 0) {
+        console.log("we have connected trackers, lets validate");
+        this.props.validateTrackers(this.props.connectedTrackers);
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
+      // bluetooth has been enabled do the auto-magic stuff
+      this.initSearchOrScan();
+    }
   }
 
   /** Watch tracker array for connection state changes */

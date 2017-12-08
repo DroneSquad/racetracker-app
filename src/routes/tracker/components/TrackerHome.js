@@ -22,16 +22,16 @@ export default class extends Component {
   };
 
   componentDidMount() {
-    if (this.props.isBtAvailable && this.props.isBtEnabled) {
+  /*  if (this.props.isBtAvailable && this.props.isBtEnabled) {
       this.initSearchOrScan();
-    }
+    }*/
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
+  /*  if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       // bluetooth has been enabled do the auto-magic stuff
       this.initSearchOrScan();
-    }
+    }*/
   }
 
   initSearchOrScan() {
