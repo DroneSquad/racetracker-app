@@ -8,7 +8,7 @@ import tbs from '../../../services/racetracker';
 import { setError, setIsScanning } from './bluetooth';
 
 const ATTEMPT_RECOVERY = true;
-const RECOVERY_ATTEMPTS = 1;
+const RECOVERY_ATTEMPTS = 3;
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
 
 /** types */
@@ -328,7 +328,7 @@ export const stopTrackerScan = (request: array = []) => {
         dispatch(setIsScanning(false));
         if (request.length > 0) {
           // the idea here is that when a scan is stopped manually, validate trackers on cancel
-          // unfortunately it doesnt appear to work well, there is a large pause...
+          // unfortunately it doesnt appear to work well, there is a long pause... before it completes
           dispatch(validateTrackers(request));
         }
       }
