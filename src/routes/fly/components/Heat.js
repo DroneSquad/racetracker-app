@@ -53,7 +53,11 @@ export default class Heat extends Component {
     let { activeHeat, heatChannels } = this.props;
     let title = (
       <span>
-        {`Heat ${activeHeat.number}`} {activeHeat.isComplete && `Results`}
+        {`Heat ${activeHeat.number}`} {activeHeat.isComplete && `Results `}
+        {/* Will show internal heat id when in debug mode */}
+        <span style={{ color: '#aaa', fontSize: '12px' }}>
+          {window.isDeveloper && activeHeat.id}
+        </span>
       </span>
     );
     return (

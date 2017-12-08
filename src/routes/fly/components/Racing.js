@@ -88,7 +88,6 @@ export default class Racing extends Component {
   };
 
   render() {
-    console.log(this.props.state)
     let { isRaceActive, activeHeatId, connectedTrackers } = this.props;
     return (
       <div>

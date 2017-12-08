@@ -23,7 +23,7 @@ export default class extends DroneSquadAppBar {
       } else if (window.developer === 7) {
         let developerConfirm = window.confirm('Are you a developer?');
         if (developerConfirm) {
-          window.developer = true;
+          window.isDeveloper = window.developer = true;
         }
       } else {
         window.developer++;
