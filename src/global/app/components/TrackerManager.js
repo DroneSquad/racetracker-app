@@ -10,41 +10,24 @@ export default class TrackerManager extends React.PureComponent {
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
     setConnecting: Function,
-    disconnect: Function, // disconnect a connected tracker
     setDisconnected: Function // update prop of already disconnected tracker
   };
 
   constructor(props) {
-    console.log("constructor")
     super(props);
     this.state = {
       id: '',
       message: '',
       action: '', // button on snackbar
-      timer: true,
-      clicked: false,
       default_action: '',
       clicked_action: '',
+      timer: true,
       open: false
     };
   }
 
-  /*shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate")
-    // the only reason to ever render is if there is a bluetooth error that
-    // needs to be show to the user, otherwise save the cycle and move along
-    // TODO: adapt this to also work with isConnected checks
-    if (nextState.message) {
-      console.log("YES")
-      console.log(nextProps.message);
-      return true;
-      }
-      console.log("NO")
-      return false;
-  }*/
-
   /** Watch tracker array for connection state changes */
-  // TODO: improve this through direct use of selectors
+  // TODO: improve this through use of selectors
   componentDidUpdate(prevProps, prevState) {
     // handle trakers in a connecting state
     if (prevProps.connectingTrackers.length !== this.props.connectingTrackers.length) {
@@ -99,9 +82,9 @@ export default class TrackerManager extends React.PureComponent {
   configSnackbar(tracker) {
     let message = '';
     let action = '';
-    let timer = true;
     let defAction = '';
     let clkAction = '';
+    let timer = true;
     // handle trackers attempting to connect/reconnect
     if (tracker.isConnecting) {
       timer = false;
@@ -162,72 +145,57 @@ export default class TrackerManager extends React.PureComponent {
       id: tracker.id,
       message: message,
       action: action,
-      timer: timer,
       default_action: defAction,
-      clicked_action: clkAction
+      clicked_action: clkAction,
+      timer: timer,
+      open: !!message,
     });
   }
 
-  handleTouchTap = () => {
-    console.log("handleTouchTap");
+  doCloseEvents = (action: string) => {
+    let id = this.state.id;
+    if (action === 'connect') {
+      this.props.setConnecting(id);
+      this.props.connect(id);
+    }
+    if (action === 'disconnect') {
+      this.props.setDisconnected(id);
+    }
     this.setState({
-      clicked: true,
-      open: false,
-      message: '',
-      autoHideDuration: 0,
+      open: false
     });
+  }
+
+  handleActionClick = () => {
+    let clicked_action = this.state.clicked_action;
+    this.doCloseEvents(clicked_action);
   };
 
   handleRequestClose = (reason: string) => {
-    console.log("handleRequestClose");
-    console.log(reason)
-    let { id, clicked, default_action, clicked_action } = this.state;
-    if (clicked) {
-      if (clicked_action === 'connect') {
-        this.props.setConnecting(id);
-        this.props.connect(id);
-      }
-      if (clicked_action === 'disconnect') {
-        this.props.setDisconnected(id);
-      }
-    } else {
-      if (default_action === 'connect') {
-        this.props.setConnecting(id);
-        this.props.connect(id);
-      }
-      if (default_action === 'disconnect') {
-        this.props.setDisconnected(id);
-      }
-    }
-    this.setState({ message: '', clicked: false, open: false });
+    let default_action = this.state.default_action;
+    this.doCloseEvents(default_action);
   };
 
   render() {
-    let { message, action, timer } = this.state;
-    console.log("RENDER")
+    let { message, action, timer, open } = this.state;
     let attrs = {
-      open: !!message,
+      open: open,
       message: message,
       onRequestClose: this.handleRequestClose
     };
-    console.log(attrs)
     if (timer) {
       attrs = {
         ...attrs,
         autoHideDuration: 4000
       };
-      console.log(attrs)
     }
     if (action) {
       attrs = {
         ...attrs,
         action: action,
-        onActionTouchTap: this.handleTouchTap
+        onActionTouchTap: this.handleActionClick
       };
-      console.log(attrs)
     }
-    console.log("----------------")
-    console.log(attrs);
     return <Snackbar {...attrs} />;
   }
 }

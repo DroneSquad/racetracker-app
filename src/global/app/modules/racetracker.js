@@ -620,9 +620,9 @@ export default function(state = [], action: Action) {
             ? {
                 ...tracker,
                 wasConnected: tracker.reconnects === RECOVERY_ATTEMPTS ? tracker.isConnected : tracker.wasConnected,
+                isReconnecting: tracker.isConnecting || tracker.isConnected ? true : false,  // do not attempt reconnect if not previously connected, or connecting
                 isConnecting: false,
-                isConnected: false,
-                isReconnecting: true
+                isConnected: false
               }
             : tracker
       );
