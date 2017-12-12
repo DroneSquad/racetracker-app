@@ -8,14 +8,16 @@ import Racer from '../components/Racer';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-  lap: state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heatId === ownProps.heatId)[0].lap,
+  lap: state.race.laps
+    .filter(h => h.racer === ownProps.id && (h.heatId === ownProps.heatId || h.heat === ownProps.heatId))[0].lap,
   lapTime: msToClock(
-    state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heatId === ownProps.heatId)[0].lapTime
+    state.race.laps
+      .filter(h => h.racer === ownProps.id && (h.heatId === ownProps.heatId || h.heat === ownProps.heatId))[0].lapTime
   ),
   bestTime: msToClock(
-    state.race.laps.filter(l => l.racer === ownProps.id).filter(h => h.heatId === ownProps.heatId).sort(function(a, b) {
-      return a.lapTime - b.lapTime;
-    })[0].lapTime
+    state.race.laps
+      .filter(h => h.racer === ownProps.id && (h.heatId === ownProps.heatId || h.heat === ownProps.heatId))
+      .sort((a, b) => a.lapTime - b.lapTime)[0].lapTime
   )
 });
 

@@ -51,7 +51,7 @@ export const newHeat = (request: object) => ({
 
 export const setLap = (request: object) => ({
   type: SET_LAP,
-  payload: request
+  payload: { ...request, heatId: request.heat } // some parts of the code uses the old heatId property
 });
 
 export const setHeatRacers = (request: object) => ({
