@@ -189,7 +189,11 @@ export const connectTracker = (deviceId: string) => {
       } else if (!response.connected) {
         console.log("racetrackerModule-connectTracker-Error(disconnect)")
         // the device has either failed connection or disconnected on error
-        dispatch(setReconnecting(response.device.id));
+        ble.isEnabled(result => {
+          if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
+            dispatch(setReconnecting(response.device.id));
+          }
+        });
       }
     }, deviceId);
   };

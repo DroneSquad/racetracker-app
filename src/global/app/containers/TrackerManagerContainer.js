@@ -19,10 +19,9 @@ import TrackerManager from '../components/TrackerManager';
     component - in this case, the TrackerManager  */
 
 const mapStateToProps = state => ({
-  reconnectingTrackers: getReconnectingTrackers(state), // state.trackers.filter(t => t.isReconnecting),
-  connectingTrackers: getConnectingTrackers(state), // state.trackers.filter(t => t.isConnecting),
-  connectedTrackers: getConnectedTrackers(state), // state.trackers.filter(t => t.isConnected),
-  isBtAvailable: state.bluetooth.isAvailable,
+  reconnectingTrackers: getReconnectingTrackers(state),
+  connectingTrackers: getConnectingTrackers(state),
+  connectedTrackers: getConnectedTrackers(state),
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
 });
@@ -33,11 +32,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setDisconnected: deviceId => dispatch(setDisconnected(deviceId)),
   validateTrackers: array => dispatch(validateTrackers(array))
 });
-
-/* Memoized selectors with 'Reselect'
-export const isHeatActive = createSelector(
-  // TODO: finish the selectors started in the racetracker module
-) */
 
 const TrackerManagerContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerManager);
 

@@ -15,7 +15,8 @@ export default class extends Component {
     isBtEnabled: boolean,
     isBtScanning: boolean,
     trackers: Array<RaceTracker>,
-    enableBt: Function,
+    availableTrackers: Array<RaceTracker>,
+    connectedTrackers: Array<RaceTracker>,
     startTrackerScan: Function,
     stopTrackerScan: Function,
     validateTrackers: Function

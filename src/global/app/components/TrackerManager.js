@@ -29,35 +29,19 @@ export default class TrackerManager extends React.PureComponent {
     };
   }
 
-  // This will never ever ever happen
-  /*componentDidMount() {
-    // on mount check if bluetooth is active/enabled and not scanning, then
-    // check if any trackers are connected, if so validate connection states
-    // (this is used on app restart when a tracker/s should be connected)
-    if (this.props.isBtEnabled && !this.props.isBtScanning) {
-      if (this.props.connectedTrackers.length > 0) {
-        this.props.validateTrackers(this.props.connectedTrackers);
-      }
-    }
-  }*/
-
   componentWillReceiveProps(nextProps) {
-    // check that the bluetooth state was just verified as enabled
-    console.log("1")
-    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled && !this.props.isBtScanning) {
-      console.log("2")
+    // bluetooth was just been enabled, lets validate any "connected" trackers now
+    // this occurs on both new startup and on bluetooth toggle off and on
+    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       if (this.props.connectedTrackers.length > 0) {
-        console.log("3")
         this.props.validateTrackers(this.props.connectedTrackers);
-        console.log("4")
       }
     }
   }
 
   /** Watch tracker array for connection state changes */
-  // TODO: improve this through use of selectors
   componentDidUpdate(prevProps, prevState) {
-    // handle trakers in a connecting state
+    // handle trackers in a connecting state
     if (prevProps.connectingTrackers.length !== this.props.connectingTrackers.length) {
       if (this.props.connectingTrackers.length > 0) {
         // determine which/if any tracker is new to the stack

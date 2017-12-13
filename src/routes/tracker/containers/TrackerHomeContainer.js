@@ -1,8 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { enable } from '../../../global/app/modules/bluetooth';
-
 import { stopTrackerScan, validateTrackers, discoverTrackers, getAvailableTrackers, getConnectedTrackers } from '../../../global/app/modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
@@ -22,7 +20,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  enableBt: () => dispatch(enable()),
   startTrackerScan: array => dispatch(discoverTrackers(array)),
   stopTrackerScan: array => dispatch(stopTrackerScan(array)),
   validateTrackers: array => dispatch(validateTrackers(array))
