@@ -187,6 +187,7 @@ export const connectTracker = (deviceId: string) => {
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
+        console.log("racetrackerModule-connectTracker-Error(disconnect)")
         // the device has either failed connection or disconnected on error
         dispatch(setReconnecting(response.device.id));
       }
@@ -263,7 +264,7 @@ export const validateTrackerPromise = (request: object) => {
     ble.readDeviceRssi(response => {
       if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
-        // the bluetooth library determine the type of errort and handle accordingly
+        // the bluetooth library determine the type of error and handle accordingly
         let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
