@@ -30,7 +30,7 @@ export default class extends Component {
 
   componentWillReceiveProps(nextProps) {
     // TODO: lets do more checking on exactly how to handle these checks
-    // bluetooth was just eneabled, lets validate 'available' trackers now,
+    // bluetooth was just enabled, lets validate 'available' trackers now,
     // 'connected' trackers will be handled by the TrackerManager.
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       console.log("bluetoothEnabled discovery or validation called")
