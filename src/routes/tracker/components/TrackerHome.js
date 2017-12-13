@@ -22,25 +22,25 @@ export default class extends Component {
   };
 
   componentDidMount() {
-  /*  if (this.props.isBtAvailable && this.props.isBtEnabled) {
+    if (this.props.isBtEnabled) {
       this.initSearchOrScan();
-    }*/
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-  /*  if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      // bluetooth has been enabled do the auto-magic stuff
+    // TODO: lets do more checking on exactly how to handle these checks
+    // bluetooth was just eneabled, lets validate 'available' trackers now,
+    // 'connected' trackers will be handled by the TrackerManager.
+    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       this.initSearchOrScan();
-    }*/
+    }
   }
 
   initSearchOrScan() {
     if (this.props.trackers.length === 0) {
-      // automagically start bluetooth scan for racetrackers
-      this.startDiscovery();
+      this.startDiscovery();  // automagically start bluetooth scan for racetrackers
     } else {
-      // verify each tracker available on the existing list
-      this.verifyTrackers();
+      this.verifyTrackers();  // verify 'available trackers'
     }
   }
 
@@ -63,8 +63,8 @@ export default class extends Component {
     // see the racetracker module function stopTrackerScan, where this call is used
     // possible options: improved callback, only validate connected trackers, wipe all?
     // -----------------------------------------------------
-    // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
-    this.props.stopTrackerScan();
+    this.props.stopTrackerScan(this.props.trackers); // (validation option call)
+    // this.props.stopTrackerScan();
   };
 
   /** change button purpose: start/stop scan based on scanning state */
@@ -123,7 +123,6 @@ export default class extends Component {
         </header>
         <main>
           <BluetoothCard />
-
           {isBtEnabled && <this.rtDiscoveryList />}
         </main>
         <footer>

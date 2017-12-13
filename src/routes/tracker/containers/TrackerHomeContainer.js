@@ -1,7 +1,8 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { stopTrackerScan, validateTrackers, discoverTrackers, getAvailableTrackers, getConnectedTrackers } from '../../../global/app/modules/racetracker';
+import { stopTrackerScan, validateTrackers, discoverTrackers,
+  getAvailableTrackers, getConnectedTrackers } from '../../../global/app/modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 

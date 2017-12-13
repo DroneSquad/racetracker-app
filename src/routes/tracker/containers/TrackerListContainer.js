@@ -9,7 +9,9 @@ import TrackerList from '../components/TrackerList';
 
 const mapStateToProps = (state, ownProps) => ({
   trackers: ownProps.trackers,
-  isBtScanning: state.bluetooth.isScanning
+  isBtScanning: state.bluetooth.isScanning,
+  emptyText: ownProps.emptyText,
+  headerText: ownProps.headerText
 });
 
 const TrackerListContainer = connect(mapStateToProps)(TrackerList);
