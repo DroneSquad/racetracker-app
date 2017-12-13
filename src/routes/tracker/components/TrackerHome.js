@@ -6,12 +6,11 @@ import { AppBar, Divider, FlatButton } from 'material-ui';
 
 import { historyBackButton } from '../../../utils';
 
-import BluetoothCard from '../containers/BluetoothCardContainer';
+import BluetoothCard from '../../../global/app/containers/BluetoothCardContainer';
 import TrackerList from '../containers/TrackerListContainer';
 
 export default class extends Component {
   props: {
-    isBtAvailable: boolean,
     isBtEnabled: boolean,
     isBtScanning: boolean,
     trackers: Array<RaceTracker>,
@@ -112,9 +111,9 @@ export default class extends Component {
   };
 
   render() {
-    let { isBtEnabled, isBtAvailable } = this.props;
+    let { isBtEnabled } = this.props;
     return (
-      <div className={isBtAvailable && isBtEnabled ? 'main tracker-home' : 'main'}>
+      <div className={isBtEnabled ? 'main tracker-home' : 'main'}>
         <header>
           <AppBar
             title="RaceTracker"
@@ -123,25 +122,12 @@ export default class extends Component {
           />
         </header>
         <main>
-          {!isBtAvailable &&
-            <BluetoothCard
-              title="No Bluetooth LE Available"
-              subtitle="This device does not support Bluetooth LE"
-              text="The Cordova plugin for Bluetooth LE support was not found"
-              button=""
-            />}
-          {isBtAvailable &&
-            !isBtEnabled &&
-            <BluetoothCard
-              title="Enable Bluetooth"
-              subtitle="Bluetooth LE is required to use TBS RaceTrackers"
-              text="Enable Bluetooth to continue"
-              button="enable"
-            />}
-          {isBtAvailable && isBtEnabled && <this.rtDiscoveryList />}
+          <BluetoothCard />
+
+          {isBtEnabled && <this.rtDiscoveryList />}
         </main>
         <footer>
-          {isBtAvailable && isBtEnabled && <this.btScanButton />}
+          {isBtEnabled && <this.btScanButton />}
         </footer>
       </div>
     );

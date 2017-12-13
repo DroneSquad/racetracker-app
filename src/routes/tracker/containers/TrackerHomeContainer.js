@@ -11,7 +11,6 @@ import TrackerHome from '../components/TrackerHome';
     component - in this case, the TrackerHome  */
 
 const mapStateToProps = state => ({
-  isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
   trackers: state.trackers,
