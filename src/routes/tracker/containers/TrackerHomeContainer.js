@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { enable } from '../../../global/app/modules/bluetooth';
 
-import { stopTrackerScan, validateTrackers, discoverTrackers } from '../../../global/app/modules/racetracker';
+import { stopTrackerScan, validateTrackers, discoverTrackers, getAvailableTrackers, getConnectedTrackers } from '../../../global/app/modules/racetracker';
 
 import TrackerHome from '../components/TrackerHome';
 
@@ -16,7 +16,9 @@ const mapStateToProps = state => ({
   isBtAvailable: state.bluetooth.isAvailable,
   isBtEnabled: state.bluetooth.isEnabled,
   isBtScanning: state.bluetooth.isScanning,
-  trackers: state.trackers
+  trackers: state.trackers,
+  availableTrackers: getAvailableTrackers(state),
+  connectedTrackers: getConnectedTrackers(state)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash';
-// import { createSelector } from 'reselect'
+import { createSelector } from 'reselect'
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
@@ -35,24 +35,31 @@ export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 export const RT_CALIBRATING = 'RT_CALIBRATING';
 
 /** selectors */
-// racetracker connection filter selectors
-/*const getTrackers = state => state.trackers;
-export const getConnectedFilter = 'CONNECTED';
-export const getAvailableFilter = 'AVAILABLE';
-export const getConnectingFilter = 'CONNECTING';
-export const getReconnectingFilter = 'RECONNECTING';
-export const getDisconnectedFilter = 'DISCONNECTED';
-
-export const getConnectedTrackers = createSelector(
-  [ getConnectedFilter, getTrackers ],
-  (filter, trackers) => {
-    switch(filter) {
-      case 'ALL':
-        return trackers
-      case
-    }
+const getTrackers = state => state.trackers;
+export const getAvailableTrackers = createSelector(
+  [getTrackers],
+  (trackers) => {
+    return trackers.filter(t => !t.isConnected)
   }
-)*/
+)
+export const getConnectedTrackers = createSelector(
+  [getTrackers],
+  (trackers) => {
+    return trackers.filter(t => t.isConnected)
+  }
+)
+export const getConnectingTrackers = createSelector(
+  [getTrackers],
+  (trackers) => {
+    return trackers.filter(t => t.isConnecting)
+  }
+)
+export const getReconnectingTrackers = createSelector(
+  [getTrackers],
+  (trackers) => {
+    return trackers.filter(t => t.isReconnecting)
+  }
+)
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({

@@ -95,14 +95,14 @@ export default class extends Component {
       <div>
         <TrackerList
           history={this.props.history}
-          filter="SHOW_CONNECTED"
+          trackers={this.props.connectedTrackers}
           headerText="Connected RaceTrackers"
           emptyText="No connected race trackers"
         />
         <Divider />
         <TrackerList
           history={this.props.history}
-          filter="SHOW_AVAILABLE"
+          trackers={this.props.availableTrackers}
           headerText="Available RaceTrackers"
           emptyText="No available race trackers"
         />
