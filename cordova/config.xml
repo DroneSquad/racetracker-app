@@ -36,4 +36,5 @@
     </plugin>
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-tts" spec="^0.2.3" />
+    <engine name="ios" spec="~4.5.4" />
 </widget>
