@@ -785,14 +785,8 @@ export default function(state = [], action: Action) {
       );
       case 'persist/REHYDRATE': {
         if (action.payload !== undefined) {
-          console.log("x2")
-          console.log(action.payload.trackers)
-          // api._updateToken(action.payload.auth.token); // update the api as well
           return action.payload.trackers;
-
         }
-        console.log("x3");
-        console.log(state);
         return state;
       }
     default:

@@ -1,6 +1,7 @@
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -61,9 +62,11 @@ export default class Loading extends React.PureComponent {
   /** The default callback that will open the app */
   defaultCallback = () =>
     <Provider store={configStore(this.history).store}>
-      <MuiThemeProvider muiTheme={this.muiTheme}>
-        <App history={this.history} persistor={configStore(this.history).persistor} />
-      </MuiThemeProvider>
+      <PersistGate persistor={configStore(this.history).persistor}>
+        <MuiThemeProvider muiTheme={this.muiTheme}>
+          <App history={this.history} />
+        </MuiThemeProvider>
+      </PersistGate>
     </Provider>;
 
   render() {
