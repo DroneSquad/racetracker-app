@@ -29,11 +29,20 @@ export default class TrackerManager extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    console.log("componentDidMount");
+    console.log(this.props.connectedTrackers);
+    console.log(this.props.connectingTrackers);
+    console.log(this.props.reconnectingTrackers);
+  }
+
   componentWillReceiveProps(nextProps) {
     // bluetooth was just been enabled, lets validate any "connected" trackers now
     // this occurs on both new startup and on bluetooth toggle off and on
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
+      console.log("bluetoothactivated")
       if (this.props.connectedTrackers.length > 0) {
+        console.log("kjhsjfh")
         this.props.validateTrackers(this.props.connectedTrackers);
       }
     }
@@ -190,6 +199,10 @@ export default class TrackerManager extends React.PureComponent {
 
   render() {
     let { message, action, timer, open } = this.state;
+    console.log("RENDER")
+    console.log(this.props.connectedTrackers);
+    console.log(this.props.connectingTrackers);
+    console.log(this.props.reconnectingTrackers);
     let attrs = {
       open: open,
       message: message,

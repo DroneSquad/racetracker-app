@@ -187,7 +187,7 @@ export const connectTracker = (deviceId: string) => {
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
-        console.log("racetrackerModule-connectTracker-Error(disconnect)")
+        console.log("-----racetrackerModule-connectTracker-Error(disconnect)-----")
         // the device has either failed connection or disconnected on error
         ble.isEnabled(result => {
           if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
@@ -783,6 +783,18 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+      case 'persist/REHYDRATE': {
+        if (action.payload !== undefined) {
+          console.log("x2")
+          console.log(action.payload.trackers)
+          // api._updateToken(action.payload.auth.token); // update the api as well
+          return action.payload.trackers;
+
+        }
+        console.log("x3");
+        console.log(state);
+        return state;
+      }
     default:
       return state;
   }

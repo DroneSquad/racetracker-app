@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 import AuthRoute from './AuthRoute';
 import TrackerManager from './containers/TrackerManagerContainer';
@@ -23,9 +24,11 @@ import Home from '../../routes/home';
 export default class App extends React.Component {
   /** This will render full screen pages that need different layouts */
   render() {
-    let { history } = this.props;
+    let { history, persistor } = this.props;
     return (
+      <PersistGate persistor={persistor}>
       <div>
+
         <ConnectedRouter history={history}>
           <Switch>
             <Route path="/account/forgot*" component={Forgot} />
@@ -44,7 +47,9 @@ export default class App extends React.Component {
         <BluetoothManager />
         <TrackerManager />
         <ErrorPopup />
+
       </div>
+      </PersistGate>
     );
   }
 }

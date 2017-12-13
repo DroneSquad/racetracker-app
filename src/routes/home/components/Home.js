@@ -66,7 +66,7 @@ export default class extends React.Component {
   render() {
     // temp redirect to the fly page
     if (true) {
-      return <Redirect to="/tracker" />;
+      return <Redirect to="/fly" />;
     }
     return (
       <Paper style={{ margin: '8px', padding: '16px', color: '#666' }}>

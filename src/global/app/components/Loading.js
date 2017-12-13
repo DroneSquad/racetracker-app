@@ -62,7 +62,7 @@ export default class Loading extends React.PureComponent {
   defaultCallback = () =>
     <Provider store={configStore(this.history).store}>
       <MuiThemeProvider muiTheme={this.muiTheme}>
-        <App history={this.history} />
+        <App history={this.history} persistor={configStore(this.history).persistor} />
       </MuiThemeProvider>
     </Provider>;
 
