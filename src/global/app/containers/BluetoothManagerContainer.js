@@ -18,7 +18,6 @@ import BluetoothManager from '../components/BluetoothManager';
 const mapStateToProps = state => ({
   btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
-  isBtEnabled: state.bluetooth.isEnabled,
   isBtNotifying: state.bluetooth.isNotifying,
 });
 

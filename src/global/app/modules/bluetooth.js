@@ -67,7 +67,7 @@ export const startStateNotifications = () => {
         dispatch(setError(response.error));
       } else {
         dispatch(setIsEnabled(response.value));  // update the state of bluetooth
-        dispatch(setIsNotifying(true));  // state notifications activated
+        dispatch(setIsNotifying(true));  // activate state notifications
       }
     });
   };
@@ -79,7 +79,7 @@ export const stopStateNotifications = () => {
       if (response.error) {
         dispatch(setError(response.error));
       } else {
-        dispatch(setIsNotifying(false));  // state notifications deactivated
+        dispatch(setIsNotifying(false));  // deactivate state notifications
       }
     });
   };
