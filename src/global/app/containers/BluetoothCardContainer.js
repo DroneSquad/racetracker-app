@@ -10,7 +10,7 @@ import BluetoothCard from '../components/BluetoothCard';
     wiring in the actions and state necessary to render a presentational
     component - in this case, a BluetoothCard  */
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isBtEnabled: state.bluetooth.isEnabled,
   isBtAvailable: state.bluetooth.isAvailable
 });

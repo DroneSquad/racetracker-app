@@ -34,7 +34,7 @@ export default class Main extends Component {
           </Switch>
         </main>
         {/*<footer>*/}
-          {/*<Nav history={history} />*/}
+        {/*<Nav history={history} />*/}
         {/*</footer>*/}
       </content>
     );

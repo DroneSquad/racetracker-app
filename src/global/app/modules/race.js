@@ -3,7 +3,12 @@
 import _ from 'lodash';
 
 import raceMngr from '../../../services/racemanager';
-import { announceLapsFromResponse, announceShotgunStart, announceFlyoverStart, announceFlyover } from '../../../routes/fly/modules/announcer';
+import {
+  announceLapsFromResponse,
+  announceShotgunStart,
+  announceFlyoverStart,
+  announceFlyover
+} from '../../../routes/fly/modules/announcer';
 
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
@@ -132,11 +137,11 @@ export const updateLaps = (request: object) => {
 };
 
 export const updateHeatRacers = (request: object) => {
-  console.log("updateHeatRacers-module")
+  console.log('updateHeatRacers-module');
   console.log(request);
   return dispatch => {
     raceMngr.updateHeatRacers(response => {
-      console.log("call setHeatRacers")
+      console.log('call setHeatRacers');
       console.log(response);
       dispatch(setHeatRacers(response));
     }, request);
@@ -198,18 +203,15 @@ export default function(state = {}, action: Action) {
         laps: state.laps.concat(action.payload.laps)
       };
     case SET_HEAT_RACERS:
-    console.log("SET_HEAT_RACERS")
-    console.log(action.payload)
+      console.log('SET_HEAT_RACERS');
+      console.log(action.payload);
       return {
         ...state,
-        heats: _.unionWith(
-          [action.payload.heat],
-          state.heat,
-          (left, right) => left.id === right.id),
+        heats: _.unionWith([action.payload.heat], state.heat, (left, right) => left.id === right.id),
         laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
       };
     case SET_LAP:
-      console.log("SET_LAP")
+      console.log('SET_LAP');
       // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
       return {
         ...state,

@@ -50,8 +50,6 @@ export default class BluetoothManager extends React.PureComponent {
 
   render() {
     let { btError } = this.props;
-    return (
-      <Snackbar open={!!btError} message={btError} autoHideDuration={4000} />
-    )
+    return <Snackbar open={!!btError} message={btError} autoHideDuration={4000} />;
   }
 }

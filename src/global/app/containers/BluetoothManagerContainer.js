@@ -1,12 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 
-import {
-  isAvailable,
-  isEnabled,
-  startStateNotifications,
-  stopStateNotifications
-} from '../modules/bluetooth';
+import { isAvailable, isEnabled, startStateNotifications, stopStateNotifications } from '../modules/bluetooth';
 
 import BluetoothManager from '../components/BluetoothManager';
 
@@ -18,7 +13,7 @@ import BluetoothManager from '../components/BluetoothManager';
 const mapStateToProps = state => ({
   btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
-  isBtNotifying: state.bluetooth.isNotifying,
+  isBtNotifying: state.bluetooth.isNotifying
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

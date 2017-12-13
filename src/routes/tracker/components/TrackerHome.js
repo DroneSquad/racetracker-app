@@ -23,7 +23,7 @@ export default class extends Component {
 
   componentDidMount() {
     if (this.props.isBtEnabled) {
-      console.log("componenetDidMount")
+      console.log('componenetDidMount');
       this.initSearchOrScan();
     }
   }
@@ -33,16 +33,16 @@ export default class extends Component {
     // bluetooth was just enabled, lets validate 'available' trackers now,
     // 'connected' trackers will be handled by the TrackerManager.
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      console.log("bluetoothEnabled discovery or validation called")
+      console.log('bluetoothEnabled discovery or validation called');
       this.initSearchOrScan();
     }
   }
 
   initSearchOrScan() {
     if (this.props.trackers.length === 0) {
-      this.startDiscovery();  // automagically start bluetooth scan for racetrackers
+      this.startDiscovery(); // automagically start bluetooth scan for racetrackers
     } else {
-      this.verifyTrackers();  // verify 'available trackers'
+      this.verifyTrackers(); // verify 'available trackers'
     }
   }
 
@@ -51,7 +51,7 @@ export default class extends Component {
     if (!this.props.isBtScanning) {
       this.props.validateTrackers(this.props.trackers);
     }
-  };
+  }
 
   /** Start racetracker discovery if possible */
   startDiscovery = () => {

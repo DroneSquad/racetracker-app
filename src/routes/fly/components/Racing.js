@@ -21,7 +21,7 @@ export default class Racing extends Component {
   };
 
   componentDidMount() {
-   if (!this.props.isRaceActive) {
+    if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
           if (this.props.connectedTrackers[0].racerChannels) {
@@ -42,7 +42,10 @@ export default class Racing extends Component {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
           if (this.props.connectedTrackers[0].racerChannels) {
-            if (this.props.connectedTrackers[0].racerChannels.length !== nextProps.connectedTrackers[0].racerChannels.length) {
+            if (
+              this.props.connectedTrackers[0].racerChannels.length !==
+              nextProps.connectedTrackers[0].racerChannels.length
+            ) {
               if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
                 this.createRace(nextProps.connectedTrackers[0]);
               }
@@ -60,7 +63,7 @@ export default class Racing extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   validateTrackers = () => {
     if (!this.props.isBtScanning) {
-      let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId)
+      let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
       this.props.validateTrackers(aTracker);
     }
   };

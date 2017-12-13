@@ -18,17 +18,17 @@ import Racer from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.trackerChannels !== this.props.heatChannels) {
-      this.props.updateHeatRacers({ heat: this.props.activeHeat, racerChannels: nextProps.trackerChannels })
+      this.props.updateHeatRacers({ heat: this.props.activeHeat, racerChannels: nextProps.trackerChannels });
     }
   }
 
   /** The drop down menu for the options menu */
   menuDropdown = () => {
-    if (true) { // temp disable the ...
-      return <span></span>;
+    if (true) {
+      // temp disable the ...
+      return <span />;
     }
     let styleIcons = { margin: '0 0 0 8px' };
     let icon = (
@@ -55,9 +55,7 @@ export default class Heat extends Component {
       <span>
         {`Heat ${activeHeat.number}`} {activeHeat.isComplete && `Results `}
         {/* Will show internal heat id when in debug mode */}
-        <span style={{ color: '#aaa', fontSize: '12px' }}>
-          {window.isDeveloper && activeHeat.id}
-        </span>
+        <span style={{ color: '#aaa', fontSize: '12px' }}>{window.isDeveloper && activeHeat.id}</span>
       </span>
     );
     return (

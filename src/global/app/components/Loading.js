@@ -1,7 +1,7 @@
 import React from 'react';
 import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/es/integration/react'
+import { PersistGate } from 'redux-persist/es/integration/react';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';

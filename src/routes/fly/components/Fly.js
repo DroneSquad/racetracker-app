@@ -29,16 +29,14 @@ export default class Race extends Component {
   };
 
   /** Fast tracker icon to go right to the tracker menu */
-  tracker = () => (
-    <IconButton iconClassName="mdi mdi-timer" onTouchTap={() => this.props.goToTrackerHome()} />
-  );
+  tracker = () => <IconButton iconClassName="mdi mdi-timer" onTouchTap={() => this.props.goToTrackerHome()} />;
 
   render() {
     let card = (
-    <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
-      <CardTitle title="Coming Soon" />
-      <CardText>Previous heats will be listed here.</CardText>
-    </Card>
+      <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
+        <CardTitle title="Coming Soon" />
+        <CardText>Previous heats will be listed here.</CardText>
+      </Card>
     );
     return (
       <div className="fly">
@@ -55,7 +53,7 @@ export default class Race extends Component {
               {card}
             </Tab>
             {/*<Tab label="Stats">*/}
-              {/*{card}*/}
+            {/*{card}*/}
             {/*</Tab>*/}
           </Tabs>
         </main>

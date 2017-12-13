@@ -29,16 +29,16 @@ export default class BluetoothCard extends Component {
         subtitle: 'Bluetooth LE is required to use TBS RaceTrackers',
         text: 'Enable Bluetooth to continue',
         button: 'enable',
-        show: true,
-      }
+        show: true
+      };
     } else {
       this.state = {
         title: '',
         subtitle: '',
         text: '',
         button: '',
-        show: false,
-      }
+        show: false
+      };
     }
   }
 
@@ -50,16 +50,16 @@ export default class BluetoothCard extends Component {
           subtitle: '',
           text: '',
           button: '',
-          show: false,
-        })
+          show: false
+        });
       } else {
         this.setState({
           title: 'Enable Bluetooth',
           subtitle: 'Bluetooth LE is required to use TBS RaceTrackers',
           text: 'Enable Bluetooth to continue',
           button: 'enable',
-          show: true,
-        })
+          show: true
+        });
       }
     }
   }
@@ -82,7 +82,7 @@ export default class BluetoothCard extends Component {
         </Card>
       );
     } else {
-      return null
+      return null;
     }
   }
 }

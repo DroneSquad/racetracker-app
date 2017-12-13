@@ -11,7 +11,7 @@ export default class TrackerManager extends React.PureComponent {
     connectingTrackers: Array<RaceTracker>,
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
-    setConnecting: Function,  // set state while trying to connect to tracker
+    setConnecting: Function, // set state while trying to connect to tracker
     setDisconnected: Function, // update prop of already disconnected tracker,
     validateTrackers: Function // validate connection state of trackers on start/restart
   };
@@ -34,7 +34,7 @@ export default class TrackerManager extends React.PureComponent {
     // this occurs on both startup and on bluetooth toggle off/on
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       if (this.props.connectedTrackers.length > 0) {
-        console.log("bluetooth enabled validate connected trackers");
+        console.log('bluetooth enabled validate connected trackers');
         this.props.validateTrackers(this.props.connectedTrackers);
       }
     }
@@ -161,7 +161,7 @@ export default class TrackerManager extends React.PureComponent {
       default_action: defAction,
       clicked_action: clkAction,
       timer: timer,
-      open: !!message,
+      open: !!message
     });
   }
 
@@ -177,7 +177,7 @@ export default class TrackerManager extends React.PureComponent {
     this.setState({
       open: false
     });
-  }
+  };
 
   handleActionClick = () => {
     let clicked_action = this.state.clicked_action;
