@@ -33,7 +33,7 @@
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <plugin name="cordova-plugin-ble-central" spec="^1.1.4">
-        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Allows app to communicate with the TBS Racetracker" />
+        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Allows app to communicate with the TBS RaceTracker" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-tts" spec="^0.2.3" />
