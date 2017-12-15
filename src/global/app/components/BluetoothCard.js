@@ -69,15 +69,16 @@ export default class BluetoothCard extends Component {
   };
 
   render() {
+    let isAndroid = window.cordova.platformId === 'android';
     if (this.state.show) {
       return (
         <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
           <CardTitle title={this.state.title} subtitle={this.state.subtitle} />
           <CardText>
-            {this.state.text}
+            {isAndroid && this.state.text}
           </CardText>
           <CardActions>
-            {!!this.state.button && <FlatButton label={this.state.button} onClick={this.handleButtonClick} />}
+            {isAndroid && !!this.state.button && <FlatButton label={this.state.button} onClick={this.handleButtonClick} />}
           </CardActions>
         </Card>
       );
