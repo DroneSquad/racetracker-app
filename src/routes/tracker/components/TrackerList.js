@@ -8,7 +8,6 @@ import TrackerDevice from '../containers/TrackerDeviceContainer';
 
 export default class TrackerList extends React.Component {
   props: {
-    filter: string,
     headerText: string,
     emptyText: string,
     isBtScanning: boolean,

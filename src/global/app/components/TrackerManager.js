@@ -5,12 +5,15 @@ import { Snackbar } from 'material-ui';
 
 export default class TrackerManager extends React.PureComponent {
   props: {
+    isBtEnabled: boolean,
+    isBtScanning: boolean,
     reconnectingTrackers: Array<RaceTracker>,
     connectingTrackers: Array<RaceTracker>,
     connectedTrackers: Array<RaceTracker>,
     connect: Function, // attempt to connect to tracker
-    setConnecting: Function,
-    setDisconnected: Function // update prop of already disconnected tracker
+    setConnecting: Function, // set state while trying to connect to tracker
+    setDisconnected: Function, // update prop of already disconnected tracker,
+    validateTrackers: Function // validate connection state of trackers on start/restart
   };
 
   constructor(props) {
@@ -26,10 +29,20 @@ export default class TrackerManager extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    // bluetooth was just enabled, lets validate any "connected" trackers now
+    // this occurs on both startup and on bluetooth toggle off/on
+    if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
+      if (this.props.connectedTrackers.length > 0) {
+        console.log('bluetooth enabled validate connected trackers');
+        this.props.validateTrackers(this.props.connectedTrackers);
+      }
+    }
+  }
+
   /** Watch tracker array for connection state changes */
-  // TODO: improve this through use of selectors
   componentDidUpdate(prevProps, prevState) {
-    // handle trakers in a connecting state
+    // handle trackers in a connecting state
     if (prevProps.connectingTrackers.length !== this.props.connectingTrackers.length) {
       if (this.props.connectingTrackers.length > 0) {
         // determine which/if any tracker is new to the stack
@@ -148,7 +161,7 @@ export default class TrackerManager extends React.PureComponent {
       default_action: defAction,
       clicked_action: clkAction,
       timer: timer,
-      open: !!message,
+      open: !!message
     });
   }
 
@@ -164,7 +177,7 @@ export default class TrackerManager extends React.PureComponent {
     this.setState({
       open: false
     });
-  }
+  };
 
   handleActionClick = () => {
     let clicked_action = this.state.clicked_action;

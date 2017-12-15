@@ -45,7 +45,13 @@ export class Ble {
           cb({ value: true });
         }
         // states indicating bluetooth is off
-        if (btState === 'off' || btState === 'turningOff' || btState === 'unknown' || btState === 'unsupported' || btState === 'unauthorized') {
+        if (
+          btState === 'off' ||
+          btState === 'turningOff' ||
+          btState === 'unknown' ||
+          btState === 'unsupported' ||
+          btState === 'unauthorized'
+        ) {
           cb({ value: false });
         }
       },

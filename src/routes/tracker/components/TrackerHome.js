@@ -6,41 +6,43 @@ import { AppBar, Divider, FlatButton } from 'material-ui';
 
 import { historyBackButton } from '../../../utils';
 
-import BluetoothCard from '../containers/BluetoothCardContainer';
+import BluetoothCard from '../../../global/app/containers/BluetoothCardContainer';
 import TrackerList from '../containers/TrackerListContainer';
 
 export default class extends Component {
   props: {
-    isBtAvailable: boolean,
     isBtEnabled: boolean,
     isBtScanning: boolean,
     trackers: Array<RaceTracker>,
-    enableBt: Function,
+    availableTrackers: Array<RaceTracker>,
+    connectedTrackers: Array<RaceTracker>,
     startTrackerScan: Function,
     stopTrackerScan: Function,
     validateTrackers: Function
   };
 
   componentDidMount() {
-    if (this.props.isBtAvailable && this.props.isBtEnabled) {
+    if (this.props.isBtEnabled) {
+      console.log('componenetDidMount');
       this.initSearchOrScan();
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    // TODO: lets do more checking on exactly how to handle these checks
+    // bluetooth was just enabled, lets validate 'available' trackers now,
+    // 'connected' trackers will be handled by the TrackerManager.
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      // bluetooth has been enabled do the auto-magic stuff
+      console.log('bluetoothEnabled discovery or validation called');
       this.initSearchOrScan();
     }
   }
 
   initSearchOrScan() {
     if (this.props.trackers.length === 0) {
-      // automagically start bluetooth scan for racetrackers
-      this.startDiscovery();
+      this.startDiscovery(); // automagically start bluetooth scan for racetrackers
     } else {
-      // verify each tracker available on the existing list
-      this.verifyTrackers();
+      this.verifyTrackers(); // verify 'available trackers'
     }
   }
 
@@ -49,7 +51,7 @@ export default class extends Component {
     if (!this.props.isBtScanning) {
       this.props.validateTrackers(this.props.trackers);
     }
-  };
+  }
 
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
@@ -63,8 +65,8 @@ export default class extends Component {
     // see the racetracker module function stopTrackerScan, where this call is used
     // possible options: improved callback, only validate connected trackers, wipe all?
     // -----------------------------------------------------
-    // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
-    this.props.stopTrackerScan();
+    this.props.stopTrackerScan(this.props.trackers); // (validation option call)
+    // this.props.stopTrackerScan();
   };
 
   /** change button purpose: start/stop scan based on scanning state */
@@ -95,14 +97,14 @@ export default class extends Component {
       <div>
         <TrackerList
           history={this.props.history}
-          filter="SHOW_CONNECTED"
+          trackers={this.props.connectedTrackers}
           headerText="Connected RaceTrackers"
           emptyText="No connected race trackers"
         />
         <Divider />
         <TrackerList
           history={this.props.history}
-          filter="SHOW_AVAILABLE"
+          trackers={this.props.availableTrackers}
           headerText="Available RaceTrackers"
           emptyText="No available race trackers"
         />
@@ -111,9 +113,9 @@ export default class extends Component {
   };
 
   render() {
-    let { isBtEnabled, isBtAvailable } = this.props;
+    let { isBtEnabled } = this.props;
     return (
-      <div className={isBtAvailable && isBtEnabled ? 'main tracker-home' : 'main'}>
+      <div className={isBtEnabled ? 'main tracker-home' : 'main'}>
         <header>
           <AppBar
             title="RaceTracker"
@@ -122,25 +124,11 @@ export default class extends Component {
           />
         </header>
         <main>
-          {!isBtAvailable &&
-            <BluetoothCard
-              title="No Bluetooth LE Available"
-              subtitle="This device does not support Bluetooth LE"
-              text="The Cordova plugin for Bluetooth LE support was not found"
-              button=""
-            />}
-          {isBtAvailable &&
-            !isBtEnabled &&
-            <BluetoothCard
-              title="Enable Bluetooth"
-              subtitle="Bluetooth LE is required to use TBS RaceTrackers"
-              text="Enable Bluetooth to continue"
-              button="enable"
-            />}
-          {isBtAvailable && isBtEnabled && <this.rtDiscoveryList />}
+          <BluetoothCard />
+          {isBtEnabled && <this.rtDiscoveryList />}
         </main>
         <footer>
-          {isBtAvailable && isBtEnabled && <this.btScanButton />}
+          {isBtEnabled && <this.btScanButton />}
         </footer>
       </div>
     );

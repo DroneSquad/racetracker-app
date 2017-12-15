@@ -20,7 +20,7 @@ export class RaceMngr {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
     let laps = request[0].racerChannels.map(slot => ({
-      racer: slot.racer,  // name alias, object eventually
+      racer: slot.racer, // name alias, object eventually
       lap: 1,
       lapTime: 0,
       totalTime: 0,
@@ -76,7 +76,7 @@ export class RaceMngr {
   }
 
   updateHeatRacers(cb, request) {
-    console.log("updateHeatRacers-manager")
+    console.log('updateHeatRacers-manager');
 
     // create initial lap for each racer
     let laps = request.racerChannels.map(slot => ({
@@ -97,7 +97,7 @@ export class RaceMngr {
       racerChannels: request.racerChannels
     };
     // send it...
-    console.log("sendback")
+    console.log('sendback');
     console.log(heat);
     console.log(laps);
     cb({ heat: heat, laps: laps });

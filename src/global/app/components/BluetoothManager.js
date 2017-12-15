@@ -7,7 +7,6 @@ export default class BluetoothManager extends React.PureComponent {
   props: {
     btError: string,
     isBtAvailable: boolean,
-    isBtEnabled: boolean,
     isBtNotifying: boolean,
     checkIsBtAvailable: Function,
     checkIsBtEnabled: Function,
@@ -16,45 +15,41 @@ export default class BluetoothManager extends React.PureComponent {
   };
 
   componentDidMount() {
-    // check/update default state for device bluetooth availability
+    // on startup check/update the device bluetooth availability state
     this.props.checkIsBtAvailable();
   }
 
   componentWillReceiveProps(nextProps) {
-    // on-mount has found that bluetooth is available for this device
+    // if bluetooth is found to be available on startup, check if it is enabled
     if (this.props.isBtAvailable !== nextProps.isBtAvailable && nextProps.isBtAvailable) {
-      // now check/update the default enabled state of bluetooth on the device
+      // update redux with the current enabled state of bluetooth on this device
       this.props.checkIsBtEnabled();
       // activate bluetooth state notifications (watches for all bt status changes)
       if (!this.props.isBtNotifying) {
+        // updates redux anytime bluetooth is turned on/off
         this.props.startBtStateNotifications();
       }
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // the only reason to ever render is if there is a bluetooth error that
-    // needs to be show to the user, otherwise save the cycle and move along
-    // TODO: adapt this to also work with isConnected checks
+    // the only reason to ever render is if there is a bluetooth error to show
+    // the user. otherwise dont bother, save the cycle and move along..
     if (nextProps.btError) {
       return true;
     }
     return false;
   }
 
-  // TODO: Investigate further, called on app minimized, close, WHEN/WHY/EVAR!?
   componentWillUnMount() {
-    // stop watching for bluetooth sttus changes
+    // stop watching for bluetooth status changes
     if (this.props.isBtNotifying) {
       this.props.stopBtStateNotifications();
     }
   }
 
   render() {
-    // TODO: handle the isConnection messages
     let { btError } = this.props;
-    return (
-      <Snackbar open={!!btError} message={btError} autoHideDuration={4000} />
-    )
+    return <Snackbar open={!!btError} message={btError} autoHideDuration={4000} />;
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash';
-// import { createSelector } from 'reselect'
+import { createSelector } from 'reselect';
 
 import ble from '../../../services/bluetooth';
 import tbs from '../../../services/racetracker';
@@ -35,24 +35,19 @@ export const RT_RACER_CHAN = 'RT_RACER_CHAN';
 export const RT_CALIBRATING = 'RT_CALIBRATING';
 
 /** selectors */
-// racetracker connection filter selectors
-/*const getTrackers = state => state.trackers;
-export const getConnectedFilter = 'CONNECTED';
-export const getAvailableFilter = 'AVAILABLE';
-export const getConnectingFilter = 'CONNECTING';
-export const getReconnectingFilter = 'RECONNECTING';
-export const getDisconnectedFilter = 'DISCONNECTED';
-
-export const getConnectedTrackers = createSelector(
-  [ getConnectedFilter, getTrackers ],
-  (filter, trackers) => {
-    switch(filter) {
-      case 'ALL':
-        return trackers
-      case
-    }
-  }
-)*/
+const getTrackers = state => state.trackers;
+export const getAvailableTrackers = createSelector([getTrackers], trackers => {
+  return trackers.filter(t => !t.isConnected);
+});
+export const getConnectedTrackers = createSelector([getTrackers], trackers => {
+  return trackers.filter(t => t.isConnected);
+});
+export const getConnectingTrackers = createSelector([getTrackers], trackers => {
+  return trackers.filter(t => t.isConnecting);
+});
+export const getReconnectingTrackers = createSelector([getTrackers], trackers => {
+  return trackers.filter(t => t.isReconnecting);
+});
 
 /** actions */
 export const discoverTracker = (tracker: RaceTracker) => ({
@@ -180,8 +175,14 @@ export const connectTracker = (deviceId: string) => {
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
+        console.log('-----racetrackerModule-connectTracker-Error(disconnect)-----');
         // the device has either failed connection or disconnected on error
-        dispatch(setReconnecting(response.device.id));
+        ble.isEnabled(result => {
+          if (result) {
+            // if bluetooth was deactivated, dont bother trying to reconnect
+            dispatch(setReconnecting(response.device.id));
+          }
+        });
       }
     }, deviceId);
   };
@@ -256,7 +257,7 @@ export const validateTrackerPromise = (request: object) => {
     ble.readDeviceRssi(response => {
       if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
-        // the bluetooth library determine the type of errort and handle accordingly
+        // the bluetooth library determine the type of error and handle accordingly
         let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
@@ -270,7 +271,7 @@ export const validateTrackerPromise = (request: object) => {
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
-          console.log(err);  // TODO: proper error handling
+          console.log(err); // TODO: proper error handling
           reject();
         }
       } else {
@@ -620,7 +621,7 @@ export default function(state = [], action: Action) {
             ? {
                 ...tracker,
                 wasConnected: tracker.reconnects === RECOVERY_ATTEMPTS ? tracker.isConnected : tracker.wasConnected,
-                isReconnecting: tracker.isConnecting || tracker.isConnected ? true : false,  // do not attempt reconnect if not previously connected, or connecting
+                isReconnecting: tracker.isConnecting || tracker.isConnected ? true : false, // do not attempt reconnect if not previously connected, or connecting
                 isConnecting: false,
                 isConnected: false
               }
@@ -771,6 +772,12 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
+    case 'persist/REHYDRATE': {
+      if (action.payload !== undefined) {
+        return action.payload.trackers;
+      }
+      return state;
+    }
     default:
       return state;
   }

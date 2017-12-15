@@ -16,7 +16,7 @@ export default class Main extends Component {
   props: {};
 
   render() {
-    let { history } = this.props;
+    // let { history } = this.props;
     // TODO: have the selected route change the bottom navigation index
     return (
       <content className="main">
@@ -34,7 +34,7 @@ export default class Main extends Component {
           </Switch>
         </main>
         {/*<footer>*/}
-          {/*<Nav history={history} />*/}
+        {/*<Nav history={history} />*/}
         {/*</footer>*/}
       </content>
     );

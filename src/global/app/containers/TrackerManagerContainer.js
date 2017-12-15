@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import {
   connectTracker,
   setConnecting,
-  setDisconnected
+  setDisconnected,
+  validateTrackers,
+  getConnectedTrackers,
+  getConnectingTrackers,
+  getReconnectingTrackers
 } from '../modules/racetracker';
 
 import TrackerManager from '../components/TrackerManager';
@@ -12,26 +16,22 @@ import TrackerManager from '../components/TrackerManager';
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
     wiring in the actions and state necessary to render a presentational
-    component - in this case, the TrackerDevice  */
+    component - in this case, the TrackerManager  */
 
 const mapStateToProps = state => ({
-  trackers: state.trackers,
-
-  reconnectingTrackers: state.trackers.filter(t => t.isReconnecting),
-  connectingTrackers: state.trackers.filter(t => t.isConnecting),
-  connectedTrackers: state.trackers.filter(t => t.isConnected)
+  reconnectingTrackers: getReconnectingTrackers(state),
+  connectingTrackers: getConnectingTrackers(state),
+  connectedTrackers: getConnectedTrackers(state),
+  isBtEnabled: state.bluetooth.isEnabled,
+  isBtScanning: state.bluetooth.isScanning
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   connect: deviceId => dispatch(connectTracker(deviceId)),
   setConnecting: deviceId => dispatch(setConnecting(deviceId)),
-  setDisconnected: deviceId => dispatch(setDisconnected(deviceId))
+  setDisconnected: deviceId => dispatch(setDisconnected(deviceId)),
+  validateTrackers: array => dispatch(validateTrackers(array))
 });
-
-/* Memoized selectors with 'Reselect'
-export const isHeatActive = createSelector(
-  // TODO: check
-) */
 
 const TrackerManagerContainer = connect(mapStateToProps, mapDispatchToProps)(TrackerManager);
 

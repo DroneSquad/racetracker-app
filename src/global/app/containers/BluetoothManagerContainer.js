@@ -1,13 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
-// import { createSelector } from 'reselect'
 
-import {
-  isAvailable,
-  isEnabled,
-  startStateNotifications,
-  stopStateNotifications
-} from '../modules/bluetooth';
+import { isAvailable, isEnabled, startStateNotifications, stopStateNotifications } from '../modules/bluetooth';
 
 import BluetoothManager from '../components/BluetoothManager';
 
@@ -19,13 +13,7 @@ import BluetoothManager from '../components/BluetoothManager';
 const mapStateToProps = state => ({
   btError: state.bluetooth.error,
   isBtAvailable: state.bluetooth.isAvailable,
-  isBtEnabled: state.bluetooth.isEnabled,
-  isBtNotifying: state.bluetooth.isNotifying,
-
-  // isBtRequired: TODO: selector checking the below
-  // isRaceActive: state.race.isActive,
-  // isHeatActive: activeHeat: state.race.heats ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null,
-  // isTrackersConnected
+  isBtNotifying: state.bluetooth.isNotifying
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -34,11 +22,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
   startBtStateNotifications: () => dispatch(startStateNotifications()),
   stopBtStateNotifications: () => dispatch(stopStateNotifications())
 });
-
-/* Memoized selectors with 'Reselect'
-export const isHeatActive = createSelector(
-  // TODO: check
-) */
 
 const BluetoothManagerContainer = connect(mapStateToProps, mapDispatchToProps)(BluetoothManager);
 

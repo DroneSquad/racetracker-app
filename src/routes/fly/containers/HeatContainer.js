@@ -13,11 +13,11 @@ import { updateHeatRacers } from '../../../global/app/modules/race';
 const mapStateToProps = (state, ownProps) => ({
   activeHeat: state.race.heats.filter(t => t.id === ownProps.id)[0],
   heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels,
-  trackerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels,
+  trackerChannels: state.trackers.filter(t => t.id === state.race.trackerId)[0].racerChannels
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  updateHeatRacers: object => dispatch(updateHeatRacers(object)),
+  updateHeatRacers: object => dispatch(updateHeatRacers(object))
 });
 
 const HeatContainer = connect(mapStateToProps, mapDispatchToProps)(Heat);
