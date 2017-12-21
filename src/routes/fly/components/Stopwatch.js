@@ -82,6 +82,7 @@ export default class Stopwatch extends Component {
     let heat = this.props.activeHeat;
     //Race Clock: 1:00:00
     let btnStyle = { width: '30vw', marginTop: '4px', boxShadow: 'none', marginRight: '24px' };
+    let spinner = <div style={{ marginTop: '-28px' }} className="mdi mdi-loading spinner">&nbsp;</div>;
     return (
       <Paper className="heat-action" style={{ display: 'flex' }}>
         {heat.isPending &&
@@ -96,8 +97,8 @@ export default class Stopwatch extends Component {
           <p
             style={{ width: '60vw', marginRight: '0', textAlign: 'left', paddingLeft: '24px' }}
           >{`Heat ${heat.number} Finished`}</p>}
-        {heat.isPending && <RaisedButton primary onClick={this.startHeat} style={btnStyle} label="Start Race" />}
-        {heat.isActive && <RaisedButton primary onClick={this.endHeat} style={btnStyle} label="End Race" />}
+        {heat.isPending && <RaisedButton primary onClick={this.startHeat} style={btnStyle} disabled={this.props.isSendingCommand} label={this.props.isSendingCommand ? spinner : 'Start Race'} />}
+        {heat.isActive && <RaisedButton primary onClick={this.endHeat} style={btnStyle} disabled={this.props.isSendingCommand} label={this.props.isSendingCommand ? spinner : 'End Race'} />}
         {heat.isComplete && <RaisedButton primary onClick={this.createHeat} style={btnStyle} label="New Heat" />}
       </Paper>
     );

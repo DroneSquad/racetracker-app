@@ -18,6 +18,7 @@ export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
+export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 
 // TODO:
 // export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
@@ -64,6 +65,11 @@ export const setHeatRacers = (request: object) => ({
   payload: request
 });
 
+export const sentCommand = () => ({ //
+  type: SENT_START_STOP_HEAT,
+  payload: 'sent command, waiting for response'
+});
+
 /*export const setTotalRounds = (request: Object) => ({
   type: RT_TOTAL_ROUNDS,
   payload: request
@@ -92,6 +98,7 @@ export const createHeat = (request: object) => {
 
 export const startShotgunHeat = (request: object) => {
   return dispatch => {
+    dispatch(sentCommand());
     dispatch(announceShotgunStart());
     // TODO: refactor this and get rid of this hack
     setTimeout(() => dispatch(startHeat(request)), 3100); // timer accounts for delay of start countdown (HACK)
@@ -100,6 +107,7 @@ export const startShotgunHeat = (request: object) => {
 
 export const startFlyoverHeat = (request: object) => {
   return dispatch => {
+    dispatch(sentCommand());
     dispatch(startHeat(request));
     dispatch(announceFlyoverStart());
   };
@@ -107,6 +115,7 @@ export const startFlyoverHeat = (request: object) => {
 
 export const stopHeat = (request: object) => {
   return dispatch => {
+    dispatch(sentCommand());
     raceMngr.stopHeat(response => {
       dispatch(setStop(response));
     }, request);
@@ -221,9 +230,12 @@ export default function(state = {}, action: Action) {
           (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
         )
       };
-    case START_HEAT:
+    case SENT_START_STOP_HEAT:
+      return { ...state, sentCommand: true };
+    case START_HEAT: // gets called when we get the response from the tracker
       return {
         ...state,
+        sentCommand: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload.heatId
@@ -236,9 +248,10 @@ export default function(state = {}, action: Action) {
               : heat
         )
       };
-    case STOP_HEAT:
+    case STOP_HEAT: // gets called when we got the response from the tracker
       return {
         ...state,
+        sentCommand: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload.heatId
