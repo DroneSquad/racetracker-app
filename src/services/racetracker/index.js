@@ -38,8 +38,8 @@ export class TbsRt {
 
   /** Convert a command string to bytes for sending to RaceTracker */
   strToBytes(string) {
-    var array = new Uint8Array(string.length);
-    for (var i = 0, l = string.length; i < l; i++) {
+    let array = new Uint8Array(string.length);
+    for (let i = 0, l = string.length; i < l; i++) {
       array[i] = string.charCodeAt(i);
     }
     return array.buffer;
@@ -47,7 +47,22 @@ export class TbsRt {
 
   /** Convert bytes from RaceTracker response to string */
   bytesToStr(buffer) {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+    if (buffer === null) {
+      return ''; // null buffer means empty string
+    }
+    let view = new DataView(buffer.slice(0)); // use a data view to look at the copy of the buffer
+    let response = '';
+    for (let i = 0; i < view.byteLength; i++) {
+      //console.log('byte index: ', i , view.byteLength);
+      let value = view.getUint8(i);
+      if (value === 0) { // commands end with \0 aka just 0
+        break;
+      }
+      response += String.fromCharCode(value);
+      //console.log('value plus full response: (', value, ') ',response)
+    }
+    //console.log('bytesToString: ' + response);
+    return response;
   }
 
   /** Lookup command, prepare any additional arguments and convert to bytes
@@ -131,6 +146,13 @@ export class TbsRt {
       resolve(response);
     });
   }
+
+  // registerListener(deviceId) {
+  //   window.ble.startNotification(deviceId, this._config.racetracker_service, this._config.read, data => {
+  //     console.log('listener callback');
+  //     console.log(this.bytesToStr(data));
+  //   });
+  // }
 
   /** Send a command to RaceTracker WRITE_CHARACTERISTIC */
   /*  cmd: raw command to send to RaceTracker */
@@ -345,6 +367,8 @@ export class TbsRt {
 
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, deviceId) {
+    //this.registerListener(deviceId);
+
     var racerPromises = [
       this.getRacerChannelPromise({ deviceId: deviceId, racer: 1 }),
       this.getRacerChannelPromise({ deviceId: deviceId, racer: 2 }),
