@@ -7,7 +7,8 @@ import {
   announceLapsFromResponse,
   announceShotgunStart,
   announceFlyoverStart,
-  announceFlyover
+  announceFlyover,
+  announceGo
 } from '../../../routes/fly/modules/announcer';
 
 export const NEW_RACE = 'NEW_RACE';
@@ -99,9 +100,9 @@ export const createHeat = (request: object) => {
 export const startShotgunHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
-    dispatch(announceShotgunStart());
-    // TODO: refactor this and get rid of this hack
-    setTimeout(() => dispatch(startHeat(request)), 3100); // timer accounts for delay of start countdown (HACK)
+    dispatch(announceShotgunStart(() => {
+      dispatch(startHeat(request, true));
+    }));
   };
 };
 
@@ -122,10 +123,13 @@ export const stopHeat = (request: object) => {
   };
 };
 
-export const startHeat = (request: object) => {
+export const startHeat = (request: object, sayGo) => {
   return dispatch => {
     raceMngr.startHeat(response => {
       dispatch(setStart(response));
+      if (sayGo) {
+        dispatch(announceGo());
+      }
     }, request);
   };
 };

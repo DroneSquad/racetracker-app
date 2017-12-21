@@ -69,9 +69,9 @@ export function announceLapsFromResponse(response) {
 }
 
 /** Announce the start of a heat in shotgun mode */
-export function announceShotgunStart() {
+export function announceShotgunStart(callback) {
   return dispatch => {
-    dispatch(sendVoice('Five, Four, Three, Two, One, Go', 0.15));
+    dispatch(sendVoice('Five, Four, Three, Two, One', 0.15, 'en-US', callback));
   };
 }
 
@@ -91,6 +91,11 @@ export function announceFlyover() {
       dispatch(sendVoice('Race started'));
     };
   }
+}
+
+/** Announce the passing of a gate by a racer in flyover mode */
+export function announceGo() {
+  return dispatch => dispatch(sendVoice('Go!'));
 }
 
 /** Determine if this lap is the new fastest lap for announce */
