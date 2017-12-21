@@ -13,17 +13,18 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-file": {},
       "cordova-plugin-headercolor": {},
-      "cordova-plugin-ble-central": {
-        "BLUETOOTH_USAGE_DESCRIPTION": "Allows app to communicate with the TBS Racetracker"
-      },
       "cordova-plugin-device": {},
-      "cordova-plugin-tts": {}
+      "cordova-plugin-tts": {},
+      "cordova-plugin-ble-central": {
+        "BLUETOOTH_USAGE_DESCRIPTION": " "
+      }
     }
   },
   "dependencies": {
+    "cordova": "^8.0.0",
     "cordova-android": "^6.2.3",
     "cordova-ios": "^4.5.4",
-    "cordova-plugin-ble-central": "^1.1.4",
+    "cordova-plugin-ble-central": "git+https://github.com/DroneSquad/cordova-plugin-ble-central.git",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-file": "^4.3.3",
