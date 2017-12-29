@@ -10,7 +10,7 @@ export default class Racer extends Component {
     return (
       <Switch>
         <Route path="/fly/racer/:heat/:racer" component={RacerDetails} />
-        <Route path="/fly/racer*" component={FourOhFour}/>
+        <Route path="/fly/racer*" component={FourOhFour} />
       </Switch>
     );
   }

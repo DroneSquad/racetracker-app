@@ -66,7 +66,8 @@ export const setHeatRacers = (request: object) => ({
   payload: request
 });
 
-export const sentCommand = () => ({ //
+export const sentCommand = () => ({
+  //
   type: SENT_START_STOP_HEAT,
   payload: 'sent command, waiting for response'
 });
@@ -100,9 +101,11 @@ export const createHeat = (request: object) => {
 export const startShotgunHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
-    dispatch(announceShotgunStart(() => {
-      dispatch(startHeat(request, true));
-    }));
+    dispatch(
+      announceShotgunStart(() => {
+        dispatch(startHeat(request, true));
+      })
+    );
   };
 };
 

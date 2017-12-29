@@ -103,8 +103,8 @@ export function isFastestLap(laps, heat, response) {
   if (laps) {
     if (response.lap > 1) {
       return (
-        laps.filter(h => h.heat === heat && h.lapTime > 0)
-          .sort((a, b) => a.lapTime - b.lapTime)[0].lapTime === response.lapTime
+        laps.filter(h => h.heat === heat && h.lapTime > 0).sort((a, b) => a.lapTime - b.lapTime)[0].lapTime ===
+        response.lapTime
       );
     }
   }

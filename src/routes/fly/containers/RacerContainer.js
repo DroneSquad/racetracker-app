@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import { msToClock } from '../../../utils';
 import Racer from '../components/Racer';
+import { push } from 'react-router-redux';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -23,6 +24,10 @@ const mapStateToProps = (state, ownProps) => ({
   )
 });
 
-const RacerContainer = connect(mapStateToProps)(Racer);
+const mapDispatchToProps = dispatch => ({
+  openRacer: (heat, id) => dispatch(push(`/fly/racer/${heat}/${id}`))
+});
+
+const RacerContainer = connect(mapStateToProps, mapDispatchToProps)(Racer);
 
 export default RacerContainer;

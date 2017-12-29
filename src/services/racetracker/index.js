@@ -55,7 +55,8 @@ export class TbsRt {
     for (let i = 0; i < view.byteLength; i++) {
       //console.log('byte index: ', i , view.byteLength);
       let value = view.getUint8(i);
-      if (value === 0) { // commands end with \0 aka just 0
+      if (value === 0) {
+        // commands end with \0 aka just 0
         break;
       }
       response += String.fromCharCode(value);

@@ -66,7 +66,7 @@ export function msToClock(millisec) {
   if (arr.length > 1) {
     mils = arr[1];
   }
-  return mins + ':' + secs + ':' + mils;
+  return mins > 0 ? `${mins}:${secs}.${mils}` : `${secs}.${mils}`;
 }
 
 /** Generate a list of random number from min to max */

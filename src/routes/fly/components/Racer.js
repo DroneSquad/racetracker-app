@@ -50,7 +50,7 @@ export default class Racer extends Component {
   }*/
 
   render() {
-    let { name, channel, lap, lapTime, bestTime } = this.props;
+    let { name, channel, lap, lapTime, bestTime, heatId, id } = this.props;
     let racerName = (
       <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
         {name}
@@ -58,7 +58,10 @@ export default class Racer extends Component {
     );
     //let avatar = <Avatar size={20} src={BLANK_PNG} /*{this.state.avatar}*/ />;
     return (
-      <TableRow /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/>
+      <TableRow
+        onRowClick={() =>
+          this.props.openRacer(heatId, id)} /*id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}*/
+      >
         <TableRowColumn className="pilot-name">
           {/*avatar*/}
           {racerName}

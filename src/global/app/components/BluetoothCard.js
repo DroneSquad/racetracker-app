@@ -78,7 +78,9 @@ export default class BluetoothCard extends Component {
             {isAndroid && this.state.text}
           </CardText>
           <CardActions>
-            {isAndroid && !!this.state.button && <FlatButton label={this.state.button} onClick={this.handleButtonClick} />}
+            {isAndroid &&
+              !!this.state.button &&
+              <FlatButton label={this.state.button} onClick={this.handleButtonClick} />}
           </CardActions>
         </Card>
       );

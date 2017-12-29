@@ -8,7 +8,9 @@ export default class FourOhFour extends React.Component {
       <div class="main" style={{ textAlign: 'center' }}>
         <h1>Four Oh Four</h1>
         <div>You have lost your RC click the link to go where its safe.</div>
-        <a href="/#!/" style={{ color: '#678' }}>Back to Safety</a>
+        <a href="/#!/" style={{ color: '#678' }}>
+          Back to Safety
+        </a>
       </div>
     );
   }
