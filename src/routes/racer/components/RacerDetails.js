@@ -29,8 +29,36 @@ export default class RacerDetails extends Component {
     );
   }
 
+  header() {
+    let { heat, total, bestLap } = this.props;
+    return (
+      <Paper>
+        <GridList cols={3} cellHeight="100%">
+          <RacerDetailHeaderItem title="Heat" body={(heat || 0) + ''} />
+          <RacerDetailHeaderItem title="Total" body={msToClock(total || 0)} />
+          <RacerDetailHeaderItem title="Best Lap" body={msToClock(bestLap || 0)} />
+        </GridList>
+      </Paper>
+    );
+  }
+
+  tableHeader() {
+    return (
+      <TableHeader enableSelectAll={false} displaySelectAll={false} adjustForCheckbox={false}>
+        <TableRow>
+          <TableHeaderColumn>
+            <strong style={{ color: '#333' }}>Lap</strong>
+          </TableHeaderColumn>
+          <TableHeaderColumn>
+            <strong style={{ color: '#333' }}>Time</strong>
+          </TableHeaderColumn>
+        </TableRow>
+      </TableHeader>
+    );
+  }
+
   render() {
-    let { person, heat, total, bestLap, laps } = this.props;
+    let { person, laps } = this.props;
     return (
       <div className="main">
         <header>
@@ -39,26 +67,15 @@ export default class RacerDetails extends Component {
             iconClassNameLeft="mdi mdi-arrow-left"
             onLeftIconButtonTouchTap={historyBackButton.bind(this)}
           />
+          {this.header()}
+          <Table selectable={false} style={{ backgroundColor: '#f3f3f3' }}>
+            {this.tableHeader()}
+          </Table>
         </header>
         <main>
-          <Paper>
-            <GridList cols={3} cellHeight="100%">
-              <RacerDetailHeaderItem title="Heat" body={(heat || 0) + ''} />
-              <RacerDetailHeaderItem title="Total" body={msToClock(total || 0)} />
-              <RacerDetailHeaderItem title="Best Lap" body={msToClock(bestLap || 0)} />
-            </GridList>
-          </Paper>
+          {this.header()}
           <Table selectable={false} style={{ backgroundColor: 'none' }}>
-            <TableHeader enableSelectAll={false} displaySelectAll={false} adjustForCheckbox={false}>
-              <TableRow>
-                <TableHeaderColumn>
-                  <strong style={{ color: '#333' }}>Lap</strong>
-                </TableHeaderColumn>
-                <TableHeaderColumn>
-                  <strong style={{ color: '#333' }}>Time</strong>
-                </TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
+            {this.tableHeader()}
             <TableBody>
               {laps &&
                 _.map(
