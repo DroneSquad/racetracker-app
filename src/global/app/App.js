@@ -15,6 +15,7 @@ import Tracker from '../../routes/tracker';
 import NewGuest from '../../routes/people/components/NewGuest';
 import NewPilot from '../../routes/people/components/NewPilot';
 import People from '../../routes/people/containers/PeopleContainer';
+import Racer from '../../routes/racer';
 import HeatLineUp from '../../routes/fly/components/HeatLineUp';
 import HeatResultEdit from '../../routes/fly/components/HeatResultEdit';
 import Home from '../../routes/home';
@@ -34,6 +35,7 @@ export default class App extends React.Component {
             <AuthRoute path="/people/guest/new" component={NewGuest} />
             <AuthRoute path="/people/new" component={NewPilot} />
             <AuthRoute path="/people" component={People} />
+            <AuthRoute path="/fly/racer" component={Racer} />
             <AuthRoute path="/fly/heat/results/edit" component={HeatResultEdit} />
             <AuthRoute path="/fly/heat/edit" component={HeatLineUp} />
             <AuthRoute path="/tracker" component={Tracker} />
