@@ -5,7 +5,7 @@ export default class RacerDetailHeaderItem extends Component {
     let { title, body, footer } = this.props;
     let style = { textAlign: 'center', margin: '0' };
     let titleStyle = { ...style, fontSize: '18px', fontWeight: 'normal' };
-    let bodyStyle = { ...style, fontSize: '32px' };
+    let bodyStyle = { ...style, fontSize: 'calc(100%)', overflowX: 'hidden' };
     let footerStyle = { ...style, fontSize: '14px', fontWeight: 'normal' };
     return (
       <div style={{ margin: '1em' }}>
