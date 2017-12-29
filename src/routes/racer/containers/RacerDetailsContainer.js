@@ -19,7 +19,9 @@ export default class extends Container {
       '[0].totalTime'
     ),
     bestLap: _.get(
-      _.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer)), ['lapTime']),
+      _.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer)), lap =>
+        Number(lap.lapTime)
+      ),
       '[0].lapTime'
     ),
     laps:
