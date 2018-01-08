@@ -23,11 +23,9 @@ export default class RaceManager extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-      console.log("START")
       this.startIntervalQuery();
     }
     if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-      console.log("STOP")
       this.stopIntervalQuery();
     }
   }

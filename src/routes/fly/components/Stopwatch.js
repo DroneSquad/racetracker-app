@@ -34,7 +34,7 @@ export default class Stopwatch extends Component {
     this.props.stopHeat(r);
   };
 
-// TODO validate this
+  // TODO validate this
   createHeat = () => {
     let r = {
       raceId: this.props.activeHeat.raceId,
