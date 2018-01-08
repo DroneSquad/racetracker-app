@@ -15,7 +15,7 @@ export class RaceMngr {
     return RaceMngr._instance;
   }
 
-  createRace(cb, request) {
+  /*createRace(cb, request) {
     let rUid = uuid.v4(); // race uid
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
@@ -50,7 +50,7 @@ export class RaceMngr {
     // send it...
     cb({ race: race, heat: heat, laps: laps });
   }
-
+*/
   createHeat(cb, request) {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer

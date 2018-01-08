@@ -10,7 +10,7 @@ import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, updateLaps } 
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-  activeHeat: state.race.heats ? state.race.heats.filter(t => t.id === state.race.activeHeat)[0] : null,
+  activeHeat: state.race.heats ? state.race.heats.filter(t => t.id === state.race.activeHeatId)[0] : null,
   raceMode: state.race.raceMode,
   queryInterval: state.race.queryInterval,
   trackerId: state.race.trackerId,

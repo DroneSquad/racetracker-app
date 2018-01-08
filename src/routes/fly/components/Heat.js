@@ -20,7 +20,7 @@ import Racer from '../containers/RacerContainer';
 export default class Heat extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.trackerChannels !== this.props.heatChannels) {
-      this.props.updateHeatRacers({ heat: this.props.activeHeat, racerChannels: nextProps.trackerChannels });
+      this.props.updateHeatRacers({ heat: this.props.activeHeatId, racerChannels: nextProps.trackerChannels });
     }
   }
 

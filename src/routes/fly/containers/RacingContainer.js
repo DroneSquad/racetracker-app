@@ -14,24 +14,16 @@ import { createRace, validateRace } from '../../../global/app/modules/race';
 const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   isRaceValid: state.race.isValid,
+  activeHeatId: state.race.activeHeatId,
   activeTrackerId: state.race.trackerId,
+  activeRace: state.race,
   connectedTrackers: getConnectedTrackers(state),
-
-  theState: state,
-  activeHeatId: state.race.activeHeat,
-  activeRaceMode: state.race.raceMode,
-  isBtScanning: state.bluetooth.isScanning,
-  //trackerRaceMode: state.race.trackerId
-  //  ? state.trackers.filter(t => t.id === state.race.trackerId)[0].raceMode
-  //  : state.race.raceMode,
-  // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
-  // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
+  theState: state
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   validateRace: object => dispatch(validateRace(object)),
   createRace: object => dispatch(createRace(object)),
-  // validateTrackers: array => dispatch(validateTrackers(array))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);

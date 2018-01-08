@@ -1,7 +1,7 @@
 // @flow
 import _ from 'lodash';
 import uuid from 'uuid';
-// import { createSelector } from 'reselect';
+//import { createSelector } from 'reselect';
 
 import {
   announceLapsFromResponse,
@@ -53,20 +53,15 @@ export const setIsValid = (request: boolean) => ({
   payload: request
 });
 
-export const newRace = (request: object) => ({
-  type: NEW_RACE,
-  payload: request
-});
-
 export const setIsActive = (request: boolean) => ({
   type: RACE_IS_ACTIVE,
   payload: request
 });
 
-
-
-
-
+export const newRace = (request: object) => ({
+  type: NEW_RACE,
+  payload: request
+});
 
 export const setQueryInterval = (request: string) => ({
   type: SET_QUERY_INTERVAL,
@@ -77,6 +72,9 @@ export const setRaceMode = (request: string) => ({
   type: SET_RACEMODE,
   payload: request
 });
+
+
+
 
 export const setStart = (request: object) => ({
   type: START_HEAT,
@@ -120,8 +118,10 @@ export const sentCommand = () => ({
 
 export const createRace = (request: object) => {
   return dispatch => {
-    // verify racerchannels are configured
+    console.log("START");
+    // verify racer-channels are configured
     if (request.racerChannels.length !== 0) {
+      console.log("YES")
       // generate unique ids for heats and race
       let rUid = uuid.v4(); // race uid
       let hUid = uuid.v4(); // heat uid
@@ -159,17 +159,22 @@ export const createRace = (request: object) => {
   };
 };
 
-
-
-
-export const validateRace = (request: array) => {
+export const validateRace = (request: object) => {
   return dispatch => {
-    console.log("==validateRace==")
+    /*console.log("==validateRace==")
+    console.log(request);
+    console.log(this.getActiveTracker)
+    console.log(this.getActiveTracker())
+    console.log(getActiveTracker)
+    console.log(getActiveTracker())*/
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
   };
 };
+
+
+
 
 export const createHeat = (request: object) => {
   return dispatch => {
@@ -307,13 +312,9 @@ export default function(state = initialState, action: Action) {
         ...state,
         isActive: action.payload
      };
-
-
-
     case NEW_RACE:
-      console.log("X")
-      console.log(action.payload)
-      console.log("XX")
+    console.log("JKKKJH")
+    console.log(action.payload)
       return {
         ...state,
         ...action.payload.race,
@@ -330,10 +331,11 @@ export default function(state = initialState, action: Action) {
         ...state,
         queryInterval: action.payload
       };
+
     case NEW_HEAT:
       return {
         ...state,
-        activeHeat: action.payload.heat.id,
+        activeHeatId: action.payload.heat.id,
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: state.laps.concat(action.payload.laps)
       };

@@ -10,73 +10,39 @@ export default class Racing extends Component {
   props: {
     isRaceActive: boolean,
     isRaceValid: boolean,
+    activeHeatId: string,
     connectedTrackers: Array<RaceTracker>,
+    validateRace: Function,
+    createRace: Function
   };
 
   componentDidMount() {
     console.log("Racing-componentDidMount")
     // no previous race exists, create a new race with the connected tracker
     if (!this.props.isRaceActive && this.props.connectedTrackers.length === 1) {
-      this.createRace(this.props.connectedTrackers[0]);
+      console.log("X2")
+      this.props.createRace(this.props.connectedTrackers[0]);
     }
     // a previous race was setup, validate it or reset as needed
-    // if (this.props.isRaceActive && !this.props.isRaceValid) {
-    //  console.log("attenot a race validation")
-    /*  if (this.props.connectedTrackers) {
-        if (this.props.connectedTrackers.length === 1) {
-          if (this.props.connectedTrackers[0].racerChannels) {
-            if (this.props.connectedTrackers[0].racerChannels.length !== 0) {
-              this.createRace(this.props.connectedTrackers[0]);
-            }
-          }
-        }
-      } */
-
-  //   }
+    if (this.props.isRaceActive && !this.props.isRaceValid) {
+      console.log("validateRace-1")
+      //this.props.validateRace(this.props.activeRace);
+    }
   }
 
-  // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
     console.log("Racing-componentWillReceiveProps")
+    // generate a new race as there is none from a previous session
     if (!nextProps.isRaceActive && nextProps.connectedTrackers.length === 1) {
-      this.createRace(nextProps.connectedTrackers[0]);
+      console.log("X1")
+      this.props.createRace(nextProps.connectedTrackers[0]);
     }
-
-
-
-
-    /*if (!this.props.isRaceActive) {
-      if (this.props.connectedTrackers) {
-        if (this.props.connectedTrackers.length === 1) {
-          if (this.props.connectedTrackers[0].racerChannels) {
-            if (
-              this.props.connectedTrackers[0].racerChannels.length !==
-              nextProps.connectedTrackers[0].racerChannels.length
-            ) {
-              if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
-                this.createRace(nextProps.connectedTrackers[0]);
-              }
-            }
-          }
-        }
-      }
-    } else {
-      if (nextProps.trackerRaceMode !== this.props.activeRaceMode) {
-        this.props.updateRaceMode(nextProps.trackerRaceMode);
-      }
-    }*/
-  }
-
-  /** Validate that the device exists on the internal bluetooth scan list */
-  validateTrackers = () => {
-    if (!this.props.isBtScanning) {
-      let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
-      this.props.validateTrackers(aTracker);
+    // TODO:
+    // a previous race was running, validate it and proceed
+    if (this.props.isRaceActive && !this.props.isRaceValid) {
+      console.log("validateRace-2")
+      //this.props.validateRace(this.props.activeRace);
     }
-  };
-
-  createRace(tracker) {
-    this.props.createRace(tracker);
   }
 
   heatInterface = () => {
@@ -93,12 +59,12 @@ export default class Racing extends Component {
   };
 
   handleListClick = (event: RaceTracker) => {
-    this.props.createRace([event]);
+    this.props.createRace(event);
   };
 
   render() {
-    console.log("Racing-Render")
-    console.log(this.props.theState);
+    console.log("RENDER")
+    console.log(this.props.theState)
     let { isRaceActive, activeHeatId, connectedTrackers } = this.props;
     return (
       <div>
