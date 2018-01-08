@@ -8,12 +8,12 @@ export default class RaceManager extends React.PureComponent {
 
   componentDidMount() {
     // validation needs to be checked after this initial load
-    console.log("** Validation is set to False")
+  //   console.log("** Validation is set to False")
     this.props.setIsValid(false);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("** raceManager-componentWillReceiveProps")
+    // console.log("** raceManager-componentWillReceiveProps")
   }
 
   // shouldComponentUpdate(nextProps, nextState) {

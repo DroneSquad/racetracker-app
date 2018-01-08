@@ -1,7 +1,6 @@
 // @flow
 import _ from 'lodash';
 import uuid from 'uuid';
-//import { createSelector } from 'reselect';
 
 import {
   announceLapsFromResponse,
@@ -32,16 +31,6 @@ export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 
-/** selectors */
-/*const getTrackers = state => state.trackers;
-const getActiveTrackerId = state => state.race.trackerId;
-export const getActiveTracker = createSelector([getTrackers, getActiveTrackerId], (trackers, activeTrackerId) => {
-  console.log("1")
-  let arr = trackers.filter(t => t.id === activeTrackerId);
-  console.log("2")
-  console.log(arr)
-  return arr// trackers.filter(t => !t.isConnected);
-});*/
 
 // TODO:
 // export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
@@ -118,10 +107,8 @@ export const sentCommand = () => ({
 
 export const createRace = (request: object) => {
   return dispatch => {
-    console.log("START");
     // verify racer-channels are configured
     if (request.racerChannels.length !== 0) {
-      console.log("YES")
       // generate unique ids for heats and race
       let rUid = uuid.v4(); // race uid
       let hUid = uuid.v4(); // heat uid
@@ -161,15 +148,23 @@ export const createRace = (request: object) => {
 
 export const validateRace = (request: object) => {
   return dispatch => {
-    /*console.log("==validateRace==")
+    console.log("==validateRace==")
     console.log(request);
-    console.log(this.getActiveTracker)
-    console.log(this.getActiveTracker())
-    console.log(getActiveTracker)
-    console.log(getActiveTracker())*/
+
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
+
+
+    /** Validate that the device exists on the internal bluetooth scan list */
+/*validateTrackers = () => {
+  if (!this.props.isBtScanning) {
+    let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
+    this.props.validateTrackers(aTracker);
+  }
+};*/
+
+
   };
 };
 
@@ -313,8 +308,6 @@ export default function(state = initialState, action: Action) {
         isActive: action.payload
      };
     case NEW_RACE:
-    console.log("JKKKJH")
-    console.log(action.payload)
       return {
         ...state,
         ...action.payload.race,
@@ -331,6 +324,7 @@ export default function(state = initialState, action: Action) {
         ...state,
         queryInterval: action.payload
       };
+
 
     case NEW_HEAT:
       return {

@@ -15,10 +15,8 @@ const mapStateToProps = state => ({
   isRaceActive: state.race.isActive,
   isRaceValid: state.race.isValid,
   activeHeatId: state.race.activeHeatId,
-  activeTrackerId: state.race.trackerId,
   activeRace: state.race,
   connectedTrackers: getConnectedTrackers(state),
-  theState: state
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
