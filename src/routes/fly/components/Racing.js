@@ -8,22 +8,21 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 
 export default class Racing extends Component {
   props: {
-    connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
-    activeHeatId: string,
-    activeRaceId: string,
-    activeTrackerId: string,
-    activeRaceMode: string,
-    isBtScanning: boolean,
-    trackerRaceMode: string,
-    createRace: Function,
-    validateTrackers: Function
+    isRaceValid: boolean,
+    connectedTrackers: Array<RaceTracker>,
   };
 
   componentDidMount() {
     console.log("Racing-componentDidMount")
-    if (!this.props.isRaceActive) {
-      if (this.props.connectedTrackers) {
+    // no previous race exists, create a new race with the connected tracker
+    if (!this.props.isRaceActive && this.props.connectedTrackers.length === 1) {
+      this.createRace(this.props.connectedTrackers[0]);
+    }
+    // a previous race was setup, validate it or reset as needed
+    // if (this.props.isRaceActive && !this.props.isRaceValid) {
+    //  console.log("attenot a race validation")
+    /*  if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
           if (this.props.connectedTrackers[0].racerChannels) {
             if (this.props.connectedTrackers[0].racerChannels.length !== 0) {
@@ -31,14 +30,21 @@ export default class Racing extends Component {
             }
           }
         }
-      }
-    } else {
-    //  this.validateTrackers();
-    }
+      } */
+
+  //   }
   }
 
   // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
+    console.log("Racing-componentWillReceiveProps")
+    if (!nextProps.isRaceActive && nextProps.connectedTrackers.length === 1) {
+      this.createRace(nextProps.connectedTrackers[0]);
+    }
+
+
+
+
     /*if (!this.props.isRaceActive) {
       if (this.props.connectedTrackers) {
         if (this.props.connectedTrackers.length === 1) {
@@ -70,8 +76,7 @@ export default class Racing extends Component {
   };
 
   createRace(tracker) {
-    // TODO: handle multitracker support
-    this.props.createRace([tracker]);
+    this.props.createRace(tracker);
   }
 
   heatInterface = () => {
@@ -92,6 +97,8 @@ export default class Racing extends Component {
   };
 
   render() {
+    console.log("Racing-Render")
+    console.log(this.props.theState);
     let { isRaceActive, activeHeatId, connectedTrackers } = this.props;
     return (
       <div>

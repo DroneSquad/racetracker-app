@@ -3,11 +3,13 @@ import React from 'react';
 
 export default class RaceManager extends React.PureComponent {
   props: {
-
+    setIsValid: Function
   };
 
   componentDidMount() {
-    console.log("** raceManager-componentDidMount")
+    // validation needs to be checked after this initial load
+    console.log("** Validation is set to False")
+    this.props.setIsValid(false);
   }
 
   componentWillReceiveProps(nextProps) {

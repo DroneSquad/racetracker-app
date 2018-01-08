@@ -10,7 +10,6 @@ import { setError, setIsScanning } from './bluetooth';
 /** defaults */
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 3;
-// const RACEMODE_DEFAULT = 'shotgun'; // flyby
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -25,7 +24,6 @@ export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
-// export const RT_RACEMODE = 'RT_RACEMODE';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS';
@@ -59,7 +57,6 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
-    // raceMode: RACEMODE_DEFAULT, // TODO should store the previous race mode and use it on discovery
     minLapTime: '',
     maxRounds: '',
     gateADC: '',
@@ -126,11 +123,6 @@ export const setFirmwareVersion = (request: Object) => ({
   payload: request
 });
 
-/*export const setRaceMode = (request: Object) => ({
-  type: RT_RACEMODE,
-  payload: request
-});*/
-
 export const setActiveMode = (request: Object) => ({
   type: RT_ACTIVE_MODE,
   payload: request
@@ -182,7 +174,7 @@ export const connectTracker = (deviceId: string) => {
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
-            console.log("try to reconnect")
+            console.log('---------- RECONNECT -------------');
             dispatch(setReconnecting(response.device.id));
           }
         });
@@ -192,7 +184,6 @@ export const connectTracker = (deviceId: string) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
-  console.log("startTrackerSearch")
   let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
@@ -221,7 +212,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
                 }
               }
             } else {
-              // device not found add it as a new discovery
+              // device was not found add it as a new discovery
               if (discoveryScan) {
                 dispatch(discoverTracker(response.device));
               }
@@ -229,12 +220,12 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
           }
         }
       } else {
-        // if we made it here then the scan completed its full timer
-        // any trackers remaining in the array were not found, and should
+        // if we made it here then the scan completed its full timer interval,
+        // any trackers remaining in the array were not found and should
         // be removed from the redux store now
         if (matchArr.length > 0) {
           for (let rt of matchArr) {
-            console.log("<- A TRACKER WAS REMOVED - >")
+            console.log("<---- A TRACKER WAS REMOVED ---->")
             dispatch(removeTracker(rt.id));
           }
         }
@@ -248,7 +239,6 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
 };
 
 export const isTrackerConnected = (deviceId: string) => {
-  console.log("isTrackerConnected")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -257,13 +247,9 @@ export const isTrackerConnected = (deviceId: string) => {
 };
 
 export const validateTrackerPromise = (request: object) => {
-  console.log("validateTrackerPromise")
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
-
-
-
     ble.readDeviceRssi(response => {
       if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
@@ -286,13 +272,10 @@ export const validateTrackerPromise = (request: object) => {
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
-        // dispatch action verifies the connected state of redux matches
+        // dispatch action verifies the connected state of redux reflects this
         resolve(isTrackerConnected(request.id));
       }
     }, request.id);
-
-
-
   });
 };
 
@@ -341,8 +324,7 @@ export const stopTrackerScan = (request: array = []) => {
         // fired on device scan stop manually (no timeout)
         dispatch(setIsScanning(false));
         if (request.length > 0) {
-          // TODO: fix this
-          console.log("trying to validate again")
+          // TODO: (see stopDiscovery() within TrackerHome to see calling location)
           // the idea here is that when a scan is stopped manually, validate trackers on cancel
           // unfortunately it doesnt appear to work well, there is a long pause... before it completes
           dispatch(validateTrackers(request));
@@ -417,11 +399,6 @@ export const readBatteryLevel = (deviceId: string) => {
   };
 };
 
-/* export const writeRaceMode = (request: object) => {
-  return dispatch => {
-    dispatch(setRaceMode(request));
-  };
-};*/
 
 /** read the channel of a selected racer from racetracker, updating redux if successful */
 /*  request: { deviceId: tracker_id, racer: racer_position } */
@@ -695,16 +672,6 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    /*case RT_RACEMODE:
-      return state.map(
-        tracker =>
-          tracker.id === action.payload.deviceId
-            ? {
-                ...tracker,
-                raceMode: action.payload.raceMode
-              }
-            : tracker
-      ); */
     case RT_RACER_CHANS:
       return state.map(
         tracker =>
@@ -789,7 +756,6 @@ export default function(state = [], action: Action) {
       );
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        console.log("TRACKER-REHYDRATED")
         return action.payload.trackers;
       }
       return state;
