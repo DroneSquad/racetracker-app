@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import { connect as _connect } from 'react-redux';
 
 import { combineReducers } from 'redux';
-// allows dispatch of actions from anywhere: store.dispatch(push('/foo'))
+// allows dispatch of actions from anywhere: push, replace, go, goBack, goForward
 import { routerReducer } from 'react-router-redux';
 
 import authReducer from './routes/login/modules/login';

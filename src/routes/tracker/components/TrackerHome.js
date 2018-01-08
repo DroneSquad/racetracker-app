@@ -23,7 +23,6 @@ export default class extends Component {
 
   componentDidMount() {
     if (this.props.isBtEnabled) {
-      console.log('componenetDidMount');
       this.initSearchOrScan();
     }
   }
@@ -31,9 +30,8 @@ export default class extends Component {
   componentWillReceiveProps(nextProps) {
     // TODO: lets do more checking on exactly how to handle these checks
     // bluetooth was just enabled, lets validate 'available' trackers now,
-    // 'connected' trackers will be handled by the TrackerManager.
+    // 'connected' trackers will be handled by the TrackerManager. ??
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      console.log('bluetoothEnabled discovery or validation called');
       this.initSearchOrScan();
     }
   }
@@ -65,8 +63,8 @@ export default class extends Component {
     // see the racetracker module function stopTrackerScan, where this call is used
     // possible options: improved callback, only validate connected trackers, wipe all?
     // -----------------------------------------------------
-    this.props.stopTrackerScan(this.props.trackers); // (validation option call)
-    // this.props.stopTrackerScan();
+    // this.props.stopTrackerScan(this.props.trackers); // (validation option call)
+    this.props.stopTrackerScan();
   };
 
   /** change button purpose: start/stop scan based on scanning state */

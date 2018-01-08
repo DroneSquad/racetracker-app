@@ -41,7 +41,10 @@ export class Ble {
     window.ble.startStateNotifications(
       btState => {
         // states indicating bluetooth is on
-        if (btState === 'on' || btState === 'turningOn' || btState === 'resetting') {
+        if (
+          btState === 'on' ||
+          btState === 'turningOn' ||
+          btState === 'resetting') {
           cb({ value: true });
         }
         // states indicating bluetooth is off

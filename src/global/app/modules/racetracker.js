@@ -7,6 +7,7 @@ import tbs from '../../../services/racetracker';
 
 import { setError, setIsScanning } from './bluetooth';
 
+/** defaults */
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 3;
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
@@ -58,7 +59,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
-    raceMode: RACEMODE_DEFAULT, // TODO we should store the previous race mode and use it on discovery
+    raceMode: RACEMODE_DEFAULT, // TODO should store the previous race mode and use it on discovery
     minLapTime: '',
     maxRounds: '',
     gateADC: '',
@@ -170,16 +171,18 @@ export const connectTracker = (deviceId: string) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
+        console.log('---------- CONNECT -------------');
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
-        console.log('-----racetrackerModule-connectTracker-Error(disconnect)-----');
+        console.log('---------- DISCONNECT -------------');
         // the device has either failed connection or disconnected on error
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
+            console.log("try to reconnect")
             dispatch(setReconnecting(response.device.id));
           }
         });
@@ -189,6 +192,7 @@ export const connectTracker = (deviceId: string) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
+  console.log("startTrackerSearch")
   let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
@@ -243,6 +247,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
 };
 
 export const isTrackerConnected = (deviceId: string) => {
+  console.log("isTrackerConnected")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -251,6 +256,7 @@ export const isTrackerConnected = (deviceId: string) => {
 };
 
 export const validateTrackerPromise = (request: object) => {
+  console.log("validateTrackerPromise")
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
@@ -284,6 +290,7 @@ export const validateTrackerPromise = (request: object) => {
 };
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
+  console.log("validateTrackers")
   return dispatch => {
     let trackerPromises = [];
     for (let rt of request) {
@@ -313,6 +320,7 @@ export const validateTrackers = (request: array, discoveryScan: boolean = false)
 };
 
 export const discoverTrackers = (request: array) => {
+  console.log("discoverTrackers")
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
@@ -320,6 +328,7 @@ export const discoverTrackers = (request: array) => {
 };
 
 export const stopTrackerScan = (request: array = []) => {
+  console.log("stopTrackerScan")
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {
@@ -328,6 +337,8 @@ export const stopTrackerScan = (request: array = []) => {
         // fired on device scan stop manually (no timeout)
         dispatch(setIsScanning(false));
         if (request.length > 0) {
+          // TODO: fix this
+          console.log("trying to validate again")
           // the idea here is that when a scan is stopped manually, validate trackers on cancel
           // unfortunately it doesnt appear to work well, there is a long pause... before it completes
           dispatch(validateTrackers(request));
@@ -339,6 +350,7 @@ export const stopTrackerScan = (request: array = []) => {
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (deviceId: string) => {
+  console.log("disconnectTracker")
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
@@ -774,6 +786,7 @@ export default function(state = [], action: Action) {
       );
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
+        console.log("TRACKER-REHYDRATED")
         return action.payload.trackers;
       }
       return state;

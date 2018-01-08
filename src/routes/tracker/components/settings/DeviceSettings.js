@@ -30,14 +30,8 @@ export default class DeviceSettings extends Setting {
   }
 
   checkLoading() {
-    if (this.props.battery) {
-      if (this.props.rssi) {
-        if (this.props.firmware) {
-          if (this.state.loading) {
-            this.doneLoading();
-          }
-        }
-      }
+    if (this.props.battery && this.props.rssi && this.props.firmware && this.state.loading) {
+      this.doneLoading();
     }
   }
 

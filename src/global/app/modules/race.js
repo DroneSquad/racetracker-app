@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 
-import raceMngr from '../../../services/racemanager';
+// import raceMngr from '../../../services/racemanager';
 import {
   announceLapsFromResponse,
   announceShotgunStart,
@@ -84,17 +84,19 @@ export const sentCommand = () => ({
 
 export const createRace = (request: array) => {
   return dispatch => {
-    raceMngr.createRace(response => {
+    console.log("==createRace==")
+    /*raceMngr.createRace(response => {
       dispatch(newRace(response));
-    }, request);
+    }, request);*/
   };
 };
 
 export const createHeat = (request: object) => {
   return dispatch => {
-    raceMngr.createHeat(response => {
+    console.log("==createHeat==")
+    /*raceMngr.createHeat(response => {
       dispatch(newHeat(response));
-    }, request);
+    }, request);*/
   };
 };
 
@@ -120,26 +122,29 @@ export const startFlyoverHeat = (request: object) => {
 export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
-    raceMngr.stopHeat(response => {
+    console.log("==stopHeate==")
+    /*raceMngr.stopHeat(response => {
       dispatch(setStop(response));
-    }, request);
+    }, request);*/
   };
 };
 
 export const startHeat = (request: object, sayGo) => {
   return dispatch => {
-    raceMngr.startHeat(response => {
+    console.log("==startHeat==")
+    /*raceMngr.startHeat(response => {
       dispatch(setStart(response));
       if (sayGo) {
         dispatch(announceGo());
       }
-    }, request);
+    }, request);*/
   };
 };
 
 export const updateLaps = (request: object) => {
   return dispatch => {
-    raceMngr.updateLaps(response => {
+    console.log("==updateLaps==")
+  /*  raceMngr.updateLaps(response => {
       if (response.start) {
         // accounts for flyover start in flyovermode
         dispatch(announceFlyover());
@@ -148,7 +153,7 @@ export const updateLaps = (request: object) => {
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
-    }, request);
+    }, request); */
   };
 };
 
@@ -156,11 +161,12 @@ export const updateHeatRacers = (request: object) => {
   console.log('updateHeatRacers-module');
   console.log(request);
   return dispatch => {
-    raceMngr.updateHeatRacers(response => {
+    console.log("==updateHeatRacer==")
+  /*  raceMngr.updateHeatRacers(response => {
       console.log('call setHeatRacers');
       console.log(response);
       dispatch(setHeatRacers(response));
-    }, request);
+    }, request);*/
   };
 };
 
@@ -192,8 +198,22 @@ export const updateHeatRacers = (request: object) => {
   };
 };*/
 
+/** initial state */
+const initialState = {
+  id: '',
+  name: '',
+  date: '',
+  location: '',
+  trackerId: '',
+  activeHeatId: '',
+  isActive: false,
+  queryInterval: 1,
+  heats: [],
+  laps: []
+};
+
 /** reducers */
-export default function(state = {}, action: Action) {
+export default function(state = initialState, action: Action) {
   switch (action.type) {
     case NEW_RACE:
       return {
@@ -271,6 +291,12 @@ export default function(state = {}, action: Action) {
               : heat
         )
       };
+    /* case 'persist/REHYDRATE': {
+      if (action.payload !== undefined) {
+        return action.payload.race;
+      }
+      return state;
+    } */
     default:
       return state;
   }
