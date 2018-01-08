@@ -38,8 +38,13 @@ export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 const getActiveHeatId = state => state.race.activeHeatId;
 const getHeats = state => state.race.heats;
 export const getActiveHeat = createSelector([getActiveHeatId, getHeats], (activeHeatId, heats) => {
-  let ah = heats ? heats.filter(t => t.id === activeHeatId)[0] : null;
-  return ah;
+  return heats ? heats.filter(t => t.id === activeHeatId)[0] : null;
+});
+
+const getActiveTrackerId = state => state.race.trackerId;
+const getTrackers = state => state.trackers;
+export const getRacerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
+  return trackers ? trackers.filter(t => t.id === activeTrackerId)[0].racerChannels : null;
 });
 
 /** actions */
@@ -208,18 +213,29 @@ export const stopHeat = (request: object) => {
 
 export const createHeat = (request: object) => {
   return dispatch => {
-    console.log("==createHeat==")
-    /*raceMngr.createHeat(response => {
-      dispatch(newHeat(response));
-    }, request);*/
+    let hUid = uuid.v4(); // heat uid
+    // create initial lap for each racer
+    let laps = request.activeChannels.map(slot => ({
+      racer: slot.racer,
+      lap: 1,
+      lapTime: 0,
+      totalTime: 0,
+      heatId: hUid
+    }));
+    // create a new heat for the current race
+    let heat = {
+      id: hUid,
+      raceId: request.raceId,
+      number: request.currentHeat.number + 1,
+      isPending: true,
+      isActive: false,
+      isComplete: false,
+      racerChannels: request.activeChannels
+    };
+    // send it...
+    dispatch(newHeat({ heat: heat, laps: laps }));
   };
 };
-
-
-
-
-
-
 
 export const updateLaps = (request: object) => {
   return dispatch => {
@@ -323,7 +339,6 @@ export default function(state = initialState, action: Action) {
         ...state,
         queryInterval: action.payload
       };
-
     case NEW_HEAT:
       return {
         ...state,
@@ -331,6 +346,7 @@ export default function(state = initialState, action: Action) {
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: state.laps.concat(action.payload.laps)
       };
+
     case SET_HEAT_RACERS:
       return {
         ...state,

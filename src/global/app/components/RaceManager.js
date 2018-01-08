@@ -56,7 +56,6 @@ export default class RaceManager extends React.PureComponent {
   };
 
   render() {
-    console.log("RaceManager-Render")
     return null;
   }
 }

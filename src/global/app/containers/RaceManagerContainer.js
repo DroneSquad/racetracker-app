@@ -13,7 +13,7 @@ import RaceManager from '../components/RaceManager';
 const mapStateToProps = state => ({
   queryInterval: state.race.queryInterval,
   trackerId: state.race.trackerId,
-  activeHeat: getActiveHeat(state),
+  activeHeat: getActiveHeat(state)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
