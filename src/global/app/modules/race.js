@@ -11,6 +11,10 @@ import {
   announceGo
 } from '../../../routes/fly/modules/announcer';
 
+/** defaults */
+const RACEMODE_DEFAULT = 'shotgun'; // flyby
+const QUERY_INTERVAL_DEFAULT = 1;
+
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
 export const START_HEAT = 'START_HEAT';
@@ -200,14 +204,15 @@ export const updateHeatRacers = (request: object) => {
 
 /** initial state */
 const initialState = {
-  id: '',
+  id: null,
   name: '',
   date: '',
   location: '',
-  trackerId: '',
-  activeHeatId: '',
+  trackerId: null,
+  activeHeatId: null,
+  raceMode: RACEMODE_DEFAULT,
   isActive: false,
-  queryInterval: 1,
+  queryInterval: QUERY_INTERVAL_DEFAULT,
   heats: [],
   laps: []
 };

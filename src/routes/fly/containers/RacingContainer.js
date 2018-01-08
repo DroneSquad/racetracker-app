@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 
 import Racing from '../components/Racing';
 
+import {
+  getConnectedTrackers
+} from '../../../global/app/modules/racetracker';
+
 import { createRace, setRaceMode } from '../../../global/app/modules/race';
 
 import { validateTrackers } from '../../../global/app/modules/racetracker';
@@ -12,7 +16,7 @@ import { validateTrackers } from '../../../global/app/modules/racetracker';
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = state => ({
-  connectedTrackers: state.trackers.filter(t => t.isConnected),
+  connectedTrackers: getConnectedTrackers(state),
   isRaceActive: state.race.isActive,
   activeHeatId: state.race.activeHeat,
   activeRaceId: state.race.id,
@@ -24,7 +28,6 @@ const mapStateToProps = state => ({
     : state.race.raceMode,
   // pendingHeats: (state.heats) ? state.heats.filter(t => t.isPending) : [],
   // completeHeats: (state.race.heats) ? state.race.heats.filter(t => t.isComplete) : []
-  state: state
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

@@ -10,7 +10,7 @@ import { setError, setIsScanning } from './bluetooth';
 /** defaults */
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 3;
-const RACEMODE_DEFAULT = 'shotgun'; // flyby
+// const RACEMODE_DEFAULT = 'shotgun'; // flyby
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -25,7 +25,7 @@ export const RT_UPDATE_CONNECT = 'RT_UPDATE_CONNECT';
 export const RT_BATTERY_LEVEL = 'RT_BATTERY_LEVEL';
 export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
-export const RT_RACEMODE = 'RT_RACEMODE';
+// export const RT_RACEMODE = 'RT_RACEMODE';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
 export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS';
@@ -59,7 +59,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     name: tracker.name,
     battery: '',
     firmware: '',
-    raceMode: RACEMODE_DEFAULT, // TODO should store the previous race mode and use it on discovery
+    // raceMode: RACEMODE_DEFAULT, // TODO should store the previous race mode and use it on discovery
     minLapTime: '',
     maxRounds: '',
     gateADC: '',
@@ -126,10 +126,10 @@ export const setFirmwareVersion = (request: Object) => ({
   payload: request
 });
 
-export const setRaceMode = (request: Object) => ({
+/*export const setRaceMode = (request: Object) => ({
   type: RT_RACEMODE,
   payload: request
-});
+});*/
 
 export const setActiveMode = (request: Object) => ({
   type: RT_ACTIVE_MODE,
@@ -234,6 +234,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
         // be removed from the redux store now
         if (matchArr.length > 0) {
           for (let rt of matchArr) {
+            console.log("<- A TRACKER WAS REMOVED - >")
             dispatch(removeTracker(rt.id));
           }
         }
@@ -260,6 +261,9 @@ export const validateTrackerPromise = (request: object) => {
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
+
+
+
     ble.readDeviceRssi(response => {
       if (response.error) {
         // error response indicates either the tracker is not connected, or not found with
@@ -286,11 +290,13 @@ export const validateTrackerPromise = (request: object) => {
         resolve(isTrackerConnected(request.id));
       }
     }, request.id);
+
+
+
   });
 };
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
-  console.log("validateTrackers")
   return dispatch => {
     let trackerPromises = [];
     for (let rt of request) {
@@ -320,7 +326,6 @@ export const validateTrackers = (request: array, discoveryScan: boolean = false)
 };
 
 export const discoverTrackers = (request: array) => {
-  console.log("discoverTrackers")
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
@@ -328,7 +333,6 @@ export const discoverTrackers = (request: array) => {
 };
 
 export const stopTrackerScan = (request: array = []) => {
-  console.log("stopTrackerScan")
   return dispatch => {
     ble.stopDeviceScan(response => {
       if (response.error) {
@@ -350,7 +354,6 @@ export const stopTrackerScan = (request: array = []) => {
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (deviceId: string) => {
-  console.log("disconnectTracker")
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
@@ -414,11 +417,11 @@ export const readBatteryLevel = (deviceId: string) => {
   };
 };
 
-export const writeRaceMode = (request: object) => {
+/* export const writeRaceMode = (request: object) => {
   return dispatch => {
     dispatch(setRaceMode(request));
   };
-};
+};*/
 
 /** read the channel of a selected racer from racetracker, updating redux if successful */
 /*  request: { deviceId: tracker_id, racer: racer_position } */
@@ -692,7 +695,7 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    case RT_RACEMODE:
+    /*case RT_RACEMODE:
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId
@@ -701,7 +704,7 @@ export default function(state = [], action: Action) {
                 raceMode: action.payload.raceMode
               }
             : tracker
-      );
+      ); */
     case RT_RACER_CHANS:
       return state.map(
         tracker =>

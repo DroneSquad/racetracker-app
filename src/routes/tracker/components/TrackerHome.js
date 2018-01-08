@@ -40,7 +40,7 @@ export default class extends Component {
     if (this.props.trackers.length === 0) {
       this.startDiscovery(); // automagically start bluetooth scan for racetrackers
     } else {
-      this.verifyTrackers(); // verify 'available trackers'
+      this.verifyTrackers(); // verify all trackers available
     }
   }
 

@@ -34,6 +34,7 @@ export default class TrackerManager extends React.PureComponent {
     // this occurs on both startup and on bluetooth toggle off/on
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       if (this.props.connectedTrackers.length > 0) {
+        console.log("previously connected tracker being validated now")
         this.props.validateTrackers(this.props.connectedTrackers);
       }
     }
