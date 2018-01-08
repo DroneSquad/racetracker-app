@@ -36,15 +36,11 @@ export default class Stopwatch extends Component {
   };
 
   createHeat = () => {
-    console.log("CLEAN")
-    console.log(this.props.activeChannels);
     let r = {
       raceId: this.props.activeHeat.raceId,
       activeChannels: this.props.activeChannels,
       currentHeat: this.props.activeHeat
     };
-    console.log("COMBINED")
-    console.log(r);
     this.props.createHeat(r);
   };
 
