@@ -290,6 +290,8 @@ export class TbsRt {
     this.readCommand(request.deviceId)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
+          console.log("INSIDE")
+          console.log(response)
           if (response.startsWith('STARTED')) {
             // this response occurs when in flyovermode and the first pilot passes the gate
             cb({
@@ -316,6 +318,9 @@ export class TbsRt {
                 heat: request.heat
               });
             }
+          } else {
+            console.log("THEELSESTATEMENt")
+            cb({});
           }
         })
       )

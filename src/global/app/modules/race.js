@@ -1,6 +1,9 @@
 // @flow
 import _ from 'lodash';
 import uuid from 'uuid';
+import { createSelector } from 'reselect';
+
+import tbs from '../../../services/racetracker';
 
 import {
   announceLapsFromResponse,
@@ -18,23 +21,26 @@ const QUERY_INTERVAL_DEFAULT = 1;
 export const RACE_IS_VALID = 'RACE_IS_VALID';
 export const RACE_IS_ACTIVE = 'RACE_IS_ACTIVE'
 export const NEW_RACE = 'NEW_RACE';
-
-
-
-
 export const NEW_HEAT = 'NEW_HEAT';
 export const START_HEAT = 'START_HEAT';
 export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
-export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
-
+export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 
 // TODO:
 // export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
 // export const RT_LAPTIME = 'RT_LAPTIME';
+
+/** selectors */
+const getActiveHeatId = state => state.race.activeHeatId;
+const getHeats = state => state.race.heats;
+export const getActiveHeat = createSelector([getActiveHeatId, getHeats], (activeHeatId, heats) => {
+  let ah = heats ? heats.filter(t => t.id === activeHeatId)[0] : null;
+  return ah;
+});
 
 /** actions */
 export const setIsValid = (request: boolean) => ({
@@ -62,9 +68,6 @@ export const setRaceMode = (request: string) => ({
   payload: request
 });
 
-
-
-
 export const setStart = (request: object) => ({
   type: START_HEAT,
   payload: request
@@ -82,7 +85,7 @@ export const newHeat = (request: object) => ({
 
 export const setLap = (request: object) => ({
   type: SET_LAP,
-  payload: { ...request, heatId: request.heat } // some parts of the code uses the old heatId property
+  payload: { ...request, heatId: request.heatId }
 });
 
 export const setHeatRacers = (request: object) => ({
@@ -146,16 +149,14 @@ export const createRace = (request: object) => {
   };
 };
 
+// TODO:
 export const validateRace = (request: object) => {
   return dispatch => {
     console.log("==validateRace==")
     console.log(request);
-
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
-
-
     /** Validate that the device exists on the internal bluetooth scan list */
 /*validateTrackers = () => {
   if (!this.props.isBtScanning) {
@@ -163,20 +164,6 @@ export const validateRace = (request: object) => {
     this.props.validateTrackers(aTracker);
   }
 };*/
-
-
-  };
-};
-
-
-
-
-export const createHeat = (request: object) => {
-  return dispatch => {
-    console.log("==createHeat==")
-    /*raceMngr.createHeat(response => {
-      dispatch(newHeat(response));
-    }, request);*/
   };
 };
 
@@ -199,41 +186,53 @@ export const startFlyoverHeat = (request: object) => {
   };
 };
 
-export const stopHeat = (request: object) => {
-  return dispatch => {
-    dispatch(sentCommand());
-    console.log("==stopHeate==")
-    /*raceMngr.stopHeat(response => {
-      dispatch(setStop(response));
-    }, request);*/
-  };
-};
-
 export const startHeat = (request: object, sayGo) => {
   return dispatch => {
-    console.log("==startHeat==")
-    /*raceMngr.startHeat(response => {
+    tbs.startHeat(response => {
       dispatch(setStart(response));
       if (sayGo) {
         dispatch(announceGo());
       }
+    }, request);
+  };
+};
+
+export const stopHeat = (request: object) => {
+  return dispatch => {
+    dispatch(sentCommand());
+    tbs.stopHeat(response => {
+      dispatch(setStop(response));
+    }, request);
+  };
+};
+
+export const createHeat = (request: object) => {
+  return dispatch => {
+    console.log("==createHeat==")
+    /*raceMngr.createHeat(response => {
+      dispatch(newHeat(response));
     }, request);*/
   };
 };
 
+
+
+
+
+
+
 export const updateLaps = (request: object) => {
   return dispatch => {
-    console.log("==updateLaps==")
-  /*  raceMngr.updateLaps(response => {
+    tbs.readRaceUpdate(response => {
       if (response.start) {
-        // accounts for flyover start in flyovermode
+        // accounts for flyover start
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
-    }, request); */
+    }, request);
   };
 };
 
@@ -324,7 +323,6 @@ export default function(state = initialState, action: Action) {
         ...state,
         queryInterval: action.payload
       };
-
 
     case NEW_HEAT:
       return {

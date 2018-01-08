@@ -103,17 +103,17 @@ export class RaceMngr {
     cb({ heat: heat, laps: laps });
   }
 
-  startHeat(cb, request) {
+  /*startHeat(cb, request) {
     tbs.startHeat(cb, request);
-  }
+  }*/
 
-  stopHeat(cb, request) {
+/*  stopHeat(cb, request) {
     tbs.stopHeat(cb, request);
-  }
+  }*/
 
-  updateLaps(cb, request) {
+  /*updateLaps(cb, request) {
     tbs.readRaceUpdate(cb, request); // => {
-  }
+  }*/
 
   /** Get the total number of rounds by a a selected racer */
   /*export const readTotalRounds = (request: object) => {
