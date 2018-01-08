@@ -8,7 +8,6 @@ export default class RaceManager extends React.PureComponent {
 
   componentDidMount() {
     // validation needs to be checked after this initial load
-  //   console.log("** Validation is set to False")
     this.props.setIsValid(false);
   }
 
@@ -21,7 +20,7 @@ export default class RaceManager extends React.PureComponent {
   // }
 
   render() {
-    console.log("** raceManager-render");
+    // console.log("** raceManager-render");
     return null;
   }
 }
