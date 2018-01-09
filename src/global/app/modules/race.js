@@ -346,7 +346,6 @@ export default function(state = initialState, action: Action) {
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: state.laps.concat(action.payload.laps)
       };
-
     case SET_HEAT_RACERS:
       return {
         ...state,
