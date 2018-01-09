@@ -3,10 +3,12 @@ import React from 'react';
 
 export default class RaceManager extends React.PureComponent {
   props: {
+    isActive: boolean,
     queryInterval: string,
-    trackerId: string,
     activeHeat: Object,
+    activeTracker: Object,
     setIsValid: Function,
+    setIsActive: Function,
     updateLaps: Function
   };
 
@@ -28,9 +30,13 @@ export default class RaceManager extends React.PureComponent {
     if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
       this.stopIntervalQuery();
     }
+    if (this.props.isActive && !nextProps.activeTracker.isConnected && !nextProps.isConnecting && !nextProps.isReconnecting) {
+      this.props.setIsActive(false); // the tracker has been disconnected, the race is no longer active
+    }
   }
 
   // dont bother doing renders
+
   shouldComponentUpdate(nextProps, nextState) {
     // return false;
   }
@@ -46,7 +52,7 @@ export default class RaceManager extends React.PureComponent {
   intervalQuery = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      deviceId: this.props.trackerId
+      deviceId: this.props.activeTracker.id
     };
     this.props.updateLaps(r);
   };

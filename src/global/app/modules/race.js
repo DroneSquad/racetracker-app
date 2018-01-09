@@ -44,6 +44,9 @@ export const getActiveHeat = createSelector([getActiveHeatId, getHeats], (active
 
 const getActiveTrackerId = state => state.race.trackerId;
 const getTrackers = state => state.trackers;
+export const getActiveTracker = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
+  return trackers ? trackers.filter(t => t.id === activeTrackerId)[0] : null;
+});
 export const getRacerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0].racerChannels : null;
 });

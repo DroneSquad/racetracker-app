@@ -58,7 +58,6 @@ export default class Racing extends Component {
   };
 
   render() {
-    console.log(this.props.theState);
     let { isRaceValid, isRaceActive, connectedTrackers } = this.props;
     return (
       <div>

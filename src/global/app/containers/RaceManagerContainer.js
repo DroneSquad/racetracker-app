@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { setIsValid, getActiveHeat, updateLaps } from '../modules/race';
+import { setIsValid, setIsActive, getActiveHeat, updateLaps, getActiveTracker } from '../modules/race';
 
 import RaceManager from '../components/RaceManager';
 
@@ -11,12 +11,14 @@ import RaceManager from '../components/RaceManager';
     component - in this case, the RaceManager  */
 
 const mapStateToProps = state => ({
+  isActive: state.race.isActive,
   queryInterval: state.race.queryInterval,
-  trackerId: state.race.trackerId,
-  activeHeat: getActiveHeat(state)
+  activeHeat: getActiveHeat(state),
+  activeTracker: getActiveTracker(state)
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
+  setIsActive: boolean => dispatch(setIsActive(boolean)),
   setIsValid: boolean => dispatch(setIsValid(boolean)),
   updateLaps: object => dispatch(updateLaps(object))
 });
