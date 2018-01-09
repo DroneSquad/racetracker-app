@@ -599,7 +599,7 @@ export class TbsRt {
     this.writeCommand(cmd, deviceId)
       .then(
         this.readCommand(deviceId).then(result => {
-          console.log('sendRawCommandResponse');
+          console.log('--sendRawCommandResponse--');
           let response = this.bytesToStr(result);
           console.log(response);
           // do any optional work now
@@ -607,7 +607,7 @@ export class TbsRt {
         })
       )
       .catch(error => {
-        console.log('sendRawCommandError');
+        console.log('--sendRawCommandError--');
         console.log(error);
       });
   }

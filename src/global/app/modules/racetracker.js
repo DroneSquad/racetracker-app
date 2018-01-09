@@ -163,18 +163,15 @@ export const connectTracker = (deviceId: string) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
-        console.log('---------- CONNECT -------------');
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
-        console.log('---------- DISCONNECT -------------');
         // the device has either failed connection or disconnected on error
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
-            console.log('---------- RECONNECT -------------');
             dispatch(setReconnecting(response.device.id));
           }
         });
@@ -225,7 +222,6 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
         // be removed from the redux store now
         if (matchArr.length > 0) {
           for (let rt of matchArr) {
-            console.log("<---- A TRACKER WAS REMOVED ---->")
             dispatch(removeTracker(rt.id));
           }
         }

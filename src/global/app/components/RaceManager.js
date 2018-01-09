@@ -31,12 +31,11 @@ export default class RaceManager extends React.PureComponent {
       this.stopIntervalQuery();
     }
     if (this.props.isActive && !nextProps.activeTracker.isConnected && !nextProps.isConnecting && !nextProps.isReconnecting) {
-      this.props.setIsActive(false); // the tracker has been disconnected, the race is no longer active
+      this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
     }
   }
 
   // dont bother doing renders
-
   shouldComponentUpdate(nextProps, nextState) {
     // return false;
   }

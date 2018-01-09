@@ -161,8 +161,7 @@ export const createRace = (request: object) => {
 // TODO:
 export const validateRace = (request: object) => {
   return dispatch => {
-    console.log("==validateRace==")
-    console.log(request);
+
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
@@ -259,10 +258,7 @@ export const updateLaps = (request: object) => {
 };
 
 export const updateHeatRacers = (request: object) => {
-  console.log('updateHeatRacers-module');
-  console.log(request);
   return dispatch => {
-    console.log("==updateHeatRacer==")
   /*  raceMngr.updateHeatRacers(response => {
       console.log('call setHeatRacers');
       console.log(response);

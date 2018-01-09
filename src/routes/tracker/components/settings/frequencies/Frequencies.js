@@ -77,7 +77,7 @@ export default class Frequencies extends React.Component {
             : _.findIndex(profilesMap[amount + 1], id => videoProfile.name === this.props.profiles[id]);
       }
     }
-    console.log(amount, channel);
+
     let isLoading = !videoProfile || !videoFrequencies;
     return (
       <div className="main video-frequencies">

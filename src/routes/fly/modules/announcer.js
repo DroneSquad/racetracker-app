@@ -14,7 +14,7 @@ function splitMillsToArray(ms) {
 function humanSpeech(millis) {
   let speech = '';
   let [mins, seconds, ms] = splitMillsToArray(millis);
-  console.log(mins, seconds, ms);
+  // console.log(mins, seconds, ms);
 
   if (ms > 100 && ms % 10 >= 5) {
     // round to the 10th position
