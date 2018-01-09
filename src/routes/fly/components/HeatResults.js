@@ -1,5 +1,4 @@
-import React from 'react';
-import uuid from 'uuid';
+import React, { Component } from 'react';
 
 import {
   Card,
@@ -9,70 +8,22 @@ import {
   TableHeader,
   TableHeaderColumn,
   TableRow,
-  TableRowColumn,
   IconButton,
   FontIcon,
   IconMenu,
   MenuItem
 } from 'material-ui';
 
-import PilotAvatar from '../../../global/app/PilotAvatar';
-import { lazyLoad } from '../../../utils';
-import fetch from '../../../fetch';
-
-/** Used to display the pilot info for the heat builder */
-export class Pilot extends React.Component {
-  constructor(props) {
-    super(props);
-    this.uuid = uuid.v4();
-    this.state = {
-      loading: true,
-      name: 'Unknown',
-      avatar: `https://api.dronesquad.com/avatar/${this.props.id}`
-    };
-  }
-
-  componentDidMount() {
-    this.lazyLoad = lazyLoad(document.getElementById(this.uuid), () => {
-      //todo replace with loopback, this is just to test loading
-      fetch.get(`https://api.dronesquad.com/pilot/${this.props.id}`, data => {
-        this.setState({
-          name: data.callsign || data.display || 'No Pilot Found',
-          loading: false
-        });
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.lazyLoad && this.lazyLoad(); // this will remove the listener from the lazy loader
-  }
-
-  render() {
-    let name = (
-      <span style={{ verticalAlign: 'super', paddingLeft: '4px', marginLeft: '2px' }} className="ds-blue-text bar-item">
-        {this.state.name}
-      </span>
-    );
-    let avatar = <PilotAvatar size={20} src={this.state.avatar} />;
-    return (
-      <TableRow id={this.uuid} className={this.state.loading ? 'loading-bar' : ''}>
-        <TableRowColumn className="pilot-name">
-          {avatar}
-          {name}
-        </TableRowColumn>
-        <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn className="no-clip">0:01:00</TableRowColumn>
-        <TableRowColumn>0</TableRowColumn>
-      </TableRow>
-    );
-  }
-}
+import Racer from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
-export default class HeatResults extends React.Component {
+export default class HeatResults extends Component {
   /** The drop down menu for the options menu */
   menuDropdown = () => {
+    if (true) {
+      // temp disable the ...
+      return <span />;
+    }
     let styleIcons = { margin: '0 0 0 8px' };
     let icon = (
       <IconButton style={{ margin: '-12px' }}>
@@ -93,7 +44,14 @@ export default class HeatResults extends React.Component {
   };
 
   render() {
-    let title = <span>{`Heat ${this.props.id} Results`}</span>;
+    let { id, number, racerChannels } = this.props;
+    let title = (
+      <span>
+        {`Heat ${number}`} Results
+        {/* Will show internal heat id when in debug mode */}
+        <span style={{ color: '#aaa', fontSize: '12px' }}> {window.isDeveloper && id}</span>
+      </span>
+    );
     return (
       <Card expanded={false}>
         <CardTitle style={{ paddingBottom: '0' }} title={title} showExpandableButton closeIcon={this.menuDropdown()} />
@@ -103,14 +61,11 @@ export default class HeatResults extends React.Component {
               <TableHeaderColumn className="pilot-name">Pilot</TableHeaderColumn>
               <TableHeaderColumn>Laps</TableHeaderColumn>
               <TableHeaderColumn>Time</TableHeaderColumn>
-              <TableHeaderColumn>Points</TableHeaderColumn>
+              <TableHeaderColumn>Best</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
-            <Pilot id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
-            <Pilot id={Math.floor(Math.random() * 10000)} />
+            {racerChannels.map(slot => <Racer id={slot.racer} name={`Racer ${slot.racer}`} heatId={id} />)}
           </TableBody>
         </Table>
       </Card>

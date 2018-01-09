@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Card, CardTitle, CardText, Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
+import { Tabs, Tab, IconMenu, MenuItem, FontIcon, IconButton } from 'material-ui';
 
-// import RaceHeats from './RaceHeats';
+import RaceHeats from '../containers/RaceHeatsContainer';
 import DroneSquadAppBar from '../../../global/app/containers/DroneSquadAppBarContainer';
 import Racing from '../containers/RacingContainer';
 
@@ -32,12 +32,6 @@ export default class Race extends Component {
   tracker = () => <IconButton iconClassName="mdi mdi-timer" onTouchTap={() => this.props.goToTrackerHome()} />;
 
   render() {
-    let card = (
-      <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
-        <CardTitle title="Coming Soon" />
-        <CardText>Previous heats will be listed here.</CardText>
-      </Card>
-    );
     return (
       <div className="fly">
         <header>
@@ -49,8 +43,7 @@ export default class Race extends Component {
               <Racing history={this.props.history} />
             </Tab>
             <Tab label="Heats">
-              {/*<RaceHeats history={this.props.history} />*/}
-              {card}
+              <RaceHeats history={this.props.history} />
             </Tab>
             {/*<Tab label="Stats">*/}
             {/*{card}*/}

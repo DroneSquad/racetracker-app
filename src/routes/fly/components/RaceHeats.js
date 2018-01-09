@@ -1,23 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { Paper, List, ListItem } from 'material-ui';
+import _ from 'lodash';
 
-import HeatBuilder from './HeatBuilder';
+import { Card, CardTitle, CardText, List, ListItem } from 'material-ui';
+
 import HeatResults from './HeatResults';
 
 /** The basic component for displaying the fly heats */
-export default class RaceHeats extends React.Component {
+export default class RaceHeats extends Component {
   render() {
+    let card = (
+      <Card style={{ margin: '8px', padding: '16px', color: '#666' }}>
+        <CardTitle title="No Past Laps Found" />
+        <CardText>Go fly some laps, there are none here.</CardText>
+      </Card>
+    );
     return (
       <div>
-        <Paper className="heat-action">
-          <p>There is no action yet</p>
-        </Paper>
-
         <List className="heat-list">
-          <ListItem className="small-screen" disabled primaryText={<HeatResults {...this.props} id="1" />} />
-          <ListItem className="small-screen" disabled primaryText={<HeatBuilder {...this.props} id="2" />} />
-          <ListItem className="small-screen" disabled primaryText={<HeatBuilder {...this.props} id="3" />} />
+          {this.props.heats &&
+            _.map(this.props.heats, heat =>
+              <ListItem
+                className="small-screen"
+                disabled
+                primaryText={<HeatResults id={heat.id} number={heat.number} racerChannels={heat.racerChannels} />}
+              />
+            )}
+          {_.size(this.props.heats) == 0 && <ListItem className="small-screen" disabled primaryText={card} />}
         </List>
       </div>
     );

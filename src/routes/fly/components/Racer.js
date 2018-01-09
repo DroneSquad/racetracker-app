@@ -1,6 +1,3 @@
-// NOTE: this is basically the Pilot class contained in all 3 HeatResult/HeatBuilder/RacingHeat files
-// the commented code was left as we need to use it to put lazy loading back in....
-
 import React, { Component } from 'react';
 // import uuid from 'uuid';
 
@@ -75,9 +72,10 @@ export default class Racer extends Component {
         <TableRowColumn className="no-clip">
           {bestTime}
         </TableRowColumn>
-        <TableRowColumn>
-          {channel}
-        </TableRowColumn>
+        {channel &&
+          <TableRowColumn>
+            {channel}
+          </TableRowColumn>}
       </TableRow>
     );
   }

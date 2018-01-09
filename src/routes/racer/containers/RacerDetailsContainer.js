@@ -15,11 +15,11 @@ export default class extends Container {
     person: `Racer ${props.match.params.racer}`,
     heat: _.get(_.find(states.race.heats, heat => heat.id === props.match.params.heat), 'number'),
     total: _.get(
-      _.reverse(_.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer)), ['lap'])),
+      _.reverse(_.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer) && (lap.heatId === props.match.params.heat || lap.heat === props.match.params.heat)), ['lap'])),
       '[0].totalTime'
     ),
     bestLap: _.get(
-      _.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer)), lap =>
+      _.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.match.params.racer) && (lap.heatId === props.match.params.heat || lap.heat === props.match.params.heat)), lap =>
         Number(lap.lapTime)
       ),
       '[0].lapTime'
