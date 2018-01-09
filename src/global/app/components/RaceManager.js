@@ -18,7 +18,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.setIsValid(false);  // on start revalidate previous session
+    this.props.setIsValid(false);  // indicates startup, verify any race settings
   }
 
   componentWillReceiveProps(nextProps) {

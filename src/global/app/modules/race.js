@@ -4,6 +4,7 @@ import uuid from 'uuid';
 import { createSelector } from 'reselect';
 
 import tbs from '../../../services/racetracker';
+import { readActiveMode } from './racetracker';
 
 import {
   announceLapsFromResponse,
@@ -198,6 +199,7 @@ export const startHeat = (request: object, sayGo) => {
       if (sayGo) {
         dispatch(announceGo());
       }
+      dispatch(readActiveMode(response.deviceId));
     }, request);
   };
 };
@@ -207,6 +209,7 @@ export const stopHeat = (request: object) => {
     dispatch(sentCommand());
     tbs.stopHeat(response => {
       dispatch(setStop(response));
+      dispatch(readActiveMode(response.deviceId));
     }, request);
   };
 };

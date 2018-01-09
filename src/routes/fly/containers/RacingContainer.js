@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
   activeHeatId: state.race.activeHeatId,
   activeRace: state.race,
   connectedTrackers: getConnectedTrackers(state),
+  theState: state
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

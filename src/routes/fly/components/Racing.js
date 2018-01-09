@@ -58,11 +58,12 @@ export default class Racing extends Component {
   };
 
   render() {
-    let { isRaceValid, activeHeatId, connectedTrackers } = this.props;
+    console.log(this.props.theState);
+    let { isRaceValid, isRaceActive, connectedTrackers } = this.props;
     return (
       <div>
-        {isRaceValid && activeHeatId && <this.heatInterface />}
-        {isRaceValid && activeHeatId && <this.heatList />}
+        {isRaceValid && isRaceActive && <this.heatInterface />}
+        {isRaceValid && isRaceActive && <this.heatList />}
         {!isRaceValid && connectedTrackers.length > 1
           ? <RacetrackerCard
               title="Multi-tracker racing is not yet supported"
