@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+// import Dialog from 'material-ui/Dialog';
+// import FlatButton from 'material-ui/FlatButton';
 
 export default class RaceManager extends React.PureComponent {
   props: {
@@ -15,7 +17,8 @@ export default class RaceManager extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      timer: null
+      timer: null,
+      // open: false
     };
   }
 
@@ -60,7 +63,38 @@ export default class RaceManager extends React.PureComponent {
     clearInterval(this.state.timer);
   };
 
+  /*handleClose = () => {
+    this.setState({open: false});
+  };*/
+
   render() {
     return null;
+    /*const actions = [
+     <FlatButton
+       label="Cancel"
+       primary={true}
+       onClick={this.handleClose}
+     />,
+     <FlatButton
+       label="Submit"
+       primary={true}
+       onClick={this.handleClose}
+     />,
+   ];
+   return (
+       <div>
+
+         <Dialog
+
+           actions={actions}
+           modal={false}
+           open={this.state.open}
+           onRequestClose={this.handleClose}
+         >
+           The actions in this window were passed in as an array of React objects.
+         </Dialog>
+       </div>
+     );
+     */
   }
 }
