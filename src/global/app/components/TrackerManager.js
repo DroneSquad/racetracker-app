@@ -6,7 +6,6 @@ import { Snackbar } from 'material-ui';
 export default class TrackerManager extends React.PureComponent {
   props: {
     isBtEnabled: boolean,
-    isBtScanning: boolean,
     reconnectingTrackers: Array<RaceTracker>,
     connectingTrackers: Array<RaceTracker>,
     connectedTrackers: Array<RaceTracker>,
@@ -34,7 +33,6 @@ export default class TrackerManager extends React.PureComponent {
     // this occurs on both startup and on bluetooth toggle off/on
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       if (this.props.connectedTrackers.length > 0) {
-        console.log('bluetooth enabled validate connected trackers');
         this.props.validateTrackers(this.props.connectedTrackers);
       }
     }
@@ -160,7 +158,7 @@ export default class TrackerManager extends React.PureComponent {
       action: action,
       default_action: defAction,
       clicked_action: clkAction,
-      timer: timer,
+      timer: timer,  // autoclose the snackbar on timeout
       open: !!message
     });
   }

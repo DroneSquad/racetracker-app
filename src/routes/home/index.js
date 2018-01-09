@@ -16,11 +16,7 @@ import { connect } from '../../store';
 @connect()
 export default class Home extends React.Component {
   componentWillMount() {
-    let interval = 1;
-    if (this.props.raceQueryInterval) {
-      interval = this.props.raceQueryInterval;
-    }
-    this.setState({ interval: interval });
+    this.setState({ interval: this.props.raceQueryInterval });
   }
 
   state = {};

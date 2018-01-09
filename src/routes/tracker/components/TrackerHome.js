@@ -23,26 +23,22 @@ export default class extends Component {
 
   componentDidMount() {
     if (this.props.isBtEnabled) {
-      console.log('componenetDidMount');
       this.initSearchOrScan();
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    // TODO: lets do more checking on exactly how to handle these checks
-    // bluetooth was just enabled, lets validate 'available' trackers now,
-    // 'connected' trackers will be handled by the TrackerManager.
+    // bluetooth was just enabled, lets validate any trackers from previous sessions
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
-      console.log('bluetoothEnabled discovery or validation called');
       this.initSearchOrScan();
     }
   }
 
   initSearchOrScan() {
     if (this.props.trackers.length === 0) {
-      this.startDiscovery(); // automagically start bluetooth scan for racetrackers
+      this.startDiscovery(); // automagically start bluetooth scan for all racetrackers
     } else {
-      this.verifyTrackers(); // verify 'available trackers'
+      this.verifyTrackers(); // verify connection state of all known trackers available
     }
   }
 
@@ -61,12 +57,14 @@ export default class extends Component {
   };
 
   stopDiscovery = () => {
-    // TODO: determine if we should run the validation on a manually stopped scan
+    // TODO: should we run the validation on a manually stopped scan
     // see the racetracker module function stopTrackerScan, where this call is used
     // possible options: improved callback, only validate connected trackers, wipe all?
-    // -----------------------------------------------------
-    this.props.stopTrackerScan(this.props.trackers); // (validation option call)
-    // this.props.stopTrackerScan();
+    // ------------------------ two options -----------------------------
+    // 1.)
+    // this.props.stopTrackerScan(this.props.trackers); // completes validation on cancel
+    // 2.)
+    this.props.stopTrackerScan();  // no validation on cancel
   };
 
   /** change button purpose: start/stop scan based on scanning state */

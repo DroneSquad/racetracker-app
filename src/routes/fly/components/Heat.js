@@ -18,11 +18,6 @@ import Racer from '../containers/RacerContainer';
 
 /** This will display tabs for each section for tab, they keep their state across tabs */
 export default class Heat extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.trackerChannels !== this.props.heatChannels) {
-      this.props.updateHeatRacers({ heat: this.props.activeHeat, racerChannels: nextProps.trackerChannels });
-    }
-  }
 
   /** The drop down menu for the options menu */
   menuDropdown = () => {

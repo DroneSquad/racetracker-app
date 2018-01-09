@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { replace } from 'react-router-redux';
 
 import DisconnectTracker from '../../components/settings/DisconnectTracker';
 
@@ -17,7 +17,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   disconnect: deviceId => dispatch(disconnectTracker(deviceId)),
-  goToTrackers: () => dispatch(push(`/tracker`))
+  goToTrackers: () => dispatch(replace(`/tracker`))
 });
 
 const DisconnectTrackerContainer = connect(mapStateToProps, mapDispatchToProps)(DisconnectTracker);

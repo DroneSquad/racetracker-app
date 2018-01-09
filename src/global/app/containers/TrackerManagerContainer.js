@@ -22,8 +22,7 @@ const mapStateToProps = state => ({
   reconnectingTrackers: getReconnectingTrackers(state),
   connectingTrackers: getConnectingTrackers(state),
   connectedTrackers: getConnectedTrackers(state),
-  isBtEnabled: state.bluetooth.isEnabled,
-  isBtScanning: state.bluetooth.isScanning
+  isBtEnabled: state.bluetooth.isEnabled
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

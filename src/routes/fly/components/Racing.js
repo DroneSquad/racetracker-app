@@ -8,69 +8,36 @@ import RacetrackerCard from '../containers/RacetrackerCardContainer';
 
 export default class Racing extends Component {
   props: {
-    connectedTrackers: Array<RaceTracker>,
     isRaceActive: boolean,
+    isRaceValid: boolean,
     activeHeatId: string,
-    activeRaceId: string,
-    activeTrackerId: string,
-    activeRaceMode: string,
-    isBtScanning: boolean,
-    trackerRaceMode: string,
-    createRace: Function,
-    validateTrackers: Function
+    connectedTrackers: Array<RaceTracker>,
+    validateRace: Function,
+    createRace: Function
   };
 
   componentDidMount() {
-    if (!this.props.isRaceActive) {
-      if (this.props.connectedTrackers) {
-        if (this.props.connectedTrackers.length === 1) {
-          if (this.props.connectedTrackers[0].racerChannels) {
-            if (this.props.connectedTrackers[0].racerChannels.length !== 0) {
-              this.createRace(this.props.connectedTrackers[0]);
-            }
-          }
-        }
-      }
-    } else {
-      this.validateTrackers();
+    // no previous race exists, create a new race with the connected tracker
+    if (!this.props.isRaceActive && this.props.connectedTrackers.length === 1) {
+      this.props.createRace(this.props.connectedTrackers[0]);
+    }
+    // a previous race was setup, validate it or reset as needed
+    if (this.props.isRaceActive && !this.props.isRaceValid) {
+      // TODO: finish validation
+      this.props.validateRace(this.props.activeRace);
     }
   }
 
-  // check here if race exists already check heat?
   componentWillReceiveProps(nextProps) {
-    if (!this.props.isRaceActive) {
-      if (this.props.connectedTrackers) {
-        if (this.props.connectedTrackers.length === 1) {
-          if (this.props.connectedTrackers[0].racerChannels) {
-            if (
-              this.props.connectedTrackers[0].racerChannels.length !==
-              nextProps.connectedTrackers[0].racerChannels.length
-            ) {
-              if (nextProps.connectedTrackers[0].racerChannels.length !== 0) {
-                this.createRace(nextProps.connectedTrackers[0]);
-              }
-            }
-          }
-        }
-      }
-    } else {
-      if (nextProps.trackerRaceMode !== this.props.activeRaceMode) {
-        this.props.updateRaceMode(nextProps.trackerRaceMode);
-      }
+    // generate a new race as there is none from a previous session
+    if (!nextProps.isRaceActive && nextProps.connectedTrackers.length === 1) {
+      this.props.createRace(nextProps.connectedTrackers[0]);
     }
-  }
-
-  /** Validate that the device exists on the internal bluetooth scan list */
-  validateTrackers = () => {
-    if (!this.props.isBtScanning) {
-      let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
-      this.props.validateTrackers(aTracker);
+    // a previous race was running, validate and proceed
+    if (this.props.isRaceActive && !this.props.isRaceValid) {
+      // TODO: finish validation
+      this.props.validateRace(this.props.activeRace);
     }
-  };
-
-  createRace(tracker) {
-    // TODO: handle multitracker support
-    this.props.createRace([tracker]);
   }
 
   heatInterface = () => {
@@ -87,16 +54,16 @@ export default class Racing extends Component {
   };
 
   handleListClick = (event: RaceTracker) => {
-    this.props.createRace([event]);
+    this.props.createRace(event);
   };
 
   render() {
-    let { isRaceActive, activeHeatId, connectedTrackers } = this.props;
+    let { isRaceValid, activeHeatId, connectedTrackers } = this.props;
     return (
       <div>
-        {isRaceActive && activeHeatId && <this.heatInterface />}
-        {isRaceActive && activeHeatId && <this.heatList />}
-        {!isRaceActive && connectedTrackers.length > 1
+        {isRaceValid && activeHeatId && <this.heatInterface />}
+        {isRaceValid && activeHeatId && <this.heatList />}
+        {!isRaceValid && connectedTrackers.length > 1
           ? <RacetrackerCard
               title="Multi-tracker racing is not yet supported"
               subtitle="Select the Racetracker you want to use for racing"
@@ -114,7 +81,7 @@ export default class Racing extends Component {
               }
             />
           : null}
-        {!isRaceActive && connectedTrackers.length === 0
+        {!isRaceValid && connectedTrackers.length === 0
           ? <RacetrackerCard
               title="Racetracker connection required"
               subtitle="Race mode requires the connection of a TBS Racetracker"

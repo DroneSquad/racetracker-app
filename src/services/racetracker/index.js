@@ -291,7 +291,7 @@ export class TbsRt {
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
           if (response.startsWith('STARTED')) {
-            // this response occurs when in flyovermode and the first pilot passes the gate
+            // occurs when in flyovermode and the first pilot passes the gate
             cb({
               start: true
             });
@@ -305,7 +305,7 @@ export class TbsRt {
                 lap: Number(arr[1]),
                 lapTime: arr[2],
                 totalTime: arr[3].match(RE_NUMBER)[0],
-                heat: request.heat
+                heatId: request.heatId
               });
             } else {
               cb({
@@ -313,7 +313,7 @@ export class TbsRt {
                 lap: Number(arr[2]),
                 lapTime: arr[3],
                 totalTime: arr[4].match(RE_NUMBER)[0],
-                heat: request.heat
+                heatId: request.heatId
               });
             }
           }

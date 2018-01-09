@@ -1,3 +1,4 @@
+// @flow
 import ble from '../../../services/bluetooth';
 
 /** types */
