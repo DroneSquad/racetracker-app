@@ -176,6 +176,7 @@ export const validateRace = (request: object) => {
 };
 
 export const startShotgunHeat = (request: object) => {
+  request.raceMode = "shotgun"
   return dispatch => {
     dispatch(sentCommand());
     dispatch(
@@ -187,6 +188,7 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const startFlyoverHeat = (request: object) => {
+  request.raceMode = "flyover"
   return dispatch => {
     dispatch(sentCommand());
     dispatch(startHeat(request));
@@ -245,14 +247,31 @@ export const createHeat = (request: object) => {
 export const updateLaps = (request: object) => {
   return dispatch => {
     tbs.readRaceUpdate(response => {
+      console.log("TBS-readRaceUpdateReponse");
+      console.log(response)
+      console.log("A")
       if (response.start) {
+        console.log("B")
         // accounts for flyover start
         dispatch(announceFlyover());
+        console.log("BX")
       }
+      console.log("C")
       if (!response.error && !response.start) {
+        console.log("D")
         dispatch(setLap(response));
+        console.log("E")
         dispatch(announceLapsFromResponse(response));
+        console.log("F")
       }
+      console.log("G")
+      if (response.error) {
+        console.log("H")
+        console.log("**** updateLaps-Error ****")
+        console.log(response)
+        console.log("**************************")
+      }
+      console.log("I")
     }, request);
   };
 };

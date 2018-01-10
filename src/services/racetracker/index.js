@@ -179,8 +179,14 @@ export class TbsRt {
         deviceId,
         this._config.racetracker_service,
         this._config.read,
-        data => resolve(data),
-        error => reject(error)
+        data => {
+          resolve(data)
+        },
+        error =>
+        {
+          console.log("readCommand-REJECT")
+          reject(error)
+        }
       );
     });
   }
@@ -287,19 +293,30 @@ export class TbsRt {
 
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
+    console.log("----- readRaceUpdate -----")
     this.readCommand(request.deviceId)
-      .then(result =>
+      .then(result => {
+        console.log("THE_RESULT:")
+        console.log(result)
         this.prepareResponse('getRaceUpdate', result).then(response => {
+          console.log("THE_RESPONSE:");
+          console.log(response)
+          console.log("X1")
           if (response.startsWith('STARTED')) {
+            console.log("X2")
             // occurs when in flyovermode and the first pilot passes the gate
             cb({
               start: true
             });
           }
+          console.log("X3")
           if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
+            console.log("BREAK APART RESPONSE")
             let arr = response.split(RE_RACEUPDATE);
+            console.log(arr)
             // there are 2 different responses depending on a single racer or more
             if (arr.length === 4) {
+              console.log("X5")
               cb({
                 racer: 1,
                 lap: Number(arr[1]),
@@ -307,19 +324,32 @@ export class TbsRt {
                 totalTime: arr[3].match(RE_NUMBER)[0],
                 heatId: request.heatId
               });
-            } else {
+              console.log("X6")
+            } else if (arr.length === 5) {
+              console.log("X7")
               cb({
+
                 racer: Number(arr[1]),
                 lap: Number(arr[2]),
                 lapTime: arr[3],
                 totalTime: arr[4].match(RE_NUMBER)[0],
                 heatId: request.heatId
               });
+              console.log("X8")
             }
           }
+          else {
+            console.log("----- ELSE ------")
+          }
         })
+      }
       )
-      .catch(error => cb({ error: error }));
+      .catch(error =>
+        {
+        console.log("readRaceUpdate-ERROR: " + error);
+        cb({ error: error })
+      }
+      );
   }
 
   /** Get the maximum allowed number of rounds allowed */
@@ -552,7 +582,7 @@ export class TbsRt {
   /* Start a race heat according to start style, device id, and heat id */
   startHeat(cb, request) {
     let vrxStr = 'activateVrx'; // enables the vrx for race tracking
-    let cmdStr = request.raceMode === 'shotgun' ? 'startRaceShotgun' : 'startRaceFlyby'; // race start type
+    let cmdStr = request.raceMode === 'flyby' ? 'startRaceFlyby' : 'startRaceShotgun'; // race start type
     this.prepareCommand(vrxStr, request)
       .then(vrx =>
         this.writeCommand(vrx, request.deviceId).then(
