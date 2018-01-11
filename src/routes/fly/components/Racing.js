@@ -17,7 +17,7 @@ export default class Racing extends Component {
   };
 
   componentDidMount() {
-    // no previous race exists, create a new race with the connected tracker
+    // no previous race exists, create a new one using the connected tracker
     if (!this.props.isRaceActive && !this.props.isRaceValid && this.props.connectedTrackers.length === 1) {
       this.props.createRace(this.props.connectedTrackers[0]);
     }
@@ -32,7 +32,7 @@ export default class Racing extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // generate a new race as there is none from a previous session
+    // no previous race exists, create a new one using the connected tracker
     if (!nextProps.isRaceActive && !nextProps.isRaceValid && nextProps.connectedTrackers.length === 1) {
       this.props.createRace(nextProps.connectedTrackers[0]);
     }

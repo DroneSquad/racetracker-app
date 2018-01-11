@@ -256,25 +256,25 @@ export const validateTrackerPromise = (request: object) => {
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
           if (request.isConnected) {
-            // console.log("TRACKER_STATE: Available: True, Connected: False")
+            console.log("TRACKER_STATE: Available: True, Connected: False")
             resolve(connectTracker(request.id));
           } else {
             resolve(request);
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
-          // console.log("TRACKER_STATE: Available: False, Connected: False")
+          console.log("TRACKER_STATE: Available: False, Connected: False")
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
-          // console.log("TRACKER_STATE: COMPLETE FAILURE")
+          console.log("TRACKER_STATE: COMPLETE FAILURE")
           console.log(err); // TODO: proper error handling
           reject();
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        // console.log("TRACKER_STATE: Available: True, Connected: True")
+        console.log("TRACKER_STATE: Available: True, Connected: True")
         resolve(isTrackerConnected(request.id));
       }
     }, request.id);
@@ -443,7 +443,6 @@ export const writeRacerChannels = (request: object, callback) => {
         }
       }, request);
     });
-
     promise
       .then(response => dispatch(setRacerChannels(response)))
       .catch(response => console.error(response))
@@ -520,7 +519,7 @@ export const readMaxLaps = (deviceId: string) => {
 /** Set the value of the maximum number of allowed laps for a racetracker */
 export const writemaxLaps = (request: object) => {
   return dispatch => {
-    tbs.writemaxLaps(response => {
+    tbs.writeMaxLaps(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
