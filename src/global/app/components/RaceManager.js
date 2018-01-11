@@ -11,7 +11,7 @@ export default class RaceManager extends React.PureComponent {
     activeTracker: Object,
     setIsValid: Function,
     setIsActive: Function,
-    updateLaps: Function
+    getRaceUpdate: Function
   };
 
   constructor(props) {
@@ -23,7 +23,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.setIsValid(false);  // indicates startup, verify any race settings
+    this.props.setIsValid(false);  // indicates startup, verify any race settings next
   }
 
   componentWillReceiveProps(nextProps) {
@@ -59,7 +59,7 @@ export default class RaceManager extends React.PureComponent {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
-    this.props.updateLaps(r);
+    this.props.getRaceUpdate(r);
   };
 
   stopIntervalQuery = () => {

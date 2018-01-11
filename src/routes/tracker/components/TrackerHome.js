@@ -45,6 +45,7 @@ export default class extends Component {
   /** Validate that the device exists on the internal bluetooth scan list */
   verifyTrackers() {
     if (!this.props.isBtScanning) {
+      console.log("TrackerHome-ValidateTrackers")
       this.props.validateTrackers(this.props.trackers);
     }
   }
@@ -52,6 +53,7 @@ export default class extends Component {
   /** Start racetracker discovery if possible */
   startDiscovery = () => {
     if (!this.props.isBtScanning) {
+      console.log("TrackerHome-startTrackerScan")
       this.props.startTrackerScan(this.props.trackers);
     }
   };

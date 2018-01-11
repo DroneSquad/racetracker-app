@@ -153,10 +153,10 @@ export const createRace = (request: object) => {
         isActive: true,
         isValid: true
       };
-      /*console.log("------------- raceModule createRace ------------------")
+      console.log("------------- raceModule createRace ------------------")
       console.log(race)
       console.log(heat)
-      console.log(laps) */
+      console.log(laps)
       dispatch(newRace({ race: race, heat: heat, laps: laps }));
     }
   };
@@ -248,7 +248,7 @@ export const createHeat = (request: object) => {
   };
 };
 
-export const updateLaps = (request: object) => {
+export const getRaceUpdate = (request: object) => {
   return dispatch => {
     // console.log("++ updateLaps ++")
     // console.log(request)
@@ -258,15 +258,17 @@ export const updateLaps = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
+        console.log("****** GetRaceUpdate ********")
+        console.log(response)
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
-      /* TODO: should we use this for newqueries?
+      // TODO: should we use this for newqueries?
       if (response.error) {
-        console.log("**** updateLaps-Error ****")
+        console.log("**** getRaceUpdate-Error ****")
         console.log(response)
         console.log("**************************")
-      } */
+      }
     }, request);
   };
 };
@@ -370,6 +372,7 @@ export default function(state = initialState, action: Action) {
       };
     case SET_LAP:
       // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
+      console.log("==== SET_LAP ====")
       return {
         ...state,
         laps: _.unionWith(
@@ -412,12 +415,14 @@ export default function(state = initialState, action: Action) {
               : heat
         )
       };
-    /* case 'persist/REHYDRATE': {
+    case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
+        console.log("REHYDRATE-RACE")
+        console.log(action.payload.race)
         return action.payload.race;
       }
       return state;
-    } */
+    }
     default:
       return state;
   }
