@@ -18,26 +18,32 @@ export default class Racing extends Component {
 
   componentDidMount() {
     // no previous race exists, create a new race with the connected tracker
-    if (!this.props.isRaceActive && this.props.connectedTrackers.length === 1) {
+    if (!this.props.isRaceActive && !this.props.isRaceValid && this.props.connectedTrackers.length === 1) {
       this.props.createRace(this.props.connectedTrackers[0]);
     }
+    // TODO:
     // a previous race was setup, validate it or reset as needed
-    if (this.props.isRaceActive && !this.props.isRaceValid) {
-      // TODO: finish validation
+    /*if (this.props.isRaceActive && !this.props.isRaceValid) {
+      console.log("Racing-componentDidMount");
+      console.log("VALIDATE")
+      console.log(this.props.activeRace)
       this.props.validateRace(this.props.activeRace);
-    }
+    }*/
   }
 
   componentWillReceiveProps(nextProps) {
     // generate a new race as there is none from a previous session
-    if (!nextProps.isRaceActive && nextProps.connectedTrackers.length === 1) {
+    if (!nextProps.isRaceActive && !nextProps.isRaceValid && nextProps.connectedTrackers.length === 1) {
       this.props.createRace(nextProps.connectedTrackers[0]);
     }
+    // TODO:
     // a previous race was running, validate and proceed
-    if (this.props.isRaceActive && !this.props.isRaceValid) {
-      // TODO: finish validation
+    /*if (nextProps.isRaceActive && !nextProps.isRaceValid) {
+      console.log("Racing-componentWillReceiveProps");
+      console.log("VALIDATE")
+      console.log(nextProps.activeRace)
       this.props.validateRace(this.props.activeRace);
-    }
+    }*/
   }
 
   heatInterface = () => {

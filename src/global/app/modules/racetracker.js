@@ -9,7 +9,7 @@ import { setError, setIsScanning } from './bluetooth';
 
 /** defaults */
 const ATTEMPT_RECOVERY = true;
-const RECOVERY_ATTEMPTS = 3;
+const RECOVERY_ATTEMPTS = 8;
 
 /** types */
 export const RT_ERROR = 'RT_ERROR';
@@ -163,12 +163,14 @@ export const connectTracker = (deviceId: string) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
+        console.log("++++++++++++++ RACETRACKER IS CONNECTED ++++++++++++++")
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
+        console.log("++++++++++++++ RACETRACKER HAS LOST CONNECTION ++++++++++++++")
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
@@ -254,21 +256,25 @@ export const validateTrackerPromise = (request: object) => {
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not curently connected
           if (request.isConnected) {
+            // console.log("TRACKER_STATE: Available: True, Connected: False")
             resolve(connectTracker(request.id));
           } else {
             resolve(request);
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
+          // console.log("TRACKER_STATE: Available: False, Connected: False")
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
+          // console.log("TRACKER_STATE: COMPLETE FAILURE")
           console.log(err); // TODO: proper error handling
           reject();
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
+        // console.log("TRACKER_STATE: Available: True, Connected: True")
         resolve(isTrackerConnected(request.id));
       }
     }, request.id);
@@ -319,12 +325,12 @@ export const stopTrackerScan = (request: array = []) => {
       } else {
         // fired on device scan stop manually (no timeout)
         dispatch(setIsScanning(false));
-        if (request.length > 0) {
+        // if (request.length > 0) {
           // TODO: (see stopDiscovery() within TrackerHome to see calling location)
           // the idea here is that when a scan is stopped manually, validate trackers on cancel
           // unfortunately it doesnt appear to work well, there is a long pause... before it completes
-          dispatch(validateTrackers(request));
-        }
+          // dispatch(validateTrackers(request));
+        // }
       }
     });
   };

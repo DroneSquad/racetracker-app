@@ -16,7 +16,7 @@ import {
 
 /** defaults */
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
-const QUERY_INTERVAL_DEFAULT = 1;
+const QUERY_INTERVAL_DEFAULT = 10;
 
 /** types */
 export const RACE_IS_VALID = 'RACE_IS_VALID';
@@ -153,6 +153,10 @@ export const createRace = (request: object) => {
         isActive: true,
         isValid: true
       };
+      /*console.log("------------- raceModule createRace ------------------")
+      console.log(race)
+      console.log(heat)
+      console.log(laps) */
       dispatch(newRace({ race: race, heat: heat, laps: laps }));
     }
   };
@@ -246,32 +250,23 @@ export const createHeat = (request: object) => {
 
 export const updateLaps = (request: object) => {
   return dispatch => {
+    // console.log("++ updateLaps ++")
+    // console.log(request)
     tbs.readRaceUpdate(response => {
-      console.log("TBS-readRaceUpdateReponse");
-      console.log(response)
-      console.log("A")
       if (response.start) {
-        console.log("B")
         // accounts for flyover start
         dispatch(announceFlyover());
-        console.log("BX")
       }
-      console.log("C")
       if (!response.error && !response.start) {
-        console.log("D")
         dispatch(setLap(response));
-        console.log("E")
         dispatch(announceLapsFromResponse(response));
-        console.log("F")
       }
-      console.log("G")
+      /* TODO: should we use this for newqueries?
       if (response.error) {
-        console.log("H")
         console.log("**** updateLaps-Error ****")
         console.log(response)
         console.log("**************************")
-      }
-      console.log("I")
+      } */
     }, request);
   };
 };
@@ -347,7 +342,7 @@ export default function(state = initialState, action: Action) {
       return {
         ...state,
         ...action.payload.race,
-        heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
+        heats: [action.payload.heat],
         laps: action.payload.laps
       };
     case SET_RACEMODE:

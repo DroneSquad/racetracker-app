@@ -33,9 +33,12 @@ export default class RaceManager extends React.PureComponent {
     if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
       this.stopIntervalQuery();
     }
-    if (this.props.isActive && !nextProps.activeTracker.isConnected && !nextProps.isConnecting && !nextProps.isReconnecting) {
+    /*if (this.props.isActive && !nextProps.activeTracker.isConnected && !nextProps.isConnecting && !nextProps.isReconnecting) {
+      console.log("setRaceIsActive to FALSE")
+      console.log(this.props)
+      console.log(nextProps)
       this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
-    }
+    }*/
   }
 
   // dont bother doing renders

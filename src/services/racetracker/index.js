@@ -184,7 +184,6 @@ export class TbsRt {
         },
         error =>
         {
-          console.log("readCommand-REJECT")
           reject(error)
         }
       );
@@ -296,27 +295,19 @@ export class TbsRt {
     console.log("----- readRaceUpdate -----")
     this.readCommand(request.deviceId)
       .then(result => {
-        console.log("THE_RESULT:")
-        console.log(result)
         this.prepareResponse('getRaceUpdate', result).then(response => {
-          console.log("THE_RESPONSE:");
-          console.log(response)
-          console.log("X1")
           if (response.startsWith('STARTED')) {
-            console.log("X2")
             // occurs when in flyovermode and the first pilot passes the gate
             cb({
               start: true
             });
           }
-          console.log("X3")
           if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
-            console.log("BREAK APART RESPONSE")
+            console.log("THE_RESPONSE")
             let arr = response.split(RE_RACEUPDATE);
             console.log(arr)
             // there are 2 different responses depending on a single racer or more
             if (arr.length === 4) {
-              console.log("X5")
               cb({
                 racer: 1,
                 lap: Number(arr[1]),
@@ -324,9 +315,7 @@ export class TbsRt {
                 totalTime: arr[3].match(RE_NUMBER)[0],
                 heatId: request.heatId
               });
-              console.log("X6")
             } else if (arr.length === 5) {
-              console.log("X7")
               cb({
 
                 racer: Number(arr[1]),
@@ -335,11 +324,7 @@ export class TbsRt {
                 totalTime: arr[4].match(RE_NUMBER)[0],
                 heatId: request.heatId
               });
-              console.log("X8")
             }
-          }
-          else {
-            console.log("----- ELSE ------")
           }
         })
       }
