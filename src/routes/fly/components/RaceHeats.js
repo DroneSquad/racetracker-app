@@ -26,7 +26,7 @@ export default class RaceHeats extends Component {
                 primaryText={<HeatResults id={heat.id} number={heat.number} racerChannels={heat.racerChannels} />}
               />
             )}
-          {_.size(this.props.heats) == 0 && <ListItem className="small-screen" disabled primaryText={card} />}
+          {_.size(this.props.heats) === 0 && <ListItem className="small-screen" disabled primaryText={card} />}
         </List>
       </div>
     );

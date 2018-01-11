@@ -49,9 +49,9 @@ export default class RaceManager extends React.PureComponent {
 
       // if reconnections have failed, or user chose to disconnect, deactivate the race and validation
       if (nextProps.isActive && nextProps.isValid && !nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
-        console.log("DEACTIVATE THE TRACKER AND RACE")
-        // this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
-        // this.props.setIsValid(false);
+        console.log("tracker has been disconnected, disable the active state and validation of the race")
+        this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
+        this.props.setIsValid(false);
       }
     }
 

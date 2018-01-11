@@ -31,8 +31,10 @@ export default class Racing extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("Racing-componentWillReceiveProps");
     // no previous race exists, create a new one using the connected tracker
     if (!nextProps.isRaceActive && !nextProps.isRaceValid && nextProps.connectedTrackers.length === 1) {
+      console.log("CREATE")
       this.props.createRace(nextProps.connectedTrackers[0]);
     }
     // TODO:
@@ -66,7 +68,7 @@ export default class Racing extends Component {
       <div>
         {isRaceValid && isRaceActive && <this.heatInterface />}
         {isRaceValid && isRaceActive && <this.heatList />}
-        {!isRaceValid && connectedTrackers.length > 1
+        {!isRaceValid && !isRaceActive && connectedTrackers.length > 1
           ? <RacetrackerCard
               title="Multi-tracker racing is not yet supported"
               subtitle="Select the Racetracker you want to use for racing"
@@ -84,7 +86,7 @@ export default class Racing extends Component {
               }
             />
           : null}
-        {!isRaceValid && connectedTrackers.length === 0
+        {!isRaceValid && !isRaceActive && connectedTrackers.length === 0
           ? <RacetrackerCard
               title="Racetracker connection required"
               subtitle="Race mode requires the connection of a TBS Racetracker"

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 // import uuid from 'uuid';
 
-import { Avatar } from 'material-ui'; //'../../../global/app/PilotAvatar';
+// import { Avatar } from 'material-ui'; //'../../../global/app/PilotAvatar';
 // import { lazyLoad } from '../../../utils';
 // import fetch from '../../../fetch';
 
-import { BLANK_PNG } from '../../../utils';
+// import { BLANK_PNG } from '../../../utils';
 
 import { TableRow, TableRowColumn } from 'material-ui';
 
