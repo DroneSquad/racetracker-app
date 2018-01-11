@@ -32,7 +32,7 @@ export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 
 // TODO:
-// export const RT_TOTAL_ROUNDS = 'RT_TOTAL_ROUNDS';
+// export const RT_TOTAL_LAPS = 'RT_TOTAL_LAPS';
 // export const RT_LAPTIME = 'RT_LAPTIME';
 
 /** selectors */
@@ -107,8 +107,8 @@ export const sentCommand = () => ({
   payload: 'sent command, waiting for response'
 });
 
-/*export const setTotalRounds = (request: Object) => ({
-  type: RT_TOTAL_ROUNDS,
+/*export const setTotalLaps = (request: Object) => ({
+  type: RT_TOTAL_LAPS,
   payload: request
 });*/
 
@@ -281,15 +281,15 @@ export const updateHeatRacers = (request: object) => {
   };
 };
 
-/** Get the total number of rounds by a a selected racer */
-/*export const readTotalRounds = (request: object) => {
+/** Get the total number of laps by a a selected racer */
+/*export const readTotalLaps = (request: object) => {
   return dispatch => {
-    tbs.readTotalRounds(response => {
+    tbs.readTotalLaps(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
         // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
       } else {
-        dispatch(setTotalRounds(response)); // update the redux value
+        dispatch(setTotalLaps(response)); // update the redux value
       }
     }, request);
   };

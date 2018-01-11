@@ -26,7 +26,7 @@ export const RT_RSSI_LEVEL = 'RT_RSSI_LEVEL';
 export const RT_FIRMWARE_VERSION = 'RT_FIRMWARE_VERSION';
 export const RT_ACTIVE_MODE = 'RT_ACTIVE_MODE';
 export const RT_MIN_LAPTIME = 'RT_MIN_LAPTIME';
-export const RT_MAX_ROUNDS = 'RT_MAX_ROUNDS';
+export const RT_MAX_LAPS = 'RT_MAX_LAPS';
 export const RT_GATE_ADC = 'RT_GATE_ADC';
 export const RT_RSSI_ADC = 'RT_RSSI_ADC';
 export const RT_RACER_CHANS = 'RT_RACER_CHANS';
@@ -58,7 +58,7 @@ export const discoverTracker = (tracker: RaceTracker) => ({
     battery: '',
     firmware: '',
     minLapTime: '',
-    maxRounds: '',
+    maxLaps: '',
     gateADC: '',
     rssiADC: '',
     activeMode: '', // (idle, shotgun, flyby, gateColor)
@@ -133,8 +133,8 @@ export const setMinLapTime = (request: Object) => ({
   payload: request
 });
 
-export const setMaxRounds = (request: Object) => ({
-  type: RT_MAX_ROUNDS,
+export const setMaxLaps = (request: Object) => ({
+  type: RT_MAX_LAPS,
   payload: request
 });
 
@@ -504,27 +504,27 @@ export const readRssiAdc = (deviceId: string) => {
   };
 };
 
-/** Get the maximum number of allowed rounds for a ractracker */
-export const readMaxRounds = (deviceId: string) => {
+/** Get the maximum number of allowed laps for a racetracker */
+export const readMaxLaps = (deviceId: string) => {
   return dispatch => {
-    tbs.readMaxRounds(response => {
+    tbs.readMaxLaps(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        dispatch(setMaxRounds(response)); // update the redux value
+        dispatch(setMaxLaps(response)); // update the redux value
       }
     }, deviceId);
   };
 };
 
-/** Set the value of the maximum number of allowed rounds for a racetracker */
-export const writeMaxRounds = (request: object) => {
+/** Set the value of the maximum number of allowed laps for a racetracker */
+export const writemaxLaps = (request: object) => {
   return dispatch => {
-    tbs.writeMaxRounds(response => {
+    tbs.writemaxLaps(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        dispatch(setMaxRounds(response)); // update the redux value
+        dispatch(setMaxLaps(response)); // update the redux value
       }
     }, request);
   };
@@ -705,13 +705,13 @@ export default function(state = [], action: Action) {
               }
             : tracker
       );
-    case RT_MAX_ROUNDS:
+    case RT_MAX_LAPS:
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
-                maxRounds: action.payload.maxRounds
+                maxLaps: action.payload.maxLaps
               }
             : tracker
       );

@@ -53,16 +53,13 @@ export class TbsRt {
     let view = new DataView(buffer.slice(0)); // use a data view to look at the copy of the buffer
     let response = '';
     for (let i = 0; i < view.byteLength; i++) {
-      //console.log('byte index: ', i , view.byteLength);
       let value = view.getUint8(i);
       if (value === 0) {
         // commands end with \0 aka just 0
         break;
       }
       response += String.fromCharCode(value);
-      //console.log('value plus full response: (', value, ') ',response)
     }
-    //console.log('bytesToString: ' + response);
     return response;
   }
 
@@ -88,14 +85,14 @@ export class TbsRt {
           chan = RE_CHANNEL(chan, L2D);
           cmd = cmd + ' ' + options.racer + ' ' + chan;
           break;
-        case 'getTotalRounds':
+        case 'getTotalLaps':
           cmd = cmd + ' ' + options.racer;
           break;
         case 'getLapTime':
           cmd = cmd + ' ' + options.racer + ' ' + options.lap;
           break;
-        case 'setMaxRounds':
-          cmd = cmd + ' ' + options.maxRounds;
+        case 'setMaxLaps':
+          cmd = cmd + ' ' + options.maxLaps;
           break;
         default:
           break;
@@ -116,12 +113,12 @@ export class TbsRt {
           break;
         case 'getMinLapTime':
         case 'setMinLapTime':
-        case 'getMaxRounds':
-        case 'setMaxRounds':
+        case 'getMaxLaps':
+        case 'setMaxLaps':
         case 'getGateAdc':
         case 'setGateAdc':
         case 'getRssiAdc':
-        case 'getTotalRounds':
+        case 'getTotalLaps':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
         case 'getActiveMode':
@@ -256,16 +253,16 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Fetch the total amount of rounds a racer has completed */
-  readTotalRounds(cb, request) {
-    let cmdStr = 'getTotalRounds';
+  /** Fetch the total amount of laps a racer has completed */
+  readTotalLaps(cb, request) {
+    let cmdStr = 'getTotalLaps';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
               response => console.log(response) // numeric value 0
-              // cb({ deviceId: request.deviceId, totalRounds: response })
+              // cb({ deviceId: request.deviceId, totalLaps: response })
             )
           )
         )
@@ -337,29 +334,29 @@ export class TbsRt {
       );
   }
 
-  /** Get the maximum allowed number of rounds allowed */
-  readMaxRounds(cb, deviceId) {
-    let cmdStr = 'getMaxRounds';
+  /** Get the maximum allowed number of laps allowed */
+  readMaxLaps(cb, deviceId) {
+    let cmdStr = 'getMaxLaps';
     this.prepareCommand(cmdStr)
       .then(cmd =>
         this.writeCommand(cmd, deviceId).then(
           this.readCommand(deviceId).then(result =>
-            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, maxRounds: response }))
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, maxLaps: response }))
           )
         )
       )
       .catch(error => cb({ error: error }));
   }
 
-  /** Set the value for the maximum number of rounds allowed */
-  writeMaxRounds(cb, request) {
-    let cmdStr = 'setMaxRounds';
+  /** Set the value for the maximum number of laps allowed */
+  writeMaxLaps(cb, request) {
+    let cmdStr = 'setMaxLaps';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(response =>
-              cb({ deviceId: request.deviceId, maxRounds: response })
+              cb({ deviceId: request.deviceId, maxLaps: response })
             )
           )
         )
@@ -383,8 +380,6 @@ export class TbsRt {
 
   /** Read all channels from available racer slots (used on initial set) */
   readRacerChannels(cb, deviceId) {
-    //this.registerListener(deviceId);
-
     var racerPromises = [
       this.getRacerChannelPromise({ deviceId: deviceId, racer: 1 }),
       this.getRacerChannelPromise({ deviceId: deviceId, racer: 2 }),
