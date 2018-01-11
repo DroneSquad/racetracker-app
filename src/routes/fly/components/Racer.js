@@ -16,8 +16,7 @@ export default class Racer extends Component {
   };
 
   /*componentWillReceiveProps(nextProps) {
-    console.log("racer-render-next-props")
-    console.log(nextProps);
+
   }*/
 
   /*constructor(props) {

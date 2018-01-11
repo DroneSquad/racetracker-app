@@ -22,7 +22,6 @@ export function sendVoice(text, rate = 1, locale = 'en-US', callback) {
         reason => dispatch({ type: VOICE_SEND_ERROR, payload: reason })
       );
     } else {
-      // console.log(text);
       dispatch({ type: VOICE_SEND_ERROR, payload: 'Plugin not loaded' });
     }
   };

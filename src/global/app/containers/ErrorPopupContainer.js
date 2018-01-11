@@ -25,8 +25,6 @@ export default class extends ErrorPopup {
       console.log('Caught an error with no value!');
       return;
     }
-    // console.error(error);
-    // console.log(JSON.stringify(error));
     if (window.developer === true || forced) { // only developers can see this currently
       this.setState({
         opened: true,

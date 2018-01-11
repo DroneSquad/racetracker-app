@@ -7,7 +7,7 @@ export default class Stopwatch extends Component {
     activeChannels: Array<Object>,
     activeHeat: Object,
     raceMode: string,
-    trackerId: string,
+    // trackerId: string,
     isSendingCommand: boolean,
     startFlyoverHeat: Function,
     startShotgunHeat: Function,
@@ -18,7 +18,8 @@ export default class Stopwatch extends Component {
   startHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      deviceId: this.props.trackerId
+      deviceId: this.props.activeTracker.id
+      // deviceId: this.props.trackerId
     };
     if (this.props.raceMode === 'shotgun') {
       this.props.startShotgunHeat(r);
@@ -30,7 +31,8 @@ export default class Stopwatch extends Component {
   endHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      deviceId: this.props.trackerId
+      deviceId: this.props.activeTracker.id
+      // deviceId: this.props.trackerId
     };
     this.props.stopHeat(r);
   };

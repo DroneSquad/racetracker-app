@@ -26,7 +26,6 @@ export default class Racing extends Component {
     // a previous race was setup, validate it or reset as needed
     if (this.props.isRaceActive && !this.props.isRaceValid) {
       console.log("VALIDATE")
-      console.log(this.props)
       // this.props.validateRace(this.props.activeRace);
     }
   }
@@ -39,9 +38,7 @@ export default class Racing extends Component {
     // TODO:
     // a previous race was running, validate and proceed
     /*if (nextProps.isRaceActive && !nextProps.isRaceValid) {
-      console.log("Racing-componentWillReceiveProps");
-      console.log("VALIDATE")
-      console.log(nextProps.activeRace)
+
       this.props.validateRace(this.props.activeRace);
     }*/
   }

@@ -12,7 +12,7 @@ import RaceManager from '../components/RaceManager';
 
 const mapStateToProps = state => ({
   isActive: state.race.isActive,
-  // isValid: state.race.isValid,
+  isValid: state.race.isValid,
   queryInterval: state.race.queryInterval,
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state)

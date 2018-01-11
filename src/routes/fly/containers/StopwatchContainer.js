@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 import Stopwatch from '../components/Stopwatch';
 
-import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, getActiveHeat, getRacerChannels } from '../../../global/app/modules/race';
+import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, getActiveHeat,
+         getActiveTracker, getRacerChannels } from '../../../global/app/modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
@@ -12,8 +13,9 @@ import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, getActiveHeat
 const mapStateToProps = (state, ownProps) => ({
   activeChannels: getRacerChannels(state),
   activeHeat: getActiveHeat(state),
+  activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,
-  trackerId: state.race.trackerId,
+  // trackerId: state.race.trackerId,
   isSendingCommand: !!state.race.sentCommand
 });
 

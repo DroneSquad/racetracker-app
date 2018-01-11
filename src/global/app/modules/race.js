@@ -154,9 +154,6 @@ export const createRace = (request: object) => {
         isValid: true
       };
       console.log("------------- raceModule createRace ------------------")
-      console.log(race)
-      console.log(heat)
-      console.log(laps)
       dispatch(newRace({ race: race, heat: heat, laps: laps }));
     }
   };
@@ -250,24 +247,24 @@ export const createHeat = (request: object) => {
 
 export const getRaceUpdate = (request: object) => {
   return dispatch => {
-    // console.log("++ updateLaps ++")
-    // console.log(request)
     tbs.readRaceUpdate(response => {
       if (response.start) {
         // accounts for flyover start
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
-        console.log("****** GetRaceUpdate ********")
+        console.log("**** getRaceUpdate-Result ****")
         console.log(response)
+        console.log("******************************")
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
-      // TODO: should we use this for newqueries?
+      // TODO: should a flag be set here for on reconnect, to fetch missing??
+      // or just wait until the race ends?
       if (response.error) {
-        console.log("**** getRaceUpdate-Error ****")
+        console.log("**** getRaceUpdate-Error *****")
         console.log(response)
-        console.log("**************************")
+        console.log("******************************")
       }
     }, request);
   };
@@ -276,8 +273,6 @@ export const getRaceUpdate = (request: object) => {
 export const updateHeatRacers = (request: object) => {
   return dispatch => {
   /*  raceMngr.updateHeatRacers(response => {
-      console.log('call setHeatRacers');
-      console.log(response);
       dispatch(setHeatRacers(response));
     }, request);*/
   };
@@ -288,7 +283,7 @@ export const updateHeatRacers = (request: object) => {
   return dispatch => {
     tbs.readTotalLaps(response => {
       if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
+        consol.log(response.error); // TODO: log the error properly to device
         // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
       } else {
         dispatch(setTotalLaps(response)); // update the redux value
@@ -302,7 +297,7 @@ export const updateHeatRacers = (request: object) => {
   return dispatch => {
     tbs.readLapTime(response => {
       if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
+        consol.log(response.error); // TODO: log the error properly to device
         // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
       } else {
         dispatch(setLaptime(response)); // update the redux value
@@ -415,14 +410,12 @@ export default function(state = initialState, action: Action) {
               : heat
         )
       };
-    case 'persist/REHYDRATE': {
+    /*case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        console.log("REHYDRATE-RACE")
-        console.log(action.payload.race)
         return action.payload.race;
       }
       return state;
-    }
+    } */
     default:
       return state;
   }
