@@ -555,7 +555,7 @@ export const writeMinLapTime = (request: object) => {
   };
 };
 
-/** write a new min lap time value to a racetracker */
+/** calibrate the racetracker to race gate */
 export const calibrateGate = (deviceId: string) => {
   return dispatch => {
     dispatch(setCalibrating({ deviceId: deviceId, calibrating: true }));

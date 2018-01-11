@@ -270,7 +270,7 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the laptime of a round by a specific racer */
+  /** Get the laptime of a lap by a specific racer */
   readLapTime(cb, request) {
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
@@ -291,7 +291,7 @@ export class TbsRt {
   readRaceUpdate(cb, request) {
     console.log("----- readRaceUpdate -----")
     this.readCommand(request.deviceId)
-      .then(result => {
+      .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {
           if (response.startsWith('STARTED')) {
             // occurs when in flyovermode and the first pilot passes the gate
@@ -324,14 +324,8 @@ export class TbsRt {
             }
           }
         })
-      }
       )
-      .catch(error =>
-        {
-        console.log("readRaceUpdate-ERROR: " + error);
-        cb({ error: error })
-      }
-      );
+      .catch(error => cb({ error: error }));
   }
 
   /** Get the maximum allowed number of laps allowed */
