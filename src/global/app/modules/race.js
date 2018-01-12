@@ -16,7 +16,7 @@ import {
 
 /** defaults */
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
-const QUERY_INTERVAL_DEFAULT = 10;
+const QUERY_INTERVAL_DEFAULT = 1;
 
 /** types */
 export const RACE_IS_VALID = 'RACE_IS_VALID';
@@ -30,10 +30,6 @@ export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
-
-// TODO:
-// export const RT_TOTAL_LAPS = 'RT_TOTAL_LAPS';
-// export const RT_LAPTIME = 'RT_LAPTIME';
 
 /** selectors */
 const getActiveHeatId = state => state.race.activeHeatId;
@@ -111,16 +107,6 @@ export const sentCommand = () => ({
   type: SENT_START_STOP_HEAT,
   payload: 'sent command, waiting for response'
 });
-
-/*export const setTotalLaps = (request: Object) => ({
-  type: RT_TOTAL_LAPS,
-  payload: request
-});*/
-
-/*export const setLaptime = (request: Object) => ({
-  type: RT_LAPTIME,
-  payload: request
-});*/
 
 export const createRace = (request: object) => {
   return dispatch => {
@@ -274,37 +260,6 @@ export const getRaceUpdate = (request: object) => {
   };
 };
 
-/*export const getMissingLapsPromise = (request: object) => {
-  return new Promise((resolve, reject) => {
-    // we really dont care about the rssi value here, the command is being used
-    // to determine the connection state of the tracker within the bluetooth library
-    tbs.readTotalLaps(response => {
-      if (response.error) {
-        console.log(response.error); // TODO: log the error properly to device
-      } else {
-        console.log(response)
-        // resolve(response);
-        // or
-        // resolve(writeLap(request.id));
-      }
-    }, request);
-  });
-};*/
-
-/*export const getMissingLaps = (request: array) => {
-  return dispatch => {
-    let lapPromises = [];
-    for (let pos of request) {
-      lapPromises.push(getMissingLapsPromise({ racer: pos.racer, laps: pos.laps }));
-    }
-    Promise.all(lapPromises)
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.log(error)); // TODO: add proper error handling/logging
-  };
-};*/
-
 export const getMissingLaps = (request: array) => {
   return dispatch => {
     for (let slot of request) {
@@ -333,21 +288,13 @@ export const getMissingLaps = (request: array) => {
 };
 
 export const setMissingLaps = (request: object) => {
-  console.log("setMissingLaps")
-  console.log(request)
-  console.log("-----------------")
   return dispatch => {
     for (let lap of request.laps) {
-      console.log("LOOP")
-      console.log(lap)
       tbs.readLapTime(response => {
         if (response.error) {
           console.log(response.error); // TODO: log the error properly to device
         } else {
-          console.log("RESPONSE-FOR-LAP")
-          console.log(response);
           dispatch(setLap(response));
-          console.log("lkdf")
         }
       }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
     }
@@ -361,34 +308,6 @@ export const updateHeatRacers = (request: object) => {
     }, request);*/
   };
 };
-
-/** Get the total number of laps by a a selected racer */
-/*export const readTotalLaps = (request: object) => {
-  return dispatch => {
-    tbs.readTotalLaps(response => {
-      if (response.error) {
-        consol.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
-      } else {
-        dispatch(setTotalLaps(response)); // update the redux value
-      }
-    }, request);
-  };
-};*/
-
-/** Get the laptime of a specific round of a chosen racer */
-/*export const readLapTime = (request: object) => {
-  return dispatch => {
-    tbs.readLapTime(response => {
-      if (response.error) {
-        consol.log(response.error); // TODO: log the error properly to device
-        // dispatch(isTrackerConnected(request.deviceId)); // verify/update connection state
-      } else {
-        dispatch(setLaptime(response)); // update the redux value
-      }
-    }, request);
-  };
-};*/
 
 /** initial state */
 const initialState = {
