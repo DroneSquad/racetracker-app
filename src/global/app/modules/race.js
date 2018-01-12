@@ -38,8 +38,12 @@ export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
 /** selectors */
 const getActiveHeatId = state => state.race.activeHeatId;
 const getHeats = state => state.race.heats;
+const getLaps = state => state.race.laps;
 export const getActiveHeat = createSelector([getActiveHeatId, getHeats], (activeHeatId, heats) => {
   return heats ? heats.filter(t => t.id === activeHeatId)[0] : null;
+});
+export const getActiveLaps = createSelector([getActiveHeatId, getLaps], (activeHeatId, laps) => {
+  return laps ? laps.filter(t => t.heatId === activeHeatId) : null;
 });
 
 const getActiveTrackerId = state => state.race.trackerId;
@@ -47,7 +51,8 @@ const getTrackers = state => state.trackers;
 export const getActiveTracker = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0] : null;
 });
-export const getRacerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
+// fetch the racer channels from the active racetracker. ** USE ONLY TO CREATE HEATS **
+export const getActiveTrackerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0].racerChannels : null;
 });
 
@@ -162,7 +167,6 @@ export const createRace = (request: object) => {
 // TODO:
 export const validateRace = (request: object) => {
   return dispatch => {
-
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
@@ -267,6 +271,86 @@ export const getRaceUpdate = (request: object) => {
         console.log("******************************")
       }
     }, request);
+  };
+};
+
+/*export const getMissingLapsPromise = (request: object) => {
+  return new Promise((resolve, reject) => {
+    // we really dont care about the rssi value here, the command is being used
+    // to determine the connection state of the tracker within the bluetooth library
+    tbs.readTotalLaps(response => {
+      if (response.error) {
+        console.log(response.error); // TODO: log the error properly to device
+      } else {
+        console.log(response)
+        // resolve(response);
+        // or
+        // resolve(writeLap(request.id));
+      }
+    }, request);
+  });
+};*/
+
+/*export const getMissingLaps = (request: array) => {
+  return dispatch => {
+    let lapPromises = [];
+    for (let pos of request) {
+      lapPromises.push(getMissingLapsPromise({ racer: pos.racer, laps: pos.laps }));
+    }
+    Promise.all(lapPromises)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => console.log(error)); // TODO: add proper error handling/logging
+  };
+};*/
+
+export const getMissingLaps = (request: array) => {
+  return dispatch => {
+    for (let slot of request) {
+      tbs.readTotalLaps(response => {
+        if (response.error) {
+          console.log(response.error); // TODO: log the error properly to device
+        } else {
+          console.log("race-getMissingLaps-SLOT")
+          console.log(slot)
+          console.log("race-getMissingLaps-RESPONSE")
+          console.log(response)
+          if (slot.laps.length !== response.totalLaps) {
+            console.log("--NO MATCH--")
+            let arr = _.range(1, response.totalLaps + 1);
+            console.log(arr)
+            let awol =_.difference(arr, slot.laps);
+            console.log(awol)
+            dispatch(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
+          } else {
+            console.log("--THEY MATCH--")
+          }
+        }
+      }, slot);
+    }
+  };
+};
+
+export const setMissingLaps = (request: object) => {
+  console.log("setMissingLaps")
+  console.log(request)
+  console.log("-----------------")
+  return dispatch => {
+    for (let lap of request.laps) {
+      console.log("LOOP")
+      console.log(lap)
+      tbs.readLapTime(response => {
+        if (response.error) {
+          console.log(response.error); // TODO: log the error properly to device
+        } else {
+          console.log("RESPONSE-FOR-LAP")
+          console.log(response);
+          dispatch(setLap(response));
+          console.log("lkdf")
+        }
+      }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
+    }
   };
 };
 

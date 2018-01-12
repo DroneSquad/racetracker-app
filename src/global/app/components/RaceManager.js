@@ -12,7 +12,7 @@ export default class RaceManager extends React.PureComponent {
     activeTracker: Object,
     setIsValid: Function,
     setIsActive: Function,
-    getRaceUpdate: Function
+    getRaceUpdate: Function,
   };
 
   constructor(props) {
@@ -30,15 +30,17 @@ export default class RaceManager extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     // start race update interval query
     if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-      console.log("startIntervalQuery")
+      console.log("--startIntervalQuery--")
       this.startIntervalQuery();
     }
     // stop race update interval query
     if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-      console.log("stopIntervalQuery")
+      console.log("--stopIntervalQuery--")
       this.stopIntervalQuery();
+      console.log("--getMissingLaps--")
+      this.getMissingLaps();
     }
-
+    // make sure an active tracker exists before checking further
     if (this.props.activeTracker) {
       // the race is running the device just reconnected to the rt after a disconnect
       if (nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
@@ -46,7 +48,7 @@ export default class RaceManager extends React.PureComponent {
         // TODO: should we run querys from this point or do it all at the end of the race
         console.log("race is active & valid, and activeTracker just reconnected from lost connection")
       }
-
+      // TODO:
       // if reconnections have failed, or user chose to disconnect, deactivate the race and validation
       if (nextProps.isActive && nextProps.isValid && !nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
         console.log("tracker has been disconnected, disable the active state and validation of the race")
@@ -54,13 +56,23 @@ export default class RaceManager extends React.PureComponent {
         this.props.setIsValid(false);
       }
     }
-
-
   }
 
   // dont bother doing renders
   shouldComponentUpdate(nextProps, nextState) {
     // return false;
+  }
+
+  getMissingLaps = () => {
+    let cl = this.props.activeHeat.racerChannels.map(chan => ({
+      racer: chan.racer,
+      laps: this.props.activeLaps.filter(t => t.racer === chan.racer).map(t => t.lap),
+      deviceId: this.props.activeTracker.id,
+      heatId: this.props.activeHeat.id
+    }));
+    console.log("RaceManager-getMissingLaps")
+    console.log(cl)
+    this.props.getMissingLaps(cl);
   }
 
   startIntervalQuery = () => {

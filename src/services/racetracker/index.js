@@ -121,6 +121,9 @@ export class TbsRt {
         case 'getTotalLaps':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           break;
+        case 'getLapTime':
+          response = response.split(':')[2].match(RE_NUMBER)[0];
+          break;
         case 'getActiveMode':
           response = response.split(':')[1].match(RE_NUMBER)[0];
           response = this._config.modes[response];
@@ -261,8 +264,9 @@ export class TbsRt {
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
-              response => console.log(response) // numeric value 0
-              // cb({ deviceId: request.deviceId, totalLaps: response })
+              response =>
+                cb({ deviceId: request.deviceId, heatId: request.heatId,
+                     racer: request.racer, totalLaps: Number(response) })
             )
           )
         )
@@ -272,14 +276,21 @@ export class TbsRt {
 
   /** Get the laptime of a lap by a specific racer */
   readLapTime(cb, request) {
+    console.log("readLapTime")
+    console.log(request)
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
-              response => console.log(response)
-              // cb({ deviceId: request.deviceId, round: request.round, lapTime: response })
+              response => {
+              console.log("THEFINAL")
+              console.log(response)
+              // TODO: calculate the totalTime
+              cb({ racer: Number(request.racer), lap: Number(request.lap),
+                   lapTime: response, totalTime: "", heatId: request.heatId })
+              }
             )
           )
         )
