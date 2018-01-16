@@ -29,7 +29,7 @@ export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
-export const SET_HEAT_RACERS = 'SET_HEAT_RACERS';
+export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** selectors */
 const getActiveHeatId = state => state.race.activeHeatId;
@@ -47,7 +47,7 @@ const getTrackers = state => state.trackers;
 export const getActiveTracker = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0] : null;
 });
-// fetch the racer channels from the active racetracker. ** USE ONLY TO CREATE HEATS **
+// ** USE ONLY TO CREATE HEATS ** fetch the racer channels from the active racetracker.
 export const getActiveTrackerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0].racerChannels : null;
 });
@@ -98,8 +98,8 @@ export const setLap = (request: object) => ({
   payload: { ...request, heatId: request.heatId }
 });
 
-export const setHeatRacers = (request: object) => ({
-  type: SET_HEAT_RACERS,
+export const setHeatChannels = (request: object) => ({
+  type: SET_HEAT_CHANNELS,
   payload: request
 });
 
@@ -235,6 +235,31 @@ export const createHeat = (request: object) => {
   };
 };
 
+export const updateHeatChannels = (request: object) => {
+  return dispatch => {
+    // create initial laps for each updated racer channel
+    let laps = request.channels.map(slot => ({
+      racer: slot.racer,
+      lap: 1,
+      lapTime: 0,
+      totalTime: 0,
+      heatId: request.heat.id
+    }));
+    // update heat with updated racer channels
+    let heat = {
+      id: request.heat.id,
+      raceId: request.heat.raceId,
+      number: request.heat.number,
+      isPending: request.heat.isPending,
+      isActive: request.heat.isActive,
+      isComplete: request.heat.isComplete,
+      racerChannels: request.channels
+    };
+    // and away we go....
+    dispatch(setHeatChannels({ heat: heat, laps: laps }));
+  };
+};
+
 export const getRaceUpdate = (request: object) => {
   return dispatch => {
     tbs.readRaceUpdate(response => {
@@ -267,8 +292,6 @@ export const getMissingLaps = (request: array) => {
         if (response.error) {
           console.log(response.error); // TODO: log the error properly to device
         } else {
-          console.log("race-getMissingLaps-SLOT")
-          console.log(slot)
           console.log("race-getMissingLaps-RESPONSE")
           console.log(response)
           if (slot.laps.length !== response.totalLaps) {
@@ -298,14 +321,6 @@ export const setMissingLaps = (request: object) => {
         }
       }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
     }
-  };
-};
-
-export const updateHeatRacers = (request: object) => {
-  return dispatch => {
-  /*  raceMngr.updateHeatRacers(response => {
-      dispatch(setHeatRacers(response));
-    }, request);*/
   };
 };
 
@@ -362,7 +377,7 @@ export default function(state = initialState, action: Action) {
         heats: _.unionWith(state.heats, [action.payload.heat], (left, right) => left.id === right.id),
         laps: state.laps.concat(action.payload.laps)
       };
-    case SET_HEAT_RACERS:
+    case SET_HEAT_CHANNELS:
       return {
         ...state,
         heats: _.unionWith([action.payload.heat], state.heat, (left, right) => left.id === right.id),

@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import { setIsValid, setIsActive, getActiveHeat, getRaceUpdate, getActiveTracker,
-         getActiveLaps, getMissingLaps } from '../modules/race';
+         getActiveLaps, getMissingLaps, updateHeatChannels } from '../modules/race';
 
 import RaceManager from '../components/RaceManager';
 
@@ -24,7 +24,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setIsActive: boolean => dispatch(setIsActive(boolean)),
   setIsValid: boolean => dispatch(setIsValid(boolean)),
   getRaceUpdate: object => dispatch(getRaceUpdate(object)),
-  getMissingLaps: array => dispatch(getMissingLaps(array))
+  getMissingLaps: array => dispatch(getMissingLaps(array)),
+  setHeatChannels: object => dispatch(updateHeatChannels(object))
 });
 
 const RaceManagerContainer = connect(mapStateToProps, mapDispatchToProps)(RaceManager);

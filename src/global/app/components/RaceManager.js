@@ -10,6 +10,7 @@ export default class RaceManager extends React.PureComponent {
     queryInterval: string,
     activeHeat: Object,
     activeTracker: Object,
+    activeChannels: Array<Object>,
     setIsValid: Function,
     setIsActive: Function,
     getRaceUpdate: Function,
@@ -42,7 +43,12 @@ export default class RaceManager extends React.PureComponent {
     }
     // make sure an active tracker exists before checking further
     if (this.props.activeTracker) {
-      // the race is running the device just reconnected to the rt after a disconnect
+      // look for changes to the activetracker racer channels, update the active heat channels if 'pending'
+      if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
+      {
+        this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
+      }
+      // the race is running, the device just reconnected to the rt after a disconnect
       if (nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
       {
         // TODO: should we run querys from this point or do it all at the end of the race
