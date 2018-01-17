@@ -163,14 +163,14 @@ export const connectTracker = (deviceId: string) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
-        console.log("++++++++++++++ RACETRACKER IS CONNECTED ++++++++++++++")
+        console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
         dispatch(readRacerChannels(response.device.id));
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
-        console.log("++++++++++++++ RACETRACKER HAS LOST CONNECTION ++++++++++++++")
+        console.log("++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++")
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
@@ -401,7 +401,6 @@ export const readBatteryLevel = (deviceId: string) => {
   };
 };
 
-
 /** read the channel of a selected racer from racetracker, updating redux if successful */
 /*  request: { deviceId: tracker_id, racer: racer_position } */
 export const readRacerChannel = (request: object) => {
@@ -614,7 +613,7 @@ export default function(state = [], action: Action) {
             ? {
                 ...tracker,
                 wasConnected: tracker.reconnects === RECOVERY_ATTEMPTS ? tracker.isConnected : tracker.wasConnected,
-                isReconnecting: tracker.isConnecting || tracker.isConnected ? true : false, // do not attempt reconnect if not previously connected, or connecting
+                isReconnecting: tracker.isConnecting || tracker.isConnected ? true : false, // do not attempt reconnect if not previously 'connected', or 'connecting'
                 isConnecting: false,
                 isConnected: false
               }
@@ -679,7 +678,7 @@ export default function(state = [], action: Action) {
           tracker.id === action.payload.deviceId
             ? {
                 ...tracker,
-                racerChannels: action.payload.channels // replace previous entirely
+                racerChannels: action.payload.channels
               }
             : tracker
       );

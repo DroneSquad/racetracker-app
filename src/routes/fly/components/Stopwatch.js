@@ -5,6 +5,7 @@ import { Paper, RaisedButton } from 'material-ui';
 export default class Stopwatch extends Component {
   props: {
     activeHeat: Object,
+    activeTracker: Object,
     raceMode: string,
     isSendingCommand: boolean,
     startFlyoverHeat: Function,

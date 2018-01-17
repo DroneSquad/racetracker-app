@@ -50,6 +50,7 @@ export default class RaceManager extends React.PureComponent {
       {
         // TODO: should we run querys from this point or do it all at the end of the race
         console.log("race is active & valid, and activeTracker just reconnected from lost connection")
+        // we could fire off getmissing laps here, or perhaps check the state of rt first?
       }
       // TODO:
       // if reconnections have failed, or user chose to disconnect, deactivate the race and validation

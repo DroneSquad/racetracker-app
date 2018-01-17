@@ -139,7 +139,7 @@ export const createRace = (request: object) => {
         isActive: true,
         isValid: true
       };
-      console.log("------------- raceModule createRace ------------------")
+      // fire and forget...
       dispatch(newRace({ race: race, heat: heat, laps: laps }));
     }
   };
@@ -288,7 +288,7 @@ export const getMissingLaps = (request: array) => {
           console.log(response.error); // TODO: log the error properly to device
         } else {
           if (slot.laps.length !== response.totalLaps) {
-            console.log("--NO MATCH--")
+            console.log("-- getMissingLaps --")
             let arr = _.range(1, response.totalLaps + 1);
             let awol =_.difference(arr, slot.laps);
             dispatch(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
