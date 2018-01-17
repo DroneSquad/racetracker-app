@@ -287,17 +287,11 @@ export const getMissingLaps = (request: array) => {
         if (response.error) {
           console.log(response.error); // TODO: log the error properly to device
         } else {
-          console.log("race-getMissingLaps-RESPONSE")
-          console.log(response)
           if (slot.laps.length !== response.totalLaps) {
             console.log("--NO MATCH--")
             let arr = _.range(1, response.totalLaps + 1);
-            console.log(arr)
             let awol =_.difference(arr, slot.laps);
-            console.log(awol)
             dispatch(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
-          } else {
-            console.log("--THEY MATCH--")
           }
         }
       }, slot);
