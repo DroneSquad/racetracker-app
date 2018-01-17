@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import Stopwatch from '../components/Stopwatch';
 
 import { startFlyoverHeat, startShotgunHeat, stopHeat, createHeat, getActiveHeat,
-         getActiveTracker, getActiveTrackerChannels } from '../../../global/app/modules/race';
+         getActiveTracker } from '../../../global/app/modules/race';
 
 /*  This is a container component. It does not contain any JSX, or
     import React. This component is **only** responsible for wiring
     in actions and state necessary to render a presentational component */
 
 const mapStateToProps = (state, ownProps) => ({
-  activeChannels: getActiveTrackerChannels(state),
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,

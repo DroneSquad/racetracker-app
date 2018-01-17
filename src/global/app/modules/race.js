@@ -32,24 +32,19 @@ export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** selectors */
-const getActiveHeatId = state => state.race.activeHeatId;
+const getTrackers = state => state.trackers;
 const getHeats = state => state.race.heats;
 const getLaps = state => state.race.laps;
+const getActiveTrackerId = state => state.race.trackerId;
+const getActiveHeatId = state => state.race.activeHeatId;
 export const getActiveHeat = createSelector([getActiveHeatId, getHeats], (activeHeatId, heats) => {
   return heats ? heats.filter(t => t.id === activeHeatId)[0] : null;
 });
 export const getActiveLaps = createSelector([getActiveHeatId, getLaps], (activeHeatId, laps) => {
   return laps ? laps.filter(t => t.heatId === activeHeatId) : null;
 });
-
-const getActiveTrackerId = state => state.race.trackerId;
-const getTrackers = state => state.trackers;
 export const getActiveTracker = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
   return trackers ? trackers.filter(t => t.id === activeTrackerId)[0] : null;
-});
-// ** USE ONLY TO CREATE HEATS ** fetch the racer channels from the active racetracker.
-export const getActiveTrackerChannels = createSelector([getActiveTrackerId, getTrackers], (activeTrackerId, trackers) => {
-  return trackers ? trackers.filter(t => t.id === activeTrackerId)[0].racerChannels : null;
 });
 
 /** actions */

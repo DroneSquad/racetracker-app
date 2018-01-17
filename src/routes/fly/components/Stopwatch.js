@@ -4,7 +4,6 @@ import { Paper, RaisedButton } from 'material-ui';
 
 export default class Stopwatch extends Component {
   props: {
-    activeChannels: Array<Object>,
     activeHeat: Object,
     raceMode: string,
     isSendingCommand: boolean,
@@ -37,7 +36,7 @@ export default class Stopwatch extends Component {
   createHeat = () => {
     let r = {
       raceId: this.props.activeHeat.raceId,
-      activeChannels: this.props.activeChannels,
+      activeChannels: this.props.activeTracker.racerChannels,
       currentHeat: this.props.activeHeat
     };
     this.props.createHeat(r);
