@@ -440,12 +440,12 @@ export default function(state = initialState, action: Action) {
         sentCommand: false,
         error: action.payload
       };
-    /*case 'persist/REHYDRATE': {
+    case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return action.payload.race;
+        return { ...action.payload.race };
       }
       return state;
-    } */
+    }
     default:
       return state;
   }
