@@ -387,14 +387,20 @@ export default function(state = initialState, action: Action) {
     case SET_LAP:
       // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
       console.log("==== SET_LAP ====")
-      return {
-        ...state,
-        laps: _.unionWith(
-          [action.payload],
-          state.laps,
-          (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
-        )
-      };
+      if (_.get(action.payload, 'lap') !== state.lastLapId) { // make sure its unique right now
+        return {
+          ...state,
+          lastLapId: _.get(action.payload, 'lap'),
+          laps: _.sortBy(_.unionWith(
+            [action.payload],
+            state.laps,
+            (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
+          ), 'lap')
+        };
+      } else {
+        return { ...state };
+      }
+
     case SENT_START_STOP_HEAT:
       return {
         ...state,
