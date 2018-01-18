@@ -35,7 +35,7 @@ export default class BluetoothManager extends React.PureComponent {
   shouldComponentUpdate(nextProps, nextState) {
     // the only reason to ever render is if there is a bluetooth error to show
     // the user. otherwise dont bother, save the cycle and move along..
-    if (nextProps.btError) {
+    if ((nextProps.btError && !this.props.btError) || (this.props.btError && !nextProps.btError)) {
       return true;
     }
     return false;
