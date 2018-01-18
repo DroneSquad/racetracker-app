@@ -448,7 +448,7 @@ export default function(state = initialState, action: Action) {
       };
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return { ...action.payload.race, sentCommand: false };
+        return { ...action.payload.race, sentCommand: false, laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
       }
       return state;
     }
