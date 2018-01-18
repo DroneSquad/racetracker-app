@@ -311,9 +311,7 @@ export class TbsRt {
             });
           }
           if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
-            console.log("THE_RESPONSE")
             let arr = response.split(RE_RACEUPDATE);
-            console.log(arr)
             // there are 2 different responses depending on a single racer or more
             if (arr.length === 4) {
               cb({
@@ -325,7 +323,6 @@ export class TbsRt {
               });
             } else if (arr.length === 5) {
               cb({
-
                 racer: Number(arr[1]),
                 lap: Number(arr[2]),
                 lapTime: arr[3],

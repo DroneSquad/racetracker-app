@@ -31,34 +31,48 @@ export default class RaceManager extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     // start race update interval query
     if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
+      console.log("RACEMNGR-startInterval")
       this.startIntervalQuery();
     }
     // stop race update interval query
     if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
+      console.log("RACEMNGR-stop Interval and check for missing laps")
       this.stopIntervalQuery();
+      // todo: run a check for connected here before running function
       this.getMissingLaps();
     }
     // make sure an active tracker exists before checking further
     if (this.props.activeTracker) {
+
+      // watch for the stop of a heat, if the racetracker has no connection, ask user to verify
+      if (nextProps.sentCommand && nextProps.activeHeat.isActive && !nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
+      {
+        console.log("we are attempting to stop a race when the racetracker is disconnected")
+      }
+
+
+
+
       // look for changes to the activetracker racer channels, update the active heat channels if 'pending'
       if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
       {
+        console.log("RACEMNGR-Update Heat Channels")
         this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
       }
       // the race is running, the device just reconnected to the rt after a disconnect
       if (nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
       {
         // TODO: should we run querys from this point or do it all at the end of the race
-        console.log("race is active & valid, and activeTracker just reconnected from lost connection")
+        console.log("RACEMNGR-race is active & valid, and activeTracker just reconnected from lost connection")
         // we could fire off getmissing laps here, or perhaps check the state of rt first?
       }
-      // TODO:
+
       // if reconnections have failed, or user chose to disconnect, deactivate the race and validation
-      if (nextProps.isActive && nextProps.isValid && !nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
-        console.log("tracker has been disconnected, disable the active state and validation of the race")
+      /*if (nextProps.isActive && nextProps.isValid && !nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
+        console.log("RACEMNGR-tracker has been disconnected, disable the active state and validation of the race")
         this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
         this.props.setIsValid(false);
-      }
+      }*/
     }
   }
 

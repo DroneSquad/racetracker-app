@@ -12,7 +12,6 @@ const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 8;
 
 /** types */
-export const RT_ERROR = 'RT_ERROR';
 export const RT_DISCOVER = 'RT_DISCOVER';
 export const RT_REMOVE = 'RT_REMOVE';
 export const RT_CONNECT = 'RT_CONNECT';
@@ -254,27 +253,23 @@ export const validateTrackerPromise = (request: object) => {
         // the bluetooth library determine the type of error and handle accordingly
         let err = response.error.replace('.', '').split(' ').pop().toUpperCase();
         if (err === 'CONNECTED') {
-          // indicates the tracker is available to the bluetooth library but not curently connected
+          // indicates the tracker is available to the bluetooth library but not currently connected
           if (request.isConnected) {
-            console.log("TRACKER_STATE: Available: True, Connected: False")
             resolve(connectTracker(request.id));
           } else {
             resolve(request);
           }
         } else if (err === 'FOUND') {
           // indicates that the tracker is NOT currently available to the bluetooth library
-          console.log("TRACKER_STATE: Available: False, Connected: False")
           resolve(request); // return the object and populate the search array
         } else {
           // this should never happen
-          console.log("TRACKER_STATE: COMPLETE FAILURE")
           console.log(err); // TODO: proper error handling
           reject();
         }
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        console.log("TRACKER_STATE: Available: True, Connected: True")
         resolve(isTrackerConnected(request.id));
       }
     }, request.id);

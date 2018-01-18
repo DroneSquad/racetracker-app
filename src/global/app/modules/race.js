@@ -73,12 +73,12 @@ export const setRaceMode = (request: string) => ({
   payload: request
 });
 
-export const setStart = (request: object) => ({
+export const setStartHeat = (request: string) => ({
   type: START_HEAT,
   payload: request
 });
 
-export const setStop = (request: object) => ({
+export const setStopHeat = (request: string) => ({
   type: STOP_HEAT,
   payload: request
 });
@@ -185,7 +185,7 @@ export const startFlyoverHeat = (request: object) => {
 export const startHeat = (request: object, sayGo) => {
   return dispatch => {
     tbs.startHeat(response => {
-      dispatch(setStart(response));
+      dispatch(setStartHeat(response.heatId));
       if (sayGo) {
         dispatch(announceGo());
       }
@@ -198,9 +198,18 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
     tbs.stopHeat(response => {
-      dispatch(setStop(response));
-      dispatch(readActiveMode(response.deviceId));
+      if (response.error) {
+
+        console.log("3a")
+      } else {
+        console.log("3b")
+        dispatch(setStopHeat(response.heatId));
+        dispatch(readActiveMode(response.deviceId));
+      }
+      // dispatch(setStop(response));
+      // dispatch(readActiveMode(response.deviceId));
     }, request);
+
   };
 };
 
@@ -386,12 +395,14 @@ export default function(state = initialState, action: Action) {
     case SENT_START_STOP_HEAT:
       return { ...state, sentCommand: true };
     case START_HEAT: // gets called when we get the response from the tracker
+    console.log("START_HEAT")
+    console.log(action.payload)
       return {
         ...state,
         sentCommand: false,
         heats: state.heats.map(
           heat =>
-            heat.id === action.payload.heatId
+            heat.id === action.payload
               ? {
                   ...heat,
                   isPending: false,
@@ -402,12 +413,14 @@ export default function(state = initialState, action: Action) {
         )
       };
     case STOP_HEAT: // gets called when we got the response from the tracker
+      console.log("STOP_HEAT")
+      console.log(action.payload)
       return {
         ...state,
         sentCommand: false,
         heats: state.heats.map(
           heat =>
-            heat.id === action.payload.heatId
+            heat.id === action.payload
               ? {
                   ...heat,
                   isPending: false,
