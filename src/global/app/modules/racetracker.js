@@ -218,9 +218,8 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
           }
         }
       } else {
-        // if we made it here then the scan completed its full timer interval,
-        // any trackers remaining in the array were not found and should
-        // be removed from the redux store now
+        // if we made it here then the scan completed its full timer interval, any trackers
+        // remaining in the array were not found and should be removed from the redux store now
         if (matchArr.length > 0) {
           for (let rt of matchArr) {
             dispatch(removeTracker(rt.id));

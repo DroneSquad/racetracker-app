@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-// import Dialog from 'material-ui/Dialog';
-// import FlatButton from 'material-ui/FlatButton';
+import { Dialog, FlatButton } from 'material-ui';
+
+// import race error lookup codes
+import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
 
 export default class RaceManager extends React.PureComponent {
   props: {
@@ -10,75 +12,89 @@ export default class RaceManager extends React.PureComponent {
     queryInterval: string,
     activeHeat: Object,
     activeTracker: Object,
-    activeChannels: Array<Object>,
+    activeLaps: Array<Object>,
+    raceError: string,
     setIsValid: Function,
     setIsActive: Function,
     getRaceUpdate: Function,
+    getMissingLaps: Function,
+    setHeatChannels: Function,
+    forceStopHeat: Function,
+    clearRaceError: Function
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      timer: null,
-      // open: false
+      title: '',
+      message: '',
+      main_action: '',
+      main_action_label: '',
+      alt_action: '',
+      alt_action_label: '',
+      primary: true,
+      open: false
     };
   }
 
   componentDidMount() {
-    this.props.setIsValid(false);  // indicates startup, verify any race settings next
+    this.props.setIsValid(false);  // this happens on app startup, set any previous settings to invalid and recheck
   }
 
   componentWillReceiveProps(nextProps) {
-    // start race update interval query
-    if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-      console.log("RACEMNGR-startInterval")
-      this.startIntervalQuery();
-    }
-    // stop race update interval query
-    if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-      console.log("RACEMNGR-stop Interval and check for missing laps")
-      this.stopIntervalQuery();
-      // todo: run a check for connected here before running function
-      this.getMissingLaps();
-    }
-    // make sure an active tracker exists before checking further
-    if (this.props.activeTracker) {
-
-      // watch for the stop of a heat, if the racetracker has no connection, ask user to verify
-      if (nextProps.sentCommand && nextProps.activeHeat.isActive && !nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
-      {
-        console.log("we are attempting to stop a race when the racetracker is disconnected")
+    // verify there is an active race and it has been validated
+    if (nextProps.isActive && nextProps.isValid) {
+      // start race update interval query
+      if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
+        console.log("RaceManager-startIntervalQuery")
+        this.startIntervalQuery();
       }
-
-
-
-
-      // look for changes to the activetracker racer channels, update the active heat channels if 'pending'
-      if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
-      {
-        console.log("RACEMNGR-Update Heat Channels")
-        this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
+      // stop race update interval query
+      if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
+        console.log("RaceManager-stopIntervalQuery")
+        this.stopIntervalQuery();
+        // if the tracker isconnected, fetch any missing laps now
+        if (nextProps.activeTracker.isConnected) {
+          console.log("RaceManager-getMissingLaps")
+          this.getMissingLaps();
+        }
       }
-      // the race is running, the device just reconnected to the rt after a disconnect
-      if (nextProps.activeTracker.isConnected && nextProps.isActive && nextProps.isValid && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
-      {
-        // TODO: should we run querys from this point or do it all at the end of the race
-        console.log("RACEMNGR-race is active & valid, and activeTracker just reconnected from lost connection")
-        // we could fire off getmissing laps here, or perhaps check the state of rt first?
+      // handle any race errors (includes: attempt to stop w/ no connection, etc.)
+      if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
+        console.log("RaceManager-configDialog()")
+        this.configDialog(nextProps.raceError);
       }
-
-      // if reconnections have failed, or user chose to disconnect, deactivate the race and validation
-      /*if (nextProps.isActive && nextProps.isValid && !nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
-        console.log("RACEMNGR-tracker has been disconnected, disable the active state and validation of the race")
-        this.props.setIsActive(false); // the active tracker has been disconnected, the race is no longer active
-        this.props.setIsValid(false);
-      }*/
+      // verify an activeTracker is available for the following checks
+      if (this.props.activeTracker) {
+        // if the activeTrackers racerchannels change then update the active heat, if the heat isPending
+        if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
+        {
+          console.log("RaceManager-setHeatChannels")
+          this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
+        }
+        // if a heat is running, the device has just recovered from a lost connection
+        if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
+        {
+          console.log("RaceManager-activeRace-Reconnected")
+          // TODO: we could/should run a check to get the mode of the tracker, and perhaps fetch missing laps
+        }
+        // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
+        if (!nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
+          console.log("RaceManager-Deactive/Unvalidate-ActiveDisconnect")
+          this.props.setIsActive(false);
+          this.props.setIsValid(false);
+        }
+      }
     }
   }
 
-  // dont bother doing renders
   shouldComponentUpdate(nextProps, nextState) {
-    // return false;
+    // the only reason to ever render is if there is a race error to show or clear
+    // from the display for the user. else dont bother, save the cycle and move along..
+    if ((nextProps.raceError && !this.props.raceError) || (this.props.raceError && !nextProps.raceError)) {
+      return true;
+    }
+    return false;
   }
 
   getMissingLaps = () => {
@@ -111,38 +127,86 @@ export default class RaceManager extends React.PureComponent {
     clearInterval(this.state.timer);
   };
 
-  /*handleClose = () => {
-    this.setState({open: false});
-  };*/
+  configDialog(errCode) {
+    let title = '';
+    let message = '';
+    let mainAction = '';
+    let mainActionLabel = '';
+    let altAction = '';
+    let altActionLabel = '';
+    // no tracker connection on heat stop action
+    if (errCode === ERR_STOP_HEAT_NO_CONN) {
+      title = 'Stop Heat Warning'
+      message = 'There is no connection to a RaceTracker. Ending the race may result in lost data.'
+      mainAction = 'clear_race_error'
+      mainActionLabel = 'Cancel'
+      altAction = 'force_stop_heat'
+      altActionLabel = 'End Heat'
+    }
+    this.setState({
+      title: title,
+      message: message,
+      main_action: mainAction,
+      main_action_label: mainActionLabel,
+      alt_action: altAction,
+      alt_action_label: altActionLabel,
+      open: !!errCode
+    });
+  }
+
+  doCloseEvents = (action: string) => {
+    if (action === 'clear_race_error') {
+      this.props.clearRaceError();
+    }
+    if (action === 'force_stop_heat') {
+      this.props.forceStopHeat(this.props.activeHeat.id)
+    }
+    this.setState({
+      open: false
+    });
+  };
+
+  handleAltActionClick = () => {
+    let action = this.state.alt_action;
+    this.doCloseEvents(action);
+  };
+
+  handleMainActionClick = () => {
+    let action = this.state.main_action;
+    this.doCloseEvents(action);
+  };
+
+  handleRequestClose = (reason: string) => {
+    let action = this.state.main_action;
+    this.doCloseEvents(action);
+  };
 
   render() {
-    return null;
-    /*const actions = [
+    let { message, title, main_action_label, alt_action_label, open, primary } = this.state;
+    const actions = [
      <FlatButton
-       label="Cancel"
-       primary={true}
-       onClick={this.handleClose}
+       label={alt_action_label}
+       primary={primary}
+       onClick={this.handleAltActionClick}
      />,
      <FlatButton
-       label="Submit"
-       primary={true}
-       onClick={this.handleClose}
+       label={main_action_label}
+       primary={primary}
+       onClick={this.handleMainActionClick}
      />,
    ];
    return (
        <div>
-
          <Dialog
-
+           title={title}
            actions={actions}
            modal={false}
-           open={this.state.open}
-           onRequestClose={this.handleClose}
+           open={open}
+           onRequestClose={this.handleRequestClose}
          >
-           The actions in this window were passed in as an array of React objects.
+           {message}
          </Dialog>
        </div>
      );
-     */
   }
 }

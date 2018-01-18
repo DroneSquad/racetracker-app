@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 import { setIsValid, setIsActive, getActiveHeat, getRaceUpdate, getActiveTracker,
-         getActiveLaps, getMissingLaps, updateHeatChannels } from '../modules/race';
+         getActiveLaps, getMissingLaps, updateHeatChannels, setStopHeat, setRaceError } from '../modules/race';
 
 import RaceManager from '../components/RaceManager';
 
@@ -17,7 +17,8 @@ const mapStateToProps = state => ({
   queryInterval: state.race.queryInterval,
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
-  activeLaps: getActiveLaps(state)
+  activeLaps: getActiveLaps(state),
+  raceError: state.race.error
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -25,7 +26,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setIsValid: boolean => dispatch(setIsValid(boolean)),
   getRaceUpdate: object => dispatch(getRaceUpdate(object)),
   getMissingLaps: array => dispatch(getMissingLaps(array)),
-  setHeatChannels: object => dispatch(updateHeatChannels(object))
+  setHeatChannels: object => dispatch(updateHeatChannels(object)),
+  forceStopHeat: string => dispatch(setStopHeat(string)),
+  clearRaceError: () => dispatch(setRaceError(''))
 });
 
 const RaceManagerContainer = connect(mapStateToProps, mapDispatchToProps)(RaceManager);

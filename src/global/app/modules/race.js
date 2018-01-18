@@ -19,6 +19,7 @@ const RACEMODE_DEFAULT = 'shotgun'; // flyby
 const QUERY_INTERVAL_DEFAULT = 10;
 
 /** types */
+export const RACE_ERROR = 'RACE_ERROR';
 export const RACE_IS_VALID = 'RACE_IS_VALID';
 export const RACE_IS_ACTIVE = 'RACE_IS_ACTIVE'
 export const NEW_RACE = 'NEW_RACE';
@@ -30,6 +31,9 @@ export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
+
+/** error const for RaceManager */
+export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'  // attempt to stop heat with no race tracker connected
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -48,6 +52,11 @@ export const getActiveTracker = createSelector([getActiveTrackerId, getTrackers]
 });
 
 /** actions */
+export const setRaceError = (error: string) => ({
+  type: RACE_ERROR,
+  payload: error
+});
+
 export const setIsValid = (request: boolean) => ({
   type: RACE_IS_VALID,
   payload: request
@@ -106,7 +115,7 @@ export const sentCommand = () => ({
 export const createRace = (request: object) => {
   return dispatch => {
     // verify racer-channels are configured
-    if (request.racerChannels.length !== 0) {
+    if (request.racerChannels && request.racerChannels.length !== 0) {
       // generate unique ids for heats and race
       let rUid = uuid.v4(); // race uid
       let hUid = uuid.v4(); // heat uid
@@ -155,9 +164,7 @@ export const validateRace = (request: object) => {
 /*validateTrackers = () => {
   if (!this.props.isBtScanning) {
     let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
-    this.props.validateTrackers(aTracker);
-  }
-};*/
+    this.props.validateTrackers(aTracker); */
   };
 };
 
@@ -182,7 +189,7 @@ export const startFlyoverHeat = (request: object) => {
   };
 };
 
-export const startHeat = (request: object, sayGo) => {
+export const startHeat = (request: object, sayGo: boolean) => {
   return dispatch => {
     tbs.startHeat(response => {
       dispatch(setStartHeat(response.heatId));
@@ -198,18 +205,13 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
     tbs.stopHeat(response => {
-      if (response.error) {
-
-        console.log("3a")
-      } else {
-        console.log("3b")
+      if (response.error) {  // no tracker connected (most likely)
+        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+      } else {  // racetracker successfully halted heat
         dispatch(setStopHeat(response.heatId));
         dispatch(readActiveMode(response.deviceId));
       }
-      // dispatch(setStop(response));
-      // dispatch(readActiveMode(response.deviceId));
     }, request);
-
   };
 };
 
@@ -335,7 +337,8 @@ const initialState = {
   isActive: false,
   isValid: false,
   heats: [],
-  laps: []
+  laps: [],
+  error: ''
 };
 
 /** reducers */
@@ -393,10 +396,11 @@ export default function(state = initialState, action: Action) {
         )
       };
     case SENT_START_STOP_HEAT:
-      return { ...state, sentCommand: true };
+      return {
+        ...state,
+        sentCommand: true
+      };
     case START_HEAT: // gets called when we get the response from the tracker
-    console.log("START_HEAT")
-    console.log(action.payload)
       return {
         ...state,
         sentCommand: false,
@@ -410,11 +414,10 @@ export default function(state = initialState, action: Action) {
                   isActive: true
                 }
               : heat
-        )
+        ),
+        error: ''
       };
     case STOP_HEAT: // gets called when we got the response from the tracker
-      console.log("STOP_HEAT")
-      console.log(action.payload)
       return {
         ...state,
         sentCommand: false,
@@ -428,7 +431,14 @@ export default function(state = initialState, action: Action) {
                   isComplete: true
                 }
               : heat
-        )
+        ),
+        error: ''
+      };
+    case RACE_ERROR:
+      return {
+        ...state,
+        sentCommand: false,
+        error: action.payload
       };
     /*case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
