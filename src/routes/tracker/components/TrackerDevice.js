@@ -35,7 +35,7 @@ export default class TrackerDevice extends Component {
   connectTracker = () => {
     if (!this.props.isConnected) {
       this.props.setConnecting(this.props.id);
-      this.props.connect(this.props.id);
+      this.props.connect({deviceId: this.props.id, getChannels: true});
     }
   };
 

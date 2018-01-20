@@ -167,7 +167,11 @@ export default class TrackerManager extends React.PureComponent {
     let id = this.state.id;
     if (action === 'connect') {
       this.props.setConnecting(id);
-      this.props.connect(id);
+      if (!this.props.activeHeat || !this.props.activeHeat.isActive) {
+        this.props.connect({ deviceId: id, getChannels: true });
+      } else {
+        this.props.connect({ deviceId: id });
+      }
     }
     if (action === 'disconnect') {
       this.props.setDisconnected(id);

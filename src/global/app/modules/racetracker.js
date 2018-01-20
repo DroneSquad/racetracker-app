@@ -158,7 +158,7 @@ export const setRacerChannel = (request: Object) => ({
 });
 
 /** connect the device/app to a racetracker */
-export const connectTracker = (deviceId: string) => {
+export const connectTracker = (request: Object) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
@@ -166,7 +166,9 @@ export const connectTracker = (deviceId: string) => {
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
-        dispatch(readRacerChannels(response.device.id));
+        if (request.getChannels) {
+          dispatch(readRacerChannels(response.device.id));
+        }
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
         console.log("++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++")
@@ -177,7 +179,7 @@ export const connectTracker = (deviceId: string) => {
           }
         });
       }
-    }, deviceId);
+    }, request.deviceId);
   };
 };
 
@@ -199,7 +201,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
             if (idx !== -1) {
               if (matchArr[idx].isConnected) {
                 let id = matchArr[idx].id;
-                dispatch(connectTracker(id));
+                dispatch(connectTracker({deviceId: id}));
               }
               // remove this tracker from our search array
               matchArr.splice(idx, 1);
@@ -254,7 +256,7 @@ export const validateTrackerPromise = (request: object) => {
         if (err === 'CONNECTED') {
           // indicates the tracker is available to the bluetooth library but not currently connected
           if (request.isConnected) {
-            resolve(connectTracker(request.id));
+            resolve(connectTracker({ deviceId: request.id }));
           } else {
             resolve(request);
           }

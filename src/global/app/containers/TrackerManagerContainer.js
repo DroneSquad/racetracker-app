@@ -11,6 +11,8 @@ import {
   getReconnectingTrackers
 } from '../modules/racetracker';
 
+import { getActiveHeat } from '../modules/race';
+
 import TrackerManager from '../components/TrackerManager';
 
 /*  This is a container component. Notice it does not contain any JSX,
@@ -22,11 +24,12 @@ const mapStateToProps = state => ({
   reconnectingTrackers: getReconnectingTrackers(state),
   connectingTrackers: getConnectingTrackers(state),
   connectedTrackers: getConnectedTrackers(state),
+  activeHeat: getActiveHeat(state),
   isBtEnabled: state.bluetooth.isEnabled
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  connect: deviceId => dispatch(connectTracker(deviceId)),
+  connect: object => dispatch(connectTracker(object)),
   setConnecting: deviceId => dispatch(setConnecting(deviceId)),
   setDisconnected: deviceId => dispatch(setDisconnected(deviceId)),
   validateTrackers: array => dispatch(validateTrackers(array))
