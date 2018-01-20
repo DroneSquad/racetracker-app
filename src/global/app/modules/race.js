@@ -16,7 +16,7 @@ import {
 
 /** defaults */
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
-const QUERY_INTERVAL_DEFAULT = 10;
+const QUERY_INTERVAL_DEFAULT = 1;
 
 /** types */
 export const RACE_ERROR = 'RACE_ERROR';
