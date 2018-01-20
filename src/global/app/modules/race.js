@@ -391,11 +391,11 @@ export default function(state = initialState, action: Action) {
         return {
           ...state,
           lastLapId: _.get(action.payload, 'lap'),
-          laps: _.sortBy(_.unionWith(
+          laps: _.reverse(_.sortBy(_.unionWith(
             [action.payload],
             state.laps,
             (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
-          ), 'lap')
+          ), 'lap'))
         };
       } else {
         return { ...state };
