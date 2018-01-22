@@ -38,6 +38,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.props.setIsActive(false);
     this.props.setIsValid(false);  // this happens on app startup, set any previous settings to invalid and recheck
   }
 

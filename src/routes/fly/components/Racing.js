@@ -40,10 +40,11 @@ export default class Racing extends Component {
     }
     // TODO:
     // a previous race was running, validate and proceed
-    /*if (nextProps.isRaceActive && !nextProps.isRaceValid) {
-
-      this.props.validateRace(this.props.activeRace);
-    }*/
+    if (nextProps.isRaceActive && !nextProps.isRaceValid) {
+      console.log("Racing-componentWillReceiveProps");
+      console.log("VALIDATE")
+      // this.props.validateRace(this.props.activeRace);
+    }
   }
 
   heatInterface = () => {
