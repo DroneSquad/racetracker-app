@@ -1,6 +1,7 @@
 .main {
   --header-height: 64px;
-  --footer-height: 56px;
+  --footer-height-old: 56px;
+  --footer-height: 0px;
   overflow-y: auto;
   overflow-x: hidden;
 }
