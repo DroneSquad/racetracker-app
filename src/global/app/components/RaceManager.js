@@ -56,6 +56,7 @@ export default class RaceManager extends React.PureComponent {
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
         // console.log("RaceManager-stopIntervalQuery")
         // this.stopIntervalQuery();
+
         console.log("RaceManager-stopRaceNotif")
         this.stopRaceNotif();
 
@@ -64,6 +65,8 @@ export default class RaceManager extends React.PureComponent {
           console.log("RaceManager-getMissingLaps")
           this.getMissingLaps();
         }
+
+
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
@@ -79,11 +82,11 @@ export default class RaceManager extends React.PureComponent {
           this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
         }
         // if a heat is running, the device has just recovered from a lost connection
-        if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
+        if (this.props.activeHeat.isActive &&nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
-          console.log("RaceManager-activeRace-Reconnected")
+          console.log("---------------------- RaceManager-activeRace-Reconnected =======================================>")
           // console.log("RaceManager-startRaceNotif NUMBER 2")
-          // this.startRaceNotif();
+          this.startRaceNotif();
 
           // TODO: we could/should run a check to get the mode of the tracker, and perhaps fetch missing laps
         }
@@ -121,6 +124,7 @@ export default class RaceManager extends React.PureComponent {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
+
     this.props.startRaceNotifications(r);
   }
 
@@ -129,6 +133,7 @@ export default class RaceManager extends React.PureComponent {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
+    console.log("this.props.stopRaceNotifications")
     this.props.stopRaceNotifications(r);
   }
 

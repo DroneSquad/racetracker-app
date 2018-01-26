@@ -316,6 +316,7 @@ export class TbsRt {
           let arr = response.split(RE_RACEUPDATE);
           // there are 2 different responses depending on a single racer or more
           if (arr.length === 4) {
+            if (Number(arr[1])) {
             cb({
               racer: 1,
               lap: Number(arr[1]),
@@ -323,7 +324,9 @@ export class TbsRt {
               totalTime: arr[3].match(RE_NUMBER)[0],
               heatId: request.heatId
             });
+          }
           } else if (arr.length === 5) {
+            if (Number(arr[2])) {
             cb({
               racer: Number(arr[1]),
               lap: Number(arr[2]),
@@ -332,6 +335,7 @@ export class TbsRt {
               heatId: request.heatId
             });
           }
+          }
         }
       }, console.log("error on LISTENER callback"))
 
@@ -339,8 +343,10 @@ export class TbsRt {
   }
 
   stopRaceNotifications(cb, request) {
-    window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
-      console.log("stopRaceNotifications")
+    console.log("TBS stopRaceNotifications")
+    console.log(request)
+    window.ble.stopNotification(request.id, this._config.racetracker_service, this._config.read, result => {
+      console.log("...... stopRaceNotifications ....... ")
       console.log(result);
     // ble.stopNotification(device_id, service_uuid, characteristic_uuid, success, failure);
     });

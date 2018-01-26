@@ -292,6 +292,7 @@ export const startRaceNotifications = (request: object) => {
 };
 
 export const stopRaceNotifications = (request: object) => {
+  console.log("race.stopraceNotifications")
   return dispatch => {
     tbs.stopRaceNotifications(response => {
       console.log("-- stopRaceNotifications --")
@@ -341,6 +342,13 @@ export const getMissingLaps = (request: array) => {
         }
       }, slot);
     }
+
+    /* tbs.stopRaceNotifications(result => {
+      console.log("== ++ == stopRaceNotifications == ++ ==")
+      console.log(response.deviceId)
+      console.log(result)
+    }, response.deviceId); */
+
   };
 };
 
