@@ -47,8 +47,10 @@ export default class RaceManager extends React.PureComponent {
     if (nextProps.isActive && nextProps.isValid) {
       // start race update interval query
       if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-        console.log("RaceManager-startIntervalQuery")
-        this.startIntervalQuery();
+        // console.log("RaceManager-startIntervalQuery")
+        // this.startIntervalQuery();
+        console.log("RaceManager-startRaceNotif")
+        this.startRaceNotif();
       }
       // stop race update interval query
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
@@ -106,6 +108,14 @@ export default class RaceManager extends React.PureComponent {
       heatId: this.props.activeHeat.id
     }));
     this.props.getMissingLaps(cl);
+  }
+
+  startRaceNotif = () => {
+    let r = {
+      heatId: this.props.activeHeat.id,
+      deviceId: this.props.activeTracker.id
+    };
+    this.props.startRaceNotifications(r);
   }
 
   startIntervalQuery = () => {

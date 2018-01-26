@@ -266,6 +266,31 @@ export const updateHeatChannels = (request: object) => {
   };
 };
 
+export const startRaceNotifications = (request: object) => {
+  return dispatch => {
+    tbs.startRaceNotifications(response => {
+      if (response.start) {
+        // accounts for flyover start
+        dispatch(announceFlyover());
+      }
+      if (!response.error && !response.start) {
+        console.log("**** getRaceUpdate-Result ****")
+        console.log(response)
+        console.log("******************************")
+        dispatch(setLap(response));
+        dispatch(announceLapsFromResponse(response));
+      }
+      // TODO: should a flag be set here for on reconnect, to fetch missing??
+      // or just wait until the race ends?
+      if (response.error) {
+        console.log("**** getRaceUpdate-Error *****")
+        console.log(response)
+        console.log("******************************")
+      }
+    }, request);
+  };
+};
+
 export const getRaceUpdate = (request: object) => {
   return dispatch => {
     tbs.readRaceUpdate(response => {

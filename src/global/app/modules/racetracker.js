@@ -162,6 +162,7 @@ export const connectTracker = (request: Object) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
+        // tbs.registerListener(response.device.id)
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         // successful device connection, long running, on error fires below
         dispatch(setConnected(response.device));

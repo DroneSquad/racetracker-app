@@ -148,13 +148,6 @@ export class TbsRt {
     });
   }
 
-  // registerListener(deviceId) {
-  //   window.ble.startNotification(deviceId, this._config.racetracker_service, this._config.read, data => {
-  //     console.log('listener callback');
-  //     console.log(this.bytesToStr(data));
-  //   });
-  // }
-
   /** Send a command to RaceTracker WRITE_CHARACTERISTIC */
   /*  cmd: raw command to send to RaceTracker */
   /*  deviceId: id of the RaceTracker to send to */
@@ -296,6 +289,53 @@ export class TbsRt {
         )
       )
       .catch(error => cb({ error: error }));
+  }
+
+  registerListener(deviceId) {
+    console.log("REGISTER LISTENER =================================================")
+    window.ble.startNotification(deviceId, this._config.racetracker_service, this._config.read, data => {
+      console.log('-- listener callback --');
+      console.log(this.bytesToStr(data));
+    });
+  }
+
+  startRaceNotifications(cb, request) {
+    console.log("----- startRaceNotifications -----")
+    window.ble.startNotification(request.deviceId, this._config.racetracker_service, this._config.read, data => {
+      console.log('-- listener callback --');
+
+      // console.log(this.bytesToStr(data));
+      this.prepareResponse('getRaceUpdate', data).then(response => {
+        if (response.startsWith('STARTED')) {
+          // occurs when in flyovermode and the first pilot passes the gate
+          cb({
+            start: true
+          });
+        }
+        if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
+          let arr = response.split(RE_RACEUPDATE);
+          // there are 2 different responses depending on a single racer or more
+          if (arr.length === 4) {
+            cb({
+              racer: 1,
+              lap: Number(arr[1]),
+              lapTime: arr[2],
+              totalTime: arr[3].match(RE_NUMBER)[0],
+              heatId: request.heatId
+            });
+          } else if (arr.length === 5) {
+            cb({
+              racer: Number(arr[1]),
+              lap: Number(arr[2]),
+              lapTime: arr[3],
+              totalTime: arr[4].match(RE_NUMBER)[0],
+              heatId: request.heatId
+            });
+          }
+        }
+      }, console.log("error on LISTENER callback"))
+
+    });
   }
 
   /** Get the latest lap update of an active race heat */
