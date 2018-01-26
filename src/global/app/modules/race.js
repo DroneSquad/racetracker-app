@@ -301,7 +301,7 @@ export const stopRaceNotifications = (request: object) => {
   };
 };
 
-export const getRaceUpdate = (request: object) => {
+/*export const getRaceUpdate = (request: object) => {
   return dispatch => {
     tbs.readRaceUpdate(response => {
       if (response.start) {
@@ -324,7 +324,7 @@ export const getRaceUpdate = (request: object) => {
       }
     }, request);
   };
-};
+};*/
 
 export const getMissingLaps = (request: array) => {
   return dispatch => {

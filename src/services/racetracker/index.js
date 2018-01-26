@@ -291,20 +291,10 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  registerListener(deviceId) {
-    console.log("REGISTER LISTENER =================================================")
-    window.ble.startNotification(deviceId, this._config.racetracker_service, this._config.read, data => {
-      console.log('-- listener callback --');
-      console.log(this.bytesToStr(data));
-    });
-  }
-
   startRaceNotifications(cb, request) {
     console.log("----- startRaceNotifications -----")
     window.ble.startNotification(request.deviceId, this._config.racetracker_service, this._config.read, data => {
       console.log('-- listener callback --');
-
-      // console.log(this.bytesToStr(data));
       this.prepareResponse('getRaceUpdate', data).then(response => {
         if (response.startsWith('STARTED')) {
           // occurs when in flyovermode and the first pilot passes the gate
@@ -317,38 +307,34 @@ export class TbsRt {
           // there are 2 different responses depending on a single racer or more
           if (arr.length === 4) {
             if (Number(arr[1])) {
-            cb({
-              racer: 1,
-              lap: Number(arr[1]),
-              lapTime: arr[2],
-              totalTime: arr[3].match(RE_NUMBER)[0],
-              heatId: request.heatId
-            });
-          }
+              cb({
+                racer: 1,
+                lap: Number(arr[1]),
+                lapTime: arr[2],
+                totalTime: arr[3].match(RE_NUMBER)[0],
+                heatId: request.heatId
+              });
+            }
           } else if (arr.length === 5) {
             if (Number(arr[2])) {
-            cb({
-              racer: Number(arr[1]),
-              lap: Number(arr[2]),
-              lapTime: arr[3],
-              totalTime: arr[4].match(RE_NUMBER)[0],
-              heatId: request.heatId
-            });
-          }
+              cb({
+                racer: Number(arr[1]),
+                lap: Number(arr[2]),
+                lapTime: arr[3],
+                totalTime: arr[4].match(RE_NUMBER)[0],
+                heatId: request.heatId
+              });
+            }
           }
         }
-      }, console.log("error on LISTENER callback"))
-
+      })
     });
   }
 
   stopRaceNotifications(cb, request) {
-    console.log("TBS stopRaceNotifications")
-    console.log(request)
     window.ble.stopNotification(request.id, this._config.racetracker_service, this._config.read, result => {
-      console.log("...... stopRaceNotifications ....... ")
+      console.log("...... stopRaceNotifications .......")
       console.log(result);
-    // ble.stopNotification(device_id, service_uuid, characteristic_uuid, success, failure);
     });
   }
 
