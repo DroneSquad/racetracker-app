@@ -1,7 +1,7 @@
 // @flow
 import { connect } from 'react-redux';
 
-import { setIsValid, setIsActive, getActiveHeat, getRaceUpdate, startRaceNotifications, getActiveTracker,
+import { setIsValid, setIsActive, getActiveHeat, getRaceUpdate, startRaceNotifications, stopRaceNotifications, getActiveTracker,
          getActiveLaps, getMissingLaps, updateHeatChannels, setStopHeat, setRaceError } from '../modules/race';
 
 import RaceManager from '../components/RaceManager';
@@ -26,6 +26,8 @@ const mapDispatchToProps = (dispatch: Function) => ({
   setIsValid: boolean => dispatch(setIsValid(boolean)),
   // getRaceUpdate: object => dispatch(getRaceUpdate(object)),
   startRaceNotifications: object =>  dispatch(startRaceNotifications(object)),
+  stopRaceNotifications: object =>  dispatch(stopRaceNotifications(object)),
+
   getMissingLaps: array => dispatch(getMissingLaps(array)),
   setHeatChannels: object => dispatch(updateHeatChannels(object)),
   forceStopHeat: string => dispatch(setStopHeat(string)),

@@ -54,8 +54,11 @@ export default class RaceManager extends React.PureComponent {
       }
       // stop race update interval query
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-        console.log("RaceManager-stopIntervalQuery")
-        this.stopIntervalQuery();
+        // console.log("RaceManager-stopIntervalQuery")
+        // this.stopIntervalQuery();
+        console.log("RaceManager-stopRaceNotif")
+        this.stopRaceNotif();
+
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
           console.log("RaceManager-getMissingLaps")
@@ -79,6 +82,9 @@ export default class RaceManager extends React.PureComponent {
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
           console.log("RaceManager-activeRace-Reconnected")
+          // console.log("RaceManager-startRaceNotif NUMBER 2")
+          // this.startRaceNotif();
+
           // TODO: we could/should run a check to get the mode of the tracker, and perhaps fetch missing laps
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
@@ -116,6 +122,14 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id
     };
     this.props.startRaceNotifications(r);
+  }
+
+  stopRaceNotif = () => {
+    let r = {
+      heatId: this.props.activeHeat.id,
+      deviceId: this.props.activeTracker.id
+    };
+    this.props.stopRaceNotifications(r);
   }
 
   startIntervalQuery = () => {

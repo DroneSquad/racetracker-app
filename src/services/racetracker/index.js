@@ -338,6 +338,14 @@ export class TbsRt {
     });
   }
 
+  stopRaceNotifications(cb, request) {
+    window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
+      console.log("stopRaceNotifications")
+      console.log(result);
+    // ble.stopNotification(device_id, service_uuid, characteristic_uuid, success, failure);
+    });
+  }
+
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
     console.log("----- readRaceUpdate -----")

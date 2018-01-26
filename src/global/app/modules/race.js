@@ -291,6 +291,15 @@ export const startRaceNotifications = (request: object) => {
   };
 };
 
+export const stopRaceNotifications = (request: object) => {
+  return dispatch => {
+    tbs.stopRaceNotifications(response => {
+      console.log("-- stopRaceNotifications --")
+      console.log(response)
+    }, request);
+  };
+};
+
 export const getRaceUpdate = (request: object) => {
   return dispatch => {
     tbs.readRaceUpdate(response => {
