@@ -170,8 +170,11 @@ export const connectTracker = (request: Object) => {
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         // successful device connection. this is long running, on error it fires below
-        dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
+        dispatch(setConnected(response.device));
+        console.log("=== readActiveMode  ===")
+        console.log(response.device.id)
+
         if (request.getChannels) {
           dispatch(readRacerChannels(response.device.id));
         }
@@ -353,10 +356,14 @@ export const disconnectTracker = (deviceId: string) => {
 /** get the current mode of a racetracker by device id */
 export const readActiveMode = (deviceId: string) => {
   return dispatch => {
+    console.log("readActiveMode tbs called")
     tbs.readActiveMode(response => {
       if (response.error) {
+        console.log("#####################ERRRRRR")
         console.log(response.error); // TODO: log the error properly to device
       } else {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!readActiveMode-Result==")
+        console.log(response);
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);
@@ -746,6 +753,8 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
+    console.log("ACTIVE_MODE SET HERE")
+    console.log(action.payload.activeMode)
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId

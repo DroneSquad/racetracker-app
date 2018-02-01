@@ -80,32 +80,31 @@ export default class RaceManager extends React.PureComponent {
         // if a heat is running, then a device has just now recovered from a lost connection
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
+          console.log(":::::::::::::::::::::::: DATA RECONNECT ::::")
           let mode = this.props.activeTracker.activeMode;
-          console.log("ActiveTracker.activeMode")
           console.log(mode)
           if (this.props.activeHeat.isActive) {
             console.log("ActiveHeat-isActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              console.log("RT IS IN RACE MODE - restart notifications")
-              this.startRaceNotifications();
+              console.log("RT IN RACE MODE - restart notifications")
+                this.startRaceNotifications();
             } else {
-              console.log("RT is not in RACE MODE - update redux");
-              console.log(this.props.activeHeat.id)
+              console.log("RT NOT IN RACE MODE - update redux");
               this.props.forceStopHeat(this.props.activeHeat.id)
             }
+
           } else {
-            console.log("ActiveHeat-isNOTActive")
+            console.log("ActiveHeat-notActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              console.log("RT IS IN RACE MODE - update tracker mode to idle")
+              console.log("*RT IN RACE MODE - update RT to idle")
               let r = {
                 heatId: this.props.activeHeat.id,
                 deviceId: this.props.activeTracker.id
               };
               this.props.setTrackerIdle(r);
-              console.log("after")
             }
             else {
-              console.log("rt is already idle - no need to do anything")
+              console.log("*RT NOT IN RACE MODE - do nothing")
             }
           }
           // TODO: we could/should run a check to get the mode of the tracker, and perhaps fetch missing laps
