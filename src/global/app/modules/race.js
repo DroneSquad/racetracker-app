@@ -16,7 +16,6 @@ import {
 
 /** defaults */
 const RACEMODE_DEFAULT = 'shotgun'; // flyby
-const QUERY_INTERVAL_DEFAULT = 1;
 
 /** types */
 export const RACE_ERROR = 'RACE_ERROR';
@@ -32,8 +31,9 @@ export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
 export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
-/** error const for RaceManager */
+/** error constants for the RaceManager */
 export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'  // attempt to stop heat with no race tracker connected
+export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no race tracker connected
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -69,11 +69,6 @@ export const setIsActive = (request: boolean) => ({
 
 export const newRace = (request: object) => ({
   type: NEW_RACE,
-  payload: request
-});
-
-export const setQueryInterval = (request: string) => ({
-  type: SET_QUERY_INTERVAL,
   payload: request
 });
 
@@ -154,15 +149,15 @@ export const createRace = (request: object) => {
   };
 };
 
-// TODO:
+// TODO: validate the state of a race left running from a previous session on startup
 export const validateRace = (request: object) => {
   return dispatch => {
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
     /** Validate that the device exists on the internal bluetooth scan list */
-/*validateTrackers = () => {
-  if (!this.props.isBtScanning) {
+    /*validateTrackers = () => {
+    if (!this.props.isBtScanning) {
     let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
     this.props.validateTrackers(aTracker); */
   };
@@ -204,10 +199,15 @@ export const startHeat = (request: object, sayGo: boolean) => {
 export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
+    console.log("MODULE-RACE-STOPHEAT->calling service now")
     tbs.stopHeat(response => {
       if (response.error) {  // no tracker connected (most likely)
+        console.log("MODULE-RACE-ERROR-STOPPING HEAT")
+        console.log(response)
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       } else {  // racetracker successfully halted heat
+        console.log("MODULE-RACE-SUCCESS-STOPPING HEAT")
+        console.log(response)
         dispatch(setStopHeat(response.heatId));
         dispatch(readActiveMode(response.deviceId));
       }
@@ -292,7 +292,6 @@ export const startRaceNotifications = (request: object) => {
 };
 
 export const stopRaceNotifications = (request: object) => {
-  console.log("race.stopraceNotifications")
   return dispatch => {
     tbs.stopRaceNotifications(response => {
       console.log("-- stopRaceNotifications --")
@@ -300,31 +299,6 @@ export const stopRaceNotifications = (request: object) => {
     }, request);
   };
 };
-
-/*export const getRaceUpdate = (request: object) => {
-  return dispatch => {
-    tbs.readRaceUpdate(response => {
-      if (response.start) {
-        // accounts for flyover start
-        dispatch(announceFlyover());
-      }
-      if (!response.error && !response.start) {
-        console.log("**** getRaceUpdate-Result ****")
-        console.log(response)
-        console.log("******************************")
-        dispatch(setLap(response));
-        dispatch(announceLapsFromResponse(response));
-      }
-      // TODO: should a flag be set here for on reconnect, to fetch missing??
-      // or just wait until the race ends?
-      if (response.error) {
-        console.log("**** getRaceUpdate-Error *****")
-        console.log(response)
-        console.log("******************************")
-      }
-    }, request);
-  };
-};*/
 
 export const getMissingLaps = (request: array) => {
   return dispatch => {
@@ -334,7 +308,7 @@ export const getMissingLaps = (request: array) => {
           console.log(response.error); // TODO: log the error properly to device
         } else {
           if (slot.laps.length !== response.totalLaps) {
-            console.log("-- getMissingLaps --")
+            // console.log("-- getMissingLaps --")
             let arr = _.range(1, response.totalLaps + 1);
             let awol =_.difference(arr, slot.laps);
             dispatch(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
@@ -342,13 +316,6 @@ export const getMissingLaps = (request: array) => {
         }
       }, slot);
     }
-
-    /* tbs.stopRaceNotifications(result => {
-      console.log("== ++ == stopRaceNotifications == ++ ==")
-      console.log(response.deviceId)
-      console.log(result)
-    }, response.deviceId); */
-
   };
 };
 
@@ -375,7 +342,6 @@ const initialState = {
   trackerId: null,
   activeHeatId: null,
   raceMode: RACEMODE_DEFAULT,
-  queryInterval: QUERY_INTERVAL_DEFAULT,
   isActive: false,
   isValid: false,
   heats: [],
@@ -408,11 +374,6 @@ export default function(state = initialState, action: Action) {
         ...state,
         raceMode: action.payload
       };
-    case SET_QUERY_INTERVAL:
-      return {
-        ...state,
-        queryInterval: action.payload
-      };
     case NEW_HEAT:
       return {
         ...state,
@@ -427,8 +388,6 @@ export default function(state = initialState, action: Action) {
         laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
       };
     case SET_LAP:
-      // TODO: this is called on each interval query, which then calls render() A LOT, investigate performance improvements
-      console.log("==== SET_LAP ====")
       if (_.get(action.payload, 'lap') !== state.lastLapId) { // make sure its unique right now
         return {
           ...state,
@@ -442,7 +401,6 @@ export default function(state = initialState, action: Action) {
       } else {
         return { ...state };
       }
-
     case SENT_START_STOP_HEAT:
       return {
         ...state,
@@ -466,6 +424,8 @@ export default function(state = initialState, action: Action) {
         error: ''
       };
     case STOP_HEAT: // gets called when we got the response from the tracker
+      console.log("STOP_HEAT REDUX")
+      console.log(action.payload)
       return {
         ...state,
         sentCommand: false,

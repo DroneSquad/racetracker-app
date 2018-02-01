@@ -11,6 +11,12 @@ import { setError, setIsScanning } from './bluetooth';
 const ATTEMPT_RECOVERY = true;
 const RECOVERY_ATTEMPTS = 8;
 
+/** racetracker active mode constants */
+export const RT_MODE_IDLE = 'idle';
+export const RT_MODE_SHOTGUN = 'shotgun';
+export const RT_MODE_FLYBY = 'flyby';
+export const RT_MODE_GATECOLOR = 'gateColor';
+
 /** types */
 export const RT_DISCOVER = 'RT_DISCOVER';
 export const RT_REMOVE = 'RT_REMOVE';
@@ -162,9 +168,8 @@ export const connectTracker = (request: Object) => {
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
-        // tbs.registerListener(response.device.id)
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
-        // successful device connection, long running, on error fires below
+        // successful device connection. this is long running, on error it fires below
         dispatch(setConnected(response.device));
         dispatch(readActiveMode(response.device.id));
         if (request.getChannels) {
@@ -174,8 +179,7 @@ export const connectTracker = (request: Object) => {
         // the device has either failed connection or disconnected on error
         console.log("++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++")
         ble.isEnabled(result => {
-          if (result) {
-            // if bluetooth was deactivated, dont bother trying to reconnect
+          if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
             dispatch(setReconnecting(response.device.id));
           }
         });
@@ -265,7 +269,7 @@ export const validateTrackerPromise = (request: object) => {
           // indicates that the tracker is NOT currently available to the bluetooth library
           resolve(request); // return the object and populate the search array
         } else {
-          // this should never happen
+          // this should never ever evar happen
           console.log(err); // TODO: proper error handling
           reject();
         }

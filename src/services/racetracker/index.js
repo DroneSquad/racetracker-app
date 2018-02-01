@@ -267,10 +267,8 @@ export class TbsRt {
       .catch(error => cb({ error: error }));
   }
 
-  /** Get the laptime of a lap by a specific racer */
+  /** Get the laptime of a lap for a specific racer */
   readLapTime(cb, request) {
-    console.log("readLapTime")
-    console.log(request)
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -278,9 +276,8 @@ export class TbsRt {
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
               response => {
-              console.log("THEFINAL")
-              console.log(response)
               // TODO: calculate the totalTime
+              console.log("TODO: need to calculate the totalTime of Lap here?")
               cb({ racer: Number(request.racer), lap: Number(request.lap),
                    lapTime: response, totalTime: "", heatId: request.heatId })
               }
@@ -292,19 +289,15 @@ export class TbsRt {
   }
 
   startRaceNotifications(cb, request) {
-    console.log("----- startRaceNotifications -----")
     window.ble.startNotification(request.deviceId, this._config.racetracker_service, this._config.read, data => {
-      console.log('-- listener callback --');
       this.prepareResponse('getRaceUpdate', data).then(response => {
+        // occurs when in flyovermode and first pilot passes the start gate
         if (response.startsWith('STARTED')) {
-          // occurs when in flyovermode and the first pilot passes the gate
-          cb({
-            start: true
-          });
+          cb({ start: true });
         }
         if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
           let arr = response.split(RE_RACEUPDATE);
-          // there are 2 different responses depending on a single racer or more
+          // there are 2 different responses depends if there is a single racer or multiple racers
           if (arr.length === 4) {
             if (Number(arr[1])) {
               cb({
@@ -333,14 +326,13 @@ export class TbsRt {
 
   stopRaceNotifications(cb, request) {
     window.ble.stopNotification(request.id, this._config.racetracker_service, this._config.read, result => {
-      console.log("...... stopRaceNotifications .......")
-      console.log(result);
+      // console.log("...... SERVICE-RACETRACKER - stopRaceNotifications .......")
+      // console.log(result);
     });
   }
 
   /** Get the latest lap update of an active race heat */
   readRaceUpdate(cb, request) {
-    console.log("----- readRaceUpdate -----")
     this.readCommand(request.deviceId)
       .then(result =>
         this.prepareResponse('getRaceUpdate', result).then(response => {

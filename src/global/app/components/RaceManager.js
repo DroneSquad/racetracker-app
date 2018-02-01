@@ -4,23 +4,26 @@ import { Dialog, FlatButton } from 'material-ui';
 
 // import race error lookup codes
 import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
+// import racetracker mode constants
+import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
 export default class RaceManager extends React.PureComponent {
   props: {
     isActive: boolean,
     isValid: boolean,
-    queryInterval: string,
     activeHeat: Object,
     activeTracker: Object,
     activeLaps: Array<Object>,
     raceError: string,
     setIsValid: Function,
     setIsActive: Function,
-    getRaceUpdate: Function,
+    startRaceNotifications: Function,
+    stopRaceNotifications: Function,
     getMissingLaps: Function,
     setHeatChannels: Function,
     forceStopHeat: Function,
-    clearRaceError: Function
+    clearRaceError: Function,
+    setTrackerIdle: Function
   };
 
   constructor(props) {
@@ -38,56 +41,73 @@ export default class RaceManager extends React.PureComponent {
   }
 
   componentDidMount() {
+    // on initial startup set any saved race data to inactive and force revalidation
     this.props.setIsActive(false);
-    this.props.setIsValid(false);  // this happens on app startup, set any previous settings to invalid and recheck
+    this.props.setIsValid(false);
   }
 
   componentWillReceiveProps(nextProps) {
     // verify there is an active race and it has been validated
     if (nextProps.isActive && nextProps.isValid) {
-      // start race update interval query
+      // start race update notifications
       if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-        // console.log("RaceManager-startIntervalQuery")
-        // this.startIntervalQuery();
-        console.log("RaceManager-startRaceNotif")
-        this.startRaceNotif();
+        console.log("RaceManager-startRaceNotifications")
+        this.startRaceNotifications();
       }
-      // stop race update interval query
+      // stop race update notifications
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-        // console.log("RaceManager-stopIntervalQuery")
-        // this.stopIntervalQuery();
-
-        console.log("RaceManager-stopRaceNotif")
-        this.stopRaceNotif();
-
+        console.log("RaceManager-stopRaceNotifications")
+        this.stopRaceNotifications();
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
           console.log("RaceManager-getMissingLaps")
           this.getMissingLaps();
         }
-
-
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
-        console.log("RaceManager-configDialog()")
+        console.log("RaceManager-configErrorDialog()")
         this.configDialog(nextProps.raceError);
       }
-      // verify an activeTracker is available for the following checks
+      // verify an activeTracker is available for the remaining checks
       if (this.props.activeTracker) {
-        // if the activeTrackers racerchannels change then update the active heat, if the heat isPending
+        // if the activeTrackers racerchannels change then update the active heat, but only if the heat 'isPending'
         if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
         {
           console.log("RaceManager-setHeatChannels")
           this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
         }
-        // if a heat is running, the device has just recovered from a lost connection
-        if (this.props.activeHeat.isActive &&nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
+        // if a heat is running, then a device has just now recovered from a lost connection
+        if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
-          console.log("---------------------- RaceManager-activeRace-Reconnected =======================================>")
-          // console.log("RaceManager-startRaceNotif NUMBER 2")
-          this.startRaceNotif();
-
+          let mode = this.props.activeTracker.activeMode;
+          console.log("ActiveTracker.activeMode")
+          console.log(mode)
+          if (this.props.activeHeat.isActive) {
+            console.log("ActiveHeat-isActive")
+            if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
+              console.log("RT IS IN RACE MODE - restart notifications")
+              this.startRaceNotifications();
+            } else {
+              console.log("RT is not in RACE MODE - update redux");
+              console.log(this.props.activeHeat.id)
+              this.props.forceStopHeat(this.props.activeHeat.id)
+            }
+          } else {
+            console.log("ActiveHeat-isNOTActive")
+            if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
+              console.log("RT IS IN RACE MODE - update tracker mode to idle")
+              let r = {
+                heatId: this.props.activeHeat.id,
+                deviceId: this.props.activeTracker.id
+              };
+              this.props.setTrackerIdle(r);
+              console.log("after")
+            }
+            else {
+              console.log("rt is already idle - no need to do anything")
+            }
+          }
           // TODO: we could/should run a check to get the mode of the tracker, and perhaps fetch missing laps
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
@@ -119,43 +139,21 @@ export default class RaceManager extends React.PureComponent {
     this.props.getMissingLaps(cl);
   }
 
-  startRaceNotif = () => {
+  startRaceNotifications = () => {
     let r = {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
-
     this.props.startRaceNotifications(r);
   }
 
-  stopRaceNotif = () => {
+  stopRaceNotifications = () => {
     let r = {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
-    console.log("this.props.stopRaceNotifications")
     this.props.stopRaceNotifications(r);
   }
-
-  startIntervalQuery = () => {
-    let interval = this.props.queryInterval * 1000;
-    let timer = setInterval(() => {
-      this.intervalQuery();
-    }, interval);
-    this.setState({ timer });
-  };
-
-  intervalQuery = () => {
-    let r = {
-      heatId: this.props.activeHeat.id,
-      deviceId: this.props.activeTracker.id
-    };
-    this.props.getRaceUpdate(r);
-  };
-
-  stopIntervalQuery = () => {
-    clearInterval(this.state.timer);
-  };
 
   configDialog(errCode) {
     let title = '';

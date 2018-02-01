@@ -9,7 +9,7 @@ import { connect } from '../../../store';
 export default class extends Container {
   static mapStateToProps = (states, props) => ({
     // internal data
-    _: console.log(states.race),
+    // _: console.log(states.race),
     heats: _.filter(_.get(states, 'race.heats'), 'isComplete')
   });
 
