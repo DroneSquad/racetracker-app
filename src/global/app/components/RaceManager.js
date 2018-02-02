@@ -80,7 +80,7 @@ export default class RaceManager extends React.PureComponent {
         // if a heat is running, then a device has just now recovered from a lost connection
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
-          console.log(":::::::::::::: racetracker reconnected :::::::::::::::::::")
+          console.log("=============:::::::::::::: racetracker reconnected :::::::::::::::::::===============")
           let mode = this.props.activeTracker.activeMode;
           console.log(mode)
           if (this.props.activeHeat.isActive) {
@@ -110,7 +110,7 @@ export default class RaceManager extends React.PureComponent {
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
         if (!nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
-          console.log("RaceManager-Deactive/Unvalidate-ActiveDisconnect")
+          console.log("?????????????????????????????????? RaceManager-Deactive/Unvalidate-ActiveDisconnect")
           this.props.setIsActive(false);
           this.props.setIsValid(false);
         }
@@ -134,6 +134,8 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id,
       heatId: this.props.activeHeat.id
     }));
+    console.log("RM-getMissingLaps - Data")
+    console.log(cl)
     this.props.getMissingLaps(cl);
   }
 

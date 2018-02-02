@@ -67,7 +67,7 @@ export class TbsRt {
   /*  key: the command lookup value in config.json
   /*  options: any additional parameters needed for the commands */
   prepareCommand(key, options) {
-    console.log("** TBS - prepareCommand **")
+    // console.log("** TBS - prepareCommand **")
     return new Promise((resolve, reject) => {
       let cmd = this._config.commands[key];
       switch (key) {
@@ -106,7 +106,7 @@ export class TbsRt {
   /*  key: the command lookup value in config.json
   /*  result: raw text response from RaceTracker */
   prepareResponse(key, result) {
-    console.log("** TBS - prepareResponse **")
+    // console.log("** TBS - prepareResponse **")
     return new Promise((resolve, reject) => {
       let response = this.bytesToStr(result);
       switch (key) {
@@ -154,7 +154,7 @@ export class TbsRt {
   /*  cmd: raw command to send to RaceTracker */
   /*  deviceId: id of the RaceTracker to send to */
   writeCommand(cmd, deviceId) {
-    console.log("** TBS - writeCommand **")
+    // console.log("** TBS - writeCommand **")
     return new Promise((resolve, reject) => {
       window.ble.write(
         deviceId,
@@ -170,7 +170,7 @@ export class TbsRt {
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
   /*  deviceId: id of the racetracker to read result from */
   readCommand(deviceId) {
-    console.log("** TBS - readCommand **")
+    // console.log("** TBS - readCommand **")
     return new Promise((resolve, reject) => {
       window.ble.read(
         deviceId,
@@ -252,6 +252,10 @@ export class TbsRt {
 
   /** Fetch the total amount of laps a racer has completed */
   readTotalLaps(cb, request) {
+    console.log("TBS - readTotalLaps")
+    console.log("------------------------")
+    console.log(request)
+    console.log("------------------------")
     let cmdStr = 'getTotalLaps';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -270,6 +274,8 @@ export class TbsRt {
 
   /** Get the laptime of a lap for a specific racer */
   readLapTime(cb, request) {
+    console.log("TBS - readLapTime")
+    console.log(request)
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -328,7 +334,8 @@ export class TbsRt {
 
   stopRaceNotifications(cb, request) {
     console.log("** TBS - stopRaceNotifications **")
-    window.ble.stopNotification(request.id, this._config.racetracker_service, this._config.read, result => {
+    console.log(request)
+    window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
       console.log("stopRaceNotifications - SUCCESS")
       console.log(result);
     }, error => {

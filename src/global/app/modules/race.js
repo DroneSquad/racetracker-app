@@ -207,8 +207,16 @@ export const stopHeat = (request: object) => {
       if (response.error) {  // no tracker connected (most likely)
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       } else {  // racetracker successfully halted heat
+
         dispatch(setStopHeat(response.heatId));
-        dispatch(readActiveMode(response.deviceId));
+
+
+
+
+                dispatch(readActiveMode(response.deviceId));
+
+
+
       }
     }, request);
   };
@@ -298,16 +306,28 @@ export const stopRaceNotifications = (request: object) => {
 };
 
 export const getMissingLaps = (request: array) => {
+  console.log("RACE - getMissingLaps")
   return dispatch => {
     for (let slot of request) {
+      console.log("RACE FOR LOOP")
+      console.log(slot)
       tbs.readTotalLaps(response => {
+        console.log("tbs.readTotalLaps - response")
+        console.log(response)
         if (response.error) {
+          console.log("race - getMissingLaps - ERROR")
           console.log(response.error); // TODO: log the error properly to device
         } else {
+            console.log("race - getMissingLaps - SUCCEED")
+          console.log(slot.laps.length)
+          console.log(response.totalLaps)
           if (slot.laps.length !== response.totalLaps) {
-            // console.log("-- getMissingLaps --")
+            console.log("-- getMissingLaps --")
             let arr = _.range(1, response.totalLaps + 1);
+            console.log(arr)
             let awol =_.difference(arr, slot.laps);
+            console.log(awol)
+            console.log(response)
             dispatch(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
           }
         }
@@ -317,12 +337,17 @@ export const getMissingLaps = (request: array) => {
 };
 
 export const setMissingLaps = (request: object) => {
+  console.log("RACE - setMissingLaps")
+  console.log(request)
   return dispatch => {
     for (let lap of request.laps) {
+      console.log(lap)
       tbs.readLapTime(response => {
         if (response.error) {
+          console.log("RACE-readLapTime- Error")
           console.log(response.error); // TODO: log the error properly to device
         } else {
+          console.log("RACE-readLapTime- Success")
           dispatch(setLap(response));
         }
       }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });

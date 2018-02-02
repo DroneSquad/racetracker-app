@@ -22,6 +22,7 @@ export default class Stopwatch extends Component {
     if (this.props.raceMode === 'flyby') {
       this.props.startFlyoverHeat(r);
     } else {
+      console.log("Stopwatch - startHeat")
       this.props.startShotgunHeat(r);
     }
   };
@@ -31,6 +32,7 @@ export default class Stopwatch extends Component {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
+    console.log("Stopwatch - stopHeat")
     this.props.stopHeat(r);
   };
 
@@ -41,7 +43,6 @@ export default class Stopwatch extends Component {
       currentHeat: this.props.activeHeat
     };
     console.log("Stopwatch - createHeat")
-    console.log(r)
     this.props.createHeat(r);
   };
 

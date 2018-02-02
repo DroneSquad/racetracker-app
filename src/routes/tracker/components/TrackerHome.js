@@ -23,6 +23,7 @@ export default class extends Component {
 
   componentDidMount() {
     if (this.props.isBtEnabled) {
+      console.log("TrackerHome- componentDidMount -- initSearchOrScan")
       this.initSearchOrScan();
     }
   }
@@ -30,6 +31,7 @@ export default class extends Component {
   componentWillReceiveProps(nextProps) {
     // bluetooth was just enabled, lets validate any trackers from previous sessions
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
+      console.log("TrackerHome- componentWillReceiveProps - initSearchOrScan")
       this.initSearchOrScan();
     }
   }

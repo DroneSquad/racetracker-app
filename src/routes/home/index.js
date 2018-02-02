@@ -8,22 +8,17 @@ import { AppBar, List, ListItem, TextField } from 'material-ui';
 import { sendVoice } from '../../global/voice/modules/voice';
 import { logoutRequest } from '../../routes/login/modules/login';
 import { announceLapsFromResponse } from '../../routes/fly/modules/announcer';
-// import { setQueryInterval } from '../../global/app/modules/race';
 
 import { connect } from '../../store';
 
 /** This component is used to test things in the app */
 @connect()
 export default class Home extends React.Component {
-  componentWillMount() {
-    // this.setState({ interval: this.props.raceQueryInterval });
-  }
 
   state = {};
 
   static mapStateToProps = states => ({
     token: states.auth.token,
-    // raceQueryInterval: states.race.queryInterval
   });
 
   static mapDispatchToProps = dispatch => ({
@@ -41,7 +36,6 @@ export default class Home extends React.Component {
           heat: { id: uuid.v4() }
         })
       ),
-    // setInterval: value => dispatch(setQueryInterval(value))
   });
 
   /** Listen for the return key and trigger the announcer*/
