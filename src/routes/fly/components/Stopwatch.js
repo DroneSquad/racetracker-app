@@ -40,6 +40,8 @@ export default class Stopwatch extends Component {
       activeChannels: this.props.activeTracker.racerChannels,
       currentHeat: this.props.activeHeat
     };
+    console.log("Stopwatch - createHeat")
+    console.log(r)
     this.props.createHeat(r);
   };
 

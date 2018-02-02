@@ -164,6 +164,7 @@ export const validateRace = (request: object) => {
 };
 
 export const startShotgunHeat = (request: object) => {
+  console.log("** RACE - startShotgunHeat **")
   request.raceMode = "shotgun"
   return dispatch => {
     dispatch(sentCommand());
@@ -176,6 +177,7 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const startFlyoverHeat = (request: object) => {
+  console.log("** RACE - startFlyoverHeat **")
   request.raceMode = "flyover"
   return dispatch => {
     dispatch(sentCommand());
@@ -185,6 +187,7 @@ export const startFlyoverHeat = (request: object) => {
 };
 
 export const startHeat = (request: object, sayGo: boolean) => {
+  console.log("** RACE - startHeat **")
   return dispatch => {
     tbs.startHeat(response => {
       dispatch(setStartHeat(response.heatId));
@@ -197,17 +200,13 @@ export const startHeat = (request: object, sayGo: boolean) => {
 };
 
 export const stopHeat = (request: object) => {
+  console.log("** RACE - stopHeat **")
   return dispatch => {
     dispatch(sentCommand());
-    console.log("MODULE-RACE-STOPHEAT->calling service now")
     tbs.stopHeat(response => {
       if (response.error) {  // no tracker connected (most likely)
-        console.log("MODULE-RACE-ERROR-STOPPING HEAT")
-        console.log(response)
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       } else {  // racetracker successfully halted heat
-        console.log("MODULE-RACE-SUCCESS-STOPPING HEAT")
-        console.log(response)
         dispatch(setStopHeat(response.heatId));
         dispatch(readActiveMode(response.deviceId));
       }
@@ -216,6 +215,7 @@ export const stopHeat = (request: object) => {
 };
 
 export const createHeat = (request: object) => {
+  console.log("** RACE - createHeat **")
   return dispatch => {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
@@ -267,6 +267,7 @@ export const updateHeatChannels = (request: object) => {
 };
 
 export const startRaceNotifications = (request: object) => {
+  console.log("** RACE - startRaceNotifications **")
   return dispatch => {
     tbs.startRaceNotifications(response => {
       if (response.start) {
@@ -274,27 +275,23 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
-        console.log("**** getRaceUpdate-Result ****")
-        console.log(response)
-        console.log("******************************")
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
       // TODO: should a flag be set here for on reconnect, to fetch missing??
       // or just wait until the race ends?
       if (response.error) {
-        console.log("**** getRaceUpdate-Error *****")
-        console.log(response)
-        console.log("******************************")
+        console.log(response.error)  // TODO: log a proper error
       }
     }, request);
   };
 };
 
 export const stopRaceNotifications = (request: object) => {
+  console.log("** RACE - stopRaceNotifications **")
   return dispatch => {
     tbs.stopRaceNotifications(response => {
-      console.log("-- stopRaceNotifications --")
+      console.log("-- stopRaceNotifications result --")
       console.log(response)
     }, request);
   };
@@ -424,8 +421,6 @@ export default function(state = initialState, action: Action) {
         error: ''
       };
     case STOP_HEAT: // gets called when we got the response from the tracker
-      console.log("STOP_HEAT REDUX")
-      console.log(action.payload)
       return {
         ...state,
         sentCommand: false,

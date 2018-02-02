@@ -51,22 +51,22 @@ export default class RaceManager extends React.PureComponent {
     if (nextProps.isActive && nextProps.isValid) {
       // start race update notifications
       if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-        console.log("RaceManager-startRaceNotifications")
+        console.log("RM - componentWillReceiveProps - STARTNOTIF")
         this.startRaceNotifications();
       }
       // stop race update notifications
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
-        console.log("RaceManager-stopRaceNotifications")
+        console.log("RM - componentWillReceiveProps - STOPNOTIF")
         this.stopRaceNotifications();
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
-          console.log("RaceManager-getMissingLaps")
+          console.log("RM - componentWillReceiveProps - GETMISSEDLAPS")
           this.getMissingLaps();
         }
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
-        console.log("RaceManager-configErrorDialog()")
+        console.log("RM - componentWillReceiveProps - CONFIGDIALOG")
         this.configDialog(nextProps.raceError);
       }
       // verify an activeTracker is available for the remaining checks
@@ -74,13 +74,13 @@ export default class RaceManager extends React.PureComponent {
         // if the activeTrackers racerchannels change then update the active heat, but only if the heat 'isPending'
         if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
         {
-          console.log("RaceManager-setHeatChannels")
+          console.log("RM - componentWillReceiveProps - SETCHANNELS")
           this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
         }
         // if a heat is running, then a device has just now recovered from a lost connection
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
-          console.log(":::::::::::::::::::::::: DATA RECONNECT ::::")
+          console.log(":::::::::::::: racetracker reconnected :::::::::::::::::::")
           let mode = this.props.activeTracker.activeMode;
           console.log(mode)
           if (this.props.activeHeat.isActive) {
@@ -92,7 +92,6 @@ export default class RaceManager extends React.PureComponent {
               console.log("RT NOT IN RACE MODE - update redux");
               this.props.forceStopHeat(this.props.activeHeat.id)
             }
-
           } else {
             console.log("ActiveHeat-notActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
@@ -139,6 +138,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   startRaceNotifications = () => {
+    console.log("RM - startRaceNotifications")
     let r = {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
@@ -147,6 +147,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   stopRaceNotifications = () => {
+    console.log("RM - stopRaceNotifications")
     let r = {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
@@ -155,6 +156,7 @@ export default class RaceManager extends React.PureComponent {
   }
 
   configDialog(errCode) {
+    console.log("RM - configDialog")
     let title = '';
     let message = '';
     let mainAction = '';
@@ -182,6 +184,8 @@ export default class RaceManager extends React.PureComponent {
   }
 
   doCloseEvents = (action: string) => {
+    console.log("RM - doCloseEvent")
+    console.log(action)
     if (action === 'clear_race_error') {
       this.props.clearRaceError();
     }

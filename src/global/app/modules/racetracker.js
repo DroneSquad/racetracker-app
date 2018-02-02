@@ -165,16 +165,15 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (request: Object) => {
+  console.log("** RT - connectTracker **")
   return dispatch => {
     ble.connectDevice(response => {
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         // successful device connection. this is long running, on error it fires below
+        // TODO: HERE IS THE POTENTIAL RACE CONDITION
         dispatch(readActiveMode(response.device.id));
         dispatch(setConnected(response.device));
-        console.log("=== readActiveMode  ===")
-        console.log(response.device.id)
-
         if (request.getChannels) {
           dispatch(readRacerChannels(response.device.id));
         }
@@ -192,6 +191,7 @@ export const connectTracker = (request: Object) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
+  console.log("** RT - startTrackerSearch **")
   let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
@@ -245,6 +245,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
 };
 
 export const isTrackerConnected = (deviceId: string) => {
+  console.log("** RT - isTrackerConnected **")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -253,6 +254,7 @@ export const isTrackerConnected = (deviceId: string) => {
 };
 
 export const validateTrackerPromise = (request: object) => {
+  console.log("** RT - validateTrackerPromise **")
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
@@ -286,6 +288,7 @@ export const validateTrackerPromise = (request: object) => {
 };
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
+  console.log("** RT - validateTrackers **")
   return dispatch => {
     let trackerPromises = [];
     for (let rt of request) {
@@ -315,6 +318,7 @@ export const validateTrackers = (request: array, discoveryScan: boolean = false)
 };
 
 export const discoverTrackers = (request: array) => {
+  console.log("** RT - discoverTrackers **")
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
@@ -342,6 +346,7 @@ export const stopTrackerScan = (request: array = []) => {
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (deviceId: string) => {
+  console.log("** RT - disconnectTracker **")
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
@@ -355,14 +360,14 @@ export const disconnectTracker = (deviceId: string) => {
 
 /** get the current mode of a racetracker by device id */
 export const readActiveMode = (deviceId: string) => {
+  console.log("** RT - readActiveMode **")
   return dispatch => {
-    console.log("readActiveMode tbs called")
     tbs.readActiveMode(response => {
       if (response.error) {
-        console.log("#####################ERRRRRR")
+        console.log("RT - readActiveMode - ERROR")
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!readActiveMode-Result==")
+        console.log("RT - readActiveMode - SUCCESS")
         console.log(response);
         dispatch(setActiveMode(response)); // update the redux value
       }
@@ -753,8 +758,6 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
-    console.log("ACTIVE_MODE SET HERE")
-    console.log(action.payload.activeMode)
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId

@@ -67,6 +67,7 @@ export class TbsRt {
   /*  key: the command lookup value in config.json
   /*  options: any additional parameters needed for the commands */
   prepareCommand(key, options) {
+    console.log("** TBS - prepareCommand **")
     return new Promise((resolve, reject) => {
       let cmd = this._config.commands[key];
       switch (key) {
@@ -105,6 +106,7 @@ export class TbsRt {
   /*  key: the command lookup value in config.json
   /*  result: raw text response from RaceTracker */
   prepareResponse(key, result) {
+    console.log("** TBS - prepareResponse **")
     return new Promise((resolve, reject) => {
       let response = this.bytesToStr(result);
       switch (key) {
@@ -152,6 +154,7 @@ export class TbsRt {
   /*  cmd: raw command to send to RaceTracker */
   /*  deviceId: id of the RaceTracker to send to */
   writeCommand(cmd, deviceId) {
+    console.log("** TBS - writeCommand **")
     return new Promise((resolve, reject) => {
       window.ble.write(
         deviceId,
@@ -167,18 +170,14 @@ export class TbsRt {
   /** Read result of a command sent to a RaceTracker at READ_CHARACTERISTIC */
   /*  deviceId: id of the racetracker to read result from */
   readCommand(deviceId) {
+    console.log("** TBS - readCommand **")
     return new Promise((resolve, reject) => {
       window.ble.read(
         deviceId,
         this._config.racetracker_service,
         this._config.read,
-        data => {
-          resolve(data)
-        },
-        error =>
-        {
-          reject(error)
-        }
+        data => resolve(data),
+        error => reject(error)
       );
     });
   }
@@ -223,6 +222,8 @@ export class TbsRt {
 
   /** Get the active mode of a RaceTracker by device id */
   readActiveMode(cb, deviceId) {
+    console.log("** TBS - readActiveMode **")
+    console.log(deviceId)
     let cmdStr = 'getActiveMode';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -289,6 +290,7 @@ export class TbsRt {
   }
 
   startRaceNotifications(cb, request) {
+    console.log("** TBS - startRaceNotifications **")
     window.ble.startNotification(request.deviceId, this._config.racetracker_service, this._config.read, data => {
       this.prepareResponse('getRaceUpdate', data).then(response => {
         // occurs when in flyovermode and first pilot passes the start gate
@@ -325,9 +327,13 @@ export class TbsRt {
   }
 
   stopRaceNotifications(cb, request) {
+    console.log("** TBS - stopRaceNotifications **")
     window.ble.stopNotification(request.id, this._config.racetracker_service, this._config.read, result => {
-      // console.log("...... SERVICE-RACETRACKER - stopRaceNotifications .......")
-      // console.log(result);
+      console.log("stopRaceNotifications - SUCCESS")
+      console.log(result);
+    }, error => {
+      console.log("stopRaceNotifications - ERROR")
+      console.log(error);
     });
   }
 
@@ -579,6 +585,7 @@ export class TbsRt {
 
   /** End the currently running race heat */
   stopHeat(cb, request) {
+    console.log("** TBS - stopHeat **")
     let cmdStr = 'stopRace';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -595,6 +602,7 @@ export class TbsRt {
 
   /* Start a race heat according to start style, device id, and heat id */
   startHeat(cb, request) {
+    console.log("** TBS - startHeat **")
     let vrxStr = 'activateVrx'; // enables the vrx for race tracking
     let cmdStr = request.raceMode === 'flyby' ? 'startRaceFlyby' : 'startRaceShotgun'; // race start type
     this.prepareCommand(vrxStr, request)

@@ -33,6 +33,7 @@ export default class TrackerManager extends React.PureComponent {
     // this occurs on both startup and on bluetooth toggle off/on
     if (nextProps.isBtEnabled !== this.props.isBtEnabled && nextProps.isBtEnabled) {
       if (this.props.connectedTrackers.length > 0) {
+        console.log("TM - componentWillReceiveProps - VALIDATE")
         this.props.validateTrackers(this.props.connectedTrackers);
       }
     }
@@ -51,6 +52,7 @@ export default class TrackerManager extends React.PureComponent {
         if (d.length > 0) {
           let tracker = _(this.props.connectingTrackers).filter(t => t.id === d[0]).value()[0];
           if (tracker) {
+            console.log("TM - componentDidUpdate - CONNECTING")
             this.configSnackbar(tracker);
           }
         }
@@ -67,6 +69,7 @@ export default class TrackerManager extends React.PureComponent {
         if (d.length > 0) {
           let tracker = _(this.props.reconnectingTrackers).filter(t => t.id === d[0]).value()[0];
           if (tracker) {
+            console.log("TM - componentDidUpdate - RECONNECTING")
             this.configSnackbar(tracker);
           }
         }
@@ -83,6 +86,7 @@ export default class TrackerManager extends React.PureComponent {
         if (d.length > 0) {
           let tracker = _(this.props.connectedTrackers).filter(t => t.id === d[0]).value()[0];
           if (tracker) {
+            console.log("TM - componentDidUpdate - CONNECTED")
             this.configSnackbar(tracker);
           }
         }
