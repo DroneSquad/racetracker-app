@@ -210,12 +210,8 @@ export const stopHeat = (request: object) => {
 
         dispatch(setStopHeat(response.heatId));
 
-
-
-
-                dispatch(readActiveMode(response.deviceId));
-
-
+        // TODO: INVESTIGATE BEST LOCATION FOR THIS CALL
+        dispatch(readActiveMode(response.deviceId));
 
       }
     }, request);
