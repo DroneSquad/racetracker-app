@@ -305,25 +305,20 @@ export const stopRaceNotifications = (request: object) => {
 
 
 
-export const getSlotLapsPromise = (slot: object) => {
-  console.log("*** RACE - getSlotLapsPromise ***")
+export const setMissingLaps = (slot: object) => {
+  console.log("*** RACE - setMissingLaps ***")
   return new Promise((resolve, reject) => {
     tbs.readTotalLaps(response => {
-      console.log("RACE - getSlotLapsPromise - response")
-      console.log(response)
       if (response.error) {
-        console.log("RACE - getSlotLapsPromise - TOTAL FAILURE ERROR")
         console.log(response.error); // TODO: log the error properly to device
         reject();
       } else {
-        console.log("RACE - getSlotLapsPromise - SUCCESS")
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol =_.difference(arr, slot.laps);
-          console.log("RACE - setMissingLapResolved")
           resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
         } else {
-          console.log("else")
+          console.log("getSlotLapsPromie ELSE")
           resolve(null);
           // resolve(null)
         }
@@ -333,14 +328,13 @@ export const getSlotLapsPromise = (slot: object) => {
 };
 
 
-export const setMissingLaps = (request: object) => {
-  console.log("*** RACE - setMissingLaps ***")
+export const setMissingLapTimes = (request: object) => {
+  console.log("*** RACE - setMissingLapTimes ***")
   return new Promise((resolve, reject) => {
 
-  //  for (let lap of request.laps) {
 
       tbs.readLapTime(response => {
-        console.log("RACE - setMissingLaps - RESPONSE")
+        console.log("RACE - setMissingLapTimes - RESPONSE")
         if (response.error) {
           console.log("RACE-readLapTime- Error")
           console.log(response.error); // TODO: log the error properly to device
@@ -351,16 +345,20 @@ export const setMissingLaps = (request: object) => {
           resolve(setLap(response));
         }
       }, request);
-  //  }
+
   })
 };
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
   return dispatch => {
+    let heatId = '';
+    let deviceId = '';
     let slotPromises = [];
     for (let slot of request) {
-      slotPromises.push(getSlotLapsPromise(slot));
+      heatId = slot.heatId;
+      deviceId = slot.deviceId;
+      slotPromises.push(setMissingLaps(slot));
     }
     Promise.all(slotPromises)
       .then(response => {
@@ -368,12 +366,11 @@ export const getMissingLaps = (request: array) => {
         console.log(response);
         let lapPromises = [];
         for (let r of response) {
-          console.log("RACE - setMissingLaps")
-          // lapPromises.push(setMissingLaps(r.laps))
+          console.log("RACE - setMissingLapTimes")
           for (let l of r.laps) {
             console.log("PUSH to setMissing")
             console.log({ deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l })
-            lapPromises.push(setMissingLaps(
+            lapPromises.push(setMissingLapTimes(
                { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }
             ))
           }
@@ -382,13 +379,13 @@ export const getMissingLaps = (request: array) => {
         Promise.all(lapPromises)
               .then(response => {
                     console.log("NEXT PROMISE COMPLETE")
-                 console.log("theresponse")
-                  console.log(response)
-                  let deviceId = request[0].deviceId;
-                  console.log(deviceId)
-                  let heatId = request[0].heatId;
+            //     console.log("theresponse")
+              //    console.log(response)
+              //    let deviceId = request[0].deviceId;
+              //    console.log(deviceId)
+                //  let heatId = request[0].heatId;
                   // stopRaceNotifications
-                  console.log(heatId)
+                //  console.log(heatId)
 
                   for (let r of response) {
                     console.log("PROMISE- ALL FOOR LOOP")
@@ -414,7 +411,7 @@ export const getMissingLaps = (request: array) => {
                     heatId: heatId,
                     deviceId: deviceId
                   };
-                  console.log("the stio")
+                  console.log("the stop")
                   console.log(r)
                   dispatch(stopRaceNotifications(r));
 
