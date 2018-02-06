@@ -273,7 +273,7 @@ export const validateTrackerPromise = (request: object) => {
           // indicates that the tracker is NOT currently available to the bluetooth library
           resolve(request); // return the object and populate the search array
         } else {
-          // this should never ever evar happen
+          // this should never happen....
           console.log(err); // TODO: proper error handling
           reject();
         }
@@ -410,7 +410,7 @@ export const readBatteryLevel = (deviceId: string) => {
   };
 };
 
-/** read the channel of a selected racer from racetracker, updating redux if successful */
+/** read the channel of a selected racer from racetracker, update redux if successful */
 /*  request: { deviceId: tracker_id, racer: racer_position } */
 export const readRacerChannel = (request: object) => {
   return dispatch => {
