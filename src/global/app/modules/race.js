@@ -191,7 +191,6 @@ export const startHeat = (request: object, sayGo: boolean) => {
       if (sayGo) {
         dispatch(announceGo());
       }
-      console.log("RACE - startHeat - readActiveMode")
       dispatch(readActiveMode(response.deviceId));
     }, request);
   };
@@ -205,7 +204,6 @@ export const stopHeat = (request: object) => {
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       } else {  // racetracker successfully halted heat
         dispatch(setStopHeat(response.heatId));
-        console.log("RACE - stopHeat - readActiveMode")
         dispatch(readActiveMode(response.deviceId));
       }
     }, request);

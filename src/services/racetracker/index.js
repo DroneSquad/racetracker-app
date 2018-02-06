@@ -226,9 +226,9 @@ export class TbsRt {
     this.prepareCommand(cmdStr)
       .then(cmd =>
         this.writeCommand(cmd, deviceId).then(
-          this.readCommand(deviceId).then(result => {
-            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, activeMode: response }));
-          })
+          this.readCommand(deviceId).then(result =>
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: deviceId, activeMode: response }))
+          )
         )
       )
       .catch(error => cb({ error: error }));

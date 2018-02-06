@@ -168,15 +168,22 @@ export const connectTracker = (request: Object) => {
   console.log("** RT - connectTracker **")
   return dispatch => {
     ble.connectDevice(response => {
+      // successful device connection. this is long running, on error it fires below
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
-        // successful device connection. this is long running, on error it fires below
-        console.log("RT - connectTracker - readactiveMode")
-        dispatch(readActiveMode(response.device.id));
-        dispatch(setConnected(response.device));
-        if (request.getChannels) {
-          dispatch(readRacerChannels(response.device.id));
-        }
+        console.log(response)
+        syncTrackerState(response.device.id)
+          .then(result => {
+            console.log("++ setActiveMode ++")
+            dispatch(result)
+            console.log("++ setConnected ++")
+            dispatch(setConnected(response.device))
+            if (request.getChannels) {
+              console.log("++ getChannels ++")
+              dispatch(readRacerChannels(response.device.id));
+            }
+          })
+          .catch(error => console.log(error)); // TODO: add proper error handling/logging
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
         console.log("++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++")
@@ -187,6 +194,36 @@ export const connectTracker = (request: Object) => {
         });
       }
     }, request.deviceId);
+  };
+};
+
+export const syncTrackerState = (deviceId: string) => {
+  console.log("syncTrackerState CALLED")
+  return new Promise((resolve, reject) => {
+    ble.isDeviceConnected(result => {
+      console.log("ISDEVICECONNECTED")
+      console.log(result)
+    }, deviceId);
+
+
+    tbs.readActiveMode(response => {
+      console.log("TBS RESPONSE")
+      console.log(response)
+      if (response.error) {
+        reject(response.error);
+      } else {
+        resolve(setActiveMode(response));
+      }
+    }, deviceId);
+  });
+};
+
+export const isTrackerConnected = (deviceId: string) => {
+  console.log("** RT - isTrackerConnected **")
+  return dispatch => {
+    ble.isDeviceConnected(response => {
+      dispatch(updateConnected(response));
+    }, deviceId);
   };
 };
 
@@ -241,15 +278,6 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
         }
       }
     });
-  };
-};
-
-export const isTrackerConnected = (deviceId: string) => {
-  console.log("** RT - isTrackerConnected **")
-  return dispatch => {
-    ble.isDeviceConnected(response => {
-      dispatch(updateConnected(response));
-    }, deviceId);
   };
 };
 
@@ -365,8 +393,6 @@ export const readActiveMode = (deviceId: string) => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        console.log("** RT - readActiveMode **")
-        console.log(response)
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);
@@ -756,6 +782,8 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
+    console.log("==== REDUX_ACTIVE_MODE =====")
+    console.log(action.payload.activeMode)
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId
