@@ -57,12 +57,16 @@ export default class RaceManager extends React.PureComponent {
       // stop race update notifications
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
 
-        console.log("RM - componentWillReceiveProps - STOPNOTIF")
-        this.stopRaceNotifications();
+        // this.stopRaceNotifications();
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
-          console.log("RM - componentWillReceiveProps - GETMISSEDLAPS")
+          console.log("RM - componentWillReceiveProps - GET-MISSED-LAPS-THE-STOP-NOTIFICATIONS")
+          // if a tracker is connected then fecth any missing laps
           this.getMissingLaps();
+        } else {
+          console.log("RM - componentWillReceiveProps - STOP-RACE-NOTIFICATIONS")
+          // no tracker is connected,
+          this.stopRaceNotifications();
         }
 
       }
@@ -136,8 +140,7 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id,
       heatId: this.props.activeHeat.id
     }));
-    console.log("RM-getMissingLaps - Data")
-    console.log(cl)
+    console.log("RM - getMissingLaps")
     this.props.getMissingLaps(cl);
   }
 

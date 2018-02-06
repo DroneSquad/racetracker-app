@@ -14,7 +14,8 @@ const mapStateToProps = (state, ownProps) => ({
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,
-  isSendingCommand: !!state.race.sentCommand
+  isSendingCommand: !!state.race.sentCommand,
+  activeRace: state.race
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

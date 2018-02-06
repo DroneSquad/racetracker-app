@@ -207,12 +207,8 @@ export const stopHeat = (request: object) => {
       if (response.error) {  // no tracker connected (most likely)
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       } else {  // racetracker successfully halted heat
-
         dispatch(setStopHeat(response.heatId));
-
-        // TODO: INVESTIGATE BEST LOCATION FOR THIS CALL
         dispatch(readActiveMode(response.deviceId));
-
       }
     }, request);
   };
@@ -295,13 +291,140 @@ export const stopRaceNotifications = (request: object) => {
   console.log("** RACE - stopRaceNotifications **")
   return dispatch => {
     tbs.stopRaceNotifications(response => {
-      console.log("-- stopRaceNotifications result --")
-      console.log(response)
+      if (response.error) {
+        console.log(response.error)  // TODO: log a proper error
+      }
     }, request);
   };
 };
 
+export const setMissingLaps = (request: object) => {
+  console.log("*** RACE - setMissingLaps ***")
+  return new Promise((resolve, reject) => {
+    for (let lap of request.laps) {
+      console.log("RACE - setMissingLaps")
+      console.log(lap)
+      tbs.readLapTime(response => {
+        console.log("RACE - setMissingLaps - RESPONSE")
+        if (response.error) {
+          console.log("RACE-readLapTime- Error")
+          console.log(response.error); // TODO: log the error properly to device
+          resolve(response.error);
+        } else {
+          console.log("RACE-readLapTime- CALL SETLAP Success")
+          console.log(response)
+          resolve(setLap(response));
+        }
+      }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
+    }
+  })
+};
+
+export const getSlotLapsPromise = (slot: object) => {
+  console.log("*** RACE - getSlotLapsPromise ***")
+  return new Promise((resolve, reject) => {
+    tbs.readTotalLaps(response => {
+      console.log("RACE - getSlotLapsPromise - response")
+      console.log(response)
+      if (response.error) {
+        console.log("RACE - getSlotLapsPromise - TOTAL FAILURE ERROR")
+        console.log(response.error); // TODO: log the error properly to device
+        reject();
+      } else {
+        console.log("RACE - getSlotLapsPromise - SUCCESS")
+        if (slot.laps.length !== response.totalLaps) {
+          let arr = _.range(1, response.totalLaps + 1);
+          let awol =_.difference(arr, slot.laps);
+          console.log("RACE - setMissingLapResolved")
+          console.log({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
+          resolve(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
+        } else {
+          resolve(null)
+        }
+      }
+    }, slot);
+  });
+};
+
 export const getMissingLaps = (request: array) => {
+  console.log("*** RACE - getMissingLaps ***")
+  return dispatch => {
+    let slotPromises = [];
+    console.log("begin the for loop")
+    for (let slot of request) {
+      console.log("this is the slot")
+      console.log(slot)
+      slotPromises.push(getSlotLapsPromise(slot));
+    }
+    console.log("RACE getMissingLaps - PROMISE NOW")
+    Promise.all(slotPromises)
+      .then(response => {
+        console.log("theresponse")
+        console.log(response)
+        let deviceId = request[0].deviceId;
+        console.log(deviceId)
+        let heatId = request[0].heatId;
+        // stopRaceNotifications
+        console.log(heatId)
+
+        for (let r of response) {
+          console.log("PROMISE- ALL FOOR LOOP")
+          console.log(r)
+          var t = typeof r;
+          if (t === 'function') {
+            console.log("THIS IS A FUNCTION")
+            console.log(r)
+            dispatch(r);
+          } else if (t !== undefined) {
+
+            console.log("OTHER THAN FUNCTILN")
+dispatch(r);
+          }
+          else {
+            console.log("JLJALJLKJLKJLKJLKJLKJLK")
+          }
+        }
+        console.log("fireStopNotifications now")
+
+
+        let r = {
+          heatId: heatId,
+          deviceId: deviceId
+        };
+        console.log("the stio")
+        console.log(r)
+        dispatch(stopRaceNotifications(r));
+
+
+      })
+      .catch(error => {
+        console.log("BIG OLE CATCH HERE")
+        console.log(error); // TODO: add proper error handling/logging
+      })
+
+  };
+};
+
+/*export const setMissingLaps = (request: object) => {
+  console.log("RACE - setMissingLaps")
+  console.log(request)
+  return dispatch => {
+    for (let lap of request.laps) {
+      console.log(lap)
+      tbs.readLapTime(response => {
+        if (response.error) {
+          console.log("RACE-readLapTime- Error")
+          console.log(response.error); // TODO: log the error properly to device
+        } else {
+          console.log("RACE-readLapTime- Success")
+          dispatch(setLap(response));
+        }
+      }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
+    }
+  };
+};*/
+
+/*export const getMissingLaps = (request: array) => {
   console.log("RACE - getMissingLaps")
   return dispatch => {
     for (let slot of request) {
@@ -330,26 +453,7 @@ export const getMissingLaps = (request: array) => {
       }, slot);
     }
   };
-};
-
-export const setMissingLaps = (request: object) => {
-  console.log("RACE - setMissingLaps")
-  console.log(request)
-  return dispatch => {
-    for (let lap of request.laps) {
-      console.log(lap)
-      tbs.readLapTime(response => {
-        if (response.error) {
-          console.log("RACE-readLapTime- Error")
-          console.log(response.error); // TODO: log the error properly to device
-        } else {
-          console.log("RACE-readLapTime- Success")
-          dispatch(setLap(response));
-        }
-      }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
-    }
-  };
-};
+};*/
 
 /** initial state */
 const initialState = {
@@ -406,7 +510,10 @@ export default function(state = initialState, action: Action) {
         laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
       };
     case SET_LAP:
+      console.log("========== SET_LAP =============")
+      console.log(action.payload)
       if (_.get(action.payload, 'lap') !== state.lastLapId) { // make sure its unique right now
+        console.log("GOOD")
         return {
           ...state,
           lastLapId: _.get(action.payload, 'lap'),
@@ -417,6 +524,7 @@ export default function(state = initialState, action: Action) {
           ), 'lap'))
         };
       } else {
+        console.log("OTHER")
         return { ...state };
       }
     case SENT_START_STOP_HEAT:

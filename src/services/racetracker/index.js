@@ -223,7 +223,6 @@ export class TbsRt {
   /** Get the active mode of a RaceTracker by device id */
   readActiveMode(cb, deviceId) {
     console.log("** TBS - readActiveMode **")
-    console.log(deviceId)
     let cmdStr = 'getActiveMode';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -252,10 +251,7 @@ export class TbsRt {
 
   /** Fetch the total amount of laps a racer has completed */
   readTotalLaps(cb, request) {
-    console.log("TBS - readTotalLaps")
-    console.log("------------------------")
-    console.log(request)
-    console.log("------------------------")
+    console.log("** TBS - readTotalLaps **")
     let cmdStr = 'getTotalLaps';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -274,20 +270,17 @@ export class TbsRt {
 
   /** Get the laptime of a lap for a specific racer */
   readLapTime(cb, request) {
-    console.log("TBS - readLapTime")
-    console.log(request)
+    console.log("** TBS - readLapTime **")
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
             this.prepareResponse(cmdStr, result).then(
-              response => {
-              // TODO: calculate the totalTime
-              console.log("TODO: need to calculate the totalTime of Lap here?")
-              cb({ racer: Number(request.racer), lap: Number(request.lap),
-                   lapTime: response, totalTime: "", heatId: request.heatId })
-              }
+              response =>
+                // TODO: do we need to worry about calculating total time here?
+                cb({ racer: Number(request.racer), lap: Number(request.lap),
+                     lapTime: response, totalTime: "", heatId: request.heatId })
             )
           )
         )
@@ -333,14 +326,12 @@ export class TbsRt {
   }
 
   stopRaceNotifications(cb, request) {
-    console.log("** TBS - stopRaceNotifications **")
-    console.log(request)
     window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
-      console.log("stopRaceNotifications - SUCCESS")
+      console.log("** TBS - stopRaceNotifications SUCCESS **")
       console.log(result);
+      cb({ notifications: "stopped" })
     }, error => {
-      console.log("stopRaceNotifications - ERROR")
-      console.log(error);
+      cb({ error: error })
     });
   }
 
@@ -592,7 +583,6 @@ export class TbsRt {
 
   /** End the currently running race heat */
   stopHeat(cb, request) {
-    console.log("** TBS - stopHeat **")
     let cmdStr = 'stopRace';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -609,7 +599,6 @@ export class TbsRt {
 
   /* Start a race heat according to start style, device id, and heat id */
   startHeat(cb, request) {
-    console.log("** TBS - startHeat **")
     let vrxStr = 'activateVrx'; // enables the vrx for race tracking
     let cmdStr = request.raceMode === 'flyby' ? 'startRaceFlyby' : 'startRaceShotgun'; // race start type
     this.prepareCommand(vrxStr, request)
