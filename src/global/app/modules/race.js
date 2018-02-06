@@ -298,6 +298,41 @@ export const stopRaceNotifications = (request: object) => {
   };
 };
 
+
+
+
+
+
+
+
+export const getSlotLapsPromise = (slot: object) => {
+  console.log("*** RACE - getSlotLapsPromise ***")
+  return new Promise((resolve, reject) => {
+    tbs.readTotalLaps(response => {
+      console.log("RACE - getSlotLapsPromise - response")
+      console.log(response)
+      if (response.error) {
+        console.log("RACE - getSlotLapsPromise - TOTAL FAILURE ERROR")
+        console.log(response.error); // TODO: log the error properly to device
+        reject();
+      } else {
+        console.log("RACE - getSlotLapsPromise - SUCCESS")
+        if (slot.laps.length !== response.totalLaps) {
+          let arr = _.range(1, response.totalLaps + 1);
+          let awol =_.difference(arr, slot.laps);
+          console.log("RACE - setMissingLapResolved")
+          resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
+        } else {
+          console.log("else")
+          resolve(null);
+          // resolve(null)
+        }
+      }
+    }, slot);
+  });
+};
+
+
 export const setMissingLaps = (request: object) => {
   console.log("*** RACE - setMissingLaps ***")
   return new Promise((resolve, reject) => {
@@ -320,114 +355,74 @@ export const setMissingLaps = (request: object) => {
   })
 };
 
-export const getSlotLapsPromise = (slot: object) => {
-  console.log("*** RACE - getSlotLapsPromise ***")
-  return new Promise((resolve, reject) => {
-    tbs.readTotalLaps(response => {
-      console.log("RACE - getSlotLapsPromise - response")
-      console.log(response)
-      if (response.error) {
-        console.log("RACE - getSlotLapsPromise - TOTAL FAILURE ERROR")
-        console.log(response.error); // TODO: log the error properly to device
-        reject();
-      } else {
-        console.log("RACE - getSlotLapsPromise - SUCCESS")
-        if (slot.laps.length !== response.totalLaps) {
-          let arr = _.range(1, response.totalLaps + 1);
-          let awol =_.difference(arr, slot.laps);
-
-          console.log("RACE - setMissingLapResolved")
-          console.log({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
-          resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
-          // resolve(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
-
-        } else {
-          console.log("else")
-          resolve(null);
-          // resolve(null)
-        }
-      }
-    }, slot);
-  });
-};
-
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
-  console.log(request)
-  console.log("-----------------------------")
   return dispatch => {
     let slotPromises = [];
     for (let slot of request) {
-      console.log("getMissingLaps - slotPromises")
-      console.log(slot)
       slotPromises.push(getSlotLapsPromise(slot));
     }
-    console.log("RACE getMissingLaps - PROMISE NOW")
     Promise.all(slotPromises)
       .then(response => {
-        console.log("promise.all")
+        console.log("PROMISE COMPLETE")
         console.log(response);
         let lapPromises = [];
         for (let r of response) {
           console.log("RACE - setMissingLaps")
-          console.log(r.lap)
-          lapPromises.push(setMissingLaps(r.laps))
+          // lapPromises.push(setMissingLaps(r.laps))
+          for (let l of r.laps) {
+            console.log("PUSH to setMissing")
+            console.log({ deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l })
+            lapPromises.push(setMissingLaps(
+               { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }
+            ))
+          }
         }
 
-        console.log("RACE getMissingLaps - PROMISE NOW")
         Promise.all(lapPromises)
-          .then(response => {
+              .then(response => {
+                    console.log("NEXT PROMISE COMPLETE")
+                 console.log("theresponse")
+                  console.log(response)
+                  let deviceId = request[0].deviceId;
+                  console.log(deviceId)
+                  let heatId = request[0].heatId;
+                  // stopRaceNotifications
+                  console.log(heatId)
+
+                  for (let r of response) {
+                    console.log("PROMISE- ALL FOOR LOOP")
+                    console.log(r)
+                    var t = typeof r;
+                    if (t === 'function') {
+                      console.log("THIS IS A FUNCTION")
+                      console.log(r)
+                      dispatch(r);
+                    } else if (t !== undefined) {
+
+                      console.log("OTHER THAN FUNCTILN")
+          dispatch(r);
+                    }
+                    else {
+                      console.log("JLJALJLKJLKJLKJLKJLKJLK")
+                    }
+                  }
+                  console.log("fireStopNotifications now")
 
 
-
-
-             console.log("theresponse")
-              console.log(response)
-              let deviceId = request[0].deviceId;
-              console.log(deviceId)
-              let heatId = request[0].heatId;
-              // stopRaceNotifications
-              console.log(heatId)
-
-              for (let r of response) {
-                console.log("PROMISE- ALL FOOR LOOP")
-                console.log(r)
-                var t = typeof r;
-                if (t === 'function') {
-                  console.log("THIS IS A FUNCTION")
+                  let r = {
+                    heatId: heatId,
+                    deviceId: deviceId
+                  };
+                  console.log("the stio")
                   console.log(r)
-                  dispatch(r);
-                } else if (t !== undefined) {
+                  dispatch(stopRaceNotifications(r));
 
-                  console.log("OTHER THAN FUNCTILN")
-      dispatch(r);
-                }
-                else {
-                  console.log("JLJALJLKJLKJLKJLKJLKJLK")
-                }
-              }
-              console.log("fireStopNotifications now")
-
-
-              let r = {
-                heatId: heatId,
-                deviceId: deviceId
-              };
-              console.log("the stio")
-              console.log(r)
-              dispatch(stopRaceNotifications(r));
-
-          })
-          .catch(error => {
-            console.log("secondary HERE")
-            console.log(error); // TODO: add proper error handling/logging
-          })
-
-
-
-
-
-
+              })
+              .catch(error => {
+                console.log("secondary HERE")
+                console.log(error); // TODO: add proper error handling/logging
+              })
 
       })
       .catch(error => {
