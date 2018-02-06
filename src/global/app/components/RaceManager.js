@@ -63,9 +63,9 @@ export default class RaceManager extends React.PureComponent {
           // no tracker is connected...
           // TODO: do we really need to fire this? no tracker is avail to receive the command?
           // perhaps another event relies on the error being thrown? investigate when time allows
+          console.log("RM -raceComplete - no tracker connected - stopRaceNotifications ==")
           this.stopRaceNotifications();
         }
-
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
@@ -82,6 +82,8 @@ export default class RaceManager extends React.PureComponent {
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
           let mode = this.props.activeTracker.activeMode;
+          console.log("RM - device connection recovery - activeMode")
+          console.log(mode);
           if (this.props.activeHeat.isActive) {
             console.log("ActiveHeat-isActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {

@@ -171,6 +171,7 @@ export const connectTracker = (request: Object) => {
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         // successful device connection. this is long running, on error it fires below
+        console.log("RT - connectTracker - readactiveMode")
         dispatch(readActiveMode(response.device.id));
         dispatch(setConnected(response.device));
         if (request.getChannels) {
@@ -359,12 +360,13 @@ export const disconnectTracker = (deviceId: string) => {
 
 /** get the current mode of a racetracker by device id */
 export const readActiveMode = (deviceId: string) => {
-  console.log("** RT - readActiveMode **")
   return dispatch => {
     tbs.readActiveMode(response => {
       if (response.error) {
         console.log(response.error); // TODO: log the error properly to device
       } else {
+        console.log("** RT - readActiveMode **")
+        console.log(response)
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);
