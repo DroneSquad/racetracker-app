@@ -301,9 +301,9 @@ export const stopRaceNotifications = (request: object) => {
 export const setMissingLaps = (request: object) => {
   console.log("*** RACE - setMissingLaps ***")
   return new Promise((resolve, reject) => {
-    for (let lap of request.laps) {
-      console.log("RACE - setMissingLaps")
-      console.log(lap)
+
+  //  for (let lap of request.laps) {
+
       tbs.readLapTime(response => {
         console.log("RACE - setMissingLaps - RESPONSE")
         if (response.error) {
@@ -315,8 +315,8 @@ export const setMissingLaps = (request: object) => {
           console.log(response)
           resolve(setLap(response));
         }
-      }, { deviceId: request.deviceId,  heatId: request.heatId, racer: request.racer, lap: lap });
-    }
+      }, request);
+  //  }
   })
 };
 
@@ -335,11 +335,16 @@ export const getSlotLapsPromise = (slot: object) => {
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol =_.difference(arr, slot.laps);
+
           console.log("RACE - setMissingLapResolved")
           console.log({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
-          resolve(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
+          resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
+          // resolve(setMissingLaps({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol }))
+
         } else {
-          resolve(null)
+          console.log("else")
+          resolve(null);
+          // resolve(null)
         }
       }
     }, slot);
@@ -348,52 +353,80 @@ export const getSlotLapsPromise = (slot: object) => {
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
+  console.log(request)
+  console.log("-----------------------------")
   return dispatch => {
     let slotPromises = [];
-    console.log("begin the for loop")
     for (let slot of request) {
-      console.log("this is the slot")
+      console.log("getMissingLaps - slotPromises")
       console.log(slot)
       slotPromises.push(getSlotLapsPromise(slot));
     }
     console.log("RACE getMissingLaps - PROMISE NOW")
     Promise.all(slotPromises)
       .then(response => {
-        console.log("theresponse")
-        console.log(response)
-        let deviceId = request[0].deviceId;
-        console.log(deviceId)
-        let heatId = request[0].heatId;
-        // stopRaceNotifications
-        console.log(heatId)
-
+        console.log("promise.all")
+        console.log(response);
+        let lapPromises = [];
         for (let r of response) {
-          console.log("PROMISE- ALL FOOR LOOP")
-          console.log(r)
-          var t = typeof r;
-          if (t === 'function') {
-            console.log("THIS IS A FUNCTION")
-            console.log(r)
-            dispatch(r);
-          } else if (t !== undefined) {
-
-            console.log("OTHER THAN FUNCTILN")
-dispatch(r);
-          }
-          else {
-            console.log("JLJALJLKJLKJLKJLKJLKJLK")
-          }
+          console.log("RACE - setMissingLaps")
+          console.log(r.lap)
+          lapPromises.push(setMissingLaps(r.laps))
         }
-        console.log("fireStopNotifications now")
+
+        console.log("RACE getMissingLaps - PROMISE NOW")
+        Promise.all(lapPromises)
+          .then(response => {
 
 
-        let r = {
-          heatId: heatId,
-          deviceId: deviceId
-        };
-        console.log("the stio")
-        console.log(r)
-        dispatch(stopRaceNotifications(r));
+
+
+             console.log("theresponse")
+              console.log(response)
+              let deviceId = request[0].deviceId;
+              console.log(deviceId)
+              let heatId = request[0].heatId;
+              // stopRaceNotifications
+              console.log(heatId)
+
+              for (let r of response) {
+                console.log("PROMISE- ALL FOOR LOOP")
+                console.log(r)
+                var t = typeof r;
+                if (t === 'function') {
+                  console.log("THIS IS A FUNCTION")
+                  console.log(r)
+                  dispatch(r);
+                } else if (t !== undefined) {
+
+                  console.log("OTHER THAN FUNCTILN")
+      dispatch(r);
+                }
+                else {
+                  console.log("JLJALJLKJLKJLKJLKJLKJLK")
+                }
+              }
+              console.log("fireStopNotifications now")
+
+
+              let r = {
+                heatId: heatId,
+                deviceId: deviceId
+              };
+              console.log("the stio")
+              console.log(r)
+              dispatch(stopRaceNotifications(r));
+
+          })
+          .catch(error => {
+            console.log("secondary HERE")
+            console.log(error); // TODO: add proper error handling/logging
+          })
+
+
+
+
+
 
 
       })
