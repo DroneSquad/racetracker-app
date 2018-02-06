@@ -222,7 +222,6 @@ export class TbsRt {
 
   /** Get the active mode of a RaceTracker by device id */
   readActiveMode(cb, deviceId) {
-    console.log("** TBS - readActiveMode **")
     let cmdStr = 'getActiveMode';
     this.prepareCommand(cmdStr)
       .then(cmd =>
@@ -251,7 +250,6 @@ export class TbsRt {
 
   /** Fetch the total amount of laps a racer has completed */
   readTotalLaps(cb, request) {
-    console.log("** TBS - readTotalLaps **")
     let cmdStr = 'getTotalLaps';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -270,7 +268,6 @@ export class TbsRt {
 
   /** Get the laptime of a lap for a specific racer */
   readLapTime(cb, request) {
-    console.log("** TBS - readLapTime **")
     let cmdStr = 'getLapTime';
     this.prepareCommand(cmdStr, request)
       .then(cmd =>
@@ -289,7 +286,6 @@ export class TbsRt {
   }
 
   startRaceNotifications(cb, request) {
-    console.log("** TBS - startRaceNotifications **")
     window.ble.startNotification(request.deviceId, this._config.racetracker_service, this._config.read, data => {
       this.prepareResponse('getRaceUpdate', data).then(response => {
         // occurs when in flyovermode and first pilot passes the start gate
@@ -327,49 +323,10 @@ export class TbsRt {
 
   stopRaceNotifications(cb, request) {
     window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
-      console.log("** TBS - stopRaceNotifications SUCCESS **")
-      console.log(result);
       cb({ notifications: "stopped" })
     }, error => {
       cb({ error: error })
     });
-  }
-
-  /** Get the latest lap update of an active race heat */
-  readRaceUpdate(cb, request) {
-    this.readCommand(request.deviceId)
-      .then(result =>
-        this.prepareResponse('getRaceUpdate', result).then(response => {
-          if (response.startsWith('STARTED')) {
-            // occurs when in flyovermode and the first pilot passes the gate
-            cb({
-              start: true
-            });
-          }
-          if (!response.startsWith('READY') && !response.startsWith('STARTED')) {
-            let arr = response.split(RE_RACEUPDATE);
-            // there are 2 different responses depending on a single racer or more
-            if (arr.length === 4) {
-              cb({
-                racer: 1,
-                lap: Number(arr[1]),
-                lapTime: arr[2],
-                totalTime: arr[3].match(RE_NUMBER)[0],
-                heatId: request.heatId
-              });
-            } else if (arr.length === 5) {
-              cb({
-                racer: Number(arr[1]),
-                lap: Number(arr[2]),
-                lapTime: arr[3],
-                totalTime: arr[4].match(RE_NUMBER)[0],
-                heatId: request.heatId
-              });
-            }
-          }
-        })
-      )
-      .catch(error => cb({ error: error }));
   }
 
   /** Get the maximum allowed number of laps allowed */
