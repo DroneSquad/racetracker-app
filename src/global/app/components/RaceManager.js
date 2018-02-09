@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import { Dialog, FlatButton } from 'material-ui';
+import { Dialog, FlatButton, LinearProgress } from 'material-ui';
 
 // import race error lookup codes
-import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
+import { ERR_STOP_HEAT_NO_CONN, ERR_START_HEAT_NO_CONN } from '../modules/race';
 // import racetracker mode constants
 import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
@@ -60,11 +60,12 @@ export default class RaceManager extends React.PureComponent {
           // if a tracker is connected then fetch any missing laps
           this.getMissingLaps();
         } else {
+          console.log("THE_QUESTIONABLE_CALL_RACEMANAGER")
           // no tracker is connected...
           // TODO: do we really need to fire this? no tracker is avail to receive the command?
           // perhaps another event relies on the error being thrown? investigate when time allows
           // console.log("TODO: REEVALUATE RM -raceComplete - no tracker connected - stopRaceNotifications ==")
-          // this.stopRaceNotifications();
+          this.stopRaceNotifications();
         }
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
@@ -108,6 +109,7 @@ export default class RaceManager extends React.PureComponent {
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
         if (!nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
+          console.log("COMPLETE_DISCONNECTION")
           this.props.setIsActive(false);
           this.props.setIsValid(false);
         }
@@ -131,6 +133,10 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id,
       heatId: this.props.activeHeat.id
     }));
+
+
+
+
     this.props.getMissingLaps(cl);
   }
 

@@ -102,6 +102,7 @@ export const setHeatChannels = (request: object) => ({
   payload: request
 });
 
+// TODO: lets use this in a more generic manner to handle all potential commands
 export const sentCommand = () => ({
   type: SENT_START_STOP_HEAT,
   payload: 'sent command, waiting for response'
@@ -296,7 +297,7 @@ export const setMissingLaps = (slot: object) => {
       if (response.error) {
         reject(response.error);
       } else {
-        // if the lap counts do not match, determine which were missed
+        // if the lap counts do not match, determine which laps were missed
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol =_.difference(arr, slot.laps);
@@ -324,6 +325,8 @@ export const setMissingLapTimes = (request: object) => {
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
+  console.log(request)
+  console.log("=============================")
   return dispatch => {
     let heatId = '';
     let deviceId = '';

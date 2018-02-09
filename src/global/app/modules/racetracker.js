@@ -165,21 +165,17 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (request: Object) => {
-  console.log("** RT - connectTracker **")
   return dispatch => {
     ble.connectDevice(response => {
       // successful device connection. this is long running, on error it fires below
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
-        console.log(response)
         syncTrackerState(response.device.id)
           .then(result => {
-            console.log("++ setActiveMode ++")
+            console.log("syncTrackerState-Then.call")
             dispatch(result)
-            console.log("++ setConnected ++")
             dispatch(setConnected(response.device))
             if (request.getChannels) {
-              console.log("++ getChannels ++")
               dispatch(readRacerChannels(response.device.id));
             }
           })
@@ -201,13 +197,14 @@ export const syncTrackerState = (deviceId: string) => {
   console.log("syncTrackerState CALLED")
   return new Promise((resolve, reject) => {
     ble.isDeviceConnected(result => {
-      console.log("ISDEVICECONNECTED")
+      console.log("BLEISDEVICECONNECTED")
       console.log(result)
     }, deviceId);
-
-
+    console.log("===THE_MIDDLE===")
+    console.log(deviceId)
+    // TODO: refine this, if not connected, etc how to handle if not, ie no response
     tbs.readActiveMode(response => {
-      console.log("TBS RESPONSE")
+      console.log("TBSRESPONSEACTIVEMODE")
       console.log(response)
       if (response.error) {
         reject(response.error);
@@ -782,8 +779,6 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
-    console.log("==== REDUX_ACTIVE_MODE =====")
-    console.log(action.payload.activeMode)
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId
