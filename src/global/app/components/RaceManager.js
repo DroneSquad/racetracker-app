@@ -159,12 +159,12 @@ export default class RaceManager extends React.PureComponent {
     let altActionLabel = '';
     // no tracker connection on heat stop action
     if (errCode === ERR_STOP_HEAT_NO_CONN) {
-      title = 'Stop Heat Warning'
-      message = 'There is no connection to a RaceTracker. Ending the race may result in lost data.'
+      title = 'Stop Race Warning'
+      message = 'It looks like the RaceTracker connection has been lost. You may loose some lap information.'
       mainAction = 'clear_race_error'
       mainActionLabel = 'Cancel'
       altAction = 'force_stop_heat'
-      altActionLabel = 'End Heat'
+      altActionLabel = 'End Race'
     }
     this.setState({
       title: title,
