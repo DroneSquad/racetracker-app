@@ -74,40 +74,48 @@ export default class RaceManager extends React.PureComponent {
       // verify an activeTracker is available for the remaining checks
       if (this.props.activeTracker) {
         // if the activeTrackers racerchannels change then update the active heat, but only if the heat 'isPending'
-        if (nextProps.activeHeat.isPending && nextProps.activeTracker.isConnected && nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels)
-        {
-          this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat })
+        if (
+          nextProps.activeHeat.isPending &&
+          nextProps.activeTracker.isConnected &&
+          nextProps.activeTracker.racerChannels !== this.props.activeTracker.racerChannels
+        ) {
+          this.props.setHeatChannels({ channels: nextProps.activeTracker.racerChannels, heat: nextProps.activeHeat });
         }
         // if a heat is running, then a device has just now recovered from a lost connection
-        if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
-        {
+        if (
+          nextProps.activeTracker.isConnected &&
+          nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected
+        ) {
           let mode = this.props.activeTracker.activeMode;
           if (this.props.activeHeat.isActive) {
-            console.log("ActiveHeat-isActive")
+            console.log('ActiveHeat-isActive');
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              console.log("RT IN RACE MODE - restart notifications")
-                this.startRaceNotifications();
+              console.log('RT IN RACE MODE - restart notifications');
+              this.startRaceNotifications();
             } else {
-              console.log("RT NOT IN RACE MODE - update redux");
-              this.props.forceStopHeat(this.props.activeHeat.id)
+              console.log('RT NOT IN RACE MODE - update redux');
+              this.props.forceStopHeat(this.props.activeHeat.id);
             }
           } else {
-            console.log("ActiveHeat-notActive")
+            console.log('ActiveHeat-notActive');
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              console.log("*RT IN RACE MODE - update RT to idle")
+              console.log('*RT IN RACE MODE - update RT to idle');
               let r = {
                 heatId: this.props.activeHeat.id,
                 deviceId: this.props.activeTracker.id
               };
               this.props.setTrackerIdle(r);
-            }
-            else {
-              console.log("*RT NOT IN RACE MODE - do nothing")
+            } else {
+              console.log('*RT NOT IN RACE MODE - do nothing');
             }
           }
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
-        if (!nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
+        if (
+          !nextProps.activeTracker.isConnected &&
+          !nextProps.activeTracker.isConnecting &&
+          !nextProps.activeTracker.isReconnecting
+        ) {
           this.props.setIsActive(false);
           this.props.setIsValid(false);
         }
@@ -132,7 +140,7 @@ export default class RaceManager extends React.PureComponent {
       heatId: this.props.activeHeat.id
     }));
     this.props.getMissingLaps(cl);
-  }
+  };
 
   startRaceNotifications = () => {
     let r = {
@@ -140,7 +148,7 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id
     };
     this.props.startRaceNotifications(r);
-  }
+  };
 
   stopRaceNotifications = () => {
     let r = {
@@ -148,7 +156,7 @@ export default class RaceManager extends React.PureComponent {
       deviceId: this.props.activeTracker.id
     };
     this.props.stopRaceNotifications(r);
-  }
+  };
 
   configDialog(errCode) {
     let title = '';
@@ -159,12 +167,12 @@ export default class RaceManager extends React.PureComponent {
     let altActionLabel = '';
     // no tracker connection on heat stop action
     if (errCode === ERR_STOP_HEAT_NO_CONN) {
-      title = 'Stop Heat Warning'
-      message = 'There is no connection to a RaceTracker. Ending the race may result in lost data.'
-      mainAction = 'clear_race_error'
-      mainActionLabel = 'Cancel'
-      altAction = 'force_stop_heat'
-      altActionLabel = 'End Heat'
+      title = 'Stop Heat Warning';
+      message = 'There is no connection to a RaceTracker. Ending the race may result in lost data.';
+      mainAction = 'clear_race_error';
+      mainActionLabel = 'Cancel';
+      altAction = 'force_stop_heat';
+      altActionLabel = 'End Heat';
     }
     this.setState({
       title: title,
@@ -182,7 +190,7 @@ export default class RaceManager extends React.PureComponent {
       this.props.clearRaceError();
     }
     if (action === 'force_stop_heat') {
-      this.props.forceStopHeat(this.props.activeHeat.id)
+      this.props.forceStopHeat(this.props.activeHeat.id);
     }
     this.setState({
       open: false
@@ -207,29 +215,15 @@ export default class RaceManager extends React.PureComponent {
   render() {
     let { message, title, main_action_label, alt_action_label, open, primary } = this.state;
     const actions = [
-     <FlatButton
-       label={alt_action_label}
-       primary={primary}
-       onClick={this.handleAltActionClick}
-     />,
-     <FlatButton
-       label={main_action_label}
-       primary={primary}
-       onClick={this.handleMainActionClick}
-     />,
-   ];
-   return (
-       <div>
-         <Dialog
-           title={title}
-           actions={actions}
-           modal={false}
-           open={open}
-           onRequestClose={this.handleRequestClose}
-         >
-           {message}
-         </Dialog>
-       </div>
-     );
+      <FlatButton label={alt_action_label} primary={primary} onClick={this.handleAltActionClick} />,
+      <FlatButton label={main_action_label} primary={primary} onClick={this.handleMainActionClick} />
+    ];
+    return (
+      <div>
+        <Dialog title={title} actions={actions} modal={false} open={open} onRequestClose={this.handleRequestClose}>
+          {message}
+        </Dialog>
+      </div>
+    );
   }
 }

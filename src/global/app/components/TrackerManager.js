@@ -158,7 +158,7 @@ export default class TrackerManager extends React.PureComponent {
       action: action,
       default_action: defAction,
       clicked_action: clkAction,
-      timer: timer,  // autoclose the snackbar on timeout
+      timer: timer, // autoclose the snackbar on timeout
       open: !!message
     });
   }

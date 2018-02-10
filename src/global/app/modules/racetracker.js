@@ -165,30 +165,31 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (request: Object) => {
-  console.log("** RT - connectTracker **")
+  console.log('** RT - connectTracker **');
   return dispatch => {
     ble.connectDevice(response => {
       // successful device connection. this is long running, on error it fires below
       if (response.connected) {
-        console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
-        console.log(response)
+        console.log('++++++++++++++ RACETRACKER CONNECTED ++++++++++++++');
+        console.log(response);
         syncTrackerState(response.device.id)
           .then(result => {
-            console.log("++ setActiveMode ++")
-            dispatch(result)
-            console.log("++ setConnected ++")
-            dispatch(setConnected(response.device))
+            console.log('++ setActiveMode ++');
+            dispatch(result);
+            console.log('++ setConnected ++');
+            dispatch(setConnected(response.device));
             if (request.getChannels) {
-              console.log("++ getChannels ++")
+              console.log('++ getChannels ++');
               dispatch(readRacerChannels(response.device.id));
             }
           })
           .catch(error => console.log(error)); // TODO: add proper error handling/logging
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
-        console.log("++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++")
+        console.log('++++++++++++++ RACETRACKER CONNECTION LOST ++++++++++++++');
         ble.isEnabled(result => {
-          if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
+          if (result) {
+            // if bluetooth was deactivated, dont bother trying to reconnect
             dispatch(setReconnecting(response.device.id));
           }
         });
@@ -198,17 +199,16 @@ export const connectTracker = (request: Object) => {
 };
 
 export const syncTrackerState = (deviceId: string) => {
-  console.log("syncTrackerState CALLED")
+  console.log('syncTrackerState CALLED');
   return new Promise((resolve, reject) => {
     ble.isDeviceConnected(result => {
-      console.log("ISDEVICECONNECTED")
-      console.log(result)
+      console.log('ISDEVICECONNECTED');
+      console.log(result);
     }, deviceId);
 
-
     tbs.readActiveMode(response => {
-      console.log("TBS RESPONSE")
-      console.log(response)
+      console.log('TBS RESPONSE');
+      console.log(response);
       if (response.error) {
         reject(response.error);
       } else {
@@ -219,7 +219,7 @@ export const syncTrackerState = (deviceId: string) => {
 };
 
 export const isTrackerConnected = (deviceId: string) => {
-  console.log("** RT - isTrackerConnected **")
+  console.log('** RT - isTrackerConnected **');
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
@@ -228,7 +228,7 @@ export const isTrackerConnected = (deviceId: string) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
-  console.log("** RT - startTrackerSearch **")
+  console.log('** RT - startTrackerSearch **');
   let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
@@ -246,7 +246,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
             if (idx !== -1) {
               if (matchArr[idx].isConnected) {
                 let id = matchArr[idx].id;
-                dispatch(connectTracker({deviceId: id}));
+                dispatch(connectTracker({ deviceId: id }));
               }
               // remove this tracker from our search array
               matchArr.splice(idx, 1);
@@ -282,7 +282,7 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
 };
 
 export const validateTrackerPromise = (request: object) => {
-  console.log("** RT - validateTrackerPromise **")
+  console.log('** RT - validateTrackerPromise **');
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
@@ -316,7 +316,7 @@ export const validateTrackerPromise = (request: object) => {
 };
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
-  console.log("** RT - validateTrackers **")
+  console.log('** RT - validateTrackers **');
   return dispatch => {
     let trackerPromises = [];
     for (let rt of request) {
@@ -346,7 +346,7 @@ export const validateTrackers = (request: array, discoveryScan: boolean = false)
 };
 
 export const discoverTrackers = (request: array) => {
-  console.log("** RT - discoverTrackers **")
+  console.log('** RT - discoverTrackers **');
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
@@ -362,10 +362,10 @@ export const stopTrackerScan = (request: array = []) => {
         // fired on device scan stop manually (no timeout)
         dispatch(setIsScanning(false));
         // if (request.length > 0) {
-          // TODO: (see stopDiscovery() within TrackerHome to see calling location)
-          // the idea here is that when a scan is stopped manually, validate trackers on cancel
-          // unfortunately it doesnt appear to work well, there is a long pause... before it completes
-          // dispatch(validateTrackers(request));
+        // TODO: (see stopDiscovery() within TrackerHome to see calling location)
+        // the idea here is that when a scan is stopped manually, validate trackers on cancel
+        // unfortunately it doesnt appear to work well, there is a long pause... before it completes
+        // dispatch(validateTrackers(request));
         // }
       }
     });
@@ -374,7 +374,7 @@ export const stopTrackerScan = (request: array = []) => {
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (deviceId: string) => {
-  console.log("** RT - disconnectTracker **")
+  console.log('** RT - disconnectTracker **');
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
@@ -782,8 +782,8 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
-    console.log("==== REDUX_ACTIVE_MODE =====")
-    console.log(action.payload.activeMode)
+      console.log('==== REDUX_ACTIVE_MODE =====');
+      console.log(action.payload.activeMode);
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId

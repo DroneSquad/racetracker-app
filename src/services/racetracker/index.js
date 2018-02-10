@@ -209,6 +209,21 @@ export class TbsRt {
     });
   }
 
+  /** Register the listener manager to send it to the dispatcher */
+  registerListener(deviceId) {
+    window.ble.startNotification(deviceId, this._config.racetracker_service, this._config.read, data => {
+      console.log('listener callback');
+      let stringData = this.bytesToStr(data);
+      if (_.size(stringData) > 0) {
+        let [key, value] = _.split(stringData, ':', 2);
+        window.alert(key);
+        window.alert(value);
+        if (key === '25') {
+        }
+      }
+    });
+  }
+
   /** Get the firmware version on a RaceTracker by device id */
   readFirmwareVersion(cb, deviceId) {
     window.ble.read(
@@ -255,10 +270,13 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
-            this.prepareResponse(cmdStr, result).then(
-              response =>
-                cb({ deviceId: request.deviceId, heatId: request.heatId,
-                     racer: request.racer, totalLaps: Number(response) })
+            this.prepareResponse(cmdStr, result).then(response =>
+              cb({
+                deviceId: request.deviceId,
+                heatId: request.heatId,
+                racer: request.racer,
+                totalLaps: Number(response)
+              })
             )
           )
         )
@@ -273,11 +291,15 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
-            this.prepareResponse(cmdStr, result).then(
-              response =>
-                // TODO: do we need to worry about calculating total time here?
-                cb({ racer: Number(request.racer), lap: Number(request.lap),
-                     lapTime: response, totalTime: "", heatId: request.heatId })
+            this.prepareResponse(cmdStr, result).then(response =>
+              // TODO: do we need to worry about calculating total time here?
+              cb({
+                racer: Number(request.racer),
+                lap: Number(request.lap),
+                lapTime: response,
+                totalTime: '',
+                heatId: request.heatId
+              })
             )
           )
         )
@@ -317,16 +339,22 @@ export class TbsRt {
             }
           }
         }
-      })
+      });
     });
   }
 
   stopRaceNotifications(cb, request) {
-    window.ble.stopNotification(request.deviceId, this._config.racetracker_service, this._config.read, result => {
-      cb({ notifications: "stopped" })
-    }, error => {
-      cb({ error: error })
-    });
+    window.ble.stopNotification(
+      request.deviceId,
+      this._config.racetracker_service,
+      this._config.read,
+      result => {
+        cb({ notifications: 'stopped' });
+      },
+      error => {
+        cb({ error: error });
+      }
+    );
   }
 
   /** Get the maximum allowed number of laps allowed */
@@ -350,9 +378,7 @@ export class TbsRt {
       .then(cmd =>
         this.writeCommand(cmd, request.deviceId).then(
           this.readCommand(request.deviceId).then(result =>
-            this.prepareResponse(cmdStr, result).then(response =>
-              cb({ deviceId: request.deviceId, maxLaps: response })
-            )
+            this.prepareResponse(cmdStr, result).then(response => cb({ deviceId: request.deviceId, maxLaps: response }))
           )
         )
       )

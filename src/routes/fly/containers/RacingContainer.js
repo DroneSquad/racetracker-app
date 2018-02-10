@@ -21,7 +21,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch: Function) => ({
   validateRace: object => dispatch(validateRace(object)),
-  createRace: object => dispatch(createRace(object)),
+  createRace: object => dispatch(createRace(object))
 });
 
 const RacingContainer = connect(mapStateToProps, mapDispatchToProps)(Racing);

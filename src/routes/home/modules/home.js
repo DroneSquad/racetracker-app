@@ -64,7 +64,7 @@ const defaultState = {};
 /** The reducer for the state */
 export default function(state = defaultState, action) {
   if (window.developer === true) {
-    console.log("-- DEV-ACTION--")
+    console.log('-- DEV-ACTION--');
     console.log(action); // Print out action when in developer mode
   }
   switch (action.type) {

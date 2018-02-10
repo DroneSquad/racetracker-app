@@ -7,18 +7,20 @@ import Racer from '../components/Racer';
 import { push } from 'react-router-redux';
 
 const mapStateToProps = (states, props) => ({
-  lap: states.race.laps.filter(
-    h => h.racer === props.id && (h.heatId === props.heatId || h.heat === props.heatId)
-  )[0].lap,
+  lap: states.race.laps.filter(h => h.racer === props.id && (h.heatId === props.heatId || h.heat === props.heatId))[0]
+    .lap,
   lapTime: msToClock(
-    states.race.laps.filter(
-      h => h.racer === props.id && (h.heatId === props.heatId || h.heat === props.heatId)
-    )[0].lapTime
+    states.race.laps.filter(h => h.racer === props.id && (h.heatId === props.heatId || h.heat === props.heatId))[0]
+      .lapTime
   ),
   bestTime: msToClock(
     _.get(
-      _.sortBy(_.filter(states.race.laps, lap => lap.racer === Number(props.id) && (lap.heatId === props.heatId || lap.heat === props.heatId)), lap =>
-        Number(lap.lapTime)
+      _.sortBy(
+        _.filter(
+          states.race.laps,
+          lap => lap.racer === Number(props.id) && (lap.heatId === props.heatId || lap.heat === props.heatId)
+        ),
+        lap => Number(lap.lapTime)
       ),
       '[0].lapTime'
     )

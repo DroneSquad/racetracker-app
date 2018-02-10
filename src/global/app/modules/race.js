@@ -20,7 +20,7 @@ const RACEMODE_DEFAULT = 'shotgun'; // flyby
 /** types */
 export const RACE_ERROR = 'RACE_ERROR';
 export const RACE_IS_VALID = 'RACE_IS_VALID';
-export const RACE_IS_ACTIVE = 'RACE_IS_ACTIVE'
+export const RACE_IS_ACTIVE = 'RACE_IS_ACTIVE';
 export const NEW_RACE = 'NEW_RACE';
 export const NEW_HEAT = 'NEW_HEAT';
 export const START_HEAT = 'START_HEAT';
@@ -32,8 +32,8 @@ export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
-export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'  // attempt to stop heat with no race tracker connected
-export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no race tracker connected
+export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'; // attempt to stop heat with no race tracker connected
+export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'; // attempt to start heat with no race tracker connected
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -164,7 +164,7 @@ export const validateRace = (request: object) => {
 };
 
 export const startShotgunHeat = (request: object) => {
-  request.raceMode = "shotgun"
+  request.raceMode = 'shotgun';
   return dispatch => {
     dispatch(sentCommand());
     dispatch(
@@ -176,7 +176,7 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const startFlyoverHeat = (request: object) => {
-  request.raceMode = "flyover"
+  request.raceMode = 'flyover';
   return dispatch => {
     dispatch(sentCommand());
     dispatch(startHeat(request));
@@ -200,9 +200,11 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(sentCommand());
     tbs.stopHeat(response => {
-      if (response.error) {  // no tracker connected (most likely)
-        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
-      } else {  // racetracker successfully halted heat
+      if (response.error) {
+        // no tracker connected (most likely)
+        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN));
+      } else {
+        // racetracker successfully halted heat
         dispatch(setStopHeat(response.heatId));
         dispatch(readActiveMode(response.deviceId));
       }
@@ -273,7 +275,7 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceLapsFromResponse(response));
       }
       if (response.error) {
-        console.log(response.error)  // TODO: log a proper error
+        console.log(response.error); // TODO: log a proper error
       }
     }, request);
   };
@@ -283,14 +285,14 @@ export const stopRaceNotifications = (request: object) => {
   return dispatch => {
     tbs.stopRaceNotifications(response => {
       if (response.error) {
-        console.log(response.error)  // TODO: log a proper error
+        console.log(response.error); // TODO: log a proper error
       }
     }, request);
   };
 };
 
 export const setMissingLaps = (slot: object) => {
-  console.log("*** RACE - setMissingLaps ***")
+  console.log('*** RACE - setMissingLaps ***');
   return new Promise((resolve, reject) => {
     tbs.readTotalLaps(response => {
       if (response.error) {
@@ -299,10 +301,10 @@ export const setMissingLaps = (slot: object) => {
         // if the lap counts do not match, determine which were missed
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
-          let awol =_.difference(arr, slot.laps);
-          resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol })
+          let awol = _.difference(arr, slot.laps);
+          resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol });
         } else {
-          resolve();  // lap counts match, no need to query missing laps
+          resolve(); // lap counts match, no need to query missing laps
         }
       }
     }, slot);
@@ -310,7 +312,7 @@ export const setMissingLaps = (slot: object) => {
 };
 
 export const setMissingLapTimes = (request: object) => {
-  console.log("*** RACE - setMissingLapTimes ***")
+  console.log('*** RACE - setMissingLapTimes ***');
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
       if (response.error) {
@@ -319,11 +321,11 @@ export const setMissingLapTimes = (request: object) => {
         resolve(setLap(response));
       }
     }, request);
-  })
+  });
 };
 
 export const getMissingLaps = (request: array) => {
-  console.log("*** RACE - getMissingLaps ***")
+  console.log('*** RACE - getMissingLaps ***');
   return dispatch => {
     let heatId = '';
     let deviceId = '';
@@ -334,34 +336,39 @@ export const getMissingLaps = (request: array) => {
       slotPromises.push(setMissingLaps(slot));
     }
     // promises setting any missing laps
-    Promise.all(slotPromises).then(response => {
-      let lapPromises = [];
-      for (let r of response) {
-        if (r !== undefined) {
-          for (let l of r.laps) {
-            lapPromises.push(setMissingLapTimes(
-              { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
-          }
-        }
-      }
-      // promises setting the laptimes of any missed laps
-      Promise.all(lapPromises).then(response => {
+    Promise.all(slotPromises)
+      .then(response => {
+        let lapPromises = [];
         for (let r of response) {
-          if (r !== undefined && !r.error) {
-            dispatch(r);
+          if (r !== undefined) {
+            for (let l of r.laps) {
+              lapPromises.push(setMissingLapTimes({ deviceId: r.deviceId, heatId: r.heatId, racer: r.racer, lap: l }));
+            }
           }
         }
-        // and finally halt race notifications
-        dispatch(stopRaceNotifications({
-          heatId: heatId,
-          deviceId: deviceId
-        }));
-      }).catch(error => {
-        console.log(error); // TODO: add proper error handling/logging
+        // promises setting the laptimes of any missed laps
+        Promise.all(lapPromises)
+          .then(response => {
+            for (let r of response) {
+              if (r !== undefined && !r.error) {
+                dispatch(r);
+              }
+            }
+            // and finally halt race notifications
+            dispatch(
+              stopRaceNotifications({
+                heatId: heatId,
+                deviceId: deviceId
+              })
+            );
+          })
+          .catch(error => {
+            console.log(error); // TODO: add proper error handling/logging
+          });
       })
-    }).catch(error => {
-      console.log(error); // TODO: add proper error handling/logging
-    })
+      .catch(error => {
+        console.log(error); // TODO: add proper error handling/logging
+      });
   };
 };
 
@@ -393,7 +400,7 @@ export default function(state = initialState, action: Action) {
       return {
         ...state,
         isActive: action.payload
-     };
+      };
     case NEW_RACE:
       return {
         ...state,
@@ -420,15 +427,21 @@ export default function(state = initialState, action: Action) {
         laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
       };
     case SET_LAP:
-      if (_.get(action.payload, 'lap') !== state.lastLapId) { // make sure its unique right now
+      if (_.get(action.payload, 'lap') !== state.lastLapId) {
+        // make sure its unique right now
         return {
           ...state,
           lastLapId: _.get(action.payload, 'lap'),
-          laps: _.reverse(_.sortBy(_.unionWith(
-            [action.payload],
-            state.laps,
-            (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
-          ), 'lap'))
+          laps: _.reverse(
+            _.sortBy(
+              _.unionWith(
+                [action.payload],
+                state.laps,
+                (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
+              ),
+              'lap'
+            )
+          )
         };
       } else {
         return { ...state };
@@ -480,7 +493,12 @@ export default function(state = initialState, action: Action) {
       };
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return { ...action.payload.race, sentCommand: false, error: '', laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
+        return {
+          ...action.payload.race,
+          sentCommand: false,
+          error: '',
+          laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap'))
+        };
       }
       return state;
     }

@@ -9,7 +9,7 @@ import Heat from '../components/Heat';
 
 const mapStateToProps = (state, ownProps) => ({
   activeHeat: state.race.heats.filter(t => t.id === ownProps.id)[0],
-  heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels,
+  heatChannels: state.race.heats.filter(t => t.id === ownProps.id)[0].racerChannels
 });
 
 const HeatContainer = connect(mapStateToProps, null)(Heat);

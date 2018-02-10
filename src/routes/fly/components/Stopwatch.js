@@ -11,7 +11,7 @@ export default class Stopwatch extends Component {
     startFlyoverHeat: Function,
     startShotgunHeat: Function,
     stopHeat: Function,
-    createHeat: Function,
+    createHeat: Function
   };
 
   startHeat = () => {
