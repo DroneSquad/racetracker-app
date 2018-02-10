@@ -281,8 +281,12 @@ export const startRaceNotifications = (request: object) => {
 };
 
 export const stopRaceNotifications = (request: object) => {
+  console.log("ZZZ race- stopRaceNotification ZZZs");
   return dispatch => {
+    console.log("&&&&&&&&&&&&&")
     tbs.stopRaceNotifications(response => {
+      console.log("RESPONDERSTOP")
+      console.log(response)
       if (response.error) {
         console.log(response.error)  // TODO: log a proper error
       }
@@ -314,9 +318,13 @@ export const setMissingLapTimes = (request: object) => {
   console.log("*** RACE - setMissingLapTimes ***")
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
+      console.log("tbs.readLapTime")
+      console.log(response)
       if (response.error) {
+        console.log("tbs.readLapTime-reject")
         reject(response.error);
       } else {
+        console.log("tbs.readLapTime-success")
         resolve(setLap(response));
       }
     }, request);
@@ -325,8 +333,6 @@ export const setMissingLapTimes = (request: object) => {
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
-  console.log(request)
-  console.log("=============================")
   return dispatch => {
     let heatId = '';
     let deviceId = '';
@@ -338,8 +344,10 @@ export const getMissingLaps = (request: array) => {
     }
     // promises setting any missing laps
     Promise.all(slotPromises).then(response => {
+      console.log("PX-0")
       let lapPromises = [];
       for (let r of response) {
+        console.log("PX-1")
         if (r !== undefined) {
           for (let l of r.laps) {
             lapPromises.push(setMissingLapTimes(
@@ -349,16 +357,27 @@ export const getMissingLaps = (request: array) => {
       }
       // promises setting the laptimes of any missed laps
       Promise.all(lapPromises).then(response => {
+        console.log("PX-2")
         for (let r of response) {
+          console.log("PX-3")
+          console.log(r)
           if (r !== undefined && !r.error) {
+            console.log("PX-4")
+            console.log(r)
             dispatch(r);
           }
         }
+        console.log("haltRaceNotifications")
         // and finally halt race notifications
-        dispatch(stopRaceNotifications({
-          heatId: heatId,
-          deviceId: deviceId
-        }));
+
+
+      //  dispatch(stopRaceNotifications({
+    //      heatId: heatId,
+    //      deviceId: deviceId
+    //    }));
+    //    console.log("-----------stopRaceNotifications+++++++++")
+
+
       }).catch(error => {
         console.log(error); // TODO: add proper error handling/logging
       })
