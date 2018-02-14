@@ -3,7 +3,8 @@ import React from 'react';
 import { Dialog, FlatButton, LinearProgress } from 'material-ui';
 
 // import race error lookup codes
-import { ERR_STOP_HEAT_NO_CONN, ERR_START_HEAT_NO_CONN, ERR_START_HEAT_UNKNOWN, ERR_GET_MISSED_LAPS } from '../modules/race';
+import { ERR_STOP_HEAT_NO_CONN, ERR_START_HEAT_NO_CONN, ERR_START_HEAT_UNKNOWN,
+         ERR_GET_MISSED_LAPS, ERR_STOP_HEAT_UNKNOWN } from '../modules/race';
 // import racetracker mode constants
 import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
@@ -157,7 +158,7 @@ export default class RaceManager extends React.PureComponent {
     if (!this.state.open) {
       if(show) {
         this.setState({
-          title: 'Getting missed laps..',
+          title: 'Looking for missed laps',
           main_action: '',
           alt_action: '',
           message: '',
@@ -180,25 +181,25 @@ export default class RaceManager extends React.PureComponent {
     let altActionLabel = '';
     // no tracker connection on heat stop action
     if (errCode === ERR_STOP_HEAT_NO_CONN) {
-      title = 'Stop Race Warning'
-      message = 'It looks like the RaceTracker connection has been lost. You may loose some lap information.'
+      title = "Can't stop race"
+      message = 'It looks like the RaceTracker connection has been lost. You may lose some lap information.'
       mainAction = 'clear_race_error'
-      mainActionLabel = 'Cancel'
+      mainActionLabel = 'CANCEL'
       altAction = 'force_stop_heat'
-      altActionLabel = 'End Race'
+      altActionLabel = 'END RACE'
     }
     // no tracker connection on heat start action
     if (errCode === ERR_START_HEAT_NO_CONN) {
-      title = 'Start Race Error'
+      title = "Can't start race"
       message = 'It looks like the RaceTracker connection has been lost'
       mainAction = 'clear_race_error'
-      mainActionLabel = 'Ok'
+      mainActionLabel = 'OK'
       altAction = ''
       altActionLabel = ''
     }
     // unknown error caused heat start action to fail
     if (errCode === ERR_START_HEAT_UNKNOWN) {
-      title = 'Start Race Error'
+      title = "Can't start race"
       message = 'Race failed to start, please try again'
       mainAction = 'clear_race_error'
       mainActionLabel = 'Ok'
@@ -206,8 +207,8 @@ export default class RaceManager extends React.PureComponent {
       altActionLabel = ''
     }
     // unknown error caused heat stop action to fail
-    if (errCode === ERR_START_HEAT_UNKNOWN) {
-      title = 'Stop Race Error'
+    if (errCode === ERR_STOP_HEAT_UNKNOWN) {
+      title = "Can't stop race"
       message = 'Race failed to stop, please try again'
       mainAction = 'clear_race_error'
       mainActionLabel = 'Ok'
@@ -215,7 +216,7 @@ export default class RaceManager extends React.PureComponent {
       altActionLabel = ''
     }
     if (errCode === ERR_GET_MISSED_LAPS) {
-      title = 'Get Missed Laps Error'
+      title = "Can't look for missed laps"
       message = 'An error occured while checking for missed laps'
       mainAction = 'clear_race_error'
       mainActionLabel = 'Ok'

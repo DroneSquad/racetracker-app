@@ -195,6 +195,7 @@ export const connectTracker = (request: Object) => {
   };
 };
 
+// TODO: rework this to be more effective
 export const syncTrackerState = (deviceId: string) => {
   return new Promise((resolve, reject) => {
     tbs.readActiveMode(response => {
