@@ -36,6 +36,7 @@ export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to sto
 export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no connectd racetracker
 export const ERR_START_HEAT_UNKNOWN = 'ERR_START_HEAT_UNKNOWN';  // unknown error attempting to start heat
 export const ERR_STOP_HEAT_UNKNOWN = 'ERR_STOP_HEAT_UNKNOWN'  // unknown error attempting to stop heat
+export const ERR_GET_MISSED_LAPS = 'ERR_GET_MISSED_LAPS'  // an error occured while fetching missing laps from the racetracker
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -302,10 +303,7 @@ export const startRaceNotifications = (request: object) => {
 
 export const stopRaceNotifications = (request: object) => {
   return dispatch => {
-    console.log("RACE - stopRaceNotifications")
     tbs.stopRaceNotifications(response => {
-      console.log("RESPONDERSTOP")
-      console.log(response)
       if (response.error) {
         console.log(response.error)  // TODO: log a proper error
       }
@@ -337,13 +335,9 @@ export const setMissingLapTimes = (request: object) => {
   console.log("*** RACE - setMissingLapTimes ***")
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
-      console.log("tbs.readLapTime")
-      console.log(response)
       if (response.error) {
-        console.log("tbs.readLapTime-reject")
         reject(response.error);
       } else {
-        console.log("tbs.readLapTime-success")
         resolve(setLap(response));
       }
     }, request);
@@ -352,10 +346,7 @@ export const setMissingLapTimes = (request: object) => {
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
-
-
-
-
+  // TODO: refactor this mess into something reasonable
   return dispatch => {
     let heatId = '';
     let deviceId = '';
@@ -367,10 +358,8 @@ export const getMissingLaps = (request: array) => {
     }
     // promises setting any missing laps
     Promise.all(slotPromises).then(response => {
-      console.log("PX-0")
       let lapPromises = [];
       for (let r of response) {
-        console.log("PX-1")
         if (r !== undefined) {
           for (let l of r.laps) {
             lapPromises.push(setMissingLapTimes(
@@ -380,34 +369,26 @@ export const getMissingLaps = (request: array) => {
       }
       // promises setting the laptimes of any missed laps
       Promise.all(lapPromises).then(response => {
-        console.log("PX-2")
         for (let r of response) {
-          console.log("PX-3")
-          console.log(r)
           if (r !== undefined && !r.error) {
-            console.log("PX-4")
-            console.log(r)
             dispatch(r);
           }
         }
-        console.log("haltRaceNotifications")
         // and finally halt race notifications
-
-
-      dispatch(stopRaceNotifications({
+        dispatch(stopRaceNotifications({
           heatId: heatId,
           deviceId: deviceId
         }));
-        console.log("-----------stopRaceNotifications+++++++++")
-console.log("setAwaitingResponse - FALSE")
-  dispatch(setAwaitingResponse(false));
-
+        // and finally indicate that the command response was successful
+        dispatch(setAwaitingResponse(false));
+      // handle errors that occured during the fetch
       }).catch(error => {
-        //dispatch(setAwaitingResponse(false));
         console.log(error); // TODO: add proper error handling/logging
+        dispatch(setRaceError(ERR_GET_MISSED_LAPS))
       })
     }).catch(error => {
       console.log(error); // TODO: add proper error handling/logging
+      dispatch(setRaceError(ERR_GET_MISSED_LAPS))
     })
   };
 };
@@ -482,16 +463,11 @@ export default function(state = initialState, action: Action) {
         return { ...state };
       }
     case AWAITING_RESPONSE:
-    console.log("AWAITING_RESPONSE_REDUX")
-    console.log(action.payload)
       return {
         ...state,
         awaitingResponse: action.payload
       };
     case START_HEAT: // gets called when we get the response from the tracker
-    console.log("START_HEAT_REDUX")
-    console.log(false)
-
       return {
         ...state,
         awaitingResponse: false,
@@ -511,7 +487,6 @@ export default function(state = initialState, action: Action) {
     case STOP_HEAT: // gets called when we got the response from the tracker
       return {
         ...state,
-      //   awaitingResponse: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
@@ -526,9 +501,6 @@ export default function(state = initialState, action: Action) {
         error: ''
       };
     case RACE_ERROR:
-    console.log("RACE_ERROR_REDUX")
-    console.log(false)
-
       return {
         ...state,
         awaitingResponse: false,

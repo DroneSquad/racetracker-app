@@ -19,7 +19,6 @@ export default class Stopwatch extends Component {
       deviceId: this.props.activeTracker.id,
       raceMode: this.props.raceMode
     };
-    console.log("==> STOPWATCH - startHeat")
     this.props.startHeat(r);
   };
 
@@ -28,7 +27,6 @@ export default class Stopwatch extends Component {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
-    console.log("==> STOPWATCH - stopHeat")
     this.props.stopHeat(r);
   };
 
@@ -42,8 +40,6 @@ export default class Stopwatch extends Component {
   };
 
   render() {
-    console.log("STOPWATCH - RENDER")
-    console.log(this.props.isAwaitingResponse)
     let heat = this.props.activeHeat;
     let btnStyle = { width: '30vw', marginTop: '4px', boxShadow: 'none', marginRight: '24px' };
     let spinner = (

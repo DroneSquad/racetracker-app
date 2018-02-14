@@ -384,11 +384,8 @@ export const readActiveMode = (deviceId: string) => {
   return dispatch => {
     tbs.readActiveMode(response => {
       if (response.error) {
-        console.log("RT- readActiveMode Error")
         console.log(response.error); // TODO: log the error properly to device
       } else {
-        console.log("RT- readActiveMode Success")
-        console.log(response)
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);
