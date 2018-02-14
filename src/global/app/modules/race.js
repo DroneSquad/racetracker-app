@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import { createSelector } from 'reselect';
 
 import tbs from '../../../services/racetracker';
-import { readActiveMode } from './racetracker';
+import { readActiveMode, isTrackerConnected } from './racetracker';
 
 import {
   announceLapsFromResponse,
@@ -186,7 +186,23 @@ export const startFlyoverHeat = (request: object) => {
 };
 
 export const startHeat = (request: object, sayGo: boolean) => {
+  console.log("P3 - RACE - startHeat()")
   return dispatch => {
+    isTrackerConnected(request.deviceId).then(response => {
+      console.log("PROMISE RESOLVED")
+      dispatch(response);
+      console.log(response.payload.connected)
+      if (response.payload.connected) {
+        console.log("start race")
+      } else {
+        console.log("do other")
+      }
+    })
+  };
+};
+
+/*export const startHeat = (request: object, sayGo: boolean) => {
+return dispatch => {
     tbs.startHeat(response => {
       dispatch(setStartHeat(response.heatId));
       if (sayGo) {
@@ -195,9 +211,10 @@ export const startHeat = (request: object, sayGo: boolean) => {
       dispatch(readActiveMode(response.deviceId));
     }, request);
   };
-};
+};*/
 
 export const stopHeat = (request: object) => {
+  console.log("P2 - RACE - stopHeat()")
   return dispatch => {
     dispatch(sentCommand());
     tbs.stopHeat(response => {
@@ -212,6 +229,7 @@ export const stopHeat = (request: object) => {
 };
 
 export const createHeat = (request: object) => {
+  console.log("P2 - RACE - createHeat()")
   return dispatch => {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer

@@ -17,13 +17,10 @@ export default class Stopwatch extends Component {
   startHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      deviceId: this.props.activeTracker.id
+      deviceId: this.props.activeTracker.id,
+      raceMode: this.props.raceMode
     };
-    if (this.props.raceMode === 'flyby') {
-      this.props.startFlyoverHeat(r);
-    } else {
-      this.props.startShotgunHeat(r);
-    }
+    this.props.startHeat(r);
   };
 
   endHeat = () => {

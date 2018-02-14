@@ -186,6 +186,8 @@ export const connectTracker = (request: Object) => {
         ble.isEnabled(result => {
           if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
             dispatch(setReconnecting(response.device.id));
+          } else {
+            console.log("WHAT DO HERE?")
           }
         });
       }
@@ -196,26 +198,32 @@ export const connectTracker = (request: Object) => {
 export const syncTrackerState = (deviceId: string) => {
   console.log("syncTrackerState CALLED")
   return new Promise((resolve, reject) => {
+
+
     ble.isDeviceConnected(result => {
       console.log("BLEISDEVICECONNECTED")
       console.log(result)
     }, deviceId);
     console.log("===THE_MIDDLE===")
     console.log(deviceId)
+
+
     // TODO: refine this, if not connected, etc how to handle if not, ie no response
     tbs.readActiveMode(response => {
       console.log("TBSRESPONSEACTIVEMODE")
-      console.log(response)
       if (response.error) {
+        console.log("REJECT")
         reject(response.error);
       } else {
+        console.log("RESOLVE")
+        console.log(response)
         resolve(setActiveMode(response));
       }
     }, deviceId);
   });
 };
 
-export const isTrackerConnected = (deviceId: string) => {
+export const isTrackerConnected2 = (deviceId: string) => {
   console.log("** RT - isTrackerConnected **")
   return dispatch => {
     ble.isDeviceConnected(response => {
@@ -223,6 +231,71 @@ export const isTrackerConnected = (deviceId: string) => {
     }, deviceId);
   };
 };
+
+export const isTrackerConnected = (deviceId: string) => {
+  return new Promise((resolve, reject) => {
+    console.log("START")
+    tbs.readFirmwareVersion(response => {
+      console.log("FIRMWARE")
+      console.log(response)
+      if (response.error) {
+
+        console.log("NOT CONNECTED")
+        resolve(updateConnected({ deviceId: deviceId, connected: false }))
+          } else {
+            console.log("IS CONNECTED")
+            resolve(updateConnected({ deviceId: deviceId, connected: true }))
+          }
+        }, deviceId);
+
+  });
+};
+
+/*export const isTrackerConnected = (deviceId: string) => {
+  return new Promise((resolve, reject) => {
+    ble.isDeviceConnected(response => {
+      console.log("isConnected: " + response.connected)
+      resolve(updateConnected(response))
+    }, deviceId);
+  });
+};*/
+
+// BEST
+/* export const isTrackerConnected = (deviceId: string) => {
+  return new Promise((resolve, reject) => {
+    console.log("START")
+    tbs.readActiveMode(response => {
+      console.log("ACTIVEMODE")
+      console.log(response)
+      if (response.error) {
+
+        console.log("NOT CONNECTED")
+        resolve(updateConnected({ deviceId: deviceId, connected: false }))
+          } else {
+            console.log("IS CONNECTED")
+            resolve(updateConnected({ deviceId: deviceId, connected: true }))
+          }
+        }, deviceId);
+
+  });
+}; */
+
+/*export const isTrackerConnected = (deviceId: string) => {
+  return new Promise((resolve, reject) => {
+    ble.readDeviceRssi(response => {
+      console.log("RESPONSE")
+      console.log(response)
+        if (response.error) {
+          console.log("NOT CONNECTED")
+          resolve(updateConnected({ deviceId: deviceId, connected: false }))
+        } else {
+          console.log("IS CONNECTED")
+          resolve(updateConnected({ deviceId: deviceId, connected: true }))
+        }
+
+    }, deviceId);
+  });
+};*/
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
   console.log("** RT - startTrackerSearch **")
@@ -306,7 +379,7 @@ export const validateTrackerPromise = (request: object) => {
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        resolve(isTrackerConnected(request.id));
+        resolve(isTrackerConnected2(request.id));
       }
     }, request.id);
   });
@@ -388,6 +461,7 @@ export const readActiveMode = (deviceId: string) => {
   return dispatch => {
     tbs.readActiveMode(response => {
       if (response.error) {
+        console.log("RT- readActiveMode Error")
         console.log(response.error); // TODO: log the error properly to device
       } else {
         dispatch(setActiveMode(response)); // update the redux value

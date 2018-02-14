@@ -237,7 +237,6 @@ export default class RaceManager extends React.PureComponent {
     if (open || progress_bar) {
       show = true
     }
-    console.log("render")
     const actions = [
      <FlatButton
        label={alt_action_label}
@@ -250,9 +249,6 @@ export default class RaceManager extends React.PureComponent {
        onClick={this.handleMainActionClick}
      />,
    ];
-   console.log("renderXX")
-   console.log(show)
-   console.log(progress_bar)
    return (
      <div>
          <Dialog
