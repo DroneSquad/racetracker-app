@@ -357,40 +357,23 @@ export const getMissingLaps = (request: array) => {
       slotPromises.push(setMissingLaps(slot));
     }
     // promises setting any missing laps
-    Promise.all(slotPromises)
-      .then(response => {
-        let lapPromises = [];
-        for (let r of response) {
-          if (r !== undefined) {
-            for (let l of r.laps) {
-              lapPromises.push(setMissingLapTimes({ deviceId: r.deviceId, heatId: r.heatId, racer: r.racer, lap: l }));
-            }
+    Promise.all(slotPromises).then(response => {
+      let lapPromises = [];
+      for (let r of response) {
+        if (r !== undefined) {
+          for (let l of r.laps) {
+            lapPromises.push(setMissingLapTimes(
+              { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
           }
         }
-        // promises setting the laptimes of any missed laps
-        Promise.all(lapPromises)
-          .then(response => {
-            for (let r of response) {
-              if (r !== undefined && !r.error) {
-                dispatch(r);
-              }
-            }
-            // and finally halt race notifications
-            dispatch(
-              stopRaceNotifications({
-                heatId: heatId,
-                deviceId: deviceId
-              })
-            );
-          })
-          .catch(error => {
-            console.log(error); // TODO: add proper error handling/logging
-          });
-      })
-      .catch(error => {
-        console.log(error); // TODO: add proper error handling/logging
-      });
-=======
+      }
+      // promises setting the laptimes of any missed laps
+      Promise.all(lapPromises).then(response => {
+        for (let r of response) {
+          if (r !== undefined && !r.error) {
+            dispatch(r);
+          }
+        }
         // and finally halt race notifications
         dispatch(stopRaceNotifications({
           heatId: heatId,
@@ -407,7 +390,6 @@ export const getMissingLaps = (request: array) => {
       console.log(error); // TODO: add proper error handling/logging
       dispatch(setRaceError(ERR_GET_MISSED_LAPS))
     })
->>>>>>> midway
   };
 };
 
