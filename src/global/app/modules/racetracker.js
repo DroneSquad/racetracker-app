@@ -198,11 +198,8 @@ export const syncTrackerState = (deviceId: string) => {
   return new Promise((resolve, reject) => {
     tbs.readActiveMode(response => {
       if (response.error) {
-        console.log("REJECT")
         reject(response.error);
       } else {
-        console.log("RESOLVE")
-        console.log(response)
         resolve(setActiveMode(response));
       }
     }, deviceId);
@@ -212,7 +209,7 @@ export const syncTrackerState = (deviceId: string) => {
 export const isTrackerConnected = (deviceId: string) => {
   return new Promise((resolve, reject) => {
     // if the tracker has disconnected, but the bluetooth library has not yet
-    // noticed the disconnection, then this will force the library to update
+    // noticed the disconnection, this will then force the library to update
     tbs.readFirmwareVersion(response => {
       if (response.error) {
         resolve(false)

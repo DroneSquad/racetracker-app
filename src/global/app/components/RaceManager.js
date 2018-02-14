@@ -65,7 +65,7 @@ export default class RaceManager extends React.PureComponent {
           console.log("RACEMANAGER - isConnected - getMissingLaps");
           this.getMissingLaps();
         } else {
-          console.log("RACEMANAGER - notConnected - setAwaitingResponse FALSE");
+          console.log("XXXXXXXXXXXX  RACEMANAGER - notConnected - setAwaitingResponse FALSE");
           // here is where we turn off the active response
           this.props.setAwaitingResponse(false)  // fake the tbs racetracker response
         }
@@ -112,14 +112,8 @@ export default class RaceManager extends React.PureComponent {
                 heatId: this.props.activeHeat.id,
                 deviceId: this.props.activeTracker.id
               };
-              console.log("START HERE")
-              console.log(r)
               this.props.setTrackerIdle(r);
-              this.props.setAwaitingResponse(false)  // fake the tbs racetracker response
-              console.log("END HERE")
-            }
-            else {
-              console.log("----- RT NOT IN RACE MODE - do nothing")
+              this.props.setAwaitingResponse(false)
             }
           }
         }
@@ -133,17 +127,16 @@ export default class RaceManager extends React.PureComponent {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  /*shouldComponentUpdate(nextProps, nextState) {
     // the only reason to ever render is if there is a race error or progressbar to show or remove
     // from the display, else dont bother, save the cycle and move along..
-  /*  if (
+    if (
       (nextProps.raceError && !this.props.raceError) || (this.props.raceError && !nextProps.raceError)  ||
       (nextState.progress_bar && !this.state.progress_bar) || (this.state.progress_bar && !nextState.progress_bar)) {
         return true;
     }
-    return false; */
-    return true;
-  }
+    return false;
+  }*/
 
   getMissingLaps = () => {
     this.showProgressBar(true);  // show progressbar while missing laps are fetched from racetracker
@@ -166,13 +159,19 @@ export default class RaceManager extends React.PureComponent {
 
   showProgressBar = (show: boolean) => {
     if (!this.state.open) {
-      let msg = '';
       if(show) {
-        msg = "words and stuff";
+        this.setState({
+          title: 'Checking for laps...',
+          main_action: '',
+          alt_action: '',
+          message: '',
+          progress_bar: show
+         });
+      } else {
+        this.setState({
+          progress_bar: show
+         });
       }
-      this.setState({
-        message: msg,
-        progress_bar: show });
     }
   }
 
@@ -232,13 +231,13 @@ export default class RaceManager extends React.PureComponent {
   };
 
   render() {
-    let { message, title, main_action_label, alt_action_label, open, primary, progress_bar } = this.state;
+    let { message, title, main_action, main_action_label, alt_action, alt_action_label, open, primary, progress_bar } = this.state;
     let show = false;
     if (open || progress_bar) {
       show = true
     }
     const actions = []
-    if (alt_action_label) {
+    if (alt_action) {
       actions.push(
         <FlatButton
           label={alt_action_label}
@@ -247,7 +246,7 @@ export default class RaceManager extends React.PureComponent {
         />
       )
     }
-    if (main_action_label) {
+    if (main_action) {
       actions.push(
         <FlatButton
           label={main_action_label}

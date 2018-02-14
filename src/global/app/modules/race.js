@@ -152,15 +152,7 @@ export const createRace = (request: object) => {
 
 export const validateRace = (request: object) => {
   return dispatch => {
-    // TODO: validate the state of a race left running from a previous session on startup
-    /*raceMngr.createRace(response => {
-      dispatch(newRace(response));
-    }, request);*/
-    /** Validate that the device exists on the internal bluetooth scan list */
-    /*validateTrackers = () => {
-    if (!this.props.isBtScanning) {
-    let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
-    this.props.validateTrackers(aTracker); */
+    // TODO: validate the state of a race left running from a previous session on this startup
   };
 };
 
