@@ -70,12 +70,26 @@ export default class RaceManager extends React.PureComponent {
           // console.log("TODO: REEVALUATE RM -raceComplete - no tracker connected - stopRaceNotifications ==")
           // this.stopRaceNotifications();
           //dispatch(setStopHeat(response.heatId));
+
+
+
         }
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
         this.configDialog(nextProps.raceError);
       }
+
+      // handle any race errors (includes: attempt to stop w/ no connection, etc.)
+      if (!nextProps.isAwaitingResponse && nextProps.isAwaitingResponse !== this.props.isAwaitingResponse && this.state.progress_bar) {
+        console.log("HIDE THE PROGRESS BAR")
+          this.showProgressBar(false);
+        // this.configDialog(nextProps.raceError);
+      }
+
+
+
+
       // verify an activeTracker is available for the remaining checks
       if (this.props.activeTracker) {
         // if the activeTrackers racerchannels change then update the active heat, but only if the heat 'isPending'
@@ -137,6 +151,7 @@ export default class RaceManager extends React.PureComponent {
 
   getMissingLaps = () => {
     console.log("getMissingLaps")
+
     this.showProgressBar(true);  // show progressbar while missing laps are fetched from racetracker
     let cl = this.props.activeHeat.racerChannels.map(chan => ({
       racer: chan.racer,

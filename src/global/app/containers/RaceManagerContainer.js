@@ -19,6 +19,7 @@ const mapStateToProps = state => ({
   activeTracker: getActiveTracker(state),
   activeLaps: getActiveLaps(state),
   raceError: state.race.error,
+  isAwaitingResponse: state.race.awaitingResponse,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

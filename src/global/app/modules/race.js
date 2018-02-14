@@ -382,6 +382,69 @@ export const setMissingLapTimes = (request: object) => {
 
 export const getMissingLaps = (request: array) => {
   console.log("*** RACE - getMissingLaps ***")
+
+
+
+
+  return dispatch => {
+    let heatId = '';
+    let deviceId = '';
+    let slotPromises = [];
+    for (let slot of request) {
+      heatId = slot.heatId;
+      deviceId = slot.deviceId;
+      slotPromises.push(setMissingLaps(slot));
+    }
+    // promises setting any missing laps
+    Promise.all(slotPromises).then(response => {
+      console.log("PX-0")
+      let lapPromises = [];
+      for (let r of response) {
+        console.log("PX-1")
+        if (r !== undefined) {
+          for (let l of r.laps) {
+            lapPromises.push(setMissingLapTimes(
+              { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
+          }
+        }
+      }
+      // promises setting the laptimes of any missed laps
+      Promise.all(lapPromises).then(response => {
+        console.log("PX-2")
+        for (let r of response) {
+          console.log("PX-3")
+          console.log(r)
+          if (r !== undefined && !r.error) {
+            console.log("PX-4")
+            console.log(r)
+            dispatch(r);
+          }
+        }
+        console.log("haltRaceNotifications")
+        // and finally halt race notifications
+
+
+      dispatch(stopRaceNotifications({
+          heatId: heatId,
+          deviceId: deviceId
+        }));
+        console.log("-----------stopRaceNotifications+++++++++")
+
+  dispatch(awaitingResponse(false));
+
+      }).catch(error => {
+        console.log(error); // TODO: add proper error handling/logging
+      })
+    }).catch(error => {
+      console.log(error); // TODO: add proper error handling/logging
+    })
+  };
+};
+
+
+/*
+export const getMissingLaps = (request: array) => {
+  console.log("*** RACE - getMissingLaps ***")
   return dispatch => {
     let heatId = '';
     let deviceId = '';
@@ -434,7 +497,7 @@ export const getMissingLaps = (request: array) => {
       console.log(error); // TODO: add proper error handling/logging
     })
   };
-};
+};*/
 
 /** initial state */
 const initialState = {
@@ -530,7 +593,7 @@ export default function(state = initialState, action: Action) {
     case STOP_HEAT: // gets called when we got the response from the tracker
       return {
         ...state,
-        awaitingResponse: false,
+      //   awaitingResponse: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
