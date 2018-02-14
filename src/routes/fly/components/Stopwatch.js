@@ -8,8 +8,9 @@ export default class Stopwatch extends Component {
     activeTracker: Object,
     raceMode: string,
     isAwaitingResponse: boolean,
-    stopHeat: Function,
     createHeat: Function,
+    stopHeat: Function,
+    startHeat: Function
   };
 
   startHeat = () => {

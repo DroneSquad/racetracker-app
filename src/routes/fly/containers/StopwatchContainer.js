@@ -14,7 +14,6 @@ const mapStateToProps = (state, ownProps) => ({
   activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,
   isAwaitingResponse: !!state.race.awaitingResponse,
-  activeRace: state.race
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

@@ -149,9 +149,9 @@ export const createRace = (request: object) => {
   };
 };
 
-// TODO: validate the state of a race left running from a previous session on startup
 export const validateRace = (request: object) => {
   return dispatch => {
+    // TODO: validate the state of a race left running from a previous session on startup
     /*raceMngr.createRace(response => {
       dispatch(newRace(response));
     }, request);*/
@@ -176,6 +176,8 @@ export const startHeat = (request: object) => {
       }
       else { // no tracker connected, command is now complete
         dispatch(awaitingResponse(false));
+        // TODO: do we need an error dialog for the user here?
+        // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
     })
   };
@@ -216,7 +218,28 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const stopHeat = (request: object) => {
-  console.log("P2 - RACE - stopHeat()")
+  return dispatch => {
+    dispatch(awaitingResponse(true));
+    isTrackerConnected(request.deviceId).then(response => {
+      if (response) {  // tracker is connected
+        tbs.stopHeat(response => {
+          if (response.heatStarted) {
+            dispatch(setStopHeat(response.heatId));
+            dispatch(readActiveMode(response.deviceId));
+          } else {
+            console.log("ERROR STOPPING HEAT")
+            // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+          }
+        }, request);
+      }
+      else { // no tracker connected, show user error dialog
+        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+      }
+    })
+  };
+};
+
+/*export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(awaitingResponse(true));
     tbs.stopHeat(response => {
@@ -228,7 +251,7 @@ export const stopHeat = (request: object) => {
       }
     }, request);
   };
-};
+};*/
 
 export const createHeat = (request: object) => {
   console.log("P2 - RACE - createHeat()")

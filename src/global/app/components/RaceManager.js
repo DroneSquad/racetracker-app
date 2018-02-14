@@ -67,8 +67,10 @@ export default class RaceManager extends React.PureComponent {
           // TODO: do we really need to fire this? no tracker is avail to receive the command?
           // perhaps another event relies on the error being thrown? investigate when time allows
           // console.log("TODO: REEVALUATE RM -raceComplete - no tracker connected - stopRaceNotifications ==")
-          console.log("racemanager - stopracenotificatons");
-          this.stopRaceNotifications();
+          console.log("racemanager - stopracenotificatons - WHAT TO DO HERE");
+          // this.stopRaceNotifications();
+
+          //dispatch(setStopHeat(response.heatId));
         }
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
@@ -237,7 +239,26 @@ export default class RaceManager extends React.PureComponent {
     if (open || progress_bar) {
       show = true
     }
-    const actions = [
+    const actions = []
+    if (alt_action_label) {
+      actions.push(
+        <FlatButton
+          label={alt_action_label}
+          primary={primary}
+          onClick={this.handleAltActionClick}
+        />
+      )
+    }
+    if (main_action_label) {
+      actions.push(
+        <FlatButton
+          label={main_action_label}
+          primary={primary}
+          onClick={this.handleMainActionClick}
+        />
+      )
+    }
+    /* const actions = [
      <FlatButton
        label={alt_action_label}
        primary={primary}
@@ -248,7 +269,7 @@ export default class RaceManager extends React.PureComponent {
        primary={primary}
        onClick={this.handleMainActionClick}
      />,
-   ];
+   ]; */
    return (
      <div>
          <Dialog
