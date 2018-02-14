@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => ({
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,
-  isAwaitingResponse: !!state.race.awaitingResponse,
+  isAwaitingResponse: state.race.awaitingResponse,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({

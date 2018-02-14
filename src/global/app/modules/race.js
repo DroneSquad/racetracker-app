@@ -222,16 +222,11 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
-      console.log("1")
       if (response) {  // tracker is connected
-        console.log("2")
         tbs.stopHeat(response => {
-          console.log("3")
           if (response.heatStopped) {
-            console.log("4")
             dispatch(setStopHeat(response.heatId));
             dispatch(readActiveMode(response.deviceId));
-            console.log("5")
           } else {
             console.log("ERROR STOPPING HEAT")
             // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
@@ -239,7 +234,6 @@ export const stopHeat = (request: object) => {
         }, request);
       }
       else { // no tracker connected, show user error dialog
-        console.log("1111")
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
     })
@@ -247,7 +241,6 @@ export const stopHeat = (request: object) => {
 };
 
 export const createHeat = (request: object) => {
-  console.log("P2 - RACE - createHeat()")
   return dispatch => {
     let hUid = uuid.v4(); // heat uid
     // create initial lap for each racer
@@ -415,10 +408,11 @@ export const getMissingLaps = (request: array) => {
           deviceId: deviceId
         }));
         console.log("-----------stopRaceNotifications+++++++++")
-
+console.log("setAwaitingResponse - FALSE")
   dispatch(setAwaitingResponse(false));
 
       }).catch(error => {
+        //dispatch(setAwaitingResponse(false));
         console.log(error); // TODO: add proper error handling/logging
       })
     }).catch(error => {
@@ -426,64 +420,6 @@ export const getMissingLaps = (request: array) => {
     })
   };
 };
-
-
-/*
-export const getMissingLaps = (request: array) => {
-  console.log("*** RACE - getMissingLaps ***")
-  return dispatch => {
-    let heatId = '';
-    let deviceId = '';
-    let slotPromises = [];
-    for (let slot of request) {
-      heatId = slot.heatId;
-      deviceId = slot.deviceId;
-      slotPromises.push(setMissingLaps(slot));
-    }
-    // promises setting any missing laps
-    Promise.all(slotPromises).then(response => {
-      console.log("PX-0")
-      let lapPromises = [];
-      for (let r of response) {
-        console.log("PX-1")
-        if (r !== undefined) {
-          for (let l of r.laps) {
-            lapPromises.push(setMissingLapTimes(
-              { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
-          }
-        }
-      }
-      // promises setting the laptimes of any missed laps
-      Promise.all(lapPromises).then(response => {
-        console.log("PX-2")
-        for (let r of response) {
-          console.log("PX-3")
-          console.log(r)
-          if (r !== undefined && !r.error) {
-            console.log("PX-4")
-            console.log(r)
-            dispatch(r);
-          }
-        }
-        console.log("haltRaceNotifications")
-        // and finally halt race notifications
-
-
-      dispatch(stopRaceNotifications({
-          heatId: heatId,
-          deviceId: deviceId
-        }));
-        console.log("-----------stopRaceNotifications+++++++++")
-
-
-      }).catch(error => {
-        console.log(error); // TODO: add proper error handling/logging
-      })
-    }).catch(error => {
-      console.log(error); // TODO: add proper error handling/logging
-    })
-  };
-};*/
 
 /** initial state */
 const initialState = {
@@ -555,11 +491,16 @@ export default function(state = initialState, action: Action) {
         return { ...state };
       }
     case AWAITING_RESPONSE:
+    console.log("awaitingresponse")
+    console.log(action.payload)
       return {
         ...state,
         awaitingResponse: action.payload
       };
     case START_HEAT: // gets called when we get the response from the tracker
+    console.log("awaitingresponseX")
+    console.log(false)
+
       return {
         ...state,
         awaitingResponse: false,
@@ -594,6 +535,9 @@ export default function(state = initialState, action: Action) {
         error: ''
       };
     case RACE_ERROR:
+    console.log("awaitingresponseZ")
+    console.log(false)
+
       return {
         ...state,
         awaitingResponse: false,

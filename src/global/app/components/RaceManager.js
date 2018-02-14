@@ -19,12 +19,12 @@ export default class RaceManager extends React.PureComponent {
     setIsValid: Function,
     setIsActive: Function,
     startRaceNotifications: Function,
-    stopRaceNotifications: Function,
     getMissingLaps: Function,
     setHeatChannels: Function,
     forceStopHeat: Function,
     clearRaceError: Function,
-    setTrackerIdle: Function
+    setTrackerIdle: Function,
+    setAwaitingResponse: Function
   };
 
   constructor(props) {
@@ -58,39 +58,28 @@ export default class RaceManager extends React.PureComponent {
       }
       // stop race update notifications
       if (nextProps.activeHeat.isComplete && nextProps.activeHeat.isComplete !== this.props.activeHeat.isComplete) {
+        console.log("RACEMANAGER - raceEnded");
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
           // if a tracker is connected then fetch any missing laps
-          console.log("RACEMANAGER - getMissingLaps");
+          console.log("RACEMANAGER - isConnected - getMissingLaps");
           this.getMissingLaps();
         } else {
-          console.log("RACEMANAGER - setAwaitingResponse FALSE");
-          // no tracker is connected...
-          // TODO: do we really need to fire this? no tracker is avail to receive the command?
-          // perhaps another event relies on the error being thrown? investigate when time allows
-          // console.log("TODO: REEVALUATE RM -raceComplete - no tracker connected - stopRaceNotifications ==")
-          // this.stopRaceNotifications();
-          //dispatch(setStopHeat(response.heatId));
-
+          console.log("RACEMANAGER - notConnected - setAwaitingResponse FALSE");
           // here is where we turn off the active response
-          this.props.setAwaitingResponse(false)
-
+          this.props.setAwaitingResponse(false)  // fake the tbs racetracker response
         }
       }
       // handle any race errors (includes: attempt to stop w/ no connection, etc.)
       if (nextProps.raceError && nextProps.raceError !== this.props.raceError) {
+        console.log("RACEMANAGER - configDialog");
         this.configDialog(nextProps.raceError);
       }
-
-      // handle any race errors (includes: attempt to stop w/ no connection, etc.)
+      // hide the progress bar accordingly
       if (!nextProps.isAwaitingResponse && nextProps.isAwaitingResponse !== this.props.isAwaitingResponse && this.state.progress_bar) {
-        console.log("HIDE THE PROGRESS BAR")
-          this.showProgressBar(false);
-        // this.configDialog(nextProps.raceError);
+        console.log("RACEMANAGER - hideProgress");
+        this.showProgressBar(false);
       }
-
-
-
 
       // verify an activeTracker is available for the remaining checks
       if (this.props.activeTracker) {
@@ -102,16 +91,17 @@ export default class RaceManager extends React.PureComponent {
         // if a heat is running, then a device has just now recovered from a lost connection
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
-          console.log("RACEMANAGER - onTrackerReconnect");
           let mode = this.props.activeTracker.activeMode;
-          console.log(mode)
+          console.log("-------------------------------")
+          console.log("RACEMANAGER - onTrackerReconnect :::: " + mode);
+          console.log("-------------------------------")
           if (this.props.activeHeat.isActive) {
             console.log("---- ActiveHeat-isActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
               console.log("---- RT IN RACE MODE - restart notifications")
               this.startRaceNotifications();
             } else {
-              console.log("---- RT NOT IN RACE MODE - update redux");
+              console.log("---- RT NOT IN RACE MODE - update redux to idle");
               this.props.forceStopHeat(this.props.activeHeat.id)
             }
           } else {
@@ -152,8 +142,6 @@ export default class RaceManager extends React.PureComponent {
   }
 
   getMissingLaps = () => {
-    console.log("getMissingLaps")
-
     this.showProgressBar(true);  // show progressbar while missing laps are fetched from racetracker
     let cl = this.props.activeHeat.racerChannels.map(chan => ({
       racer: chan.racer,
@@ -172,26 +160,15 @@ export default class RaceManager extends React.PureComponent {
     this.props.startRaceNotifications(r);
   }
 
-  /*stopRaceNotifications = () => {
-    console.log("RCAJDDstopRaceNotifications")
-    let r = {
-      heatId: this.props.activeHeat.id,
-      deviceId: this.props.activeTracker.id
-    };
-    console.log("XXXX")
-    console.log(r)
-    this.props.stopRaceNotifications(r);
-    console.log("VVVVV")
-    this.showProgressBar(false);  // destroy any generic progress bar that may be showing
-    console.log("YYYYY")
-  }*/
-
   showProgressBar = (show: boolean) => {
-    console.log("========== showProgressBar ================")
-    console.log(show)
     if (!this.state.open) {
-      console.log("SHOW THE PROGRESS BAR")
-      this.setState({ progress_bar: show });
+      let msg = '';
+      if(show) {
+        msg = "words and stuff";
+      }
+      this.setState({
+        message: msg,
+        progress_bar: show });
     }
   }
 
@@ -275,18 +252,6 @@ export default class RaceManager extends React.PureComponent {
         />
       )
     }
-    /* const actions = [
-     <FlatButton
-       label={alt_action_label}
-       primary={primary}
-       onClick={this.handleAltActionClick}
-     />,
-     <FlatButton
-       label={main_action_label}
-       primary={primary}
-       onClick={this.handleMainActionClick}
-     />,
-   ]; */
    return (
      <div>
          <Dialog

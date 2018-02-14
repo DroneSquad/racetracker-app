@@ -172,7 +172,6 @@ export const connectTracker = (request: Object) => {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         syncTrackerState(response.device.id)
           .then(result => {
-            console.log("syncTrackerState-Then.call")
             dispatch(result)
             dispatch(setConnected(response.device))
             if (request.getChannels) {
@@ -187,8 +186,7 @@ export const connectTracker = (request: Object) => {
           if (result) {  // if bluetooth was deactivated, dont bother trying to reconnect
             dispatch(setReconnecting(response.device.id));
           } else {
-            console.log("WHAT DO HERE?")
-            // dispatch(setDisconnected(response.device.id)); ???
+            dispatch(setDisconnected(response.device.id));
           }
         });
       }
@@ -197,21 +195,8 @@ export const connectTracker = (request: Object) => {
 };
 
 export const syncTrackerState = (deviceId: string) => {
-  console.log("syncTrackerState CALLED")
   return new Promise((resolve, reject) => {
-
-
-  /*  ble.isDeviceConnected(result => {
-      console.log("BLEISDEVICECONNECTED")
-      console.log(result)
-    }, deviceId);
-    console.log("===THE_MIDDLE===")
-    console.log(deviceId)*/
-
-
-    // TODO: refine this, if not connected, etc how to handle if not, ie no response
     tbs.readActiveMode(response => {
-      console.log("TBSRESPONSEACTIVEMODE")
       if (response.error) {
         console.log("REJECT")
         reject(response.error);
@@ -224,15 +209,6 @@ export const syncTrackerState = (deviceId: string) => {
   });
 };
 
-/*export const isTrackerConnected2 = (deviceId: string) => {
-  console.log("** RT - isTrackerConnected **")
-  return dispatch => {
-    ble.isDeviceConnected(response => {
-      dispatch(updateConnected(response));
-    }, deviceId);
-  };
-};*/
-
 export const isTrackerConnected = (deviceId: string) => {
   return new Promise((resolve, reject) => {
     // if the tracker has disconnected, but the bluetooth library has not yet
@@ -240,61 +216,12 @@ export const isTrackerConnected = (deviceId: string) => {
     tbs.readFirmwareVersion(response => {
       if (response.error) {
         resolve(false)
-        // let the tracker manager handle state updates
-        // resolve(updateConnected({ deviceId: deviceId, connected: false }))
       } else {
         resolve(true)
-        // let the tracker manager handle state updates
-        // resolve(updateConnected({ deviceId: deviceId, connected: true }))
       }
     }, deviceId);
   });
 };
-
-/*export const isTrackerConnected = (deviceId: string) => {
-  return new Promise((resolve, reject) => {
-    ble.isDeviceConnected(response => {
-      console.log("isConnected: " + response.connected)
-      resolve(updateConnected(response))
-    }, deviceId);
-  });
-};*/
-
-/* export const isTrackerConnected = (deviceId: string) => {
-  return new Promise((resolve, reject) => {
-    console.log("START")
-    tbs.readActiveMode(response => {
-      console.log("ACTIVEMODE")
-      console.log(response)
-      if (response.error) {
-
-        console.log("NOT CONNECTED")
-        resolve(updateConnected({ deviceId: deviceId, connected: false }))
-          } else {
-            console.log("IS CONNECTED")
-            resolve(updateConnected({ deviceId: deviceId, connected: true }))
-          }
-        }, deviceId);
-
-  });
-}; */
-
-/*export const isTrackerConnected = (deviceId: string) => {
-  return new Promise((resolve, reject) => {
-    ble.readDeviceRssi(response => {
-      console.log("RESPONSE")
-      console.log(response)
-        if (response.error) {
-          console.log("NOT CONNECTED")
-          resolve(updateConnected({ deviceId: deviceId, connected: false }))
-        } else {
-          console.log("IS CONNECTED")
-          resolve(updateConnected({ deviceId: deviceId, connected: true }))
-        }
-
-    }, deviceId);
-  });
-};*/
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
   console.log("** RT - startTrackerSearch **")
@@ -464,6 +391,7 @@ export const readActiveMode = (deviceId: string) => {
         console.log(response.error); // TODO: log the error properly to device
       } else {
         console.log("RT- readActiveMode Success")
+        console.log(response)
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);
