@@ -15,6 +15,7 @@ export default class RaceManager extends React.PureComponent {
     activeTracker: Object,
     activeLaps: Array<Object>,
     raceError: string,
+    isAwaitingResponse: boolean,
     setIsValid: Function,
     setIsActive: Function,
     startRaceNotifications: Function,
@@ -63,7 +64,7 @@ export default class RaceManager extends React.PureComponent {
           console.log("RACEMANAGER - getMissingLaps");
           this.getMissingLaps();
         } else {
-          console.log("RACEMANAGER - noTrackerConnectedOnEnd");
+          console.log("RACEMANAGER - setAwaitingResponse FALSE");
           // no tracker is connected...
           // TODO: do we really need to fire this? no tracker is avail to receive the command?
           // perhaps another event relies on the error being thrown? investigate when time allows
@@ -71,7 +72,8 @@ export default class RaceManager extends React.PureComponent {
           // this.stopRaceNotifications();
           //dispatch(setStopHeat(response.heatId));
 
-
+          // here is where we turn off the active response
+          this.props.setAwaitingResponse(false)
 
         }
       }
@@ -170,7 +172,7 @@ export default class RaceManager extends React.PureComponent {
     this.props.startRaceNotifications(r);
   }
 
-  stopRaceNotifications = () => {
+  /*stopRaceNotifications = () => {
     console.log("RCAJDDstopRaceNotifications")
     let r = {
       heatId: this.props.activeHeat.id,
@@ -182,7 +184,7 @@ export default class RaceManager extends React.PureComponent {
     console.log("VVVVV")
     this.showProgressBar(false);  // destroy any generic progress bar that may be showing
     console.log("YYYYY")
-  }
+  }*/
 
   showProgressBar = (show: boolean) => {
     console.log("========== showProgressBar ================")

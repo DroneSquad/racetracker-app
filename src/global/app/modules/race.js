@@ -103,7 +103,7 @@ export const setHeatChannels = (request: object) => ({
   payload: request
 });
 
-export const awaitingResponse = (request: boolean) => ({
+export const setAwaitingResponse = (request: boolean) => ({
   type: AWAITING_RESPONSE,
   payload: request
 });
@@ -166,7 +166,7 @@ export const validateRace = (request: object) => {
 
 export const startHeat = (request: object) => {
   return dispatch => {
-    dispatch(awaitingResponse(true));
+    dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
       if (response) {  // tracker is connected
         if (request.raceMode === "flyby") {  // use flyby mode
@@ -176,7 +176,7 @@ export const startHeat = (request: object) => {
         }
       }
       else { // no tracker connected, command is now complete
-        dispatch(awaitingResponse(false));
+        dispatch(setAwaitingResponse(false));
         // TODO: do we need an error dialog for the user here?
         // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
@@ -220,7 +220,7 @@ export const startShotgunHeat = (request: object) => {
 
 export const stopHeat = (request: object) => {
   return dispatch => {
-    dispatch(awaitingResponse(true));
+    dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
       console.log("1")
       if (response) {  // tracker is connected
@@ -245,20 +245,6 @@ export const stopHeat = (request: object) => {
     })
   };
 };
-
-/*export const stopHeat = (request: object) => {
-  return dispatch => {
-    dispatch(awaitingResponse(true));
-    tbs.stopHeat(response => {
-      if (response.error) {  // no tracker connected (most likely)
-        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
-      } else {  // racetracker successfully halted heat
-        dispatch(setStopHeat(response.heatId));
-        dispatch(readActiveMode(response.deviceId));
-      }
-    }, request);
-  };
-};*/
 
 export const createHeat = (request: object) => {
   console.log("P2 - RACE - createHeat()")
@@ -430,7 +416,7 @@ export const getMissingLaps = (request: array) => {
         }));
         console.log("-----------stopRaceNotifications+++++++++")
 
-  dispatch(awaitingResponse(false));
+  dispatch(setAwaitingResponse(false));
 
       }).catch(error => {
         console.log(error); // TODO: add proper error handling/logging

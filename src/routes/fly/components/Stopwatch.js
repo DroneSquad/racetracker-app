@@ -19,7 +19,7 @@ export default class Stopwatch extends Component {
       deviceId: this.props.activeTracker.id,
       raceMode: this.props.raceMode
     };
-    console.log("STOPWATCH - startHeat")
+    console.log("==> STOPWATCH - startHeat")
     this.props.startHeat(r);
   };
 
@@ -28,7 +28,7 @@ export default class Stopwatch extends Component {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
     };
-    console.log("STOPWATCH - stopHeat")
+    console.log("==> STOPWATCH - stopHeat")
     this.props.stopHeat(r);
   };
 
@@ -38,7 +38,7 @@ export default class Stopwatch extends Component {
       activeChannels: this.props.activeTracker.racerChannels,
       currentHeat: this.props.activeHeat
     };
-    console.log("STOPWATCH - createHeat")
+    console.log("==> STOPWATCH - createHeat")
     this.props.createHeat(r);
   };
 
