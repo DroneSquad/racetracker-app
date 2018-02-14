@@ -43,6 +43,8 @@ export default class Stopwatch extends Component {
   };
 
   render() {
+    console.log("STOPWATCH - RENDER")
+    console.log(this.props.isAwaitingResponse)
     let heat = this.props.activeHeat;
     let btnStyle = { width: '30vw', marginTop: '4px', boxShadow: 'none', marginRight: '24px' };
     let spinner = (

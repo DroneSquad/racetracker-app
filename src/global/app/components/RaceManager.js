@@ -112,7 +112,11 @@ export default class RaceManager extends React.PureComponent {
                 heatId: this.props.activeHeat.id,
                 deviceId: this.props.activeTracker.id
               };
+              console.log("START HERE")
+              console.log(r)
               this.props.setTrackerIdle(r);
+              this.props.setAwaitingResponse(false)  // fake the tbs racetracker response
+              console.log("END HERE")
             }
             else {
               console.log("----- RT NOT IN RACE MODE - do nothing")

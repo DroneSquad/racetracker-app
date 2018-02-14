@@ -166,6 +166,7 @@ export const validateRace = (request: object) => {
 
 export const startHeat = (request: object) => {
   return dispatch => {
+    console.log("RACE - startHeat - setAwaitingResponse TRUE")
     dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
       if (response) {  // tracker is connected
@@ -176,6 +177,7 @@ export const startHeat = (request: object) => {
         }
       }
       else { // no tracker connected, command is now complete
+      console.log("RACE - startHeat - ELSE setAwaitingResponse FALSE")
         dispatch(setAwaitingResponse(false));
         // TODO: do we need an error dialog for the user here?
         // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
@@ -219,14 +221,23 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const stopHeat = (request: object) => {
+  console.log("RACE - stopHeat - setAwaitingResponse TRUE")
   return dispatch => {
+    console.log("1")
     dispatch(setAwaitingResponse(true));
+    console.log("2")
     isTrackerConnected(request.deviceId).then(response => {
+        console.log("3")
       if (response) {  // tracker is connected
+          console.log("4")
         tbs.stopHeat(response => {
+            console.log("5")
           if (response.heatStopped) {
+              console.log("6")
             dispatch(setStopHeat(response.heatId));
+              console.log("7")
             dispatch(readActiveMode(response.deviceId));
+              console.log("8")
           } else {
             console.log("ERROR STOPPING HEAT")
             // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
@@ -234,6 +245,7 @@ export const stopHeat = (request: object) => {
         }, request);
       }
       else { // no tracker connected, show user error dialog
+          console.log("20000")
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
     })
@@ -491,14 +503,14 @@ export default function(state = initialState, action: Action) {
         return { ...state };
       }
     case AWAITING_RESPONSE:
-    console.log("awaitingresponse")
+    console.log("AWAITING_RESPONSE_REDUX")
     console.log(action.payload)
       return {
         ...state,
         awaitingResponse: action.payload
       };
     case START_HEAT: // gets called when we get the response from the tracker
-    console.log("awaitingresponseX")
+    console.log("START_HEAT_REDUX")
     console.log(false)
 
       return {
@@ -535,7 +547,7 @@ export default function(state = initialState, action: Action) {
         error: ''
       };
     case RACE_ERROR:
-    console.log("awaitingresponseZ")
+    console.log("RACE_ERROR_REDUX")
     console.log(false)
 
       return {
