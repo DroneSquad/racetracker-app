@@ -33,8 +33,9 @@ export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
 export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to stop heat with no race tracker connected
-export const ERR_STOP_HEAT_GENERIC = 'ERR_STOP_HEAT_GENERIC'  // unknown error attempting to stop heat
-export const ERR_START_HEAT_GENERIC = 'ERR_START_HEAT_GENERIC';  // unknown error attempting to start heat
+export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no connectd racetracker
+export const ERR_START_HEAT_UNKNOWN = 'ERR_START_HEAT_UNKNOWN';  // unknown error attempting to start heat
+export const ERR_STOP_HEAT_UNKNOWN = 'ERR_STOP_HEAT_UNKNOWN'  // unknown error attempting to stop heat
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -152,13 +153,12 @@ export const createRace = (request: object) => {
 
 export const validateRace = (request: object) => {
   return dispatch => {
-    // TODO: validate the state of a race left running from a previous session on this startup
+    // TODO: validate the state of a race left running from a previous session on startup
   };
 };
 
 export const startHeat = (request: object) => {
   return dispatch => {
-    console.log("RACE - startHeat - setAwaitingResponse TRUE")
     dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
       if (response) {  // tracker is connected
@@ -168,11 +168,8 @@ export const startHeat = (request: object) => {
           dispatch(startShotgunHeat(request))
         }
       }
-      else { // no tracker connected, command is now complete
-      console.log("RACE - startHeat - ELSE setAwaitingResponse FALSE")
-        dispatch(setAwaitingResponse(false));
-        // TODO: do we need an error dialog for the user here?
-        // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+      else { // no tracker connected, display error dialog
+        dispatch(setRaceError(ERR_START_HEAT_NO_CONN))
       }
     })
   };
@@ -186,8 +183,8 @@ export const startFlyoverHeat = (request: object) => {
         dispatch(announceFlyoverStart());
         dispatch(readActiveMode(response.deviceId));
       } else {
-        console.log("ERROR STARTING FLYOVER HEAT")
-        // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+        // heat failed to start for some reason
+        dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
       }
     }, request);
   };
@@ -203,8 +200,8 @@ export const startShotgunHeat = (request: object) => {
             dispatch(announceGo());
             dispatch(readActiveMode(response.deviceId));
           } else {
-            console.log("ERROR STARTING SHOTGUN HEAT")
-            // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+            // heat failed to start for some reason
+            dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
           }
         }, request);
       })
@@ -213,31 +210,21 @@ export const startShotgunHeat = (request: object) => {
 };
 
 export const stopHeat = (request: object) => {
-  console.log("RACE - stopHeat - setAwaitingResponse TRUE")
   return dispatch => {
-    console.log("1")
     dispatch(setAwaitingResponse(true));
-    console.log("2")
     isTrackerConnected(request.deviceId).then(response => {
-        console.log("3")
       if (response) {  // tracker is connected
-          console.log("4")
         tbs.stopHeat(response => {
-            console.log("5")
           if (response.heatStopped) {
-              console.log("6")
             dispatch(setStopHeat(response.heatId));
-              console.log("7")
             dispatch(readActiveMode(response.deviceId));
-              console.log("8")
           } else {
-            console.log("ERROR STOPPING HEAT")
-            // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+            // heat failed to stop for some reason
+            dispatch(setRaceError(ERR_STOP_HEAT_UNKNOWN))
           }
         }, request);
       }
-      else { // no tracker connected, show user error dialog
-          console.log("20000")
+      else { // no tracker connected, display error dialog
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
     })

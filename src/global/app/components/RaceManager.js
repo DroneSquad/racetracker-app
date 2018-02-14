@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, FlatButton, LinearProgress } from 'material-ui';
 
 // import race error lookup codes
-import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
+import { ERR_STOP_HEAT_NO_CONN, ERR_START_HEAT_NO_CONN, ERR_START_HEAT_UNKNOWN } from '../modules/race';
 // import racetracker mode constants
 import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
@@ -161,7 +161,7 @@ export default class RaceManager extends React.PureComponent {
     if (!this.state.open) {
       if(show) {
         this.setState({
-          title: 'Checking for laps...',
+          title: 'Getting missed laps..',
           main_action: '',
           alt_action: '',
           message: '',
@@ -191,6 +191,34 @@ export default class RaceManager extends React.PureComponent {
       altAction = 'force_stop_heat'
       altActionLabel = 'End Race'
     }
+    // no tracker connection on heat start action
+    if (errCode === ERR_START_HEAT_NO_CONN) {
+      title = 'Start Race Error'
+      message = 'It looks like the RaceTracker connection has been lost'
+      mainAction = 'clear_race_error'
+      mainActionLabel = 'Ok'
+      altAction = ''
+      altActionLabel = ''
+    }
+    // unknown error caused heat start action to fail
+    if (errCode === ERR_START_HEAT_UNKNOWN) {
+      title = 'Start Race Error'
+      message = 'Race failed to start, please try again'
+      mainAction = 'clear_race_error'
+      mainActionLabel = 'Ok'
+      altAction = ''
+      altActionLabel = ''
+    }
+    // unknown error caused heat stop action to fail
+    if (errCode === ERR_START_HEAT_UNKNOWN) {
+      title = 'Stop Race Error'
+      message = 'Race failed to stop, please try again'
+      mainAction = 'clear_race_error'
+      mainActionLabel = 'Ok'
+      altAction = ''
+      altActionLabel = ''
+    }
+    // set the state using the errcode informtion selected
     this.setState({
       title: title,
       message: message,
@@ -199,7 +227,7 @@ export default class RaceManager extends React.PureComponent {
       alt_action: altAction,
       alt_action_label: altActionLabel,
       open: !!errCode,
-      progress_bar: false  // remove any progressbars if an error has occurred
+      progress_bar: false  // remove any progressbars that may be visible
     });
   }
 
