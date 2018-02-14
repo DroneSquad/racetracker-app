@@ -165,21 +165,16 @@ export const setRacerChannel = (request: Object) => ({
 
 /** connect the device/app to a racetracker */
 export const connectTracker = (request: Object) => {
-  console.log('** RT - connectTracker **');
   return dispatch => {
     ble.connectDevice(response => {
-      // successful device connection. this is long running, on error it fires below
+      // successful device connection. this is long running, on error it fires the else statement
       if (response.connected) {
-        console.log('++++++++++++++ RACETRACKER CONNECTED ++++++++++++++');
-        console.log(response);
+        console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         syncTrackerState(response.device.id)
           .then(result => {
-            console.log('++ setActiveMode ++');
-            dispatch(result);
-            console.log('++ setConnected ++');
-            dispatch(setConnected(response.device));
+            dispatch(result)
+            dispatch(setConnected(response.device))
             if (request.getChannels) {
-              console.log('++ getChannels ++');
               dispatch(readRacerChannels(response.device.id));
             }
           })
@@ -191,6 +186,8 @@ export const connectTracker = (request: Object) => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
             dispatch(setReconnecting(response.device.id));
+          } else {
+            dispatch(setDisconnected(response.device.id));
           }
         });
       }
@@ -199,16 +196,8 @@ export const connectTracker = (request: Object) => {
 };
 
 export const syncTrackerState = (deviceId: string) => {
-  console.log('syncTrackerState CALLED');
   return new Promise((resolve, reject) => {
-    ble.isDeviceConnected(result => {
-      console.log('ISDEVICECONNECTED');
-      console.log(result);
-    }, deviceId);
-
     tbs.readActiveMode(response => {
-      console.log('TBS RESPONSE');
-      console.log(response);
       if (response.error) {
         reject(response.error);
       } else {
@@ -219,12 +208,17 @@ export const syncTrackerState = (deviceId: string) => {
 };
 
 export const isTrackerConnected = (deviceId: string) => {
-  console.log('** RT - isTrackerConnected **');
-  return dispatch => {
-    ble.isDeviceConnected(response => {
-      dispatch(updateConnected(response));
+  return new Promise((resolve, reject) => {
+    // if the tracker has disconnected, but the bluetooth library has not yet
+    // noticed the disconnection, this will then force the library to update
+    tbs.readFirmwareVersion(response => {
+      if (response.error) {
+        resolve(false)
+      } else {
+        resolve(true)
+      }
     }, deviceId);
-  };
+  });
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
@@ -309,7 +303,7 @@ export const validateTrackerPromise = (request: object) => {
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        resolve(isTrackerConnected(request.id));
+        resolve(updateConnected({ deviceId: request.id, connected: true }))
       }
     }, request.id);
   });
@@ -782,8 +776,6 @@ export default function(state = [], action: Action) {
             : tracker
       );
     case RT_ACTIVE_MODE:
-      console.log('==== REDUX_ACTIVE_MODE =====');
-      console.log(action.payload.activeMode);
       return state.map(
         tracker =>
           tracker.id === action.payload.deviceId

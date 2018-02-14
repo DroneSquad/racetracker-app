@@ -7,23 +7,19 @@ export default class Stopwatch extends Component {
     activeHeat: Object,
     activeTracker: Object,
     raceMode: string,
-    isSendingCommand: boolean,
-    startFlyoverHeat: Function,
-    startShotgunHeat: Function,
+    isAwaitingResponse: boolean,
+    createHeat: Function,
     stopHeat: Function,
-    createHeat: Function
+    startHeat: Function
   };
 
   startHeat = () => {
     let r = {
       heatId: this.props.activeHeat.id,
-      deviceId: this.props.activeTracker.id
+      deviceId: this.props.activeTracker.id,
+      raceMode: this.props.raceMode
     };
-    if (this.props.raceMode === 'flyby') {
-      this.props.startFlyoverHeat(r);
-    } else {
-      this.props.startShotgunHeat(r);
-    }
+    this.props.startHeat(r);
   };
 
   endHeat = () => {
@@ -38,7 +34,7 @@ export default class Stopwatch extends Component {
     let r = {
       raceId: this.props.activeHeat.raceId,
       activeChannels: this.props.activeTracker.racerChannels,
-      currentHeat: this.props.activeHeat
+      currentHeat: this.props.activeHeat,
     };
     this.props.createHeat(r);
   };
@@ -70,18 +66,25 @@ export default class Stopwatch extends Component {
             primary
             onClick={this.startHeat}
             style={btnStyle}
-            disabled={this.props.isSendingCommand}
-            label={this.props.isSendingCommand ? spinner : 'Start Race'}
+            disabled={this.props.isAwaitingResponse || !this.props.activeTracker.isConnected }
+            label={this.props.isAwaitingResponse ? spinner : 'Start Race'}
           />}
         {heat.isActive &&
           <RaisedButton
             primary
             onClick={this.endHeat}
             style={btnStyle}
-            disabled={this.props.isSendingCommand}
-            label={this.props.isSendingCommand ? spinner : 'End Race'}
+            disabled={this.props.isAwaitingResponse}
+            label={this.props.isAwaitingResponse ? spinner : 'End Race'}
           />}
-        {heat.isComplete && <RaisedButton primary onClick={this.createHeat} style={btnStyle} label="New Heat" />}
+        {heat.isComplete &&
+          <RaisedButton
+            primary
+            onClick={this.createHeat}
+            style={btnStyle}
+            disabled={!this.props.activeTracker.isConnected}
+            label="New Heat"
+          />}
       </Paper>
     );
   }

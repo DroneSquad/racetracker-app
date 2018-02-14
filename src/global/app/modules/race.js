@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import { createSelector } from 'reselect';
 
 import tbs from '../../../services/racetracker';
-import { readActiveMode } from './racetracker';
+import { readActiveMode, isTrackerConnected } from './racetracker';
 
 import {
   announceLapsFromResponse,
@@ -28,12 +28,15 @@ export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
-export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
+export const AWAITING_RESPONSE = 'AWAITING_RESPONSE';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
-export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'; // attempt to stop heat with no race tracker connected
-export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'; // attempt to start heat with no race tracker connected
+export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to stop heat with no race tracker connected
+export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no connectd racetracker
+export const ERR_START_HEAT_UNKNOWN = 'ERR_START_HEAT_UNKNOWN';  // unknown error attempting to start heat
+export const ERR_STOP_HEAT_UNKNOWN = 'ERR_STOP_HEAT_UNKNOWN'  // unknown error attempting to stop heat
+export const ERR_GET_MISSED_LAPS = 'ERR_GET_MISSED_LAPS'  // an error occured while fetching missing laps from the racetracker
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -102,9 +105,9 @@ export const setHeatChannels = (request: object) => ({
   payload: request
 });
 
-export const sentCommand = () => ({
-  type: SENT_START_STOP_HEAT,
-  payload: 'sent command, waiting for response'
+export const setAwaitingResponse = (request: boolean) => ({
+  type: AWAITING_RESPONSE,
+  payload: request
 });
 
 export const createRace = (request: object) => {
@@ -149,66 +152,83 @@ export const createRace = (request: object) => {
   };
 };
 
-// TODO: validate the state of a race left running from a previous session on startup
 export const validateRace = (request: object) => {
   return dispatch => {
-    /*raceMngr.createRace(response => {
-      dispatch(newRace(response));
-    }, request);*/
-    /** Validate that the device exists on the internal bluetooth scan list */
-    /*validateTrackers = () => {
-    if (!this.props.isBtScanning) {
-    let aTracker = this.props.connectedTrackers.filter(t => t.id === this.props.activeTrackerId);
-    this.props.validateTrackers(aTracker); */
+    // TODO: validate the state of a race left running from a previous session on startup
+  };
+};
+
+export const startHeat = (request: object) => {
+  return dispatch => {
+    dispatch(setAwaitingResponse(true));
+    isTrackerConnected(request.deviceId).then(response => {
+      if (response) {  // tracker is connected
+        if (request.raceMode === "flyby") {  // use flyby mode
+          dispatch(startFlyoverHeat(request))
+        } else { // use shotgun start (default)
+          dispatch(startShotgunHeat(request))
+        }
+      }
+      else { // no tracker connected, display error dialog
+        dispatch(setRaceError(ERR_START_HEAT_NO_CONN))
+      }
+    })
+  };
+};
+
+export const startFlyoverHeat = (request: object) => {
+  return dispatch => {
+    tbs.startHeat(response => {
+      if (response.heatStarted) {
+        dispatch(setStartHeat(response.heatId));
+        dispatch(announceFlyoverStart());
+        dispatch(readActiveMode(response.deviceId));
+      } else {
+        // heat failed to start for some reason
+        dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
+      }
+    }, request);
   };
 };
 
 export const startShotgunHeat = (request: object) => {
-  request.raceMode = 'shotgun';
   return dispatch => {
-    dispatch(sentCommand());
     dispatch(
       announceShotgunStart(() => {
-        dispatch(startHeat(request, true));
+        tbs.startHeat(response => {
+          if (response.heatStarted) {
+            dispatch(setStartHeat(response.heatId));
+            dispatch(announceGo());
+            dispatch(readActiveMode(response.deviceId));
+          } else {
+            // heat failed to start for some reason
+            dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
+          }
+        }, request);
       })
     );
   };
 };
 
-export const startFlyoverHeat = (request: object) => {
-  request.raceMode = 'flyover';
-  return dispatch => {
-    dispatch(sentCommand());
-    dispatch(startHeat(request));
-    dispatch(announceFlyoverStart());
-  };
-};
-
-export const startHeat = (request: object, sayGo: boolean) => {
-  return dispatch => {
-    tbs.startHeat(response => {
-      dispatch(setStartHeat(response.heatId));
-      if (sayGo) {
-        dispatch(announceGo());
-      }
-      dispatch(readActiveMode(response.deviceId));
-    }, request);
-  };
-};
-
 export const stopHeat = (request: object) => {
   return dispatch => {
-    dispatch(sentCommand());
-    tbs.stopHeat(response => {
-      if (response.error) {
-        // no tracker connected (most likely)
-        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN));
-      } else {
-        // racetracker successfully halted heat
-        dispatch(setStopHeat(response.heatId));
-        dispatch(readActiveMode(response.deviceId));
+    dispatch(setAwaitingResponse(true));
+    isTrackerConnected(request.deviceId).then(response => {
+      if (response) {  // tracker is connected
+        tbs.stopHeat(response => {
+          if (response.heatStopped) {
+            dispatch(setStopHeat(response.heatId));
+            dispatch(readActiveMode(response.deviceId));
+          } else {
+            // heat failed to stop for some reason
+            dispatch(setRaceError(ERR_STOP_HEAT_UNKNOWN))
+          }
+        }, request);
       }
-    }, request);
+      else { // no tracker connected, display error dialog
+        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+      }
+    })
   };
 };
 
@@ -298,7 +318,7 @@ export const setMissingLaps = (slot: object) => {
       if (response.error) {
         reject(response.error);
       } else {
-        // if the lap counts do not match, determine which were missed
+        // if the lap counts do not match, determine which laps were missed
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol = _.difference(arr, slot.laps);
@@ -325,7 +345,8 @@ export const setMissingLapTimes = (request: object) => {
 };
 
 export const getMissingLaps = (request: array) => {
-  console.log('*** RACE - getMissingLaps ***');
+  console.log("*** RACE - getMissingLaps ***")
+  // TODO: refactor this mess into something reasonable
   return dispatch => {
     let heatId = '';
     let deviceId = '';
@@ -369,6 +390,24 @@ export const getMissingLaps = (request: array) => {
       .catch(error => {
         console.log(error); // TODO: add proper error handling/logging
       });
+=======
+        // and finally halt race notifications
+        dispatch(stopRaceNotifications({
+          heatId: heatId,
+          deviceId: deviceId
+        }));
+        // and finally indicate that the command response was successful
+        dispatch(setAwaitingResponse(false));
+      // handle errors that occured during the fetch
+      }).catch(error => {
+        console.log(error); // TODO: add proper error handling/logging
+        dispatch(setRaceError(ERR_GET_MISSED_LAPS))
+      })
+    }).catch(error => {
+      console.log(error); // TODO: add proper error handling/logging
+      dispatch(setRaceError(ERR_GET_MISSED_LAPS))
+    })
+>>>>>>> midway
   };
 };
 
@@ -383,6 +422,7 @@ const initialState = {
   raceMode: RACEMODE_DEFAULT,
   isActive: false,
   isValid: false,
+  awaitingResponse: false,
   heats: [],
   laps: [],
   error: ''
@@ -446,15 +486,15 @@ export default function(state = initialState, action: Action) {
       } else {
         return { ...state };
       }
-    case SENT_START_STOP_HEAT:
+    case AWAITING_RESPONSE:
       return {
         ...state,
-        sentCommand: true
+        awaitingResponse: action.payload
       };
     case START_HEAT: // gets called when we get the response from the tracker
       return {
         ...state,
-        sentCommand: false,
+        awaitingResponse: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
@@ -471,7 +511,6 @@ export default function(state = initialState, action: Action) {
     case STOP_HEAT: // gets called when we got the response from the tracker
       return {
         ...state,
-        sentCommand: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
@@ -488,17 +527,12 @@ export default function(state = initialState, action: Action) {
     case RACE_ERROR:
       return {
         ...state,
-        sentCommand: false,
+        awaitingResponse: false,
         error: action.payload
       };
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return {
-          ...action.payload.race,
-          sentCommand: false,
-          error: '',
-          laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap'))
-        };
+        return { ...action.payload.race, awaitingResponse: false, error: '', laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
       }
       return state;
     }

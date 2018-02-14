@@ -1,20 +1,9 @@
 // @flow
 import { connect } from 'react-redux';
 
-import {
-  setIsValid,
-  setIsActive,
-  getActiveHeat,
-  startRaceNotifications,
-  stopRaceNotifications,
-  getActiveTracker,
-  getActiveLaps,
-  getMissingLaps,
-  updateHeatChannels,
-  setStopHeat,
-  stopHeat,
-  setRaceError
-} from '../modules/race';
+import { setIsValid, setIsActive, getActiveHeat, startRaceNotifications,
+         getActiveTracker, getActiveLaps, getMissingLaps, updateHeatChannels, setStopHeat,
+         stopHeat, setRaceError, setAwaitingResponse } from '../modules/race';
 
 import RaceManager from '../components/RaceManager';
 
@@ -29,19 +18,20 @@ const mapStateToProps = state => ({
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
   activeLaps: getActiveLaps(state),
-  raceError: state.race.error
+  raceError: state.race.error,
+  isAwaitingResponse: state.race.awaitingResponse,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   setIsActive: boolean => dispatch(setIsActive(boolean)),
   setIsValid: boolean => dispatch(setIsValid(boolean)),
-  startRaceNotifications: object => dispatch(startRaceNotifications(object)),
-  stopRaceNotifications: object => dispatch(stopRaceNotifications(object)),
+  startRaceNotifications: object =>  dispatch(startRaceNotifications(object)),
   getMissingLaps: array => dispatch(getMissingLaps(array)),
   setHeatChannels: object => dispatch(updateHeatChannels(object)),
   forceStopHeat: string => dispatch(setStopHeat(string)),
   setTrackerIdle: object => dispatch(stopHeat(object)),
-  clearRaceError: () => dispatch(setRaceError(''))
+  clearRaceError: () => dispatch(setRaceError('')),
+  setAwaitingResponse: boolean => dispatch(setAwaitingResponse(boolean)),
 });
 
 const RaceManagerContainer = connect(mapStateToProps, mapDispatchToProps)(RaceManager);
