@@ -167,7 +167,7 @@ export const setRacerChannel = (request: Object) => ({
 export const connectTracker = (request: Object) => {
   return dispatch => {
     ble.connectDevice(response => {
-      // successful device connection. this is long running, on error it fires below
+      // successful device connection. this is long running, on error it fires the else statement
       if (response.connected) {
         console.log("++++++++++++++ RACETRACKER CONNECTED ++++++++++++++")
         syncTrackerState(response.device.id)
@@ -200,12 +200,12 @@ export const syncTrackerState = (deviceId: string) => {
   return new Promise((resolve, reject) => {
 
 
-    ble.isDeviceConnected(result => {
+  /*  ble.isDeviceConnected(result => {
       console.log("BLEISDEVICECONNECTED")
       console.log(result)
     }, deviceId);
     console.log("===THE_MIDDLE===")
-    console.log(deviceId)
+    console.log(deviceId)*/
 
 
     // TODO: refine this, if not connected, etc how to handle if not, ie no response
@@ -223,31 +223,30 @@ export const syncTrackerState = (deviceId: string) => {
   });
 };
 
-export const isTrackerConnected2 = (deviceId: string) => {
+/*export const isTrackerConnected2 = (deviceId: string) => {
   console.log("** RT - isTrackerConnected **")
   return dispatch => {
     ble.isDeviceConnected(response => {
       dispatch(updateConnected(response));
     }, deviceId);
   };
-};
+};*/
 
 export const isTrackerConnected = (deviceId: string) => {
   return new Promise((resolve, reject) => {
-    console.log("START")
+    // if the tracker has disconnected, but the bluetooth library has not yet
+    // noticed the disconnection, then this will force the library to update
     tbs.readFirmwareVersion(response => {
-      console.log("FIRMWARE")
-      console.log(response)
       if (response.error) {
-
-        console.log("NOT CONNECTED")
-        resolve(updateConnected({ deviceId: deviceId, connected: false }))
-          } else {
-            console.log("IS CONNECTED")
-            resolve(updateConnected({ deviceId: deviceId, connected: true }))
-          }
-        }, deviceId);
-
+        resolve(false)
+        // let the tracker manager handle state updates
+        // resolve(updateConnected({ deviceId: deviceId, connected: false }))
+      } else {
+        resolve(true)
+        // let the tracker manager handle state updates
+        // resolve(updateConnected({ deviceId: deviceId, connected: true }))
+      }
+    }, deviceId);
   });
 };
 
@@ -260,7 +259,6 @@ export const isTrackerConnected = (deviceId: string) => {
   });
 };*/
 
-// BEST
 /* export const isTrackerConnected = (deviceId: string) => {
   return new Promise((resolve, reject) => {
     console.log("START")
@@ -379,7 +377,7 @@ export const validateTrackerPromise = (request: object) => {
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        resolve(isTrackerConnected2(request.id));
+        resolve(updateConnected({ deviceId: request.id, connected: true }))
       }
     }, request.id);
   });

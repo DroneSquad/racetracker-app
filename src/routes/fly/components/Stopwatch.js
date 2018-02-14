@@ -7,9 +7,7 @@ export default class Stopwatch extends Component {
     activeHeat: Object,
     activeTracker: Object,
     raceMode: string,
-    isSendingCommand: boolean,
-    startFlyoverHeat: Function,
-    startShotgunHeat: Function,
+    isAwaitingResponse: boolean,
     stopHeat: Function,
     createHeat: Function,
   };
@@ -67,16 +65,16 @@ export default class Stopwatch extends Component {
             primary
             onClick={this.startHeat}
             style={btnStyle}
-            disabled={this.props.isSendingCommand}
-            label={this.props.isSendingCommand ? spinner : 'Start Race'}
+            disabled={this.props.isAwaitingResponse || !this.props.activeTracker.isConnected }
+            label={this.props.isAwaitingResponse ? spinner : 'Start Race'}
           />}
         {heat.isActive &&
           <RaisedButton
             primary
             onClick={this.endHeat}
             style={btnStyle}
-            disabled={this.props.isSendingCommand}
-            label={this.props.isSendingCommand ? spinner : 'End Race'}
+            disabled={this.props.isAwaitingResponse}
+            label={this.props.isAwaitingResponse ? spinner : 'End Race'}
           />}
         {heat.isComplete && <RaisedButton primary onClick={this.createHeat} style={btnStyle} label="New Heat" />}
       </Paper>

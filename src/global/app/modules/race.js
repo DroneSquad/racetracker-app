@@ -28,12 +28,12 @@ export const STOP_HEAT = 'STOP_HEAT';
 export const SET_LAP = 'SET_LAP';
 export const SET_RACEMODE = 'SET_RACEMODE';
 export const SET_QUERY_INTERVAL = 'SET_QUERY_INTERVAL';
-export const SENT_START_STOP_HEAT = 'SENT_START_STOP_HEAT';
+export const AWAITING_RESPONSE = 'AWAITING_RESPONSE';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
-export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'  // attempt to stop heat with no race tracker connected
-export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no race tracker connected
+export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to stop heat with no race tracker connected
+export const ERR_STARTING_HEAT = 'ERR_STARTING_HEAT';
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -102,10 +102,9 @@ export const setHeatChannels = (request: object) => ({
   payload: request
 });
 
-// TODO: lets use this in a more generic manner to handle all potential commands
-export const sentCommand = () => ({
-  type: SENT_START_STOP_HEAT,
-  payload: 'sent command, waiting for response'
+export const awaitingResponse = (request: boolean) => ({
+  type: AWAITING_RESPONSE,
+  payload: request
 });
 
 export const createRace = (request: object) => {
@@ -164,59 +163,62 @@ export const validateRace = (request: object) => {
   };
 };
 
-export const startShotgunHeat = (request: object) => {
-  request.raceMode = "shotgun"
+export const startHeat = (request: object) => {
   return dispatch => {
-    dispatch(sentCommand());
-    dispatch(
-      announceShotgunStart(() => {
-        dispatch(startHeat(request, true));
-      })
-    );
-  };
-};
-
-export const startFlyoverHeat = (request: object) => {
-  request.raceMode = "flyover"
-  return dispatch => {
-    dispatch(sentCommand());
-    dispatch(startHeat(request));
-    dispatch(announceFlyoverStart());
-  };
-};
-
-export const startHeat = (request: object, sayGo: boolean) => {
-  console.log("P3 - RACE - startHeat()")
-  return dispatch => {
+    dispatch(awaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
-      console.log("PROMISE RESOLVED")
-      dispatch(response);
-      console.log(response.payload.connected)
-      if (response.payload.connected) {
-        console.log("start race")
-      } else {
-        console.log("do other")
+      if (response) {  // tracker is connected
+        if (request.raceMode === "flyby") {  // use flyby mode
+          dispatch(startFlyoverHeat(request))
+        } else { // use shotgun start (default)
+          dispatch(startShotgunHeat(request))
+        }
+      }
+      else { // no tracker connected, command is now complete
+        dispatch(awaitingResponse(false));
       }
     })
   };
 };
 
-/*export const startHeat = (request: object, sayGo: boolean) => {
-return dispatch => {
+export const startFlyoverHeat = (request: object) => {
+  return dispatch => {
     tbs.startHeat(response => {
-      dispatch(setStartHeat(response.heatId));
-      if (sayGo) {
-        dispatch(announceGo());
+      if (response.heatStarted) {
+        dispatch(setStartHeat(response.heatId));
+        dispatch(announceFlyoverStart());
+        dispatch(readActiveMode(response.deviceId));
+      } else {
+        console.log("ERROR STARTING FLYOVER HEAT")
+        // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
-      dispatch(readActiveMode(response.deviceId));
     }, request);
   };
-};*/
+};
+
+export const startShotgunHeat = (request: object) => {
+  return dispatch => {
+    dispatch(
+      announceShotgunStart(() => {
+        tbs.startHeat(response => {
+          if (response.heatStarted) {
+            dispatch(setStartHeat(response.heatId));
+            dispatch(announceGo());
+            dispatch(readActiveMode(response.deviceId));
+          } else {
+            console.log("ERROR STARTING SHOTGUN HEAT")
+            // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
+          }
+        }, request);
+      })
+    );
+  };
+};
 
 export const stopHeat = (request: object) => {
   console.log("P2 - RACE - stopHeat()")
   return dispatch => {
-    dispatch(sentCommand());
+    dispatch(awaitingResponse(true));
     tbs.stopHeat(response => {
       if (response.error) {  // no tracker connected (most likely)
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
@@ -416,6 +418,7 @@ const initialState = {
   raceMode: RACEMODE_DEFAULT,
   isActive: false,
   isValid: false,
+  awaitingResponse: false,
   heats: [],
   laps: [],
   error: ''
@@ -473,15 +476,15 @@ export default function(state = initialState, action: Action) {
       } else {
         return { ...state };
       }
-    case SENT_START_STOP_HEAT:
+    case AWAITING_RESPONSE:
       return {
         ...state,
-        sentCommand: true
+        awaitingResponse: action.payload
       };
     case START_HEAT: // gets called when we get the response from the tracker
       return {
         ...state,
-        sentCommand: false,
+        awaitingResponse: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
@@ -498,7 +501,7 @@ export default function(state = initialState, action: Action) {
     case STOP_HEAT: // gets called when we got the response from the tracker
       return {
         ...state,
-        sentCommand: false,
+        awaitingResponse: false,
         heats: state.heats.map(
           heat =>
             heat.id === action.payload
@@ -515,12 +518,12 @@ export default function(state = initialState, action: Action) {
     case RACE_ERROR:
       return {
         ...state,
-        sentCommand: false,
+        awaitingResponse: false,
         error: action.payload
       };
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return { ...action.payload.race, sentCommand: false, error: '', laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
+        return { ...action.payload.race, awaitingResponse: false, error: '', laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
       }
       return state;
     }

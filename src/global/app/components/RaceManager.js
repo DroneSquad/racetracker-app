@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, FlatButton, LinearProgress } from 'material-ui';
 
 // import race error lookup codes
-import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
+import { ERR_STOP_HEAT_NO_CONN, ERR_STARTING_HEAT } from '../modules/race';
 // import racetracker mode constants
 import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
