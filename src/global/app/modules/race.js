@@ -33,7 +33,8 @@ export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
 export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to stop heat with no race tracker connected
-export const ERR_STARTING_HEAT = 'ERR_STARTING_HEAT';
+export const ERR_STOP_HEAT_GENERIC = 'ERR_STOP_HEAT_GENERIC'  // unknown error attempting to stop heat
+export const ERR_START_HEAT_GENERIC = 'ERR_START_HEAT_GENERIC';  // unknown error attempting to start heat
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -221,11 +222,16 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(awaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
+      console.log("1")
       if (response) {  // tracker is connected
+        console.log("2")
         tbs.stopHeat(response => {
-          if (response.heatStarted) {
+          console.log("3")
+          if (response.heatStopped) {
+            console.log("4")
             dispatch(setStopHeat(response.heatId));
             dispatch(readActiveMode(response.deviceId));
+            console.log("5")
           } else {
             console.log("ERROR STOPPING HEAT")
             // TODO: dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
@@ -233,6 +239,7 @@ export const stopHeat = (request: object) => {
         }, request);
       }
       else { // no tracker connected, show user error dialog
+        console.log("1111")
         dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
       }
     })
@@ -324,9 +331,8 @@ export const startRaceNotifications = (request: object) => {
 };
 
 export const stopRaceNotifications = (request: object) => {
-  console.log("ZZZ race- stopRaceNotification ZZZs");
   return dispatch => {
-    console.log("&&&&&&&&&&&&&")
+    console.log("RACE - stopRaceNotifications")
     tbs.stopRaceNotifications(response => {
       console.log("RESPONDERSTOP")
       console.log(response)
@@ -414,11 +420,11 @@ export const getMissingLaps = (request: array) => {
         // and finally halt race notifications
 
 
-      //  dispatch(stopRaceNotifications({
-    //      heatId: heatId,
-    //      deviceId: deviceId
-    //    }));
-    //    console.log("-----------stopRaceNotifications+++++++++")
+      dispatch(stopRaceNotifications({
+          heatId: heatId,
+          deviceId: deviceId
+        }));
+        console.log("-----------stopRaceNotifications+++++++++")
 
 
       }).catch(error => {

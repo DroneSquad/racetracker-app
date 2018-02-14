@@ -188,6 +188,7 @@ export const connectTracker = (request: Object) => {
             dispatch(setReconnecting(response.device.id));
           } else {
             console.log("WHAT DO HERE?")
+            // dispatch(setDisconnected(response.device.id)); ???
           }
         });
       }
@@ -462,6 +463,7 @@ export const readActiveMode = (deviceId: string) => {
         console.log("RT- readActiveMode Error")
         console.log(response.error); // TODO: log the error properly to device
       } else {
+        console.log("RT- readActiveMode Success")
         dispatch(setActiveMode(response)); // update the redux value
       }
     }, deviceId);

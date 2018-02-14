@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, FlatButton, LinearProgress } from 'material-ui';
 
 // import race error lookup codes
-import { ERR_STOP_HEAT_NO_CONN, ERR_STARTING_HEAT } from '../modules/race';
+import { ERR_STOP_HEAT_NO_CONN } from '../modules/race';
 // import racetracker mode constants
 import { RT_MODE_SHOTGUN, RT_MODE_FLYBY } from '../modules/racetracker';
 
@@ -52,7 +52,7 @@ export default class RaceManager extends React.PureComponent {
     if (nextProps.isActive && nextProps.isValid) {
       // start race update notifications
       if (nextProps.activeHeat.isActive && nextProps.activeHeat.isActive !== this.props.activeHeat.isActive) {
-          console.log("racemanager - startRaceNotifications");
+        console.log("RACEMANAGER - startRaceNotifications");
         this.startRaceNotifications();
       }
       // stop race update notifications
@@ -60,16 +60,15 @@ export default class RaceManager extends React.PureComponent {
         // if the tracker isconnected, fetch any missing laps now
         if (nextProps.activeTracker.isConnected) {
           // if a tracker is connected then fetch any missing laps
-          console.log("racemanager - getMissingLaps");
+          console.log("RACEMANAGER - getMissingLaps");
           this.getMissingLaps();
         } else {
+          console.log("RACEMANAGER - noTrackerConnectedOnEnd");
           // no tracker is connected...
           // TODO: do we really need to fire this? no tracker is avail to receive the command?
           // perhaps another event relies on the error being thrown? investigate when time allows
           // console.log("TODO: REEVALUATE RM -raceComplete - no tracker connected - stopRaceNotifications ==")
-          console.log("racemanager - stopracenotificatons - WHAT TO DO HERE");
           // this.stopRaceNotifications();
-
           //dispatch(setStopHeat(response.heatId));
         }
       }
@@ -87,34 +86,36 @@ export default class RaceManager extends React.PureComponent {
         // if a heat is running, then a device has just now recovered from a lost connection
         if (nextProps.activeTracker.isConnected && nextProps.activeTracker.isConnected !== this.props.activeTracker.isConnected)
         {
+          console.log("RACEMANAGER - onTrackerReconnect");
           let mode = this.props.activeTracker.activeMode;
+          console.log(mode)
           if (this.props.activeHeat.isActive) {
-            // console.log("ActiveHeat-isActive")
+            console.log("---- ActiveHeat-isActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              //console.log("RT IN RACE MODE - restart notifications")
+              console.log("---- RT IN RACE MODE - restart notifications")
               this.startRaceNotifications();
             } else {
-              //console.log("RT NOT IN RACE MODE - update redux");
+              console.log("---- RT NOT IN RACE MODE - update redux");
               this.props.forceStopHeat(this.props.activeHeat.id)
             }
           } else {
-            //console.log("ActiveHeat-notActive")
+            console.log("----- ActiveHeat-notActive")
             if (mode === RT_MODE_SHOTGUN || mode === RT_MODE_FLYBY) {
-              //console.log("*RT IN RACE MODE - update RT to idle")
+              console.log("----- RT IN RACE MODE - update RT to idle")
               let r = {
                 heatId: this.props.activeHeat.id,
                 deviceId: this.props.activeTracker.id
               };
               this.props.setTrackerIdle(r);
             }
-            /*else {
-              console.log("*RT NOT IN RACE MODE - do nothing")
-            }*/
+            else {
+              console.log("----- RT NOT IN RACE MODE - do nothing")
+            }
           }
         }
         // either the user has chosen to 'disconnect' the tracker, or reconnection attempts have been exhausted, deactivate the race and validation
         if (!nextProps.activeTracker.isConnected && !nextProps.activeTracker.isConnecting && !nextProps.activeTracker.isReconnecting) {
-          // console.log("COMPLETE_DISCONNECTION")
+          console.log("----- COMPLETE_DISCONNECTION")
           this.props.setIsActive(false);
           this.props.setIsValid(false);
         }
@@ -147,7 +148,6 @@ export default class RaceManager extends React.PureComponent {
   }
 
   startRaceNotifications = () => {
-    console.log("RACEANAstartRaceNotifications")
     let r = {
       heatId: this.props.activeHeat.id,
       deviceId: this.props.activeTracker.id
