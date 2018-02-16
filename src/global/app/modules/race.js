@@ -291,10 +291,13 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
+        console.log("RACE_NOTIFICATION-RESPONSE")
+        console.log(response)
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
       if (response.error) {
+        console.log("RACE_NOTIFICATION-ERROR")
         console.log(response.error); // TODO: log a proper error
       }
     }, request);
@@ -319,11 +322,15 @@ export const setMissingLaps = (slot: object) => {
         reject(response.error);
       } else {
         // if the lap counts do not match, determine which laps were missed
+        console.log("===> setMissingLaps - slot:" + slot.laps.length + " total:" + response.totalLaps)
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol = _.difference(arr, slot.laps);
+          console.log("MISSING")
+          console.log(awol)
           resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol });
         } else {
+          console.log("MATCH")
           resolve(); // lap counts match, no need to query missing laps
         }
       }
@@ -336,8 +343,11 @@ export const setMissingLapTimes = (request: object) => {
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
       if (response.error) {
+        console.log("setMissingLapTimes-ERROR")
         reject(response.error);
       } else {
+        console.log("setMissingLapTimes-SUCCESS")
+        console.log(response)
         resolve(setLap(response));
       }
     }, request);
@@ -356,24 +366,31 @@ export const getMissingLaps = (request: array) => {
       deviceId = slot.deviceId;
       slotPromises.push(setMissingLaps(slot));
     }
+    console.log("getMissingLaps-Promise-1")
     // promises setting any missing laps
     Promise.all(slotPromises).then(response => {
       let lapPromises = [];
       for (let r of response) {
+        console.log(r)
         if (r !== undefined) {
           for (let l of r.laps) {
+            console.log(l)
             lapPromises.push(setMissingLapTimes(
               { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
           }
         }
       }
+      console.log("getMissingLaps-Promise-2")
       // promises setting the laptimes of any missed laps
       Promise.all(lapPromises).then(response => {
         for (let r of response) {
+          console.log(r)
           if (r !== undefined && !r.error) {
+            console.log("DISPATCHED: " + r)
             dispatch(r);
           }
         }
+        console.log("getMissingLaps-STOP_NOTIFICATIONS")
         // and finally halt race notifications
         dispatch(stopRaceNotifications({
           heatId: heatId,
@@ -383,10 +400,12 @@ export const getMissingLaps = (request: array) => {
         dispatch(setAwaitingResponse(false));
       // handle errors that occured during the fetch
       }).catch(error => {
+        console.log("getMissingLaps-ERROR-X")
         console.log(error); // TODO: add proper error handling/logging
         dispatch(setRaceError(ERR_GET_MISSED_LAPS))
       })
     }).catch(error => {
+      console.log("getMissingLaps-ERROR-Z")
       console.log(error); // TODO: add proper error handling/logging
       dispatch(setRaceError(ERR_GET_MISSED_LAPS))
     })
