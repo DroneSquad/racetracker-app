@@ -54,7 +54,7 @@ export function announceLapsFromResponse(response) {
   return (dispatch, getStore) => {
     let store = getStore();
     let activeHeat = store.race.activeHeat;
-    let key = (0x1 << response.racer) * response.racer + response.lap;
+    let key = `${activeHeat}-${response.racer}-${response.lap}`;
     let heatTable = cacheTable[activeHeat] || (cacheTable[activeHeat] = {});
     if (!(key in heatTable)) {
       heatTable[key] = true;
