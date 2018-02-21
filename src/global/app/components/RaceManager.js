@@ -139,7 +139,7 @@ export default class RaceManager extends React.PureComponent {
     this.showProgressBar(true);  // show progressbar while missing laps are fetched from racetracker
     let cl = this.props.activeHeat.racerChannels.map(chan => ({
       racer: chan.racer,
-      laps: this.props.activeLaps.filter(t => t.racer === chan.racer).map(t => t.lap),
+      laps: this.props.activeLaps.filter(l => l.racer === chan.racer && l.lapTime !== 0).map(l => l.lap),
       deviceId: this.props.activeTracker.id,
       heatId: this.props.activeHeat.id
     }));
