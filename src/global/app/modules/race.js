@@ -198,13 +198,13 @@ export const startShotgunHeat = (request: object) => {
         tbs.startHeat(response => {
           if (response.heatStarted) {
             dispatch(setStartHeat(response.heatId));
-            dispatch(announceGo());
             dispatch(readActiveMode(response.deviceId));
           } else {
             // heat failed to start for some reason
             dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
           }
         }, request);
+        dispatch(announceGo());
       })
     );
   };
