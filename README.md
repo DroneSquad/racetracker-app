@@ -32,6 +32,12 @@ cordova run android
 
 automatically creates a production build that is then loaded to the phone or emulator for testing. source-maps are also generated so that chrome tools can be used to debug the minified js.
 
+## Deployment
+
+get the `upload certificate` and required password from: (see Pete)
+
+cordova build android --release -- --keystore=<PATH>/upload_cert.jks --storePassword=<PASSWORD> --alias=dskey
+
 ## Docker
 
 If you want to start up the application you just need to run `docker-compose up`.
