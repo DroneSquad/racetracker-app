@@ -67,7 +67,7 @@ export default class Racing extends Component {
         {!isRaceValid && !isRaceActive && connectedTrackers.length > 1
           ? <RacetrackerCard
               title="Multi-tracker racing is not yet supported"
-              subtitle="Select the Racetracker you want to use for racing"
+              subtitle="Select the RaceTracker you want to use for racing"
               button=""
               text={
                 <List>
@@ -84,10 +84,10 @@ export default class Racing extends Component {
           : null}
         {!isRaceValid && !isRaceActive && connectedTrackers.length === 0
           ? <RacetrackerCard
-              title="Racetracker connection required"
-              subtitle="Race mode requires the connection of a TBS Racetracker"
-              text="Click below to discover, connect, and configure Racetrackers"
-              button="Racetracker Management"
+              title="RaceTracker connection required"
+              subtitle="Race mode requires the connection of a TBS RaceTracker"
+              text="Click below to discover, connect, and configure RaceTrackers"
+              button="RaceTracker Management"
             />
           : null}
       </div>

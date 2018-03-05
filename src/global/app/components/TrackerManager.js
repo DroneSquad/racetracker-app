@@ -103,9 +103,9 @@ export default class TrackerManager extends React.PureComponent {
       defAction = 'connect';
       clkAction = 'disconnect';
       if (tracker.wasConnected) {
-        message = 'reconnecting ' + tracker.name;
+        message = 'Reconnecting ' + tracker.name;
       } else {
-        message = 'connecting ' + tracker.name;
+        message = 'Connecting ' + tracker.name;
       }
     }
     // handle trackers that have connected

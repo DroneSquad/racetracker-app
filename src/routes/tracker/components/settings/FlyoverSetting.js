@@ -21,7 +21,7 @@ export default class FlyoverSetting extends Setting {
 
   render() {
     let toggle = this.props.raceMode === 'flyby';
-    let text = <h3 className="no-margin">Detect VTx to start timing</h3>;
+    let text = <h3 className="no-margin">Detect VTx to Start Timing</h3>;
     let toggleSwitch = <Toggle defaultToggled={false} toggled={toggle} onToggle={this.handleOnToggle} label={text} />;
     let secondary = 'Timing begins when the video transmitter flies over the RaceTracker';
     return <ListItem primaryText={toggleSwitch} secondaryText={secondary} />;
