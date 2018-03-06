@@ -51,6 +51,7 @@ function humanSpeech(millis) {
 
 export function clearAnnouncements() {
   return dispatch => {
+    console.log("ClearAnnouncementsCalled")
     dispatch(clearVoiceQueue());
   };
 }
