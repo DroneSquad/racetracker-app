@@ -89,6 +89,8 @@ export function announceFlyover() {
     return dispatch => {
       dispatch(sendVoice('Race started'));
     };
+  } else {
+    return dispatch => null;
   }
 }
 
