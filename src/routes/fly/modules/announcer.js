@@ -1,4 +1,4 @@
-import { sendVoice } from '../../../global/voice/modules/voice';
+import { sendVoice, queueVoice } from '../../../global/voice/modules/voice';
 
 let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 let flyoverAnnounced = false;
@@ -117,9 +117,11 @@ export function announceLap(person, time, fastest = false) {
   return dispatch => {
     let racerToPilot = person; // todo map id with pilots name from current heat
     if (fastest) {
-      dispatch(sendVoice(`New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`));
+      queueVoice(dispatch, `New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`);
+      // dispatch(sendVoice(`New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`));
     } else {
-      dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
+      queueVoice(dispatch, `Racer ${racerToPilot}, ${humanSpeech(time)}`);
+      // dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
     }
   };
 }
