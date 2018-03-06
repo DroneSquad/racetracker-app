@@ -99,9 +99,9 @@ export default class TrackerManager extends React.PureComponent {
     // handle trackers attempting to connect/reconnect
     if (tracker.isConnecting) {
       timer = false;
-      action = 'cancel';
-      defAction = 'connect';
-      clkAction = 'disconnect';
+      action = 'CANCEL';
+      defAction = 'CONNECT';
+      clkAction = 'DISCONNECT';
       if (tracker.wasConnected) {
         message = 'Reconnecting ' + tracker.name;
       } else {
@@ -122,7 +122,7 @@ export default class TrackerManager extends React.PureComponent {
       if (tracker.recover) {
         // check if it has any reconnection attempts remaining
         if (tracker.reconnects > 0) {
-          defAction = 'connect';
+          defAction = 'CONNECT';
           // attempt to automatically reconnect
           if (tracker.wasConnected) {
             // if it was connected and then failed
@@ -133,9 +133,9 @@ export default class TrackerManager extends React.PureComponent {
           }
         } else {
           // attempts at auto connection have failed, ask user for advice
-          action = 'retry';
-          defAction = 'disconnect';
-          clkAction = 'connect';
+          action = 'RETRY';
+          defAction = 'DISCONNECT';
+          clkAction = 'CONNECT';
           if (tracker.wasConnected) {
             message = tracker.name + ' reconnection failed';
           } else {
@@ -143,7 +143,7 @@ export default class TrackerManager extends React.PureComponent {
           }
         }
       } else {
-        defAction = 'disconnect';
+        defAction = 'DISCONNECT';
         // recovery is not an option, give them nothing.. NOTHING I SAY
         if (tracker.wasConnected) {
           message = tracker.name + ' connection lost';
@@ -165,7 +165,7 @@ export default class TrackerManager extends React.PureComponent {
 
   doCloseEvents = (action: string) => {
     let id = this.state.id;
-    if (action === 'connect') {
+    if (action === 'CONNECT') {
       this.props.setConnecting(id);
       if (!this.props.activeHeat || !this.props.activeHeat.isActive) {
         this.props.connect({ deviceId: id, getChannels: true });
@@ -173,7 +173,7 @@ export default class TrackerManager extends React.PureComponent {
         this.props.connect({ deviceId: id });
       }
     }
-    if (action === 'disconnect') {
+    if (action === 'DISCONNECT') {
       this.props.setDisconnected(id);
     }
     this.setState({
