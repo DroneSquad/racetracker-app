@@ -1,4 +1,4 @@
-import { sendVoice, queueVoice } from '../../../global/voice/modules/voice';
+import { sendVoice, queueVoice, clearVoiceQueue } from '../../../global/voice/modules/voice';
 
 let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 let flyoverAnnounced = false;
@@ -47,6 +47,12 @@ function humanSpeech(millis) {
     speech += '.' + ms + ' second(s)';
   }
   return speech;
+}
+
+export function clearAnnouncements() {
+  return dispatch => {
+    dispatch(clearVoiceQueue());
+  };
 }
 
 /** Read the response from the payload and announce the values */
@@ -118,10 +124,8 @@ export function announceLap(person, time, fastest = false) {
     let racerToPilot = person; // todo map id with pilots name from current heat
     if (fastest) {
       queueVoice(dispatch, `New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`);
-      // dispatch(sendVoice(`New Fastest Lap... Racer ${racerToPilot}, ${humanSpeech(time)}`));
     } else {
       queueVoice(dispatch, `Racer ${racerToPilot}, ${humanSpeech(time)}`);
-      // dispatch(sendVoice(`Racer ${racerToPilot}, ${humanSpeech(time)}`));
     }
   };
 }
