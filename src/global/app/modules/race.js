@@ -218,7 +218,6 @@ export const stopHeat = (request: object) => {
       if (response) {  // tracker is connected
         tbs.stopHeat(response => {
           if (response.heatStopped) {
-            console.log("STOPHEAT-CLEARANNOUNCEMENTS")
             clearAnnouncements();
             dispatch(setStopHeat(response.heatId));
             dispatch(readActiveMode(response.deviceId));
@@ -310,7 +309,6 @@ export const startRaceNotifications = (request: object) => {
 export const stopRaceNotifications = (request: object) => {
   return dispatch => {
     tbs.stopRaceNotifications(response => {
-      console.log("STOPRACENOTIFICATIONS-CLEARANNOUNCEMENTS")
       clearAnnouncements();
       if (response.error) {
         console.log(response.error); // TODO: log a proper error

@@ -50,10 +50,7 @@ function humanSpeech(millis) {
 }
 
 export function clearAnnouncements() {
-  return dispatch => {
-    console.log("ClearAnnouncementsCalled")
-    dispatch(clearVoiceQueue());
-  };
+  clearVoiceQueue();
 }
 
 /** Read the response from the payload and announce the values */

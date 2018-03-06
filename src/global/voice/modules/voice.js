@@ -6,7 +6,6 @@ const _stack = [];
 
 /** remove any queued announcements from the queue, used on end heat */
 export function clearVoiceQueue() {
-  console.log("QUEUE-CLEARED")
   _stack.length = 0;
 }
 
