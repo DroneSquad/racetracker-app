@@ -19,13 +19,11 @@ export default class Racing extends Component {
   componentDidMount() {
     // no previous race exists, create a new one using the connected tracker
     if (!this.props.isRaceActive && !this.props.isRaceValid && this.props.connectedTrackers.length === 1) {
-      // console.log("CREATE-DID_MOUNT")
       this.props.createRace(this.props.connectedTrackers[0]);
     }
     // a previous race was setup, validate it or reset as needed
     if (this.props.isRaceActive && !this.props.isRaceValid) {
-      // TODO: console.log("VALIDATE-DID_MOUNT")
-      // this.props.validateRace(this.props.activeRace);
+      // TODO: this.props.validateRace(this.props.activeRace);
     }
   }
 
@@ -36,8 +34,7 @@ export default class Racing extends Component {
     }
     // a previous race was running, validate and proceed
     if (nextProps.isRaceActive && !nextProps.isRaceValid) {
-      // TODO: console.log("VALIDATE-WILL_RECEIVE")
-      // this.props.validateRace(this.props.activeRace);
+      // TODO: this.props.validateRace(this.props.activeRace);
     }
   }
 

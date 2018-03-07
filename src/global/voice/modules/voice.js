@@ -6,6 +6,7 @@ const _stack = [];
 
 /** remove any queued announcements from the queue, used on end heat */
 export function clearVoiceQueue() {
+  // TODO: interupt any speaking when stop is fired
   _stack.length = 0;
 }
 
@@ -30,7 +31,6 @@ export function sendQueuedVoice() {
         { text, locale, rate },
         () => {
           if (callback) {
-            console.log("CALLBACK CALLED");
             callback();
           }
           dispatch({ type: VOICE_SEND_SUCCESS });

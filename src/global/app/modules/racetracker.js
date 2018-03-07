@@ -223,7 +223,6 @@ export const isTrackerConnected = (deviceId: string) => {
 };
 
 export const startTrackerSearch = (request: array, discoveryScan: boolean = false) => {
-  console.log('** RT - startTrackerSearch **');
   let matchArr = request.slice(0);
   return dispatch => {
     ble.startDeviceScan(response => {
@@ -277,7 +276,6 @@ export const startTrackerSearch = (request: array, discoveryScan: boolean = fals
 };
 
 export const validateTrackerPromise = (request: object) => {
-  console.log('** RT - validateTrackerPromise **');
   return new Promise((resolve, reject) => {
     // we really dont care about the rssi value here, the command is being used
     // to determine the connection state of the tracker within the bluetooth library
@@ -311,7 +309,6 @@ export const validateTrackerPromise = (request: object) => {
 };
 
 export const validateTrackers = (request: array, discoveryScan: boolean = false) => {
-  console.log('** RT - validateTrackers **');
   return dispatch => {
     let trackerPromises = [];
     for (let rt of request) {
@@ -341,7 +338,6 @@ export const validateTrackers = (request: array, discoveryScan: boolean = false)
 };
 
 export const discoverTrackers = (request: array) => {
-  console.log('** RT - discoverTrackers **');
   return dispatch => {
     dispatch(setIsScanning(true));
     dispatch(validateTrackers(request, true));
@@ -369,7 +365,6 @@ export const stopTrackerScan = (request: array = []) => {
 
 /** disconnect a racetracker from the device/app */
 export const disconnectTracker = (deviceId: string) => {
-  console.log('** RT - disconnectTracker **');
   return dispatch => {
     ble.disconnectDevice(response => {
       if (response.error) {
