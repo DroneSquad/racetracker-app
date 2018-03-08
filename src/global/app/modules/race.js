@@ -293,7 +293,6 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
-        console.log("==> RACE_NOTIFICATION-RESPONSE")
         console.log(response)
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
@@ -321,17 +320,18 @@ export const setMissingLaps = (slot: object) => {
   return new Promise((resolve, reject) => {
     tbs.readTotalLaps(response => {
       if (response.error) {
+        console.log("response.error")  // TODO: log a proper error
         reject(response.error);
       } else {
         // if the lap counts do not match, determine which laps were missed
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol = _.difference(arr, slot.laps);
-          console.log("== MISSING ==")
+          console.log("RACER: " + response.racer + " == MISSED ==")
           console.log(awol)
           resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol });
         } else {
-          console.log("== MATCH ==")
+          console.log("RACER: " + response.racer + " == MATCH ==")
           resolve(); // lap counts match, no need to query missing laps
         }
       }
@@ -343,7 +343,7 @@ export const setMissingLapTimes = (request: object) => {
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
       if (response.error) {
-        console.log("setMissingLapTimes-ERROR")
+        console.log(response.error);  // TODO: log a proper error
         reject(response.error);
       } else {
         resolve(setLap(response));
