@@ -34,7 +34,7 @@ export default class Stopwatch extends Component {
     let r = {
       raceId: this.props.activeHeat.raceId,
       activeChannels: this.props.activeTracker.racerChannels,
-      currentHeat: this.props.activeHeat,
+      currentHeat: this.props.activeHeat
     };
     this.props.createHeat(r);
   };
@@ -66,7 +66,7 @@ export default class Stopwatch extends Component {
             primary
             onClick={this.startHeat}
             style={btnStyle}
-            disabled={this.props.isAwaitingResponse || !this.props.activeTracker.isConnected }
+            disabled={this.props.isAwaitingResponse || !this.props.activeTracker.isConnected}
             label={this.props.isAwaitingResponse ? spinner : 'Start Race'}
           />}
         {heat.isActive &&

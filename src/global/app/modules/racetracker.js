@@ -171,8 +171,8 @@ export const connectTracker = (request: Object) => {
       if (response.connected) {
         syncTrackerState(response.device.id)
           .then(result => {
-            dispatch(result)
-            dispatch(setConnected(response.device))
+            dispatch(result);
+            dispatch(setConnected(response.device));
             if (request.getChannels) {
               dispatch(readRacerChannels(response.device.id));
             }
@@ -212,9 +212,9 @@ export const isTrackerConnected = (deviceId: string) => {
     // noticed the disconnection, this will then force the library to update
     tbs.readFirmwareVersion(response => {
       if (response.error) {
-        resolve(false)
+        resolve(false);
       } else {
-        resolve(true)
+        resolve(true);
       }
     }, deviceId);
   });
@@ -300,7 +300,7 @@ export const validateTrackerPromise = (request: object) => {
       } else {
         // a proper rssi response indicates that the tracker is 'connected'
         // dispatch action verifies the connected state of redux reflects this
-        resolve(updateConnected({ deviceId: request.id, connected: true }))
+        resolve(updateConnected({ deviceId: request.id, connected: true }));
       }
     }, request.id);
   });

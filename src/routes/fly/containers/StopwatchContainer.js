@@ -13,13 +13,13 @@ const mapStateToProps = (state, ownProps) => ({
   activeHeat: getActiveHeat(state),
   activeTracker: getActiveTracker(state),
   raceMode: state.race.raceMode,
-  isAwaitingResponse: state.race.awaitingResponse,
+  isAwaitingResponse: state.race.awaitingResponse
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
   stopHeat: object => dispatch(stopHeat(object)),
   startHeat: object => dispatch(startHeat(object)),
-  createHeat: object => dispatch(createHeat(object)),
+  createHeat: object => dispatch(createHeat(object))
 });
 
 const StopwatchContainer = connect(mapStateToProps, mapDispatchToProps)(Stopwatch);

@@ -12,7 +12,7 @@ export function clearVoiceQueue() {
 }
 
 export function queueVoice(dispatch, text, rate = 1, locale = 'en-US', callback) {
-  _stack.push({ dispatch: dispatch, text: text, rate: rate, locale: locale, callback: callback })
+  _stack.push({ dispatch: dispatch, text: text, rate: rate, locale: locale, callback: callback });
   if (_stack.length === 1) {
     sendQueuedVoice();
   }
@@ -21,7 +21,8 @@ export function queueVoice(dispatch, text, rate = 1, locale = 'en-US', callback)
 /** Send a queued voice packet with the optional locale, speed, and callback */
 export function sendQueuedVoice() {
   let { dispatch, text, rate, locale, callback } = _stack[0] || {};
-  if (dispatch) { // verify we have a dispatch callback
+  if (dispatch) {
+    // verify we have a dispatch callback
     dispatch({
       type: VOICE_SEND,
       payload: { text, locale, rate }

@@ -33,11 +33,11 @@ export const AWAITING_RESPONSE = 'AWAITING_RESPONSE';
 export const SET_HEAT_CHANNELS = 'SET_HEAT_CHANNELS';
 
 /** error constants for the RaceManager */
-export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN';  // attempt to stop heat with no race tracker connected
-export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'  // attempt to start heat with no connectd racetracker
-export const ERR_START_HEAT_UNKNOWN = 'ERR_START_HEAT_UNKNOWN';  // unknown error attempting to start heat
-export const ERR_STOP_HEAT_UNKNOWN = 'ERR_STOP_HEAT_UNKNOWN'  // unknown error attempting to stop heat
-export const ERR_GET_MISSED_LAPS = 'ERR_GET_MISSED_LAPS'  // an error occured while fetching missing laps from the racetracker
+export const ERR_STOP_HEAT_NO_CONN = 'ERR_STOP_HEAT_NO_CONN'; // attempt to stop heat with no race tracker connected
+export const ERR_START_HEAT_NO_CONN = 'ERR_START_HEAT_NO_CONN'; // attempt to start heat with no connectd racetracker
+export const ERR_START_HEAT_UNKNOWN = 'ERR_START_HEAT_UNKNOWN'; // unknown error attempting to start heat
+export const ERR_STOP_HEAT_UNKNOWN = 'ERR_STOP_HEAT_UNKNOWN'; // unknown error attempting to stop heat
+export const ERR_GET_MISSED_LAPS = 'ERR_GET_MISSED_LAPS'; // an error occured while fetching missing laps from the racetracker
 
 /** selectors */
 const getTrackers = state => state.trackers;
@@ -163,17 +163,20 @@ export const startHeat = (request: object) => {
   return dispatch => {
     dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
-      if (response) {  // tracker is connected
-        if (request.raceMode === "flyby") {  // use flyby mode
-          dispatch(startFlyoverHeat(request))
-        } else { // use shotgun start (default)
-          dispatch(startShotgunHeat(request))
+      if (response) {
+        // tracker is connected
+        if (request.raceMode === 'flyby') {
+          // use flyby mode
+          dispatch(startFlyoverHeat(request));
+        } else {
+          // use shotgun start (default)
+          dispatch(startShotgunHeat(request));
         }
+      } else {
+        // no tracker connected, display error dialog
+        dispatch(setRaceError(ERR_START_HEAT_NO_CONN));
       }
-      else { // no tracker connected, display error dialog
-        dispatch(setRaceError(ERR_START_HEAT_NO_CONN))
-      }
-    })
+    });
   };
 };
 
@@ -186,7 +189,7 @@ export const startFlyoverHeat = (request: object) => {
         dispatch(readActiveMode(response.deviceId));
       } else {
         // heat failed to start for some reason
-        dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
+        dispatch(setRaceError(ERR_START_HEAT_UNKNOWN));
       }
     }, request);
   };
@@ -202,7 +205,7 @@ export const startShotgunHeat = (request: object) => {
             dispatch(readActiveMode(response.deviceId));
           } else {
             // heat failed to start for some reason
-            dispatch(setRaceError(ERR_START_HEAT_UNKNOWN))
+            dispatch(setRaceError(ERR_START_HEAT_UNKNOWN));
           }
         }, request);
         dispatch(announceGo());
@@ -215,7 +218,8 @@ export const stopHeat = (request: object) => {
   return dispatch => {
     dispatch(setAwaitingResponse(true));
     isTrackerConnected(request.deviceId).then(response => {
-      if (response) {  // tracker is connected
+      if (response) {
+        // tracker is connected
         tbs.stopHeat(response => {
           if (response.heatStopped) {
             clearAnnouncements();
@@ -223,14 +227,14 @@ export const stopHeat = (request: object) => {
             dispatch(readActiveMode(response.deviceId));
           } else {
             // heat failed to stop for some reason
-            dispatch(setRaceError(ERR_STOP_HEAT_UNKNOWN))
+            dispatch(setRaceError(ERR_STOP_HEAT_UNKNOWN));
           }
         }, request);
+      } else {
+        // no tracker connected, display error dialog
+        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN));
       }
-      else { // no tracker connected, display error dialog
-        dispatch(setRaceError(ERR_STOP_HEAT_NO_CONN))
-      }
-    })
+    });
   };
 };
 
@@ -318,7 +322,7 @@ export const setMissingLaps = (slot: object) => {
   return new Promise((resolve, reject) => {
     tbs.readTotalLaps(response => {
       if (response.error) {
-        console.log("response.error")  // TODO: log a proper error
+        console.log('response.error'); // TODO: log a proper error
         reject(response.error);
       } else {
         // if the lap counts do not match, determine which laps were missed
@@ -338,7 +342,7 @@ export const setMissingLapTimes = (request: object) => {
   return new Promise((resolve, reject) => {
     tbs.readLapTime(response => {
       if (response.error) {
-        console.log(response.error);  // TODO: log a proper error
+        console.log(response.error); // TODO: log a proper error
         reject(response.error);
       } else {
         resolve(setLap(response));
@@ -359,39 +363,44 @@ export const getMissingLaps = (request: array) => {
       slotPromises.push(setMissingLaps(slot));
     }
     // promises setting any missing laps
-    Promise.all(slotPromises).then(response => {
-      let lapPromises = [];
-      for (let r of response) {
-        if (r !== undefined) {
-          for (let l of r.laps) {
-            lapPromises.push(setMissingLapTimes(
-              { deviceId: r.deviceId,  heatId: r.heatId, racer: r.racer, lap: l }))
-          }
-        }
-      }
-      // promises setting the laptimes of any missed laps
-      Promise.all(lapPromises).then(response => {
+    Promise.all(slotPromises)
+      .then(response => {
+        let lapPromises = [];
         for (let r of response) {
-          if (r !== undefined && !r.error) {
-            dispatch(r);
+          if (r !== undefined) {
+            for (let l of r.laps) {
+              lapPromises.push(setMissingLapTimes({ deviceId: r.deviceId, heatId: r.heatId, racer: r.racer, lap: l }));
+            }
           }
         }
-        // and finally halt race notifications
-        dispatch(stopRaceNotifications({
-          heatId: heatId,
-          deviceId: deviceId
-        }));
-        // and finally indicate that the command response was successful
-        dispatch(setAwaitingResponse(false));
-      // handle errors that occured during the fetch
-      }).catch(error => {
-        console.log(error); // TODO: add proper error handling/logging
-        dispatch(setRaceError(ERR_GET_MISSED_LAPS))
+        // promises setting the laptimes of any missed laps
+        Promise.all(lapPromises)
+          .then(response => {
+            for (let r of response) {
+              if (r !== undefined && !r.error) {
+                dispatch(r);
+              }
+            }
+            // and finally halt race notifications
+            dispatch(
+              stopRaceNotifications({
+                heatId: heatId,
+                deviceId: deviceId
+              })
+            );
+            // and finally indicate that the command response was successful
+            dispatch(setAwaitingResponse(false));
+            // handle errors that occured during the fetch
+          })
+          .catch(error => {
+            console.log(error); // TODO: add proper error handling/logging
+            dispatch(setRaceError(ERR_GET_MISSED_LAPS));
+          });
       })
-    }).catch(error => {
-      console.log(error); // TODO: add proper error handling/logging
-      dispatch(setRaceError(ERR_GET_MISSED_LAPS))
-    })
+      .catch(error => {
+        console.log(error); // TODO: add proper error handling/logging
+        dispatch(setRaceError(ERR_GET_MISSED_LAPS));
+      });
   };
 };
 
@@ -510,7 +519,12 @@ export default function(state = initialState, action: Action) {
       };
     case 'persist/REHYDRATE': {
       if (action.payload !== undefined) {
-        return { ...action.payload.race, awaitingResponse: false, error: '', laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap')) };
+        return {
+          ...action.payload.race,
+          awaitingResponse: false,
+          error: '',
+          laps: _.reverse(_.sortBy(_.get(action.payload, 'race.laps'), 'lap'))
+        };
       }
       return state;
     }
