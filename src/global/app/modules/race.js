@@ -293,8 +293,6 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
-        console.log("____________________________________________")
-        console.log("RACER: " + response.racer + " LAP: " + response.lap + " LAPTIME: " + response.lapTime )
         dispatch(setLap(response));
         dispatch(announceLapsFromResponse(response));
       }
@@ -327,11 +325,8 @@ export const setMissingLaps = (slot: object) => {
         if (slot.laps.length !== response.totalLaps) {
           let arr = _.range(1, response.totalLaps + 1);
           let awol = _.difference(arr, slot.laps);
-          console.log("RACER: " + response.racer + " == MISSED ==")
-          console.log(awol)
           resolve({ heatId: response.heatId, deviceId: response.deviceId, racer: response.racer, laps: awol });
         } else {
-          console.log("RACER: " + response.racer + " == MATCH ==")
           resolve(); // lap counts match, no need to query missing laps
         }
       }

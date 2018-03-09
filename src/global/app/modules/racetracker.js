@@ -169,7 +169,6 @@ export const connectTracker = (request: Object) => {
     ble.connectDevice(response => {
       // successful device connection. this is long running, on error it fires the else statement
       if (response.connected) {
-        console.log("== RACETRACKER CONNECTED ==")
         syncTrackerState(response.device.id)
           .then(result => {
             dispatch(result)
@@ -181,7 +180,6 @@ export const connectTracker = (request: Object) => {
           .catch(error => console.log(error)); // TODO: add proper error handling/logging
       } else if (!response.connected) {
         // the device has either failed connection or disconnected on error
-        console.log('== RACETRACKER CONNECTION LOST ==');
         ble.isEnabled(result => {
           if (result) {
             // if bluetooth was deactivated, dont bother trying to reconnect
