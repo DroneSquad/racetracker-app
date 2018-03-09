@@ -296,7 +296,7 @@ export const startRaceNotifications = (request: object) => {
         console.log("____________________________________________")
         console.log("RACER: " + response.racer + " LAP: " + response.lap + " LAPTIME: " + response.lapTime )
         dispatch(setLap(response));
-        // dispatch(announceLapsFromResponse(response));
+        dispatch(announceLapsFromResponse(response));
       }
       if (response.error) {
         console.log(response.error); // TODO: log a proper error

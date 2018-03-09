@@ -1,6 +1,5 @@
 import { sendVoice, queueVoice, clearVoiceQueue } from '../../../global/voice/modules/voice';
 
-let cacheTable = (window.__announcer_cacheTable = {}); // cache table prevent multiple laps from being called out
 let flyoverAnnounced = false;
 
 /** Split the mills into an array of mins, seconds, mills */
@@ -56,18 +55,11 @@ export function clearAnnouncements() {
 /** Read the response from the payload and announce the values */
 export function announceLapsFromResponse(response) {
   return (dispatch, getStore) => {
-    console.log("ANNOUNCE")
     let store = getStore();
-    let activeHeat = store.race.activeHeat;
-    let key = `${activeHeat}-${response.racer}-${response.lap}`;
-    let heatTable = cacheTable[activeHeat] || (cacheTable[activeHeat] = {});
-    if (!(key in heatTable)) {
-      heatTable[key] = true;
-      if (isFastestLap(store.race.laps, store.race.activeHeat, response)) {
-        dispatch(announceLap(response.racer, response.lapTime, true));
-      } else {
-        dispatch(announceLap(response.racer, response.lapTime));
-      }
+    if (isFastestLap(store.race.laps, store.race.activeHeat, response)) {
+      dispatch(announceLap(response.racer, response.lapTime, true));
+    } else {
+      dispatch(announceLap(response.racer, response.lapTime));
     }
   };
 }
