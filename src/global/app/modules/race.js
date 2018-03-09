@@ -293,12 +293,12 @@ export const startRaceNotifications = (request: object) => {
         dispatch(announceFlyover());
       }
       if (!response.error && !response.start) {
-        console.log(response)
+        console.log("____________________________________________")
+        console.log("RACER: " + response.racer + " LAP: " + response.lap + " LAPTIME: " + response.lapTime )
         dispatch(setLap(response));
-        dispatch(announceLapsFromResponse(response));
+        // dispatch(announceLapsFromResponse(response));
       }
       if (response.error) {
-        console.log("==> RACE_NOTIFICATION-ERROR")
         console.log(response.error); // TODO: log a proper error
       }
     }, request);
@@ -456,25 +456,19 @@ export default function(state = initialState, action: Action) {
         laps: state.laps.filter(lap => lap.heatId !== action.payload.heat.id).concat(action.payload.laps)
       };
     case SET_LAP:
-      if (_.get(action.payload, 'lap') !== state.lastLapId) {
-        // make sure its unique right now
-        return {
-          ...state,
-          lastLapId: _.get(action.payload, 'lap'),
-          laps: _.reverse(
-            _.sortBy(
-              _.unionWith(
-                [action.payload],
-                state.laps,
-                (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
-              ),
-              'lap'
-            )
+      return {
+        ...state,
+        laps: _.reverse(
+          _.sortBy(
+            _.unionWith(
+              [action.payload],
+              state.laps,
+              (left, right) => left.heatId === right.heatId && left.racer === right.racer && left.lap === right.lap
+            ),
+            'lap'
           )
-        };
-      } else {
-        return { ...state };
-      }
+        )
+      };
     case AWAITING_RESPONSE:
       return {
         ...state,

@@ -56,6 +56,7 @@ export function clearAnnouncements() {
 /** Read the response from the payload and announce the values */
 export function announceLapsFromResponse(response) {
   return (dispatch, getStore) => {
+    console.log("ANNOUNCE")
     let store = getStore();
     let activeHeat = store.race.activeHeat;
     let key = `${activeHeat}-${response.racer}-${response.lap}`;

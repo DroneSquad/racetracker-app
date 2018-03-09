@@ -7,6 +7,7 @@ const _stack = [];
 /** remove any queued announcements from the queue, used on end heat */
 export function clearVoiceQueue() {
   // TODO: interupt any speaking when stop is fired
+  // this is done by sending an empty string, but it breaks callbacks
   _stack.length = 0;
 }
 
