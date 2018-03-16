@@ -11,32 +11,32 @@ this will install all the required npm dependencies for both the react project a
 
 in addition the following scripts are also available
 
-yarn start: debug of web app
+`yarn start`: debug of web app
 
-yarn build: production build of web app
+`yarn build`: production build of web app
 
-yarn test: start interactive test harness
+`yarn test`: start interactive test harness
 
 ## Cordova
 
 cordova builds are handled in the 'cordova' directory.
 be sure to add a cordova platform for development
 
-cordova platform add android@6.2.3
+`cordova platform add android@6.2.3`
 
 anytime a cordova build/run command is issued a `yarn build` command it auto generated, via a hook.
 
 thus running
 
-cordova run android
+`cordova run android`
 
 automatically creates a production build that is then loaded to the phone or emulator for testing. source-maps are also generated so that chrome tools can be used to debug the minified js.
 
 ## Deployment
 
-get the `upload certificate` and required password from: (see Pete)
+get the `upload_cert.jks` and required `password` from: (see Pete)
 
-cordova build android --release -- --keystore=<PATH>/upload_cert.jks --storePassword=<PASSWORD> --alias=dskey
+`cordova build android --release -- --keystore=<PATH>/upload_cert.jks --storePassword=<PASSWORD> --alias=dskey`
 
 ## Docker
 
