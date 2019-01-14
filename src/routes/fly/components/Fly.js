@@ -14,20 +14,6 @@ export default class Race extends Component {
     goToTrackerHome: Function
   };
 
-  /** The drop down menu when there are more to do on the tracker */
-  menuDropdown = () => {
-    let icon = (
-      <IconButton>
-        <FontIcon style={{ paddingTop: '8px' }} className="ds-white-text mdi mdi-dots-vertical" />
-      </IconButton>
-    );
-    return (
-      <IconMenu iconButtonElement={icon}>
-        <MenuItem primaryText="RaceTracker Management" onTouchTap={() => this.props.goToTrackerHome()} />
-      </IconMenu>
-    );
-  };
-
   /** Fast tracker icon to go right to the tracker menu */
   tracker = () => <IconButton iconClassName="mdi mdi-timer" onTouchTap={() => this.props.goToTrackerHome()} />;
 
