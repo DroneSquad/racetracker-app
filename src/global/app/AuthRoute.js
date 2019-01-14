@@ -9,7 +9,9 @@ const isAuthenticated = props => {
 };
 
 const AuthRoute = ({ component, ...props }) => {
-  if (isAuthenticated(props)) {
+  return <Route {...props} component={component} />;
+  // disabled the login routine for this release
+  /*if (isAuthenticated(props)) {
     return <Route {...props} component={component} />;
   } else {
     return (
@@ -20,7 +22,7 @@ const AuthRoute = ({ component, ...props }) => {
         }}
       />
     );
-  }
+  }*/
 };
 
 AuthRoute.propTypes = {
