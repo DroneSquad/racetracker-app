@@ -35,6 +35,6 @@
     <plugin name="cordova-plugin-ble-central" spec="git+https://github.com/DroneSquad/cordova-plugin-ble-central.git">
         <variable name="BLUETOOTH_USAGE_DESCRIPTION" value=" " />
     </plugin>
+    <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.5.4" />
-    <engine name="android" spec="~6.2.3" />
 </widget>
