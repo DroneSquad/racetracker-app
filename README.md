@@ -1,4 +1,13 @@
-## Quick start
+# RaceTracker
+Welcome! Here's some quick background on why this repository exists.
+
+## Drone Squad History
+After facing challenges finding pilots to fly with locally, Pete Mauro started Drone Squad with the goal of using technology to connect pilots around the world for fun in competition. In 2016 Drone Squad a released an app to help pilots find and organize meetups, and by 2018, 30,000 pilots in 117 countries used the software. 
+
+## RaceTracker History
+Drone Squad wanted to make it easy for pilots to practice and organize races. So in 2017, the company exclusively partnered with Team Black Sheep to add support for an inexpensive, app connected race timing system. Drone Squad released basic timing functionality and based on feedback from pilots started working on a new version. The company struggled for months to evolve the software as they hoped due to hardware and API limitations. Pursuing this as a business was not viable so Drone Squad decided to open source the technology so the community could extend functiomnality and add support for additional commercial or open source timing hardware.
+
+# Quick start
 
 Build scripts can be run with either `yarn` or `npm`. After cloning the repository, run the following to setup the project for development/deployment.
 
